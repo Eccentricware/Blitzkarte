@@ -6,6 +6,8 @@ This repo stores the client side implementation of a full stack app which allows
 
 The client side will be responsible for properly receiving the state of the game accurately. The correct game(s) for the correct player and what their precise options are with the ability to submit those orders to the server for processing at deadline.
 
+The map importer will be able to import an SVG file and parse it to extract the intended game state. Provices, nodes, units and nations are all generated within moments!
+
 ## Technologies:
 React.js
 Next.js
