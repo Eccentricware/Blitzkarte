@@ -1,16 +1,16 @@
 import type { NextPage } from 'next';
 import React, { useState } from 'react';
+import { Parser } from '../utils/svgParser';
 
 const GameParserPage: NextPage = () => {
-  const [mapString, setMapString] = useState('');
-  const [mapStringified, setMapStringified] = useState('');
-  const [mapJSON, setMapJSON] = useState({});
+  const [fileString, setFileString] = useState('');
+  const [fileStringified, setFileStringified] = useState('');
+  const [fileJSON, setFileJSON] = useState({});
 
-  function handleChange(mapString: string) {
-    console.log(mapString.split('><'));
-    // console.log(JSON.stringify(mapStringified));
-    setMapString(mapString);
-    // setMapStringified(mapStringified);
+  let parser: Parser = new Parser();
+
+  function handleChange(fileString: string) {
+    parser.parse(fileString);
   }
 
   return (
@@ -27,7 +27,7 @@ const GameParserPage: NextPage = () => {
         </div>
       </form>
       <div>JSON Output:</div>
-      <div>{mapString}</div>
+      <div>{fileString}</div>
     </div>
   );
 }
