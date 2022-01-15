@@ -1,4 +1,4 @@
-export class BKNode {
+export class Pin {
   nodeName: string | undefined;
   nodeType: string | undefined;
   coordinates: number[] | undefined;

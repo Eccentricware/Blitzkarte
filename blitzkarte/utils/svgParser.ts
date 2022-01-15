@@ -1,60 +1,38 @@
+import { Country } from './country';
+import { Unit } from './unit';
 import { Province } from './province';
-import { BKNode } from './bknode';
+import { Pin } from './pin';
 
 export class Parser {
   constructor() {
-    interface Province {
-      name?: string | undefined;
-      provinceType?: string | undefined;
-      voteType?: string | undefined;
-      controllerName?: string | undefined;
-      unit?: string | undefined;
-    }
-
-    let provinces = [];
-    let correntProvince : Province | undefined = {}
-
-    let provinceName;
-    let provinceType;
-    let voteType;
-    let controllerName;
-    let labelLoc;
-    let landNodeLoc;
-    let seaNodeLoc1;
-    let seaNodeLoc2;
-    let airNodeLoc;
-    let irLoc;
-    let unit;
+    let countries: Country[] = [];
+    let units: Unit[] = [];
+    let provinces: Province[] = [];
+    let pins: Pin[] = [];
   }
 
   parse(fileString: string) {
-    let currentProvince = new Province();
-    currentProvince.provinceName = 'SVG';
-    let currentNode = new BKNode('ABC', 'Land', [0, 0], ['BCD', 'ECF']);
-    currentProvince.landNode = currentNode;
-    console.log(currentProvince);
-    let elements : string[] = this.splitBrackets(fileString);
+    let elements : string[] = fileString.split('><');
     console.log(elements);
     elements.forEach(element => {
-      //console.log('Full:', element);
-      let elementType: string = this.identifyElementType(element);
-      //console.log('Type:', elementType);
+      this.processElement(element);
+
     });
   }
 
-  splitBrackets(fileString: string): string[] {
-    let elementsArray : string[] = fileString.split('><');
-    return elementsArray;
-  }
+  // identifyElementType(element: string): string {
 
-  identifyElementType(element: string): string {
-    let elementType: string = element.split(' ')[0];
-    return elementType;
-  }
-
-  // identifyElementName(element: string): string {
-  //     let elementName: string = element.split(' ')[2];
-  //     elementName = elementName.slice(9);
-  //     return elementName;
+  //   return elementType;
   // }
+
+  processElement(elementString: string) {
+    let elementSignature: string = elementString.split(' ')[0];
+    if (elementSignature === 'g') {
+      this.prepareProvince(elementString);
+    }
+  }
+
+  prepareProvince(province: Province) {
+
+  }
 }
