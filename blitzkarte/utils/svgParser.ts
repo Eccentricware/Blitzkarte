@@ -7,26 +7,43 @@ import { RenderElement } from './renderElement';
 
 export class Parser {
   provinces: Province[];
-  countries: {};
+  countries: Country[];
   pins: Pin[];
   renderElements: {
-    sea: RenderElement[],
-    land: RenderElement[],
-    bridge: RenderElement[],
-    canal: RenderElement[]
+    terrain: {
+      sea: RenderElement[],
+      land: RenderElement[],
+      bridge: RenderElement[],
+      canal: RenderElement[]
+    },
+    labels: RenderElement[],
+    units: {
+      stats: Unit[],
+      icons: {},
+      flags: {}
+    }
   };
   errors: string[];
   activeProvince: boolean;
   constructor() {
     // Imediate Pull
     this.provinces = [];
-    this.countries = {};
+    this.countries = [];
     this.pins = [];
     this.renderElements = {
-      sea: [],
-      land: [],
-      bridge: [],
-      canal: []
+      terrain: {
+        sea: [],
+        land: [],
+        bridge: [],
+        canal: []
+      },
+      labels: [],
+      units: {
+        stats: [],
+        icons: {},
+        flags: {}
+      },
+
     }
     this.errors = [];
     this.activeProvince = false;
@@ -138,7 +155,7 @@ export class Parser {
       console.log(renderElement);
 
       // @ts-ignore
-      this.renderElements[renderElement.type].push(renderElement);
+      this.renderElements.terrain[renderElement.type].push(renderElement);
     } else {
       this.errors.push(`Missing render type for element in ${renderElement.province}`);
     }
@@ -149,16 +166,4 @@ export class Parser {
   finishProvince() {
     this.activeProvince = false;
   }
-
-  // colorLand() {
-  //   this.renderElements.land.forEach(land => {
-  //     // @ts-ignore
-  //     if (this.provinces[land.province].country && land.province) {
-  //       // @ts-ignore
-  //       let country: string = this.provinces[land.province].country;
-  //       // @ts-ignore
-  //       land.fill = this.countries[country].fill;
-  //     }
-  //   });
-  // }
 }

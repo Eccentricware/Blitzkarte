@@ -15,7 +15,7 @@ const LandLayer: FC<Props> = ({landRenderData}: Props) => {
             points={land.points}
             fill="#85A587"
             strokeMiterlimit="10"
-            stroke="white"
+            stroke="black"
             strokeWidth="4"
           />
         ))

@@ -3,13 +3,13 @@ import { RenderElement } from '../../utils/renderElement';
 import { TerrainLayer } from './TerrainLayer';
 
 interface Props {
-  terrainRenderData: any
+  renderData: any
 }
 
-export const GameMap: FC<Props> = ({terrainRenderData}) => {
+export const GameMap: FC<Props> = ({renderData}) => {
   return (
     <svg id="map" className="map" width="1488" height="930" viewBox="0 0 16000 10000">
-      <TerrainLayer terrainRenderData={terrainRenderData} />
+      <TerrainLayer terrainRenderData={renderData.terrain} />
     </svg>
   )
 }
