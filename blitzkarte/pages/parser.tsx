@@ -2,32 +2,49 @@ import type { NextPage } from 'next';
 import React, { useState } from 'react';
 import { Parser } from '../utils/svgParser';
 import { RenderElement } from '../utils/renderElement';
+import { Unit } from '../utils/unit';
 
 import { GameMap } from '../components/map-elements/GameMap';
 
-interface TerrainRenderData {
-  sea: RenderElement[],
-  land: RenderElement[],
-  bridge: RenderElement[],
-  canal: RenderElement[]
+interface RenderData {
+  terrain: {
+    sea: RenderElement[],
+    land: RenderElement[],
+    bridge: RenderElement[],
+    canal: RenderElement[]
+  },
+  labels: RenderElement[],
+  units: {
+    stats: Unit[],
+    icons: {},
+    flags: {}
+  }
 }
 
 const GameParserPage: NextPage = () => {
   // const [fileString, setFileString] = useState('Test');
   // const [fileStringified, setFileStringified] = useState('');
   // const [fileJSON, setFileJSON] = useState({});
-  const [terrainRenderData, setTerrainRenderData] = useState <TerrainRenderData>({
-    sea: [],
-    land: [],
-    bridge: [],
-    canal: []
+  const [renderData, setRenderData] = useState <RenderData>({
+    terrain: {
+      sea: [],
+      land: [],
+      bridge: [],
+      canal: []
+    },
+    labels: [],
+    units: {
+      stats: [],
+      icons: {},
+      flags: {}
+    }
   });
 
   let parser: Parser = new Parser();
 
   function handleChange(fileString: string) {
     parser.parse(fileString);
-    setTerrainRenderData(parser.renderElements);
+    setRenderData(parser.renderElements);
   }
 
   return (
@@ -44,7 +61,7 @@ const GameParserPage: NextPage = () => {
         </div>
       </form>
       <div><b>Map</b></div>
-      <GameMap terrainRenderData={terrainRenderData}/>
+      <GameMap renderData={renderData}/>
       <div><b>Tables</b></div>
       <div>Coming soon!</div>
     </div>
