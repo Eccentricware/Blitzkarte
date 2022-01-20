@@ -1,8 +1,8 @@
 import type { NextPage } from 'next';
 import React, { useState } from 'react';
-import { Parser } from '../utils/svgParser';
-import { RenderElement } from '../utils/renderElement';
-import { Unit } from '../utils/unit';
+import { Parser } from '../utils/Parsing/svgParser';
+import { RenderElement } from '../utils/Parsing/renderElement';
+import { Unit } from '../utils/Parsing/unit';
 
 import { GameMap } from '../components/map-elements/GameMap';
 
@@ -14,11 +14,7 @@ interface RenderData {
     canal: RenderElement[]
   },
   labels: RenderElement[],
-  units: {
-    stats: Unit[],
-    icons: {},
-    flags: {}
-  }
+  units: Unit[]
 }
 
 const GameParserPage: NextPage = () => {
@@ -33,11 +29,7 @@ const GameParserPage: NextPage = () => {
       canal: []
     },
     labels: [],
-    units: {
-      stats: [],
-      icons: {},
-      flags: {}
-    }
+    units: []
   });
 
   let parser: Parser = new Parser();
