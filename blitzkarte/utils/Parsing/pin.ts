@@ -5,10 +5,12 @@ export class Pin {
   province: string | undefined;
   labelType: string | undefined;
   text: string | undefined;
-  loc: number[] | undefined;
+  loc: number[];
   adj: string[] | undefined;
 
-  constructor() {}
+  constructor() {
+    this.loc = [];
+  }
 
   isValidNode(): boolean {
     let acceptedKeys: string[] = [
