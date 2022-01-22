@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Parser } from '../utils/Parsing/svgParser';
 import { RenderElement } from '../utils/Parsing/renderElement';
 import { Unit } from '../utils/Parsing/unit';
+import { Pin } from '../utils/Parsing/pin';
 
 import { GameMap } from '../components/map-elements/GameMap';
 
@@ -13,14 +14,11 @@ interface RenderData {
     bridge: RenderElement[],
     canal: RenderElement[]
   },
-  labels: RenderElement[],
+  labels: Pin[],
   units: Unit[]
 }
 
 const GameParserPage: NextPage = () => {
-  // const [fileString, setFileString] = useState('Test');
-  // const [fileStringified, setFileStringified] = useState('');
-  // const [fileJSON, setFileJSON] = useState({});
   const [renderData, setRenderData] = useState <RenderData>({
     terrain: {
       sea: [],

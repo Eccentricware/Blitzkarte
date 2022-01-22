@@ -16,6 +16,7 @@ export class Parser {
       canal: RenderElement[]
     },
     labels: Pin[],
+    //cities: City[],
     units: Unit[]
   };
   errors: string[];
@@ -33,7 +34,8 @@ export class Parser {
         canal: []
       },
       labels: [],
-      units: []
+      //cities: [],
+      units: [],
     }
     this.errors = [];
     this.activeProvince = false;
@@ -142,8 +144,8 @@ export class Parser {
         }
       });
 
-      let x: number = Number(coordinateProperties[3].slice(5, coordinateProperties[3].length - 1));
-      let y: number = Number(coordinateProperties[4].slice(5, coordinateProperties[4].length - 1));
+      let x: number = Number(coordinateProperties[3].slice(4, coordinateProperties[3].length - 1));
+      let y: number = Number(coordinateProperties[4].slice(4, coordinateProperties[4].length - 1));
       newPin.loc = [x, y];
 
       console.log('Pin at type check', newPin);
