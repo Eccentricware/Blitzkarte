@@ -1,13 +1,15 @@
 export class Pin {
-  pin: string | undefined;
-  node: string | undefined;
-  city: string | undefined;
   name: string | undefined;
   province: string | undefined;
-  label: string | undefined;
-  text: string | undefined;
-  loc: number[];
+  pinType: string | undefined;
+  nodeType: string | undefined;
   adj: string[] | undefined;
+  cityType: string | undefined;
+  voteColor: string | undefined;
+  statusColor: string | undefined;
+  labelType: string | undefined;
+  labelText: string | undefined;
+  loc: number[];
 
   constructor() {
     this.loc = [];
