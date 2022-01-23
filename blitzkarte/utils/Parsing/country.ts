@@ -1,9 +1,9 @@
 export class Country {
-  countryName: string | undefined;
+  name: string | undefined;
   rank: string | undefined;
-  nukeRange: number | undefined;
+  nuke: number | undefined;
   bankedBuilds: number | undefined;
-  mapColor: string | undefined;
+  color: string | undefined;
   flagKey?: string | undefined;
   region?: string | undefined;
 }

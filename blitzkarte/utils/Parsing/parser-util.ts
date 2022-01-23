@@ -2,6 +2,7 @@ import { Country } from './country';
 import { Unit } from './unit';
 import { Province } from './province';
 import { Pin } from './pin';
+import { City } from './city';
 import { RenderElement } from './renderElement';
 
 export class Parser {
@@ -16,7 +17,10 @@ export class Parser {
       canal: RenderElement[]
     },
     labels: Pin[],
-    //cities: City[],
+    cities: {
+      supplyCenters: Pin[],
+      votingCenters: Pin[]
+    },
     units: Unit[]
   };
   errors: string[];
@@ -34,7 +38,10 @@ export class Parser {
         canal: []
       },
       labels: [],
-      //cities: [],
+      cities: {
+        supplyCenters: [],
+        votingCenters: []
+      },
       units: [],
     }
     this.errors = [];
@@ -119,7 +126,7 @@ export class Parser {
         this.provinces.push(province);
         this.activeProvince = true;
       } else {
-        this.errors.push(`Invalid property detected in province ${province}`);
+        this.errors.push(`Invalid property detected in province ${provinceString}`);
       }
     } else {
       this.errors.push(`Missing province data for ${provinceString.slice(5, provinceString.length - 1)}`);
@@ -148,20 +155,30 @@ export class Parser {
       let y: number = Number(coordinateProperties[4].slice(4, coordinateProperties[4].length - 1));
       newPin.loc = [x, y];
 
+      let province: Province = this.provinces[this.provinces.length - 1];
+
       console.log('Pin at type check', newPin);
-      if (newPin.pinType === 'node') {
+      if (newPin.pin === 'node') {
         if (newPin.isValidNode()) {
           this.nodes.push(newPin);
         } else {
           this.errors.push(`Invalid Node: ${newPin}`);
         }
-      } else if (newPin.pinType === 'label') {
+      } else if (newPin.pin === 'label') {
         if (newPin.isValidLabel()) {
           newPin.text = this.provinces[this.provinces.length - 1].name;
           this.renderElements.labels.push(newPin);
         } else {
           console.log('Invalid Label:', newPin);
           this.errors.push(`Invalid Label: ${newPin}`);
+        }
+      } else if (newPin.pin === 'city') {
+        if (province.city === 'supplyCenter') {
+          this.renderElements.cities.supplyCenters.push(newPin);
+        } else if (newPin.city === 'capital' || newPin.city === 'votingCenter') {
+          this.renderElements.cities.votingCenters.push(newPin);
+        } else {
+          this.errors.push(`Invalid city type associated with ${province.name}`);
         }
       } else {
         this.errors.push(`Invalid Pin: ${newPin}`);
@@ -185,8 +202,11 @@ export class Parser {
 
     let data: string = renderString.split(' ')[2];
 
+    console.log('Render string', renderString);
+
 
     if (renderProperties.length >= 3) {
+      console.log(`Processing render data ${data}`);
       renderElement.type = data.slice(16, data.length - 1);
 
       let pointIndexStart = renderString.indexOf('points=');
@@ -194,6 +214,7 @@ export class Parser {
       renderElement.points = renderString.slice(pointIndexStart + 8, pointIndexEnd);
 
       // @ts-ignore
+      console.log(`adding render element ${data}`);
       this.renderElements.terrain[renderElement.type].push(renderElement);
     } else {
       this.errors.push(`Missing render type for element in ${renderElement.province}`);
