@@ -23,6 +23,7 @@ export class Parser {
     },
     units: Unit[]
   };
+  warnings: string[];
   errors: string[];
   activeProvince: boolean;
   constructor() {
@@ -44,6 +45,7 @@ export class Parser {
       },
       units: [],
     }
+    this.warnings = [];
     this.errors = [];
     this.activeProvince = false;
 
@@ -158,32 +160,39 @@ export class Parser {
       let province: Province = this.provinces[this.provinces.length - 1];
 
       console.log('Pin at type check', newPin);
-      if (newPin.pin === 'node') {
-        if (newPin.isValidNode()) {
-          this.nodes.push(newPin);
-        } else {
-          this.errors.push(`Invalid Node: ${newPin}`);
+      if (newPin.pinType === 'node') {
+        if (!newPin.isValidNode()) {
+          this.errors.push(`Possible invalid keys for node ${coordinateString}`);
         }
-      } else if (newPin.pin === 'label') {
-        if (newPin.isValidLabel()) {
-          newPin.text = this.provinces[this.provinces.length - 1].name;
-          this.renderElements.labels.push(newPin);
-        } else {
-          console.log('Invalid Label:', newPin);
-          this.errors.push(`Invalid Label: ${newPin}`);
+        this.nodes.push(newPin);
+      } else if (newPin.pinType === 'label') {
+        if (!newPin.isValidLabel()) {
+          this.errors.push(`Possible invalid keys for Label: ${coordinateString}`);
         }
-      } else if (newPin.pin === 'city') {
-        if (province.city === 'supplyCenter') {
+        newPin.labelText = this.provinces[this.provinces.length - 1].name;
+        this.renderElements.labels.push(newPin);
+      } else if (newPin.pinType === 'city') {
+        if (newPin.cityType === 'supplyCenter') {
+          if (province.country) {
+            newPin.statusColor = 'white';
+          } else {
+            newPin.statusColor = 'gray';
+          }
           this.renderElements.cities.supplyCenters.push(newPin);
-        } else if (newPin.city === 'capital' || newPin.city === 'votingCenter') {
+        } else if (newPin.cityType === 'capital') {
+          newPin.voteColor = 'gold';
+          newPin.statusColor = 'gold';
+          this.renderElements.cities.votingCenters.push(newPin);
+        } else if (newPin.cityType === 'votingCenter') {
+          newPin.voteColor = 'red';
+          newPin.statusColor = 'red';
           this.renderElements.cities.votingCenters.push(newPin);
         } else {
           this.errors.push(`Invalid city type associated with ${province.name}`);
         }
       } else {
-        this.errors.push(`Invalid Pin: ${newPin}`);
+        this.errors.push(`Invalid Pin at ${coordinateString}}`);
       }
-
     } else {
       this.errors.push(`Missing pin data for ${coordinateString.slice(5, coordinateString.length - 1)}`);
     }
