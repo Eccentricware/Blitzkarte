@@ -173,7 +173,7 @@ export class Parser {
         this.renderElements.labels.push(newPin);
       } else if (newPin.pinType === 'city') {
         if (newPin.cityType === 'supplyCenter') {
-          if (province.country) {
+          if (newPin.cityStatus === 'active') {
             newPin.statusColor = 'white';
           } else {
             newPin.statusColor = 'gray';
