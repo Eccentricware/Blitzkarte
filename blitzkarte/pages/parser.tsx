@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import React, { useState } from 'react';
-import { Parser } from '../utils/Parsing/svgParser';
+import { Parser } from '../utils/Parsing/parser-util';
 import { RenderElement } from '../utils/Parsing/renderElement';
 import { Unit } from '../utils/Parsing/unit';
 import { Pin } from '../utils/Parsing/pin';
@@ -15,6 +15,10 @@ interface RenderData {
     canal: RenderElement[]
   },
   labels: Pin[],
+  cities: {
+    supplyCenters: Pin[],
+    votingCenters: Pin[]
+  },
   units: Unit[]
 }
 
@@ -27,6 +31,10 @@ const GameParserPage: NextPage = () => {
       canal: []
     },
     labels: [],
+    cities: {
+      supplyCenters: [],
+      votingCenters: []
+    },
     units: []
   });
 

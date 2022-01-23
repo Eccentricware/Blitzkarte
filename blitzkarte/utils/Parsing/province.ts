@@ -5,6 +5,7 @@ export class Province {
   city: string | undefined;
   country: string | undefined;
   unit: string | undefined;
+  nuke: number | undefined;
   constructor() {}
 
   isValidProvince(): boolean {
@@ -14,7 +15,8 @@ export class Province {
       'terrain',
       'city',
       'country',
-      'unit'
+      'unit',
+      'nuke'
     ];
 
     for (let key in this) {

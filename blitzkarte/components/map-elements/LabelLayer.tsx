@@ -10,7 +10,7 @@ export const LabelLayer: FC<Props> = ({labelRenderData}: Props) => {
     <React.Fragment>
       {
         labelRenderData.map((label, i) => (
-          <text key={i} className={`label-type-${label.labelType}`}
+          <text key={i} className={`label label-type-${label.label}`}
             transform={`translate(${label.loc[0]} ${label.loc[1]})`}
           >
             {label.text}

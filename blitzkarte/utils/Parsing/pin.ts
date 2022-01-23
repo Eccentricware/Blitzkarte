@@ -1,9 +1,10 @@
 export class Pin {
-  pinType: string | undefined;
-  nodeType: string | undefined;
+  pin: string | undefined;
+  node: string | undefined;
+  city: string | undefined;
   name: string | undefined;
   province: string | undefined;
-  labelType: string | undefined;
+  label: string | undefined;
   text: string | undefined;
   loc: number[];
   adj: string[] | undefined;
@@ -14,11 +15,12 @@ export class Pin {
 
   isValidNode(): boolean {
     let acceptedKeys: string[] = [
-      'pinType',
-      'nodeType',
+      'pin',
+      'node',
+      'city',
       'name',
       'province',
-      'labelType',
+      'label',
       'text',
       'loc',
       'adj'
@@ -35,14 +37,15 @@ export class Pin {
 
   isValidLabel(): boolean {
     let acceptedKeys: string[] = [
-      'pinType',
-      'nodeType',
       'name',
       'province',
-      'labelType',
-      'text',
       'loc',
-      'adj'
+      'pin',
+      'node',
+      'adj',
+      'city',
+      'label',
+      'text'
     ];
 
     for (let key in this) {
