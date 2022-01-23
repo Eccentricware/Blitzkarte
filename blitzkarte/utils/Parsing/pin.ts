@@ -1,10 +1,12 @@
 export class Pin {
+  id: number | undefined;
   name: string | undefined;
   province: string | undefined;
   pinType: string | undefined;
   nodeType: string | undefined;
   adj: string[] | undefined;
   cityType: string | undefined;
+  cityStatus: string | undefined;
   voteColor: string | undefined;
   statusColor: string | undefined;
   labelType: string | undefined;
