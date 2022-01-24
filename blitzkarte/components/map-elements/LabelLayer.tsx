@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
-import { Pin } from '../../utils/Parsing/pin';
+import { LabelPin } from '../../utils/Parsing/labelPin';
 
 interface Props {
-  labelRenderData: Pin[];
+  labelRenderData: LabelPin[];
 }
 
 export const LabelLayer: FC<Props> = ({labelRenderData}: Props) => {
@@ -10,10 +10,10 @@ export const LabelLayer: FC<Props> = ({labelRenderData}: Props) => {
     <React.Fragment>
       {
         labelRenderData.map((label, i) => (
-          <text key={i} className={`label label-type-${label.labelType}`}
+          <text key={i} className={`label label-type-${label.type}`}
             transform={`translate(${label.loc[0]} ${label.loc[1]})`}
           >
-            {label.labelText}
+            {label.province}
           </text>
         ))
       }

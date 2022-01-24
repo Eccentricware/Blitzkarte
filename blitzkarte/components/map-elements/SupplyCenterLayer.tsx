@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
-import { Pin } from '../../utils/Parsing/pin';
+import { CityPin } from '../../utils/Parsing/cityPin';
 
 interface Props {
-  supplyCenters: Pin[]
+  supplyCenters: CityPin[]
 }
 
 export const SupplyCenterLayer: FC<Props> = ({supplyCenters}: Props) => {
@@ -11,7 +11,7 @@ export const SupplyCenterLayer: FC<Props> = ({supplyCenters}: Props) => {
     {
       supplyCenters.map((city, i) => {
         return (
-          <circle key={city.id ? city.id : i}
+          <circle key={i}
             cx={city.loc[0]}
             cy={city.loc[1]}
             r={20}
