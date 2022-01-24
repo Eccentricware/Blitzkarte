@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import { Parser } from '../utils/Parsing/parser-util';
 import { RenderElement } from '../utils/Parsing/renderElement';
 import { Unit } from '../utils/Parsing/unit';
-import { Pin } from '../utils/Parsing/pin';
+import { LabelPin } from '../utils/Parsing/labelPin';
+import { CityPin } from '../utils/Parsing/cityPin';
 
 import { GameMap } from '../components/map-elements/GameMap';
 
@@ -14,12 +15,12 @@ interface RenderData {
     bridge: RenderElement[],
     canal: RenderElement[]
   },
-  labels: Pin[],
   cities: {
-    supplyCenters: Pin[],
-    votingCenters: Pin[]
+    supplyCenters: CityPin[],
+    votingCenters: CityPin[]
   },
   units: Unit[]
+  labels: LabelPin[],
 }
 
 const GameParserPage: NextPage = () => {
@@ -30,12 +31,12 @@ const GameParserPage: NextPage = () => {
       bridge: [],
       canal: []
     },
-    labels: [],
     cities: {
       supplyCenters: [],
       votingCenters: []
     },
-    units: []
+    units: [],
+    labels: []
   });
 
   let parser: Parser = new Parser();

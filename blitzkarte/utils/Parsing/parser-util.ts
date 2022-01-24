@@ -1,14 +1,37 @@
-import { Country } from './country';
-import { Unit } from './unit';
 import { Province } from './province';
 import { Pin } from './pin';
-import { City } from './city';
+import { CityPin } from './cityPin';
+import { LabelPin } from './labelPin';
+import { NodePin } from './nodePin';
+import { Country } from './country';
+import { Unit } from './unit';
 import { RenderElement } from './renderElement';
+// import { City } from './city';
 
 export class Parser {
+  // Logic
   provinces: Province[];
+  nodes: Node[];
+  cityPins: CityPin[];
+  labelPins: LabelPin[];
+  nodePins: NodePin[];
   countries: Country[];
-  nodes: Pin[];
+  units: Unit[];
+  nameToIndexLibraries: {
+    provinces: {},
+    nodes: {},
+    cityPins: {},
+    labelPins: {},
+    nodePins: {},
+    countries: {},
+    units: {},
+    labels: {}
+  }
+  activeProvince: boolean;
+  warnings: string[];
+  errors: string[];
+
+  // Rendering
   renderElements: {
     terrain: {
       sea: RenderElement[],
@@ -16,21 +39,41 @@ export class Parser {
       bridge: RenderElement[],
       canal: RenderElement[]
     },
-    labels: Pin[],
     cities: {
-      supplyCenters: Pin[],
-      votingCenters: Pin[]
+      supplyCenters: CityPin[],
+      votingCenters: CityPin[]
     },
     units: Unit[]
+    labels: LabelPin[],
   };
-  warnings: string[];
-  errors: string[];
-  activeProvince: boolean;
+
+  // DB Format
+
+
   constructor() {
-    // Imediate Pull
+    // Logic
     this.provinces = [];
-    this.countries = [];
     this.nodes = [];
+    this.cityPins = [];
+    this.labelPins = [];
+    this.nodePins = [];
+    this.countries = [];
+    this.units = [];
+    this.nameToIndexLibraries = {
+      provinces: { },
+      nodes: {},
+      cityPins: {},
+      labelPins: {},
+      nodePins: { },
+      countries: { },
+      units: { },
+      labels: { }
+    }
+    this.activeProvince = false;
+    this.warnings = [];
+    this.errors = [];
+
+    // Rendering
     this.renderElements = {
       terrain: {
         sea: [],
@@ -38,35 +81,37 @@ export class Parser {
         bridge: [],
         canal: []
       },
-      labels: [],
       cities: {
         supplyCenters: [],
         votingCenters: []
       },
       units: [],
+      labels: [],
     }
-    this.warnings = [];
-    this.errors = [];
-    this.activeProvince = false;
 
-    // Display
-
-    // DB insert format
+    // DB Format
   }
 
   parse(fileString: string) {
     let elements : string[] = fileString.split('><');
-    console.log(elements);
+    console.log('Elements:', elements);
     elements.forEach(element => {
       let elementType = this.identifyElementType(element);
       this.parseElement(element, elementType);
     });
-    //this.colorLand();
+
+    // Feedback
     console.log('Provinces: ', this.provinces);
     console.log('Nodes:', this.nodes);
+    console.log('CityPins:', this.cityPins);
+    console.log('LabelPins:', this.labelPins);
+    console.log('NodePins:', this.nodePins);
     console.log('Countries:', this.countries);
+    console.log('Units:', this.units);
+    console.log('Name To Index Libraries:', this.nameToIndexLibraries);
     console.log('Render Elements:', this.renderElements);
-    console.log('Errors and Warnings:', this.errors);
+    // console.log('Warnings:', this.warnings);
+    console.log('Errors:', this.errors);
   }
 
   identifyElementType(element: string): string {
@@ -123,13 +168,22 @@ export class Parser {
         province[properKey] = value;
       });
 
-      if (province.isValidProvince()) {
-        // @ts-ignore
-        this.provinces.push(province);
-        this.activeProvince = true;
-      } else {
-        this.errors.push(`Invalid property detected in province ${provinceString}`);
+      if (province.unit && province.country) {
+        let unit = new Unit(province.unit, province.country, province.name);
+        let validUnits: string[] = ['army', 'fleet', 'wing', 'nuke', 'garrison'];
+        if (!validUnits.includes(unit.type)) {
+          this.errors.push(`Invalid unit type detected at ${province.name}`);
+        } else {
+          this.units.push(unit);
+          this.nameToIndexLibraries.units[unit.province] = this.units.length - 1;
+        }
       }
+
+      if (province.type) {
+        this.activeProvince = true;
+        this.provinces.push(province);
+      }
+      this.nameToIndexLibraries.provinces[province.name] = this.provinces.length - 1;
     } else {
       this.errors.push(`Missing province data for ${provinceString.slice(5, provinceString.length - 1)}`);
     }
@@ -138,11 +192,9 @@ export class Parser {
   parseCoordinate(coordinateString: string) {
     let newPin: Pin = new Pin();
     let coordinateProperties = coordinateString.split(' ');
-    if (coordinateProperties.length >= 3) {
+    if (coordinateProperties.length >= 3 && coordinateString.indexOf('type') > -1) {
       let data: string = coordinateProperties[2];
       let dataArray: string[] = data.slice(11, data.length - 1).split(',');
-      console.log('Coordinate Data:', data);
-      console.log('Coordinate Data Array:', dataArray);
 
       dataArray.forEach(property => {
         let properKey: string = property.split('=')[0];
@@ -159,36 +211,39 @@ export class Parser {
 
       let province: Province = this.provinces[this.provinces.length - 1];
 
-      console.log('Pin at type check', newPin);
-      if (newPin.pinType === 'node') {
-        if (!newPin.isValidNode()) {
-          this.errors.push(`Possible invalid keys for node ${coordinateString}`);
+      if (newPin.pinType === 'node' && (newPin.name && newPin.adj)) {
+        if (newPin.name && newPin.adj) {
+          let newNodePin = new NodePin(
+            newPin.name,
+            province.name,
+            newPin.type,
+            newPin.adj,
+            newPin.loc
+          );
+          this.nodePins.push(newNodePin);
         }
-        this.nodes.push(newPin);
       } else if (newPin.pinType === 'label') {
-        if (!newPin.isValidLabel()) {
-          this.errors.push(`Possible invalid keys for Label: ${coordinateString}`);
-        }
-        newPin.labelText = this.provinces[this.provinces.length - 1].name;
-        this.renderElements.labels.push(newPin);
-      } else if (newPin.pinType === 'city') {
-        if (newPin.cityType === 'supplyCenter') {
-          if (newPin.cityStatus === 'active') {
-            newPin.statusColor = 'white';
-          } else {
-            newPin.statusColor = 'gray';
-          }
-          this.renderElements.cities.supplyCenters.push(newPin);
-        } else if (newPin.cityType === 'capital') {
-          newPin.voteColor = 'gold';
-          newPin.statusColor = 'gold';
-          this.renderElements.cities.votingCenters.push(newPin);
-        } else if (newPin.cityType === 'votingCenter') {
-          newPin.voteColor = 'red';
-          newPin.statusColor = 'red';
-          this.renderElements.cities.votingCenters.push(newPin);
+        let newLabelPin = new LabelPin(
+          newPin.type,
+          province.name,
+          newPin.loc
+        );
+        this.renderElements.labels.push(newLabelPin);
+      }
+
+      else if (newPin.pinType === 'city') {
+        let newCityPin = new CityPin(
+          newPin.type,
+          province.name,
+          newPin.loc
+        );
+
+        if (newCityPin.type === 'c' || newCityPin.type === 'v') {
+          this.renderElements.cities.votingCenters.push(newCityPin);
+        } else if (newCityPin.type === 's' || newCityPin.type === 'd') {
+          this.renderElements.cities.supplyCenters.push(newCityPin);
         } else {
-          this.errors.push(`Invalid city type associated with ${province.name}`);
+          this.errors.push(`Invalid city type detected in ${province.name}`);
         }
       } else {
         this.errors.push(`Invalid Pin at ${coordinateString}}`);
@@ -208,11 +263,7 @@ export class Parser {
     }
 
     let renderProperties = renderString.split(' ');
-
     let data: string = renderString.split(' ')[2];
-
-    console.log('Render string', renderString);
-
 
     if (renderProperties.length >= 3) {
       console.log(`Processing render data ${data}`);
@@ -222,8 +273,6 @@ export class Parser {
       let pointIndexEnd = renderString.indexOf('\" fill');
       renderElement.points = renderString.slice(pointIndexStart + 8, pointIndexEnd);
 
-      // @ts-ignore
-      console.log(`adding render element ${data}`);
       this.renderElements.terrain[renderElement.type].push(renderElement);
     } else {
       this.errors.push(`Missing render type for element in ${renderElement.province}`);

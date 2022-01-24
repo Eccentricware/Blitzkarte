@@ -1,5 +1,12 @@
 export class Unit {
-  unitType: string | undefined;
-  unitLoc: string | undefined;
-  unitCountry: string | undefined;
+  type!: string;
+  province!: string;
+  loc: string[] | undefined;
+  country!: string;
+
+  constructor(type: string, country: string, province: string) {
+    this.type = type;
+    this.country = country;
+    this.province = province;
+  }
 }
