@@ -35,8 +35,8 @@ export class Parser {
   renderElements: {
     terrain: {
       sea: RenderElement[],
-      land: RenderElement[],
       bridge: RenderElement[],
+      land: RenderElement[],
       canal: RenderElement[]
     },
     cities: {
@@ -77,8 +77,8 @@ export class Parser {
     this.renderElements = {
       terrain: {
         sea: [],
-        land: [],
         bridge: [],
+        land: [],
         canal: []
       },
       cities: {
@@ -272,6 +272,7 @@ export class Parser {
       let pointIndexStart = renderString.indexOf('points=');
       let pointIndexEnd = renderString.indexOf('\" fill');
       renderElement.points = renderString.slice(pointIndexStart + 8, pointIndexEnd);
+
 
       this.renderElements.terrain[renderElement.type].push(renderElement);
     } else {

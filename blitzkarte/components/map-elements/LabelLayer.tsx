@@ -12,6 +12,7 @@ export const LabelLayer: FC<Props> = ({labelRenderData}: Props) => {
         labelRenderData.map((label, i) => (
           <text key={i} className={`label label-type-${label.type}`}
             transform={`translate(${label.loc[0]} ${label.loc[1]})`}
+            pointerEvents="none"
           >
             {label.province}
           </text>
