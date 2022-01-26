@@ -7,6 +7,8 @@ interface Props {
   renderData: any
 }
 
+let country: string = 'australia';
+
 export const GameMap: FC<Props> = ({renderData}: Props) => {
   return (
     <svg id="map" className="map" width="1488" height="930" viewBox="0 0 16000 10000">
