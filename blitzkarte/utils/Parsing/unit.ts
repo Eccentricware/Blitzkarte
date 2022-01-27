@@ -1,12 +1,14 @@
 export class Unit {
+  name: string;
   type!: string;
-  province!: string;
+  nodePin!: string;
   loc: string[] | undefined;
   country!: string;
 
-  constructor(type: string, country: string, province: string) {
+  constructor(name: string, type: string, country: string, nodePin: string) {
+    this.name = name;
     this.type = type;
     this.country = country;
-    this.province = province;
+    this.nodePin = nodePin;
   }
 }
