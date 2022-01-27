@@ -12,6 +12,7 @@ export class Pin {
   voteColor: string | undefined;
   statusColor: string | undefined;
   labelType: string | undefined;
+  unit: string | undefined;
   text: string | undefined;
   loc: number[];
 
@@ -29,6 +30,7 @@ export class Pin {
       'label',
       'text',
       'loc',
+      'unit',
       'adj'
     ];
 

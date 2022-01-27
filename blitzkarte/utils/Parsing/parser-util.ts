@@ -168,17 +168,6 @@ export class Parser {
         province[properKey] = value;
       });
 
-      if (province.unit && province.country) {
-        let unit = new Unit(province.unit, province.country, province.name);
-        let validUnits: string[] = ['army', 'fleet', 'wing', 'nuke', 'garrison'];
-        if (!validUnits.includes(unit.type)) {
-          this.errors.push(`Invalid unit type detected at ${province.name}`);
-        } else {
-          this.units.push(unit);
-          this.nameToIndexLibraries.units[unit.province] = this.units.length - 1;
-        }
-      }
-
       if (province.type) {
         this.activeProvince = true;
         this.provinces.push(province);
@@ -218,9 +207,20 @@ export class Parser {
             province.name,
             newPin.type,
             newPin.adj,
-            newPin.loc
+            newPin.loc,
           );
           this.nodePins.push(newNodePin);
+
+          if (newPin.unit && province.country) {
+            let newUnit = new Unit(
+              `${newPin.unit}_${newPin.name}`,
+              newPin.unit,
+              province.country,
+              newPin.name
+            );
+            this.units.push(newUnit);
+            this.nameToIndexLibraries.units[newUnit.name] = this.units.length - 1;
+          }
         }
       } else if (newPin.pinType === 'label') {
         let newLabelPin = new LabelPin(
@@ -248,6 +248,7 @@ export class Parser {
       } else {
         this.errors.push(`Invalid Pin at ${coordinateString}}`);
       }
+
     } else {
       this.errors.push(`Missing pin data for ${coordinateString.slice(5, coordinateString.length - 1)}`);
     }
