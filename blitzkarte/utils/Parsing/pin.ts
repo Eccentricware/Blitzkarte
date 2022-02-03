@@ -15,6 +15,7 @@ export class Pin {
   unit: string | undefined;
   text: string | undefined;
   loc: number[];
+  wrap: boolean | undefined;
 
   constructor() {
     this.loc = [];

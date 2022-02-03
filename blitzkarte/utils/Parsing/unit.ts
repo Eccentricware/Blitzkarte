@@ -5,8 +5,8 @@ export class Unit {
   loc: string[] | undefined;
   country!: string;
 
-  constructor(name: string, type: string, country: string, nodePin: string) {
-    this.name = name;
+  constructor(type: string, country: string, nodePin: string) {
+    this.name = `${country}_${type}_${nodePin}`;
     this.type = type;
     this.country = country;
     this.nodePin = nodePin;

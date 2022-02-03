@@ -4,7 +4,7 @@ export class Province {
   city: string | undefined;
   fullName: string | undefined;
   country: string | undefined;
-  unit: string | undefined;
   nuke: number | undefined;
+  wrap: boolean | undefined;
   constructor() {}
 }
