@@ -213,7 +213,6 @@ export class Parser {
 
           if (newPin.unit && province.country) {
             let newUnit = new Unit(
-              `${newPin.unit}_${newPin.name}`,
               newPin.unit,
               province.country,
               newPin.name
