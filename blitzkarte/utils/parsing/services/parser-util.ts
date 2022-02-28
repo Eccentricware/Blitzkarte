@@ -1,11 +1,11 @@
-import { Province } from './province';
-import { Pin } from './pin';
-import { CityPin } from './cityPin';
-import { LabelPin } from './labelPin';
-import { NodePin } from './nodePin';
-import { Country } from './country';
-import { Unit } from './unit';
-import { RenderElement } from './renderElement';
+import { Province } from '../classes/province';
+import { Pin } from '../classes/pin';
+import { CityPin } from '../classes/city-pin';
+import { LabelPin } from '../classes/label-pin';
+import { NodePin } from '../classes/node-pin';
+import { Country } from '../classes/country';
+import { Unit } from '../classes/unit';
+import { RenderElement } from '../classes/render-element';
 // import { City } from './city';
 
 export class Parser {

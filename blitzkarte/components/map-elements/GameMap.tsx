@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
-import { TerrainLayer } from './TerrainLayer';
-import { LabelLayer } from './LabelLayer';
-import { CityLayer } from './CityLayer';
+import { TerrainLayer } from './layers/terrain/TerrainLayer';
+import { LabelLayer } from './layers/label/LabelLayer';
+import { CityLayer } from './layers/city/CityLayer';
 
 interface Props {
   renderData: any
