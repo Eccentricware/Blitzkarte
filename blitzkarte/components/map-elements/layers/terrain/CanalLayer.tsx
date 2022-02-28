@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { RenderElement } from '../../utils/renderElement';
+import { RenderElement } from '../../../../utils/parsing/classes/render-element';
 
 interface Props {
   canalRenderData: RenderElement[]

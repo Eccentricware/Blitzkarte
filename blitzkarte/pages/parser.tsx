@@ -1,10 +1,10 @@
 import type { NextPage } from 'next';
 import React, { useState } from 'react';
-import { Parser } from '../utils/Parsing/parser-util';
-import { RenderElement } from '../utils/Parsing/renderElement';
-import { Unit } from '../utils/Parsing/unit';
-import { LabelPin } from '../utils/Parsing/labelPin';
-import { CityPin } from '../utils/Parsing/cityPin';
+import { Parser } from '../utils/parsing/services/parser-util';
+import { RenderElement } from '../utils/parsing/classes/render-element';
+import { Unit } from '../utils/parsing/classes/unit';
+import { LabelPin } from '../utils/parsing/classes/label-pin';
+import { CityPin } from '../utils/parsing/classes/city-pin';
 
 import { GameMap } from '../components/map-elements/GameMap';
 
