@@ -3,7 +3,7 @@ export class RenderElement {
   type: string | undefined;
   points: string | undefined;
   fill: string | undefined;
-  //coordinates: number[] | undefined;
+  wrapFactor: number | undefined;
   constructor() {}
 
   isValidRenderElement(): boolean {

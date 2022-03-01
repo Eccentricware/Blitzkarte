@@ -17,6 +17,7 @@ const SeaLayer: FC<Props> = ({seaRenderData}: Props) => {
             strokeMiterlimit="10"
             stroke="white"
             strokeWidth="4"
+            transform={`translate(${sea.wrapFactor * 16000} 0)`}
           />
         ))
       }

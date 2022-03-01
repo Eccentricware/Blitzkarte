@@ -24,7 +24,7 @@ interface RenderData {
 }
 
 const GameParserPage: NextPage = () => {
-  const [renderData, setRenderData] = useState <RenderData>({
+  const [renderData, setRenderData] = useState<RenderData>({
     terrain: {
       sea: [],
       land: [],
