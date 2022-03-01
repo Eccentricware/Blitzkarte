@@ -255,8 +255,12 @@ export class Parser {
 
   parseRenderElement(renderString: string) {
     let renderElement = new RenderElement();
+    let renderElementRight = new RenderElement();
+    let renderElementLeft = new RenderElement();
     if (this.activeProvince) {
       renderElement.province = this.provinces[this.provinces.length - 1].name;
+      renderElementRight.province = renderElement.province;
+      renderElementLeft.province = renderElement.province;
     } else {
       this.errors.push(`Invalid province association for render data ${renderString}`);
       return;
@@ -272,9 +276,16 @@ export class Parser {
       let pointIndexStart = renderString.indexOf('points=');
       let pointIndexEnd = renderString.indexOf('\" fill');
       renderElement.points = renderString.slice(pointIndexStart + 8, pointIndexEnd);
+      renderElementRight.points = renderElement.points;
+      renderElementLeft.points = renderElement.points;
 
+      renderElement.wrapFactor = 0;
+      renderElementRight.wrapFactor = 1;
+      renderElementLeft.wrapFactor = -1;
 
       this.renderElements.terrain[renderElement.type].push(renderElement);
+      this.renderElements.terrain[renderElement.type].push(renderElementRight);
+      this.renderElements.terrain[renderElement.type].push(renderElementLeft);
     } else {
       this.errors.push(`Missing render type for element in ${renderElement.province}`);
     }
