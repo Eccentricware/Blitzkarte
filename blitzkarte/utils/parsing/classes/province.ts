@@ -5,6 +5,5 @@ export class Province {
   fullName: string | undefined;
   country: string | undefined;
   nuke: number | undefined;
-  wrap: boolean | undefined;
   constructor() {}
 }

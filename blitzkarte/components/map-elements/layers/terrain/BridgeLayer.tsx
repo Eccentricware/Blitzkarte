@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { RenderElement } from '../../utils/renderElement';
+import { RenderElement } from '../../../../utils/parsing/classes/render-element';
 
 interface Props {
   bridgeRenderData: RenderElement[]
@@ -10,14 +10,31 @@ const BridgeLayer: FC<Props> = ({ bridgeRenderData }: Props) => {
     <React.Fragment>
       {
         bridgeRenderData.map(bridge => (
-          <polygon
-            key={bridge.province}
-            points={bridge.points}
-            fill="#42cafe"
-            strokeMiterlimit="10"
-            stroke="white"
-            strokeWidth="4"
-          />
+          <g key={bridge.province}>
+            <polygon
+              points={bridge.points}
+              fill="#42cafe"
+              strokeMiterlimit="10"
+              stroke="white"
+              strokeWidth="4"
+              transform="translate(-16000 10000)"
+            />
+            <polygon
+              points={bridge.points}
+              fill="#42cafe"
+              strokeMiterlimit="10"
+              stroke="white"
+              strokeWidth="4"
+            />
+            <polygon
+              points={bridge.points}
+              fill="#42cafe"
+              strokeMiterlimit="10"
+              stroke="white"
+              strokeWidth="4"
+              transform="translate(16000 10000)"
+            />
+          </g>
         ))
       }
     </React.Fragment>
