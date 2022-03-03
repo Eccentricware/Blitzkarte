@@ -10,14 +10,31 @@ const CanalLayer: FC<Props> = ({ canalRenderData }: Props) => {
     <React.Fragment>
       {
         canalRenderData.map(canal => (
-          <polygon
-            key={canal.province}
-            points={canal.points}
-            fill="#42cafe"
-            strokeMiterlimit="10"
-            stroke="white"
-            strokeWidth="4"
-          />
+          <g key={canal.province}>
+            <polygon
+              points={canal.points}
+              fill="#42cafe"
+              strokeMiterlimit="10"
+              stroke="white"
+              strokeWidth="4"
+              transform={`translate(-16000 0)`}
+            />
+            <polygon
+              points={canal.points}
+              fill="#42cafe"
+              strokeMiterlimit="10"
+              stroke="white"
+              strokeWidth="4"
+            />
+            <polygon
+              points={canal.points}
+              fill="#42cafe"
+              strokeMiterlimit="10"
+              stroke="white"
+              strokeWidth="4"
+              transform={`translate(16000 0)`}
+            />
+          </g>
         ))
       }
     </React.Fragment>
