@@ -160,10 +160,10 @@ export class Parser {
 
     if (provinceProperties.length >= 3) {
       let data: string = provinceProperties[2];
-      let dataArray : string[] = data.slice(11, data.length - 1).split(',');
+      let dataArray: string[] = data.slice(11, data.length - 1).split(',');
 
       dataArray.forEach(property => {
-        let properKey : string = property.split('=')[0];
+        let properKey: string = property.split('=')[0];
         let value: string = property.split('=')[1];
         province[properKey] = value;
       });
@@ -171,8 +171,8 @@ export class Parser {
       if (province.type) {
         this.activeProvince = true;
         this.provinces.push(province);
+        this.nameToIndexLibraries.provinces[province.name] = this.provinces.length - 1;
       }
-      this.nameToIndexLibraries.provinces[province.name] = this.provinces.length - 1;
     } else {
       this.errors.push(`Missing province data for ${provinceString.slice(5, provinceString.length - 1)}`);
     }
