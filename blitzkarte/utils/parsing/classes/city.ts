@@ -1,63 +1,27 @@
-export class Pin {
-  id: number | undefined;
-  name: string | undefined;
-  province: string | undefined;
-  pinType: string | undefined;
-  nodeType: string | undefined;
-  adj: string[] | undefined;
-  cityType: string | undefined;
-  cityStatus: string | undefined;
+export class City {
+  type!: string;
+  province!: string;
+  status!: string;
+  loc!: number[];
   voteColor: string | undefined;
   statusColor: string | undefined;
-  labelType: string | undefined;
-  labelText: string | undefined;
-  loc: number[];
 
-  constructor() {
-    this.loc = [];
-  }
+  constructor(type: string, province: string, loc: number[]) {
+    this.type = type;
+    this.province = province;
+    //this.status = status;
+    this.loc = loc;
 
-  isValidNode(): boolean {
-    let acceptedKeys: string[] = [
-      'pin',
-      'node',
-      'city',
-      'name',
-      'province',
-      'label',
-      'text',
-      'loc',
-      'adj'
-    ];
-
-    for (let key in this) {
-      if (!acceptedKeys.includes(key)) {
-        return false;
-      }
+    if (type === 'c') {
+      this.voteColor = 'gold';
+      this.statusColor = 'gold';
+    } else if (type === 'v') {
+      this.voteColor = 'red';
+      this.statusColor = 'red';
+    } else if (type === 's') {
+      this.statusColor = 'white';
+    } else if (type === 'd') {
+      this.statusColor = 'gray';
     }
-
-    return true;
-  }
-
-  isValidLabel(): boolean {
-    let acceptedKeys: string[] = [
-      'name',
-      'province',
-      'loc',
-      'pin',
-      'node',
-      'adj',
-      'city',
-      'label',
-      'text'
-    ];
-
-    for (let key in this) {
-      if (!acceptedKeys.includes(key)) {
-        return false;
-      }
-    }
-
-    return true;
   }
 }

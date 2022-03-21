@@ -1,18 +1,17 @@
+import { Element } from '../classes/element';
 import { Province } from '../classes/province';
 import { Pin } from '../classes/pin';
-import { CityPin } from '../classes/city-pin';
-import { LabelPin } from '../classes/label-pin';
-import { NodePin } from '../classes/node-pin';
+import { City } from '../classes/city';
+import { LabelPin } from '../classes/label';
+import { NodePin } from '../classes/node';
 import { Country } from '../classes/country';
 import { Unit } from '../classes/unit';
 import { RenderElement } from '../classes/render-element';
-// import { City } from './city';
-
 export class Parser {
   // Logic
   provinces: Province[];
-  nodes: Node[];
-  cityPins: CityPin[];
+  nodes: NodePin[];
+  cityPins: City[];
   labelPins: LabelPin[];
   nodePins: NodePin[];
   countries: Country[];
@@ -40,8 +39,8 @@ export class Parser {
       canal: RenderElement[]
     },
     cities: {
-      supplyCenters: CityPin[],
-      votingCenters: CityPin[]
+      supplyCenters: City[],
+      votingCenters: City[]
     },
     units: Unit[]
     labels: LabelPin[],
@@ -60,7 +59,7 @@ export class Parser {
     this.countries = [];
     this.units = [];
     this.nameToIndexLibraries = {
-      provinces: { },
+      provinces: {},
       nodes: {},
       cityPins: {},
       labelPins: {},
@@ -93,11 +92,10 @@ export class Parser {
   }
 
   parse(fileString: string) {
-    let elements : string[] = fileString.split('><');
-    console.log('Elements:', elements);
-    elements.forEach(element => {
-      let elementType = this.identifyElementType(element);
-      this.parseElement(element, elementType);
+    let elementStrings : string[] = fileString.split('><');
+    elementStrings.forEach(elementString => {
+      let element = new Element(elementString);
+      this.parseElement(element);
     });
 
     // Feedback
@@ -114,37 +112,16 @@ export class Parser {
     console.log('Errors:', this.errors);
   }
 
-  identifyElementType(element: string): string {
-    let firstClause : string | undefined = element.split(' ')[0];
-
-    switch (firstClause) {
-      case 'g':
-        return 'province';
-      case 'polyline':
-        return 'renderElement';
-      case 'polygon':
-        return 'renderElement';
-      case 'circle':
-        return 'coordinate';
-      case 'text':
-        return 'country';
-      case '/g':
-        return 'finishProvince';
-      default:
-        return 'other';
-    }
-  }
-
-  parseElement(element: string, elementType: string) {
-    switch (elementType) {
+  parseElement(element: Element) {
+    switch (element.type) {
       case 'province':
-        this.parseProvince(element);
+        this.parseProvince(element.fullString);
         break;
       case 'renderElement':
-        this.parseRenderElement(element);
+        this.parseRenderElement(element.fullString);
         break;
       case 'coordinate':
-        this.parseCoordinate(element);
+        this.parseCoordinate(element.fullString);
         break;
       case 'finishProvince':
         this.finishProvince();
@@ -179,62 +156,53 @@ export class Parser {
   }
 
   parseCoordinate(coordinateString: string) {
-    let newPin: Pin = new Pin();
-    let coordinateProperties = coordinateString.split(' ');
-    if (coordinateProperties.length >= 3 && coordinateString.indexOf('type') > -1) {
-      let data: string = coordinateProperties[2];
-      let dataArray: string[] = data.slice(11, data.length - 1).split(',');
+    let province: Province = this.provinces[this.provinces.length - 1];
+    let newCoordinate: Pin = new Pin();
 
-      dataArray.forEach(property => {
-        let properKey: string = property.split('=')[0];
-        if (properKey === 'adj') {
-          newPin[properKey] = property.split('=')[1].split('/');
-        } else {
-          newPin[properKey] = property.split('=')[1];
-        }
-      });
+      if (newCoordinate.pinType === 'node' && (newCoordinate.name && newCoordinate.adj)) {
 
-      let x: number = Number(coordinateProperties[3].slice(4, coordinateProperties[3].length - 1));
-      let y: number = Number(coordinateProperties[4].slice(4, coordinateProperties[4].length - 1));
-      newPin.loc = [x, y];
-
-      let province: Province = this.provinces[this.provinces.length - 1];
-
-      if (newPin.pinType === 'node' && (newPin.name && newPin.adj)) {
-        if (newPin.name && newPin.adj) {
-          let newNodePin = new NodePin(
-            newPin.name,
+        if (newCoordinate.validNode) {
+          let newNode = new NodePin(
+            newCoordinate.name,
             province.name,
-            newPin.type,
-            newPin.adj,
-            newPin.loc,
+            newCoordinate.type,
+            newCoordinate.adj,
+            newCoordinate.loc,
+          );
+          this.nodes.push(newNode);
+        }
+        if (newCoordinate.name && newCoordinate.adj) {
+          let newNodePin = new NodePin(
+            newCoordinate.name,
+            province.name,
+            newCoordinate.type,
+            newCoordinate.adj,
+            newCoordinate.loc,
           );
           this.nodePins.push(newNodePin);
 
-          if (newPin.unit && province.country) {
+          if (newCoordinate.unit && province.country) {
             let newUnit = new Unit(
-              newPin.unit,
+              newCoordinate.unit,
               province.country,
-              newPin.name
+              newCoordinate.name
             );
             this.units.push(newUnit);
             this.nameToIndexLibraries.units[newUnit.name] = this.units.length - 1;
           }
         }
-      } else if (newPin.pinType === 'label') {
+      } else if (newCoordinate.pinType === 'label') {
         let newLabelPin = new LabelPin(
-          newPin.type,
+          newCoordinate.type,
           province.name,
-          newPin.loc
+          newCoordinate.loc
         );
         this.renderElements.labels.push(newLabelPin);
-      }
-
-      else if (newPin.pinType === 'city') {
-        let newCityPin = new CityPin(
-          newPin.type,
+      } else if (newCoordinate.pinType === 'city') {
+        let newCityPin = new City(
+          newCoordinate.type,
           province.name,
-          newPin.loc
+          newCoordinate.loc
         );
 
         if (newCityPin.type === 'c' || newCityPin.type === 'v') {
@@ -246,11 +214,8 @@ export class Parser {
         }
       } else {
         this.errors.push(`Invalid Pin at ${coordinateString}}`);
+        this.errors.push(`Missing pin data for ${coordinateString.slice(5, coordinateString.length - 1)}`);
       }
-
-    } else {
-      this.errors.push(`Missing pin data for ${coordinateString.slice(5, coordinateString.length - 1)}`);
-    }
   }
 
   parseRenderElement(renderString: string) {
