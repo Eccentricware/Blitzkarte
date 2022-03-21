@@ -1,10 +1,10 @@
 import type { NextPage } from 'next';
 import React, { useState } from 'react';
-import { Parser } from '../utils/parsing/services/parser-util';
+import { Parser } from '../utils/parsing/services/parse-orchestrator';
 import { RenderElement } from '../utils/parsing/classes/render-element';
 import { Unit } from '../utils/parsing/classes/unit';
-import { LabelPin } from '../utils/parsing/classes/label-pin';
-import { CityPin } from '../utils/parsing/classes/city-pin';
+import { LabelPin } from '../utils/parsing/classes/label';
+import { City } from '../utils/parsing/classes/city';
 
 import { GameMap } from '../components/map-elements/GameMap';
 
@@ -16,8 +16,8 @@ interface RenderData {
     canal: RenderElement[]
   },
   cities: {
-    supplyCenters: CityPin[],
-    votingCenters: CityPin[]
+    supplyCenters: City[],
+    votingCenters: City[]
   },
   units: Unit[]
   labels: LabelPin[],
