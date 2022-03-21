@@ -15,53 +15,13 @@ export class Pin {
   unit: string | undefined;
   text: string | undefined;
   loc: number[];
+  validNode: boolean | undefined;
 
   constructor() {
     this.loc = [];
   }
 
-  isValidNode(): boolean {
-    let acceptedKeys: string[] = [
-      'pin',
-      'node',
-      'city',
-      'name',
-      'province',
-      'label',
-      'text',
-      'loc',
-      'unit',
-      'adj'
-    ];
-
-    for (let key in this) {
-      if (!acceptedKeys.includes(key)) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  isValidLabel(): boolean {
-    let acceptedKeys: string[] = [
-      'name',
-      'province',
-      'loc',
-      'pin',
-      'node',
-      'adj',
-      'city',
-      'label',
-      'text'
-    ];
-
-    for (let key in this) {
-      if (!acceptedKeys.includes(key)) {
-        return false;
-      }
-    }
-
-    return true;
+  validateAsNode() {
+    this.validNode = true;
   }
 }
