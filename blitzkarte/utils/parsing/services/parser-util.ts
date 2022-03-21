@@ -93,8 +93,10 @@ export class Parser {
 
   parse(fileString: string) {
     let elementStrings : string[] = fileString.split('><');
+    console.log('elementStrings', elementStrings);
     elementStrings.forEach(elementString => {
       let element = new Element(elementString);
+      //let elementType = this.identifyElementType(elementString);
       this.parseElement(element);
     });
 
@@ -132,26 +134,14 @@ export class Parser {
   }
 
   parseProvince(provinceString: string) {
-    let province = new Province();
-    let provinceProperties = provinceString.split(' ');
+    let province = new Province(provinceString);
 
-    if (provinceProperties.length >= 3) {
-      let data: string = provinceProperties[2];
-      let dataArray: string[] = data.slice(11, data.length - 1).split(',');
-
-      dataArray.forEach(property => {
-        let properKey: string = property.split('=')[0];
-        let value: string = property.split('=')[1];
-        province[properKey] = value;
-      });
-
-      if (province.type) {
-        this.activeProvince = true;
-        this.provinces.push(province);
-        this.nameToIndexLibraries.provinces[province.name] = this.provinces.length - 1;
-      }
+    if (province.valid) {
+      this.activeProvince = true;
+      this.provinces.push(province);
+      this.nameToIndexLibraries.provinces[province.name] = this.provinces.length - 1;
     } else {
-      this.errors.push(`Missing province data for ${provinceString.slice(5, provinceString.length - 1)}`);
+      this.collectErrors(province.errors);
     }
   }
 
@@ -248,5 +238,11 @@ export class Parser {
 
   finishProvince() {
     this.activeProvince = false;
+  }
+
+  collectErrors(errors: string[]) {
+    errors.forEach(error => {
+      this.errors.push(error);
+    });
   }
 }
