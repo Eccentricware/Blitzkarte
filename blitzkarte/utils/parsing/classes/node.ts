@@ -1,15 +1,14 @@
+import { Pin } from "./pin";
+
 export class NodePin {
-  name: string;
+  name?: string;
   province!: string;
   type!: string;
   adj!: string[];
   loc!: number[];
 
-  constructor(name: string, province: string, type: string, adj: string[], loc: number[]) {
-    this.name = name;
-    this.province = province;
-    this.type = type;
-    this.adj = adj;
-    this.loc = loc;
+  constructor(pin: Pin) {
+    //this.name = pin.name +
+    console.log('pin', pin);
   }
 }
