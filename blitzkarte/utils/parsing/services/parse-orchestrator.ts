@@ -63,10 +63,10 @@ export class Parser {
       nodes: {},
       cityPins: {},
       labelPins: {},
-      nodePins: { },
-      countries: { },
-      units: { },
-      labels: { }
+      nodePins: {},
+      countries: {},
+      units: {},
+      labels: {}
     }
     this.activeProvince = false;
     this.warnings = [];
@@ -93,14 +93,13 @@ export class Parser {
 
   parse(fileString: string) {
     let elementStrings : string[] = fileString.split('><');
-    console.log('elementStrings', elementStrings);
     elementStrings.forEach(elementString => {
       let element = new Element(elementString);
-      //let elementType = this.identifyElementType(elementString);
       this.parseElement(element);
     });
 
     // Feedback
+    console.log('elementStrings', elementStrings);
     console.log('Provinces: ', this.provinces);
     console.log('Nodes:', this.nodes);
     console.log('CityPins:', this.cityPins);
@@ -146,66 +145,78 @@ export class Parser {
   }
 
   parseCoordinate(coordinateString: string) {
+    if (!this.activeProvince) {
+      this.errors.push(`Invalid province association for render data ${coordinateString}`);
+      return;
+    }
+
     let province: Province = this.provinces[this.provinces.length - 1];
-    let newCoordinate: Pin = new Pin();
+    let newPin: Pin = new Pin(coordinateString, province.name);
 
-      if (newCoordinate.pinType === 'node' && (newCoordinate.name && newCoordinate.adj)) {
+    if (!newPin.valid) {
+      this.collectErrors(newPin.errors);
+      return;
+    }
 
-        if (newCoordinate.validNode) {
-          let newNode = new NodePin(
-            newCoordinate.name,
-            province.name,
-            newCoordinate.type,
-            newCoordinate.adj,
-            newCoordinate.loc,
-          );
-          this.nodes.push(newNode);
-        }
-        if (newCoordinate.name && newCoordinate.adj) {
-          let newNodePin = new NodePin(
-            newCoordinate.name,
-            province.name,
-            newCoordinate.type,
-            newCoordinate.adj,
-            newCoordinate.loc,
-          );
-          this.nodePins.push(newNodePin);
+    if (newPin.pinType === 'node') {
+      let newNode: NodePin = new NodePin(newPin);
+    }
 
-          if (newCoordinate.unit && province.country) {
-            let newUnit = new Unit(
-              newCoordinate.unit,
-              province.country,
-              newCoordinate.name
-            );
-            this.units.push(newUnit);
-            this.nameToIndexLibraries.units[newUnit.name] = this.units.length - 1;
-          }
-        }
-      } else if (newCoordinate.pinType === 'label') {
-        let newLabelPin = new LabelPin(
-          newCoordinate.type,
-          province.name,
-          newCoordinate.loc
-        );
-        this.renderElements.labels.push(newLabelPin);
-      } else if (newCoordinate.pinType === 'city') {
-        let newCityPin = new City(
-          newCoordinate.type,
-          province.name,
-          newCoordinate.loc
-        );
+    // if (newPin.pinType === 'node' && (newPin.name && newPin.adj)) {
 
-        if (newCityPin.type === 'c' || newCityPin.type === 'v') {
-          this.renderElements.cities.votingCenters.push(newCityPin);
-        } else if (newCityPin.type === 's' || newCityPin.type === 'd') {
-          this.renderElements.cities.supplyCenters.push(newCityPin);
-        } else {
-          this.errors.push(`Invalid city type detected in ${province.name}`);
-        }
+    //   if (newPin.valid) {
+    //     let newNode = new NodePin(
+    //       newPin.name,
+    //       province.name,
+    //       newPin.type,
+    //       newPin.adj,
+    //       newPin.loc,
+    //     );
+    //     this.nodes.push(newNode);
+    //   }
+    //   if (newPin.name && newPin.adj) {
+    //     let newNodePin = new NodePin(
+    //       newPin.name,
+    //       province.name,
+    //       newPin.type,
+    //       newPin.adj,
+    //       newPin.loc,
+    //     );
+    //     this.nodePins.push(newNodePin);
+
+    //     if (newPin.unit && province.country) {
+    //       let newUnit = new Unit(
+    //         newPin.unit,
+    //         province.country,
+    //         newPin.name
+    //       );
+    //       this.units.push(newUnit);
+    //       this.nameToIndexLibraries.units[newUnit.name] = this.units.length - 1;
+    //     }
+    //   }
+    // } else
+    if (newPin.pinType === 'label') {
+      let newLabelPin = new LabelPin(
+        newPin.type,
+        province.name,
+        newPin.loc
+      );
+      this.renderElements.labels.push(newLabelPin);
+    } else if (newPin.pinType === 'city') {
+      let newCityPin = new City(
+        newPin.type,
+        province.name,
+        newPin.loc
+      );
+
+      if (newCityPin.type === 'c' || newCityPin.type === 'v') {
+        this.renderElements.cities.votingCenters.push(newCityPin);
+      } else if (newCityPin.type === 's' || newCityPin.type === 'd') {
+        this.renderElements.cities.supplyCenters.push(newCityPin);
       } else {
-        this.errors.push(`Invalid Pin at ${coordinateString}}`);
-        this.errors.push(`Missing pin data for ${coordinateString.slice(5, coordinateString.length - 1)}`);
+        this.errors.push(`Invalid city type detected in ${province.name}`);
       }
+    }
   }
 
   parseRenderElement(renderString: string) {
