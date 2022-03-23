@@ -10,9 +10,10 @@ export class LabelPin {
   errors: string[] = [];
 
   constructor(pin: Pin) {
-    this.type = pin.type;
+    this.type = pin.type[0].toLowerCase();
 
-    this.text = pin.text === '.' ? pin.province : pin.text;
+
+    this.text = pin.text ? pin.text : pin.province;
     this.name = `${pin.province}_label_${this.text}`;
     this.province = pin.province;
     this.loc = pin.loc;
@@ -28,11 +29,7 @@ export class LabelPin {
   }
 
   validateType(): boolean {
-    const validLabelTypes: string[] = [
-      's',
-      'l',
-      'c'
-    ];
+    const validLabelTypes: string[] = ['s', 'l', 'c'];
 
     if (!validLabelTypes.includes(this.type)) {
       this.errors.push(`Invalid Label Type: ${this.name}`);
