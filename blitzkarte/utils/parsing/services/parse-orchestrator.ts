@@ -11,14 +11,14 @@ export class Parser {
   // Logic
   provinces: Province[];
   nodes: NodePin[];
-  cityPins: City[];
+  cities: City[];
   labels: LabelPin[];
   countries: Country[];
   units: Unit[];
   nameToIndexLibraries: {
     provinces: {},
     nodes: {},
-    cityPins: {},
+    cities: {},
     labels: {},
     countries: {},
     units: {}
@@ -50,7 +50,7 @@ export class Parser {
     // Logic
     this.provinces = [];
     this.nodes = [];
-    this.cityPins = [];
+    this.cities = [];
     this.labels = [];
     //this.nodePins = [];
     this.countries = [];
@@ -58,7 +58,7 @@ export class Parser {
     this.nameToIndexLibraries = {
       provinces: {},
       nodes: {},
-      cityPins: {},
+      cities: {},
       labels: {},
       //nodePins: {},
       countries: {},
@@ -98,7 +98,7 @@ export class Parser {
     //console.log('elementStrings', elementStrings);
     console.log('Provinces: ', this.provinces);
     console.log('Nodes:', this.nodes);
-    console.log('CityPins:', this.cityPins);
+    console.log('CityPins:', this.cities);
     console.log('LabelPins:', this.labels);
     //console.log('NodePins:', this.nodePins);
     console.log('Countries:', this.countries);
@@ -142,7 +142,8 @@ export class Parser {
 
   parseCoordinate(coordinateString: string) {
     if (!this.activeProvince) {
-      this.errors.push(`Invalid province association for render data ${coordinateString}`);
+      let props: string[] = coordinateString.split(' ');
+      this.errors.push(`Invalid province association: ${props[0]} ${props[1]}`);
       return;
     }
 
@@ -176,23 +177,22 @@ export class Parser {
       if (newLabel.valid) {
         this.labels.push(newLabel);
         this.renderElements.labels.push(newLabel);
-        this.nameToIndexLibraries.labels[newLabel.name] = this.nameToIndexLibraries.labels[newLabel.name] = this.labels.length - 1;
+        this.nameToIndexLibraries.labels[newLabel.name] = this.labels.length - 1;
       } else {
         this.collectErrors(newLabel.errors);
       }
     } else if (newPin.pinType === 'city') {
-      let newCityPin = new City(
-        newPin.type,
-        province.name,
-        newPin.loc
-      );
-
-      if (newCityPin.type === 'c' || newCityPin.type === 'v') {
-        this.renderElements.cities.votingCenters.push(newCityPin);
-      } else if (newCityPin.type === 's' || newCityPin.type === 'd') {
-        this.renderElements.cities.supplyCenters.push(newCityPin);
+      let newCity = new City(newPin);
+      if (newCity.valid) {
+        this.cities.push(newCity);
+        this.nameToIndexLibraries.cities[newCity.name] = this.cities.length - 1;
+        if (newCity.renderCategory === 'votingCenter') {
+          this.renderElements.cities.votingCenters.push(newCity);
+        } else {
+          this.renderElements.cities.supplyCenters.push(newCity);
+        }
       } else {
-        this.errors.push(`Invalid city type detected in ${province.name}`);
+        this.collectErrors(newCity.errors);
       }
     }
   }
@@ -202,7 +202,8 @@ export class Parser {
     if (this.activeProvince) {
       renderElement.province = this.provinces[this.provinces.length - 1].name;
     } else {
-      this.errors.push(`Invalid province association for render data ${renderString}`);
+      const props: string[] = renderString.split(' ');
+      this.errors.push(`Invalid province association: ${props[0]} ${props[1]}`);
       return;
     }
 
