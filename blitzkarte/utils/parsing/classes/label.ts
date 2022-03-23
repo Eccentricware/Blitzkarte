@@ -1,30 +1,51 @@
+import { Pin } from "./pin";
+
 export class LabelPin {
+  name: string;
   type!: string;
-  //text!: string;
+  text!: string | undefined;
   province!: string;
   loc!: number[];
+  valid: boolean;
+  errors: string[] = [];
 
-  constructor(type: string, province: string, loc: number[]) {
-    this.type = type;
-    //this.text = text;
-    this.province = province;
-    this.loc = loc;
+  constructor(pin: Pin) {
+    this.type = pin.type;
+
+    this.text = pin.text === '.' ? pin.province : pin.text;
+    this.name = `${pin.province}_label_${this.text}`;
+    this.province = pin.province;
+    this.loc = pin.loc;
+
+    this.valid = this.validate();
   }
 
-  isValidLabel(): boolean {
-    let acceptedKeys: string[] = [
-      'type',
-      //'text',
-      'province',
-      'loc'
+  validate(): boolean {
+    const typeValid: boolean = this.validateType();
+    const textValid: boolean = this.validateText();
+
+    return typeValid && textValid;
+  }
+
+  validateType(): boolean {
+    const validLabelTypes: string[] = [
+      's',
+      'l',
+      'c'
     ];
 
-    for (let key in this) {
-      if (!acceptedKeys.includes(key)) {
-        return false;
-      }
+    if (!validLabelTypes.includes(this.type)) {
+      this.errors.push(`Invalid Label Type: ${this.name}`);
+      return false;
     }
+    return true;
+  }
 
+  validateText(): boolean {
+    if (!this.text) {
+      this.errors.push(`Missing Label Text: ${this.name}`);
+      return false;
+    }
     return true;
   }
 }

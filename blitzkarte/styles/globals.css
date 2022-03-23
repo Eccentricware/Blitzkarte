@@ -26,17 +26,17 @@ a {
   alignment-baseline: middle;
 }
 
-.label-type-L {
+.label-type-l {
   font-size: 100px;
   fill: black;
 }
 
-.label-type-S {
+.label-type-s {
   font-size: 100px;
   fill: white;
 }
 
-.label-type-C {
+.label-type-c {
   font-size: 60px;
   fill: black;
 }

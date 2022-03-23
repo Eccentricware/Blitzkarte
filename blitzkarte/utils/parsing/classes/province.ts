@@ -24,8 +24,8 @@ export class Province {
 
     } else {
       this.valid = false;
-      if (provinceString.slice(5, provinceString.length - 1) !== 'Tracemap') {
-        this.errors.push(`Missing province data for ${provinceString.slice(5, provinceString.length - 1)}`);
+      if (provinceString.slice(6, provinceString.length - 1) !== 'Tracemap') {
+        this.errors.push(`Missing province data for ${provinceString.slice(6, provinceString.length - 1)}`);
       }
     }
   }
