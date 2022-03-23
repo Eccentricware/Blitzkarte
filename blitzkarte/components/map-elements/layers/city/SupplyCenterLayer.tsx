@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
-import { CityPin } from '../../../../utils/parsing/classes/city-pin'
+import { City } from '../../../../utils/parsing/classes/city';
 
 interface Props {
-  supplyCenters: CityPin[]
+  supplyCenters: City[]
 }
 
 export const SupplyCenterLayer: FC<Props> = ({supplyCenters}: Props) => {

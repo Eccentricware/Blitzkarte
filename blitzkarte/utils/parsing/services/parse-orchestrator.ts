@@ -12,19 +12,16 @@ export class Parser {
   provinces: Province[];
   nodes: NodePin[];
   cityPins: City[];
-  labelPins: LabelPin[];
-  nodePins: NodePin[];
+  labels: LabelPin[];
   countries: Country[];
   units: Unit[];
   nameToIndexLibraries: {
     provinces: {},
     nodes: {},
     cityPins: {},
-    labelPins: {},
-    nodePins: {},
+    labels: {},
     countries: {},
-    units: {},
-    labels: {}
+    units: {}
   }
   activeProvince: boolean;
   warnings: string[];
@@ -54,19 +51,18 @@ export class Parser {
     this.provinces = [];
     this.nodes = [];
     this.cityPins = [];
-    this.labelPins = [];
-    this.nodePins = [];
+    this.labels = [];
+    //this.nodePins = [];
     this.countries = [];
     this.units = [];
     this.nameToIndexLibraries = {
       provinces: {},
       nodes: {},
       cityPins: {},
-      labelPins: {},
-      nodePins: {},
+      labels: {},
+      //nodePins: {},
       countries: {},
-      units: {},
-      labels: {}
+      units: {}
     }
     this.activeProvince = false;
     this.warnings = [];
@@ -99,17 +95,17 @@ export class Parser {
     });
 
     // Feedback
-    console.log('elementStrings', elementStrings);
+    //console.log('elementStrings', elementStrings);
     console.log('Provinces: ', this.provinces);
     console.log('Nodes:', this.nodes);
     console.log('CityPins:', this.cityPins);
-    console.log('LabelPins:', this.labelPins);
-    console.log('NodePins:', this.nodePins);
+    console.log('LabelPins:', this.labels);
+    //console.log('NodePins:', this.nodePins);
     console.log('Countries:', this.countries);
     console.log('Units:', this.units);
     console.log('Name To Index Libraries:', this.nameToIndexLibraries);
     console.log('Render Elements:', this.renderElements);
-    // console.log('Warnings:', this.warnings);
+    //console.log('Warnings:', this.warnings);
     console.log('Errors:', this.errors);
   }
 
@@ -160,48 +156,30 @@ export class Parser {
 
     if (newPin.pinType === 'node') {
       let newNode: NodePin = new NodePin(newPin);
-    }
-
-    // if (newPin.pinType === 'node' && (newPin.name && newPin.adj)) {
-
-    //   if (newPin.valid) {
-    //     let newNode = new NodePin(
-    //       newPin.name,
-    //       province.name,
-    //       newPin.type,
-    //       newPin.adj,
-    //       newPin.loc,
-    //     );
-    //     this.nodes.push(newNode);
-    //   }
-    //   if (newPin.name && newPin.adj) {
-    //     let newNodePin = new NodePin(
-    //       newPin.name,
-    //       province.name,
-    //       newPin.type,
-    //       newPin.adj,
-    //       newPin.loc,
-    //     );
-    //     this.nodePins.push(newNodePin);
-
-    //     if (newPin.unit && province.country) {
-    //       let newUnit = new Unit(
-    //         newPin.unit,
-    //         province.country,
-    //         newPin.name
-    //       );
-    //       this.units.push(newUnit);
-    //       this.nameToIndexLibraries.units[newUnit.name] = this.units.length - 1;
-    //     }
-    //   }
-    // } else
-    if (newPin.pinType === 'label') {
-      let newLabelPin = new LabelPin(
-        newPin.type,
-        province.name,
-        newPin.loc
-      );
-      this.renderElements.labels.push(newLabelPin);
+      if (newNode.valid) {
+        this.nodes.push(newNode);
+        this.nameToIndexLibraries.nodes[newNode.name] = this.nodes.length - 1;
+        if (newNode.unit) {
+          let newUnit: Unit = new Unit(newNode, province.country);
+          if (newUnit.valid) {
+            this.units.push(newUnit);
+            this.nameToIndexLibraries.units[newUnit.name] = this.units.length - 1;
+          } else {
+            this.collectErrors(newUnit.errors);
+          }
+        }
+      } else {
+        this.collectErrors(newNode.errors);
+      }
+    } else if (newPin.pinType === 'label') {
+      let newLabel = new LabelPin(newPin);
+      if (newLabel.valid) {
+        this.labels.push(newLabel);
+        this.renderElements.labels.push(newLabel);
+        this.nameToIndexLibraries.labels[newLabel.name] = this.nameToIndexLibraries.labels[newLabel.name] = this.labels.length - 1;
+      } else {
+        this.collectErrors(newLabel.errors);
+      }
     } else if (newPin.pinType === 'city') {
       let newCityPin = new City(
         newPin.type,

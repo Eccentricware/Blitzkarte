@@ -1,11 +1,14 @@
 export class Pin {
-  name: string | undefined;
+  name!: string;
   province!: string;
   pinType!: string | undefined;
   type!: string;
+  text: string | undefined;
+  unit: string | undefined;
   cx: string | undefined;
   cy: string | undefined;
   loc!: number[];
+  adj: string | undefined;
   valid: boolean | undefined;
   errors: string[] = [];
 

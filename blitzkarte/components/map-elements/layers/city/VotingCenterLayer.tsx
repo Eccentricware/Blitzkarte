@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
-import { CityPin } from '../../../../utils/parsing/classes/city-pin';
+import { City } from '../../../../utils/parsing/classes/city';
 
 interface Props {
-  votingCenters: CityPin[]
+  votingCenters: City[]
 }
 
 export const VotingCenterLayer: FC<Props> = ({votingCenters}: Props) => {
