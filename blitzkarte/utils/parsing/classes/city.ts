@@ -21,17 +21,17 @@ export class City {
     if (this.type === 'c') {
       this.voteColor = 'gold';
       this.statusColor = 'gold';
-      this.renderCategory = 'votingCenter';
+      this.renderCategory = 'votingCenters';
     } else if (this.type === 'v') {
       this.voteColor = 'red';
       this.statusColor = 'red';
-      this.renderCategory = 'votingCenter';
+      this.renderCategory = 'votingCenters';
     } else if (this.type === 's') {
       this.statusColor = 'white';
-      this.renderCategory = 'city';
+      this.renderCategory = 'supplyCenters';
     } else if (this.type === 'd') {
       this.statusColor = 'gray';
-      this.renderCategory = 'city';
+      this.renderCategory = 'supplyCenters';
     }
 
     this.valid = this.validate();
