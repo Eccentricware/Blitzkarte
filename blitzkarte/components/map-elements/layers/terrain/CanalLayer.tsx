@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
-import { RenderElement } from '../../../../utils/parsing/classes/render-element';
+import { Terrain } from '../../../../utils/parsing/classes/terrain';
 
 interface Props {
-  canalRenderData: RenderElement[]
+  canalRenderData: Terrain[]
 }
 
 const CanalLayer: FC<Props> = ({ canalRenderData }: Props) => {
