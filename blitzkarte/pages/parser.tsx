@@ -38,12 +38,15 @@ const GameParserPage: NextPage = () => {
     units: [],
     labels: []
   });
+  const [fileString, setFileString] = useState('Paste File Here');
 
   let parser: Parser = new Parser();
 
   function handleChange(fileString: string) {
+    setFileString(fileString);
     parser.parse(fileString);
     setRenderData(parser.renderElements);
+    setFileString('Paste File Here Again');
   }
 
   return (
@@ -52,6 +55,7 @@ const GameParserPage: NextPage = () => {
         <div>
           <label>SVG Input</label>
           <input type="text"
+            value={fileString}
             onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
               handleChange(e.target.value);
             }}>

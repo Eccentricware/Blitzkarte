@@ -35,7 +35,9 @@ export class Parser {
       sea: Terrain[],
       bridge: Terrain[],
       land: Terrain[],
-      canal: Terrain[]
+      canal: Terrain[],
+      poles: Terrain[],
+      impassible: Terrain[]
     },
     cities: {
       supplyCenters: City[],
@@ -52,7 +54,9 @@ export class Parser {
         sea: [],
         bridge: [],
         land: [],
-        canal: []
+        canal: [],
+        poles: [],
+        impassible: []
       },
       cities: {
         supplyCenters: [],
@@ -109,8 +113,7 @@ export class Parser {
 
     if (province.valid) {
       this.activeProvince = true;
-      this.provinces.push(province);
-      this.nameToIndexLibraries.provinces[province.name] = this.provinces.length - 1;
+      this.registerElement(province, 'provinces');
     } else {
       this.collectErrors(province.errors);
     }
@@ -134,13 +137,11 @@ export class Parser {
     if (newPin.pinType === 'node') {
       let newNode: NodePin = new NodePin(newPin);
       if (newNode.valid) {
-        this.nodes.push(newNode);
-        this.nameToIndexLibraries.nodes[newNode.name] = this.nodes.length - 1;
+        this.registerElement(newPin, 'nodes');
         if (newNode.unit) {
           let newUnit: Unit = new Unit(newNode, province.country);
           if (newUnit.valid) {
-            this.units.push(newUnit);
-            this.nameToIndexLibraries.units[newUnit.name] = this.units.length - 1;
+            this.registerElement(newUnit, 'units');
           } else {
             this.collectErrors(newUnit.errors);
           }
@@ -148,25 +149,19 @@ export class Parser {
       } else {
         this.collectErrors(newNode.errors);
       }
+
     } else if (newPin.pinType === 'label') {
       let newLabel = new LabelPin(newPin);
       if (newLabel.valid) {
-        this.labels.push(newLabel);
-        this.renderElements.labels.push(newLabel);
-        this.nameToIndexLibraries.labels[newLabel.name] = this.labels.length - 1;
+        this.registerElement(newLabel, 'labels');
       } else {
         this.collectErrors(newLabel.errors);
       }
+
     } else if (newPin.pinType === 'city') {
       let newCity = new City(newPin);
       if (newCity.valid) {
-        this.cities.push(newCity);
-        this.nameToIndexLibraries.cities[newCity.name] = this.cities.length - 1;
-        if (newCity.renderCategory === 'votingCenter') {
-          this.renderElements.cities.votingCenters.push(newCity);
-        } else {
-          this.renderElements.cities.supplyCenters.push(newCity);
-        }
+        this.registerElement(newCity, 'cities', newCity.renderCategory);
       } else {
         this.collectErrors(newCity.errors);
       }
@@ -183,9 +178,7 @@ export class Parser {
     let newTerrain = new Terrain(terrainString, provinceName);
 
     if (newTerrain.valid) {
-      this.renderElements.terrain[newTerrain.type].push(newTerrain);
-      this.terrain.push(newTerrain);
-      this.nameToIndexLibraries.terrain[newTerrain.name] = this.cities.length - 1;
+      this.registerElement(newTerrain, 'terrain', newTerrain.type);
     } else {
       this.collectErrors(newTerrain.errors);
     }
@@ -193,6 +186,16 @@ export class Parser {
 
   finishProvince() {
     this.activeProvince = false;
+  }
+
+  registerElement(element: any, elementType: string, renderCategory?: string) {
+    this[elementType].push(element);
+    this.nameToIndexLibraries[elementType][element.name] = this[elementType].length - 1;
+    if (elementType === 'labels' || elementType === 'units') {
+      this.renderElements[elementType].push(element);
+    } else if (renderCategory) {
+      this.renderElements[elementType][renderCategory].push(element);
+    }
   }
 
   collectErrors(errors: string[]) {
