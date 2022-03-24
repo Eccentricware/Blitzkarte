@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import React, { useState } from 'react';
 import { Parser } from '../utils/parsing/services/parse-orchestrator';
-import { RenderElement } from '../utils/parsing/classes/render-element';
+import { Terrain } from '../utils/parsing/classes/terrain';
 import { Unit } from '../utils/parsing/classes/unit';
 import { LabelPin } from '../utils/parsing/classes/label';
 import { City } from '../utils/parsing/classes/city';
@@ -10,10 +10,10 @@ import { GameMap } from '../components/map-elements/GameMap';
 
 interface RenderData {
   terrain: {
-    sea: RenderElement[],
-    land: RenderElement[],
-    bridge: RenderElement[],
-    canal: RenderElement[]
+    sea: Terrain[],
+    land: Terrain[],
+    bridge: Terrain[],
+    canal: Terrain[]
   },
   cities: {
     supplyCenters: City[],
@@ -48,7 +48,6 @@ const GameParserPage: NextPage = () => {
 
   return (
     <div>
-      <h1>Super Visual Glorious Serializer</h1>
       <form className="map-parser">
         <div>
           <label>SVG Input</label>
@@ -59,7 +58,6 @@ const GameParserPage: NextPage = () => {
           </input>
         </div>
       </form>
-      <div><b>Map</b></div>
       <GameMap renderData={renderData}/>
       <div><b>Tables</b></div>
       <div>Coming soon!</div>

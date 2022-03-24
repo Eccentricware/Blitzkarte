@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
-import { RenderElement } from '../../../../utils/parsing/classes/render-element';
+import { Terrain } from '../../../../utils/parsing/classes/terrain';
 
 interface Props {
-  bridgeRenderData: RenderElement[]
+  bridgeRenderData: Terrain[]
 }
 
 const BridgeLayer: FC<Props> = ({ bridgeRenderData }: Props) => {

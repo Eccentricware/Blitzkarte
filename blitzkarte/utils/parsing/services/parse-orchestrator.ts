@@ -6,34 +6,36 @@ import { LabelPin } from '../classes/label';
 import { NodePin } from '../classes/node';
 import { Country } from '../classes/country';
 import { Unit } from '../classes/unit';
-import { RenderElement } from '../classes/render-element';
+import { Terrain } from '../classes/terrain';
 export class Parser {
   // Logic
-  provinces: Province[];
-  nodes: NodePin[];
-  cities: City[];
-  labels: LabelPin[];
-  countries: Country[];
-  units: Unit[];
-  nameToIndexLibraries: {
+  provinces: Province[] = [];
+  terrain: Terrain[] = [];
+  nodes: NodePin[] = [];
+  cities: City[] = [];
+  labels: LabelPin[] = [];
+  countries: Country[] = [];
+  units: Unit[] = [];
+  nameToIndexLibraries = {
     provinces: {},
+    terrain: {},
     nodes: {},
     cities: {},
     labels: {},
     countries: {},
     units: {}
   }
-  activeProvince: boolean;
-  warnings: string[];
-  errors: string[];
+  activeProvince: boolean = false;
+  warnings: string[] = [];
+  errors: string[] = [];
 
   // Rendering
   renderElements: {
     terrain: {
-      sea: RenderElement[],
-      bridge: RenderElement[],
-      land: RenderElement[],
-      canal: RenderElement[]
+      sea: Terrain[],
+      bridge: Terrain[],
+      land: Terrain[],
+      canal: Terrain[]
     },
     cities: {
       supplyCenters: City[],
@@ -43,31 +45,7 @@ export class Parser {
     labels: LabelPin[],
   };
 
-  // DB Format
-
-
   constructor() {
-    // Logic
-    this.provinces = [];
-    this.nodes = [];
-    this.cities = [];
-    this.labels = [];
-    //this.nodePins = [];
-    this.countries = [];
-    this.units = [];
-    this.nameToIndexLibraries = {
-      provinces: {},
-      nodes: {},
-      cities: {},
-      labels: {},
-      //nodePins: {},
-      countries: {},
-      units: {}
-    }
-    this.activeProvince = false;
-    this.warnings = [];
-    this.errors = [];
-
     // Rendering
     this.renderElements = {
       terrain: {
@@ -83,8 +61,6 @@ export class Parser {
       units: [],
       labels: [],
     }
-
-    // DB Format
   }
 
   parse(fileString: string) {
@@ -197,32 +173,21 @@ export class Parser {
     }
   }
 
-  parseRenderElement(renderString: string) {
-    let renderElement = new RenderElement();
-    if (this.activeProvince) {
-      renderElement.province = this.provinces[this.provinces.length - 1].name;
-    } else {
-      const props: string[] = renderString.split(' ');
-      this.errors.push(`Invalid province association: ${props[0]} ${props[1]}`);
+  parseRenderElement(terrainString: string) {
+    if (!this.activeProvince) {
+      const fragments: string[] = terrainString.split(' ');
+      this.errors.push(`Invalid province association: ${fragments[0]} ${fragments[1]}`);
       return;
     }
+    let provinceName: string = this.provinces[this.provinces.length - 1].name;
+    let newTerrain = new Terrain(terrainString, provinceName);
 
-    let renderProperties = renderString.split(' ');
-    let data: string = renderString.split(' ')[2];
-
-    if (renderProperties.length >= 3) {
-      console.log(`Processing render data ${data}`);
-      renderElement.type = data.slice(16, data.length - 1);
-
-      let pointIndexStart = renderString.indexOf('points=');
-      let pointIndexEnd = renderString.indexOf('\" fill');
-      renderElement.points = renderString.slice(pointIndexStart + 8, pointIndexEnd);
-
-      renderElement.wrapFactor = 0;
-
-      this.renderElements.terrain[renderElement.type].push(renderElement);
+    if (newTerrain.valid) {
+      this.renderElements.terrain[newTerrain.type].push(newTerrain);
+      this.terrain.push(newTerrain);
+      this.nameToIndexLibraries.terrain[newTerrain.name] = this.cities.length - 1;
     } else {
-      this.errors.push(`Missing render type for element in ${renderElement.province}`);
+      this.collectErrors(newTerrain.errors);
     }
   }
 
