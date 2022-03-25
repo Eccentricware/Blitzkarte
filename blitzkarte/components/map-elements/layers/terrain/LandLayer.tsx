@@ -7,7 +7,7 @@ interface Props {
 
 const LandLayer: FC<Props> = ({landRenderData}: Props) => {
   return (
-    <React.Fragment>
+    <g className="land-layer">
       {
         landRenderData.map(land => (
           <g key={land.province}>
@@ -37,7 +37,7 @@ const LandLayer: FC<Props> = ({landRenderData}: Props) => {
           </g>
         ))
       }
-    </React.Fragment>
+    </g>
   )
 }
 
