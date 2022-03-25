@@ -11,11 +11,11 @@ interface Props {
 
 export const TerrainLayer: FC<Props> = ({terrainRenderData}) => {
     return (
-      <React.Fragment>
+      <g className="terrain-layer">
         <SeaLayer seaRenderData={terrainRenderData.sea}/>
         <BridgeLayer bridgeRenderData={terrainRenderData.bridge}/>
         <LandLayer landRenderData={terrainRenderData.land}/>
         <CanalLayer canalRenderData={terrainRenderData.canal}/>
-      </React.Fragment>
+      </g>
     )
 }

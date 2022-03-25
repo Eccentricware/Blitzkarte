@@ -7,7 +7,7 @@ interface Props {
 
 export const VotingCenterLayer: FC<Props> = ({votingCenters}: Props) => {
   return (
-    <React.Fragment>
+    <g className="supply-center-layer">
       {
         votingCenters.map((city, i) => {
           return (
@@ -55,6 +55,6 @@ export const VotingCenterLayer: FC<Props> = ({votingCenters}: Props) => {
           )
         })
       }
-    </React.Fragment>
+    </g>
   )
 }

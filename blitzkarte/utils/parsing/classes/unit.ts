@@ -3,7 +3,7 @@ export class Unit {
   name: string;
   type: string | undefined;
   node: string;
-  loc: string[] | undefined;
+  loc: number[] | undefined;
   country: string | undefined;
   valid: boolean;
   errors: string[] = [];
@@ -13,6 +13,7 @@ export class Unit {
     this.type = node.unit;
     this.country = country;
     this.node = node.name;
+    this.loc = node.loc;
 
     this.valid = this.validate();
   }

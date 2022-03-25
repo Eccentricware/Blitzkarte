@@ -7,7 +7,7 @@ interface Props {
 
 export const SupplyCenterLayer: FC<Props> = ({supplyCenters}: Props) => {
   return (
-    <React.Fragment>
+    <g className="supply-center-layer">
     {
       supplyCenters.map((city, i) => {
         return (
@@ -40,6 +40,6 @@ export const SupplyCenterLayer: FC<Props> = ({supplyCenters}: Props) => {
         )
       })
     }
-    </React.Fragment>
+    </g>
   )
 }

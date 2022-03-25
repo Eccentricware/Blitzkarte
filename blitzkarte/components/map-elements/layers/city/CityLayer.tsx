@@ -8,9 +8,9 @@ interface Props {
 
 export const CityLayer: FC<Props> = ({cityData}: Props) => {
   return (
-    <React.Fragment>
+    <g className="city-layer">
       <SupplyCenterLayer supplyCenters={cityData.supplyCenters}/>
       <VotingCenterLayer votingCenters={cityData.votingCenters}/>
-    </React.Fragment>
+    </g>
   )
 }

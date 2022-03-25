@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { TerrainLayer } from './layers/terrain/TerrainLayer';
 import { LabelLayer } from './layers/label/LabelLayer';
 import { CityLayer } from './layers/city/CityLayer';
+import { UnitLayer } from './layers/units/UnitLayer';
 
 interface Props {
   renderData: any
@@ -15,6 +16,7 @@ export const GameMap: FC<Props> = ({renderData}: Props) => {
       <TerrainLayer terrainRenderData={renderData.terrain} />
       <CityLayer cityData={renderData.cities}/>
       <LabelLayer labelRenderData={renderData.labels}/>
+      <UnitLayer unitData={renderData.units}/>
     </svg>
   )
 }

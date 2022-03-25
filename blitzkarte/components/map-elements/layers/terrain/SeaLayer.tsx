@@ -7,7 +7,7 @@ interface Props {
 
 const SeaLayer: FC<Props> = ({seaRenderData}: Props) => {
   return (
-    <React.Fragment>
+    <g className="sea-layer">
       {
         seaRenderData.map(sea => {
           return (
@@ -39,7 +39,7 @@ const SeaLayer: FC<Props> = ({seaRenderData}: Props) => {
           )
         })
       }
-    </React.Fragment>
+    </g>
   )
 }
 
