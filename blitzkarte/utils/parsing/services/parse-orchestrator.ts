@@ -162,6 +162,9 @@ export class Parser {
       let newCity = new City(newPin);
       if (newCity.valid) {
         this.registerElement(newCity, 'cities', newCity.renderCategory);
+        if (newCity.type === 'c') {
+          let newCountry =
+        }
       } else {
         this.collectErrors(newCity.errors);
       }
@@ -202,7 +205,7 @@ export class Parser {
     this.terrain.forEach(terrain => {
       let province: Province = this.nameToIndexLibraries.provinces[terrain.province];
       if (province.country) {
-        let country = this.nameToIndexLibraries.countries[province.country];
+        let country: Country = this.nameToIndexLibraries.countries[province.country];
         terrain.setFill(country.color);
       }
     });
