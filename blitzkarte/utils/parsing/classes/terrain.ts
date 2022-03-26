@@ -1,6 +1,6 @@
 export class Terrain {
   name: string = '';
-  province: string | undefined;
+  province!: string;
   type!: string;
   renderCategory!: string;
   points: string | undefined;
@@ -15,8 +15,6 @@ export class Terrain {
     let dataStartIndex: number = terrain.indexOf('data-name');
     let pointsStartIndex: number = terrain.indexOf('points');
     let pointsEndIndex: number = terrain.indexOf('\" fill');
-
-
 
     let dataArray: string[] = terrain.slice(dataStartIndex + 11, pointsStartIndex - 2).split(',');
     dataArray.forEach(property => {
@@ -89,6 +87,10 @@ export class Terrain {
     }
   }
 
+  setFill(color: string) {
+    this.fill = color;
+  }
+
   validate(): boolean {
     let typeValid: boolean = this.validateType();
 
@@ -96,7 +98,7 @@ export class Terrain {
   }
 
   validateType(): boolean {
-    const validTypes: string[] = ['l', 's', 'b', 'c', 'p', 'i'];
+    const validTypes: string[] = ['l', 's', 'b', 'o', 'c', 'p', 'i'];
 
     if (!validTypes.includes(this.type[0].toLowerCase())) {
       this.errors.push(`Invalid Terrain Type: ${this.name}`);

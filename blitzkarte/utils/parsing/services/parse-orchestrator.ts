@@ -198,6 +198,16 @@ export class Parser {
     }
   }
 
+  paintTerrainOwnerColors() {
+    this.terrain.forEach(terrain => {
+      let province: Province = this.nameToIndexLibraries.provinces[terrain.province];
+      if (province.country) {
+        let country = this.nameToIndexLibraries.countries[province.country];
+        terrain.setFill(country.color);
+      }
+    });
+  }
+
   collectErrors(errors: string[]) {
     errors.forEach(error => {
       this.errors.push(error);
