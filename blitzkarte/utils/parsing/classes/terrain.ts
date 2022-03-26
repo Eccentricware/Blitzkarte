@@ -5,6 +5,7 @@ export class Terrain {
   renderCategory!: string;
   points: string | undefined;
   fill: string | undefined;
+  stroke: string | undefined;
   valid: boolean;
   errors: string[] = [];
 
@@ -43,26 +44,43 @@ export class Terrain {
     switch (firstLetter) {
       case 'l':
         this.type = 'land';
+        this.fill = '#83a584';
+        this.stroke = 'black';
         this.renderCategory = 'land';
         break;
       case 's':
         this.type = 'sea';
+        this.fill = '#42cafe';
+        this.stroke = 'white';
         this.renderCategory = 'sea';
         break;
       case 'b':
         this.type = 'bridge';
+        this.fill = 'none';
+        this.stroke = 'red';
         this.renderCategory = 'bridge';
         break;
+      case 'o':
+        this.type = 'border';
+        this.fill = 'none';
+        this.stroke = 'darkgray';
+        this.renderCategory = 'bridge';
       case 'c':
         this.type = 'canal';
+        this.fill = '#42cafe';
+        this.stroke = 'white';
         this.renderCategory = 'canal';
         break;
       case 'p':
         this.type = 'pole';
+        this.fill = 'fdfdfd';
+        this.stroke = 'none';
         this.renderCategory = 'pole';
         break;
       case 'i':
         this.type = 'impassible';
+        this.fill = 'darkgray';
+        this.stroke = 'black';
         this.renderCategory = 'impassible';
         break;
       default:
