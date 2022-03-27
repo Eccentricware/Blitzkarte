@@ -139,7 +139,7 @@ export class Parser {
       if (newNode.valid) {
         this.registerElement(newPin, 'nodes');
         if (newNode.unit) {
-          let newUnit: Unit = new Unit(newNode, province.country);
+          let newUnit: Unit = new Unit(newPin, province.country);
           if (newUnit.valid) {
             this.registerElement(newUnit, 'units');
           } else {
@@ -162,6 +162,14 @@ export class Parser {
       let newCity = new City(newPin);
       if (newCity.valid) {
         this.registerElement(newCity, 'cities', newCity.renderCategory);
+        if (newPin.country) {
+          let newCountry = new Country(newPin);
+          if (newCountry.valid) {
+            this.registerElement(newCountry, 'countries');
+          } else {
+            this.collectErrors(newCountry.errors);
+          }
+        }
       } else {
         this.collectErrors(newCity.errors);
       }
