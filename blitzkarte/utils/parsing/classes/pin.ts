@@ -8,7 +8,7 @@ export class Pin {
   country: string | undefined;
   key: string | undefined;
   rank: string | undefined;
-  fill: string | undefined;
+  color: string | undefined;
   nuke: number | undefined;
   bankedBuilds: number | undefined;
   cx: string | undefined;

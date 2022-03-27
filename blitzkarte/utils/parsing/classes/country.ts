@@ -50,8 +50,8 @@ export class Country {
 
   setColor(pin: Pin): string {
     let color: string = '';
-    if (pin.fill) {
-      color = pin.fill;
+    if (pin.color) {
+      color = pin.color;
     }
     return color;
   }
