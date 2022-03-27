@@ -5,6 +5,12 @@ export class Pin {
   type!: string;
   text: string | undefined;
   unit: string | undefined;
+  country: string | undefined;
+  key: string | undefined;
+  rank: string | undefined;
+  fill: string | undefined;
+  nuke: number | undefined;
+  bankedBuilds: number | undefined;
   cx: string | undefined;
   cy: string | undefined;
   loc!: number[];
@@ -33,7 +39,6 @@ export class Pin {
       let y: string = this.cy.slice(1, this.cy.length - 1);
       this.loc = [Number(x), Number(y)];
     }
-
 
     if (!this.name) {
       this.name = pinString;
