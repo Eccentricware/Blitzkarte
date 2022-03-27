@@ -1,4 +1,5 @@
 import { NodePin } from "./node";
+import { Pin } from "./pin";
 export class Unit {
   name: string;
   type: string | undefined;
@@ -8,7 +9,7 @@ export class Unit {
   valid: boolean;
   errors: string[] = [];
 
-  constructor(node: NodePin, country: string | undefined) {
+  constructor(node: Pin, country: string | undefined) {
     this.name = `${country}_${node.unit}_${node.name}`;
     this.type = node.unit;
     this.country = country;

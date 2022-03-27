@@ -18,7 +18,8 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "suppressImplicitAnyIndexErrors": true,
-    "incremental": true
+    "incremental": true,
+    "noImplicitAny": true
   },
   "include": [
     "next-env.d.ts",

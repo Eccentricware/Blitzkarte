@@ -13,7 +13,7 @@ const LandLayer: FC<Props> = ({landRenderData}: Props) => {
           <g key={land.province}>
             <polygon
               points={land.points}
-              fill="#85A587"
+              fill={land.fill}
               strokeMiterlimit="10"
               stroke="black"
               strokeWidth="4"
@@ -21,14 +21,14 @@ const LandLayer: FC<Props> = ({landRenderData}: Props) => {
             />
             <polygon
               points={land.points}
-              fill="#85A587"
+              fill={land.fill}
               strokeMiterlimit="10"
               stroke="black"
               strokeWidth="4"
             />
             <polygon
               points={land.points}
-              fill="#85A587"
+              fill={land.fill}
               strokeMiterlimit="10"
               stroke="black"
               strokeWidth="4"

@@ -74,12 +74,14 @@ export class Parser {
       this.parseElement(element);
     });
 
+    this.paintTerrainOwnerColors();
+
     // Feedback
     //console.log('elementStrings', elementStrings);
     console.log('Provinces: ', this.provinces);
     console.log('Nodes:', this.nodes);
-    console.log('CityPins:', this.cities);
-    console.log('LabelPins:', this.labels);
+    console.log('Cities', this.cities);
+    console.log('Labels:', this.labels);
     //console.log('NodePins:', this.nodePins);
     console.log('Countries:', this.countries);
     console.log('Units:', this.units);
@@ -139,7 +141,7 @@ export class Parser {
       if (newNode.valid) {
         this.registerElement(newPin, 'nodes');
         if (newNode.unit) {
-          let newUnit: Unit = new Unit(newNode, province.country);
+          let newUnit: Unit = new Unit(newPin, province.country);
           if (newUnit.valid) {
             this.registerElement(newUnit, 'units');
           } else {
@@ -162,8 +164,13 @@ export class Parser {
       let newCity = new City(newPin);
       if (newCity.valid) {
         this.registerElement(newCity, 'cities', newCity.renderCategory);
-        if (newCity.type === 'c') {
-          let newCountry =
+        if (newPin.country) {
+          let newCountry = new Country(newPin);
+          if (newCountry.valid) {
+            this.registerElement(newCountry, 'countries');
+          } else {
+            this.collectErrors(newCountry.errors);
+          }
         }
       } else {
         this.collectErrors(newCity.errors);
@@ -191,6 +198,20 @@ export class Parser {
     this.activeProvince = false;
   }
 
+  paintTerrainOwnerColors() {
+    this.renderElements.terrain.land.forEach(land => {
+      let province: Province = this.referenceElement('provinces', land.province);
+      if (province.country) {
+        let country: Country | undefined = this.referenceElement('countries', province.country);
+        if (country) {
+          land.setFill(country.color);
+        } else {
+          this.errors.push(`Province ${province.name} country ${province.country} is not created!`);
+        }
+      }
+    });
+  }
+
   registerElement(element: any, elementType: string, renderCategory?: string) {
     this[elementType].push(element);
     this.nameToIndexLibraries[elementType][element.name] = this[elementType].length - 1;
@@ -201,14 +222,9 @@ export class Parser {
     }
   }
 
-  paintTerrainOwnerColors() {
-    this.terrain.forEach(terrain => {
-      let province: Province = this.nameToIndexLibraries.provinces[terrain.province];
-      if (province.country) {
-        let country: Country = this.nameToIndexLibraries.countries[province.country];
-        terrain.setFill(country.color);
-      }
-    });
+  referenceElement(elementType: string, name: string): any {
+    let elementIndex: number = this.nameToIndexLibraries[elementType][name];
+    return this[elementType][elementIndex];
   }
 
   collectErrors(errors: string[]) {

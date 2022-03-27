@@ -34,6 +34,7 @@ export class Terrain {
 
     this.points = terrain.slice(pointsStartIndex + 8, pointsEndIndex);
 
+
     this.valid = this.validate();
   }
 
