@@ -41,9 +41,13 @@ export const UnitSVGs = {
   fleet:
     <Blitzkontext.Consumer>
       {({mapView}) => {
+        const width: number = mapView.unitSizing.fleet.width;
+        const height: number = mapView.unitSizing.fleet.height;
+        const modifier: number = mapView.unitSizing.fleet.modifier;
+        const zoom: number = mapView.zoom;
         return (
-          <svg width={mapView.unitSizing.fleet.width / mapView.zoom}
-            height={mapView.unitSizing.fleet.height / mapView.zoom}
+          <svg width={(width * modifier) / zoom}
+            height={(height * modifier) / zoom}
             viewBox="0 0 294.66 256.8"
           >
             <title>Fleet</title>
@@ -73,9 +77,14 @@ export const UnitSVGs = {
   wing:
     <Blitzkontext.Consumer>
       {({mapView}) => {
+        const width: number = mapView.unitSizing.wing.width;
+        const height: number = mapView.unitSizing.wing.height;
+        const modifier: number = mapView.unitSizing.wing.modifier;
+        const zoom: number = mapView.zoom;
+
         return (
-          <svg width={mapView.unitSizing.wing.width / mapView.zoom}
-            height={mapView.unitSizing.wing.height / mapView.zoom}
+          <svg width={(width * modifier) / zoom}
+            height={(height * modifier) / zoom}
           viewBox="0 0 291.8 222.97">
             <title>Wing</title>
             <polygon id="hull" points="31.34 222.32 42.42 218.47 50 214.74 57.58 209.99 70.59 199.36 84.5 186.46 97.62 171.87 128.72 173.4 156.79 147.07 164.41 147.07 168.62 140.25 160.68 129.52 192.84 92.43 195.95 94.58 198.1 93.39 215.44 69.38 195.21 71.53 188.85 74.26 185.41 71.18 181.11 68.75 177.25 67.82 173.03 68.11 167.59 69.18 162.36 68.11 159.42 64.88 156.06 62.52 151.26 61.16 149.14 61.16 144.99 61.57 149.39 59.25 139.31 49.47 113.5 71.21 111.61 75.68 78.08 107.11 61.49 110.71 57.25 117.11 60.52 120.3 41.73 148.67 57.27 159.94 50.52 169.05 43.36 179.18 38.45 187.67 34.16 196.16 30.78 204.65 29.54 210.13 29.86 216.67 31.34 222.32" fill="#58595b" stroke="#272425" strokeMiterlimit="10" />

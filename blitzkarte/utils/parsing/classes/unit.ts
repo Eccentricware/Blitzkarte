@@ -1,18 +1,19 @@
-import { NodePin } from "./node";
 import { Pin } from "./pin";
+import { convertSpaceToCamelCase } from "../../general/utils";
+
 export class Unit {
   name: string;
   type: string | undefined;
   node: string;
   loc: number[] | undefined;
-  country: string | undefined;
+  countryKey!: string;
   valid: boolean;
   errors: string[] = [];
 
-  constructor(node: Pin, country: string | undefined) {
+  constructor(node: Pin, country: string) {
     this.name = `${country}_${node.unit}_${node.name}`;
     this.type = node.unit;
-    this.country = country;
+    this.countryKey = convertSpaceToCamelCase(country);
     this.node = node.name;
     this.loc = node.loc;
 
@@ -37,7 +38,7 @@ export class Unit {
   }
 
   validateCountry(): boolean {
-    if (!this.country) {
+    if (!this.countryKey) {
       this.errors.push(`Invalid Country: ${this.name}`);
       return false;
     }

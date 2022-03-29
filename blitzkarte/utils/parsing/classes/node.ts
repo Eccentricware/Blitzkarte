@@ -7,6 +7,7 @@ export class NodePin {
   adj!: string[] | undefined;
   loc!: number[];
   unit?: string;
+  warnings: string[] = [];
   errors: string[] = [];
   valid: boolean;
 
@@ -45,6 +46,7 @@ export class NodePin {
 
   validateAdj(): boolean {
     if (this.adj) {
+
       let type: string = this.name.split('_')[1];
       this.adj.forEach(node => {
         if (node.split('_')[1] !== type) {
