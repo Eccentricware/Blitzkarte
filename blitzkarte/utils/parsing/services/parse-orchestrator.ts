@@ -26,6 +26,7 @@ export class Parser {
     units: {}
   }
   activeProvince: boolean = false;
+  looseEndNodes: string[] = [];
   warnings: string[] = [];
   errors: string[] = [];
 
@@ -74,7 +75,10 @@ export class Parser {
       this.parseElement(element);
     });
 
-    this.paintTerrainOwnerColors();
+    // 1) Province: fill from controller
+    // 2) Units: flagKey from controller
+    this.crossReferenceWave1();
+    this.validateNodeAdjacencies();
 
     // Feedback
     //console.log('elementStrings', elementStrings);
@@ -139,7 +143,7 @@ export class Parser {
     if (newPin.pinType === 'node') {
       let newNode: NodePin = new NodePin(newPin);
       if (newNode.valid) {
-        this.registerElement(newPin, 'nodes');
+        this.registerElement(newNode, 'nodes');
         if (newNode.unit) {
           let newUnit: Unit = new Unit(newPin, province.country);
           if (newUnit.valid) {
@@ -198,7 +202,12 @@ export class Parser {
     this.activeProvince = false;
   }
 
-  paintTerrainOwnerColors() {
+  crossReferenceWave1() {
+    this.terrainWave1();
+    // this.unitWave1();
+  }
+
+  terrainWave1() {
     this.renderElements.terrain.land.forEach(land => {
       let province: Province = this.referenceElement('provinces', land.province);
       if (province.country) {
@@ -211,6 +220,27 @@ export class Parser {
       }
     });
   }
+
+  validateNodeAdjacencies() {
+    this.nodes.forEach(node => {
+      if (node.adj) {
+        node.adj.forEach(adjNode => {
+          if (!this.nodes[adjNode]) {
+            this.errors.push(`${node.name}'s adjacent node ${adjNode} does not exist!`);
+          } else if (!this.nodes[adjNode].adj.includes(node.name)) {
+            this.errors.push(`Node ${adjNode} does not reciprocate ${node.name}'s adjacency!`);
+          }
+        });
+      }
+    });
+  }
+
+  // unitWave1() {
+  //   this.units.forEach(unit => {
+  //     let country: Country = this.referenceElement('countries', unit.country);
+  //     unit.setFlagKey(country.key);
+  //   });
+  // }
 
   registerElement(element: any, elementType: string, renderCategory?: string) {
     this[elementType].push(element);
@@ -230,6 +260,12 @@ export class Parser {
   collectErrors(errors: string[]) {
     errors.forEach(error => {
       this.errors.push(error);
+    });
+  }
+
+  collectWarnings(warnings: string[]) {
+    warnings.forEach(warning => {
+      this.warnings.push(warning);
     });
   }
 }

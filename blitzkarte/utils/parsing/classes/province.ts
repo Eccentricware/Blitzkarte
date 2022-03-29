@@ -3,7 +3,7 @@ export class Province {
   type: string | undefined;
   city: string | undefined;
   fullName: string | undefined;
-  country: string | undefined;
+  country!: string;
   isTracemap: boolean = false;
   valid: boolean;
   errors: string[] = [];
