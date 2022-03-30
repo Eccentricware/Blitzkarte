@@ -7,37 +7,10 @@ import { LabelPin } from '../utils/parsing/classes/label';
 import { City } from '../utils/parsing/classes/city';
 
 import { GameMap } from '../components/map-elements/GameMap';
-
-interface RenderData {
-  terrain: {
-    sea: Terrain[],
-    land: Terrain[],
-    bridge: Terrain[],
-    canal: Terrain[]
-  },
-  cities: {
-    supplyCenters: City[],
-    votingCenters: City[]
-  },
-  units: Unit[]
-  labels: LabelPin[],
-}
+import { RenderData, initialRenderData } from '../models/RenderData';
 
 const GameParserPage: NextPage = () => {
-  const [renderData, setRenderData] = useState<RenderData>({
-    terrain: {
-      sea: [],
-      land: [],
-      bridge: [],
-      canal: []
-    },
-    cities: {
-      supplyCenters: [],
-      votingCenters: []
-    },
-    units: [],
-    labels: []
-  });
+  const [renderData, setRenderData] = useState<RenderData>(initialRenderData);
   const [fileString, setFileString] = useState('Paste File Here');
 
   let parser: Parser = new Parser();
@@ -62,6 +35,7 @@ const GameParserPage: NextPage = () => {
           </input>
         </div>
       </form>
+
       <GameMap renderData={renderData}/>
       <div><b>Tables</b></div>
       <div>Coming soon!</div>

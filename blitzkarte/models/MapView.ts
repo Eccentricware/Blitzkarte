@@ -37,8 +37,30 @@ export interface MapView {
     height: number,
     modifier: number,
     offset: {
-      x: number,
-      y: number
+      army: {
+        x: number,
+        y: number
+      },
+      fleet: {
+        x: number,
+        y: number
+      },
+      wing: {
+        x: number,
+        y: number
+      },
+      nuke: {
+        x: number,
+        y: number
+      },
+      detonation: {
+        x: number,
+        y: number
+      },
+      garrison: {
+        x: number,
+        y: number
+      }
     }
   }
 }
