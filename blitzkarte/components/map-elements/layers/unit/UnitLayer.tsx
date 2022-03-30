@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Unit }  from '../../../../utils/parsing/classes/unit';
-import { UnitRender } from '../units/UnitRender';
+import { UnitRender } from './UnitRender';
 
 interface Props {
   unitData: Unit[];

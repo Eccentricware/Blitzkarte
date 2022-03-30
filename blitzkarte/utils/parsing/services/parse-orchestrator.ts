@@ -7,6 +7,8 @@ import { NodePin } from '../classes/node';
 import { Country } from '../classes/country';
 import { Unit } from '../classes/unit';
 import { Terrain } from '../classes/terrain';
+import { initialRenderData, RenderData } from '../../../models/RenderData';
+
 export class Parser {
   // Logic
   provinces: Province[] = [];
@@ -31,42 +33,9 @@ export class Parser {
   errors: string[] = [];
 
   // Rendering
-  renderElements: {
-    terrain: {
-      sea: Terrain[],
-      bridge: Terrain[],
-      land: Terrain[],
-      canal: Terrain[],
-      poles: Terrain[],
-      impassible: Terrain[]
-    },
-    cities: {
-      supplyCenters: City[],
-      votingCenters: City[]
-    },
-    units: Unit[]
-    labels: LabelPin[],
-  };
+  renderElements: RenderData = initialRenderData;
 
-  constructor() {
-    // Rendering
-    this.renderElements = {
-      terrain: {
-        sea: [],
-        bridge: [],
-        land: [],
-        canal: [],
-        poles: [],
-        impassible: []
-      },
-      cities: {
-        supplyCenters: [],
-        votingCenters: []
-      },
-      units: [],
-      labels: [],
-    }
-  }
+  constructor() {}
 
   parse(fileString: string) {
     let elementStrings : string[] = fileString.split('><');
@@ -147,7 +116,7 @@ export class Parser {
         if (newNode.unit) {
           let newUnit: Unit = new Unit(newPin, province.country);
           if (newUnit.valid) {
-            this.registerElement(newUnit, 'units');
+            this.registerElement(newUnit, 'units', ['units']);
           } else {
             this.collectErrors(newUnit.errors);
           }
@@ -159,7 +128,7 @@ export class Parser {
     } else if (newPin.pinType === 'label') {
       let newLabel = new LabelPin(newPin);
       if (newLabel.valid) {
-        this.registerElement(newLabel, 'labels');
+        this.registerElement(newLabel, 'labels', ['labels']);
       } else {
         this.collectErrors(newLabel.errors);
       }
@@ -167,7 +136,7 @@ export class Parser {
     } else if (newPin.pinType === 'city') {
       let newCity = new City(newPin);
       if (newCity.valid) {
-        this.registerElement(newCity, 'cities', newCity.renderCategory);
+        this.registerElement(newCity, 'cities', ['cities', `${newCity.renderCategory}`]);
         if (newPin.country) {
           let newCountry = new Country(newPin);
           if (newCountry.valid) {
@@ -192,7 +161,7 @@ export class Parser {
     let newTerrain = new Terrain(terrainString, provinceName);
 
     if (newTerrain.valid) {
-      this.registerElement(newTerrain, 'terrain', newTerrain.type);
+      this.registerElement(newTerrain, 'terrain', ['terrain', newTerrain.type]);
     } else {
       this.collectErrors(newTerrain.errors);
     }
@@ -235,21 +204,35 @@ export class Parser {
     });
   }
 
-  // unitWave1() {
-  //   this.units.forEach(unit => {
-  //     let country: Country = this.referenceElement('countries', unit.country);
-  //     unit.setFlagKey(country.key);
-  //   });
-  // }
-
-  registerElement(element: any, elementType: string, renderCategory?: string) {
+  registerElement(element: any, elementType: string,
+      renderPath?: string[],
+      // renderCategory?: string, renderSubCategory?: string, renderSubCategory2?: string,
+    ) {
     this[elementType].push(element);
     this.nameToIndexLibraries[elementType][element.name] = this[elementType].length - 1;
-    if (elementType === 'labels' || elementType === 'units') {
-      this.renderElements[elementType].push(element);
-    } else if (renderCategory) {
-      this.renderElements[elementType][renderCategory].push(element);
+
+    let renderProp: any = this.renderElements;
+    if (renderPath) {
+      renderPath.forEach(level => {
+        renderProp = renderProp[level];
+      });
+      renderProp.push(element);
     }
+
+    // if (renderCategory) {
+    //   let renderField = this.renderElements[renderCategory];
+    //   if (renderSubCategory) {
+    //     renderField = renderField[renderSubCategory];
+    //     if (renderSubCategory2) {
+    //       renderField = renderField[renderSubCategory2];
+    //       renderField.push(element);
+    //     } else {
+    //       renderField.push(element);
+    //     }
+    //   } else {
+    //     renderField.push(element);
+    //   }
+    // }
   }
 
   referenceElement(elementType: string, name: string): any {

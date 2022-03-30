@@ -4,8 +4,9 @@ export class NodePin {
   name!: string;
   province!: string;
   type!: string;
-  adj!: string[] | undefined;
+  adj: string[] | undefined;
   loc!: number[];
+  fill: string | undefined;
   unit?: string;
   warnings: string[] = [];
   errors: string[] = [];
@@ -20,6 +21,10 @@ export class NodePin {
     this.unit = pin.unit;
 
     this.valid = this.validate();
+  }
+
+  setFill(fill: string) {
+    this.fill = fill;
   }
 
   validate(): boolean {
