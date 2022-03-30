@@ -14,20 +14,25 @@ export interface RenderData {
   },
   nodes: {
     display: boolean,
-    land: {
-      display: boolean,
-      pins: NodePin[],
-      links: Link[]
+    pins: {
+      display: {
+        land: boolean,
+        sea: boolean,
+        air: boolean
+      },
+      land: NodePin[],
+      sea: NodePin[],
+      air: NodePin[]
     },
-    sea: {
-      display: boolean,
-      pins: NodePin[],
-      links: Link[]
-    },
-    air: {
-      display: boolean,
-      pins: NodePin[],
-      links: Link[]
+    links: {
+      display: {
+        land: boolean,
+        sea: boolean,
+        air: boolean
+      },
+      land: NodePin[],
+      sea: NodePin[],
+      air: NodePin[]
     }
   },
   cities: {
@@ -47,20 +52,25 @@ export const initialRenderData = {
   },
   nodes: {
     display: false,
-    land: {
-      display: true,
-      pins: [],
-      links: []
+    pins: {
+      display: {
+        land: true,
+        sea: true,
+        air: true
+      },
+      land: [],
+      sea: [],
+      air: []
     },
-    sea: {
-      display: true,
-      pins: [],
-      links: []
-    },
-    air: {
-      display: true,
-      pins: [],
-      links: []
+    links: {
+      display: {
+        land: true,
+        sea: true,
+        air: true
+      },
+      land: [],
+      sea: [],
+      air: []
     }
   },
   cities: {

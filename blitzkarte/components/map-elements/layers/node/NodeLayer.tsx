@@ -10,7 +10,7 @@ export const NodeLayer: FC<Props> = ({nodeData}: Props) => {
   return (
     <g className="Node-Layer">
       <LinkRenders links={nodeData.links}/>
-      <NodeRenders nodes={nodeData.nodes}/>
+      <NodeRenders pins={nodeData.pins}/>
     </g>
   )
 }

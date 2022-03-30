@@ -8,7 +8,7 @@ export class City {
   loc!: number[];
   voteColor: string | undefined;
   statusColor: string | undefined;
-  renderCategory: string | undefined;
+  renderCategory: string;
   valid: boolean;
   errors: string[] = [];
 
@@ -32,6 +32,8 @@ export class City {
     } else if (this.type === 'd') {
       this.statusColor = 'gray';
       this.renderCategory = 'supplyCenters';
+    } else {
+      this.renderCategory = 'errorCenter'
     }
 
     this.valid = this.validate();

@@ -16,11 +16,23 @@ export class NodePin {
     this.name = pin.name;
     this.province = pin.province;
     this.type = pin.type;
+    this.fill = this.initializeFill();
     this.loc = pin.loc;
     this.adj = pin.adj?.split('/');
     this.unit = pin.unit;
 
     this.valid = this.validate();
+  }
+
+  initializeFill() {
+    switch (this.type) {
+      case 'land':
+        return 'green';
+      case 'sea':
+        return 'blue';
+      case 'air':
+        return 'gold';
+    }
   }
 
   setFill(fill: string) {
