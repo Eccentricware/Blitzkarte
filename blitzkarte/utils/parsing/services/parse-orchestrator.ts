@@ -112,7 +112,7 @@ export class Parser {
     if (newPin.pinType === 'node') {
       let newNode: NodePin = new NodePin(newPin);
       if (newNode.valid) {
-        this.registerElement(newNode, 'nodes');
+        this.registerElement(newNode, 'nodes', ['nodes', 'pins', newNode.type]);
         if (newNode.unit) {
           let newUnit: Unit = new Unit(newPin, province.country);
           if (newUnit.valid) {
@@ -136,7 +136,7 @@ export class Parser {
     } else if (newPin.pinType === 'city') {
       let newCity = new City(newPin);
       if (newCity.valid) {
-        this.registerElement(newCity, 'cities', ['cities', `${newCity.renderCategory}`]);
+        this.registerElement(newCity, 'cities', ['cities', newCity.renderCategory]);
         if (newPin.country) {
           let newCountry = new Country(newPin);
           if (newCountry.valid) {
