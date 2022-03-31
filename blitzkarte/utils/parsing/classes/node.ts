@@ -11,6 +11,7 @@ export class NodePin {
   warnings: string[] = [];
   errors: string[] = [];
   valid: boolean;
+  approved: boolean = true;
 
   constructor(pin: Pin) {
     this.name = pin.name;
@@ -62,8 +63,8 @@ export class NodePin {
   }
 
   validateAdj(): boolean {
-    if (this.adj) {
-
+    let typeWithAdjReq = ['l', 'land', 's', 'sea', 'a', 'air'];
+    if (this.adj && typeWithAdjReq.includes(this.type)) {
       let type: string = this.name.split('_')[1];
       this.adj.forEach(node => {
         if (node.split('_')[1] !== type) {
@@ -76,5 +77,10 @@ export class NodePin {
       return false;
     }
     return true;
+  }
+
+  revokeApproval() {
+    this.approved = false;
+    this.fill = 'red';
   }
 }

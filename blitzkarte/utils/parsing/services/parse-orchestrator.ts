@@ -8,12 +8,16 @@ import { Country } from '../classes/country';
 import { Unit } from '../classes/unit';
 import { Terrain } from '../classes/terrain';
 import { initialRenderData, RenderData } from '../../../models/RenderData';
+import { FinalStatusCheck, initialFinalStatusCheck } from '../../../models/FinalStatusCheck';
+import Link from 'next/link';
+import { NodeLink } from '../classes/nodeLink';
 
 export class Parser {
   // Logic
   provinces: Province[] = [];
   terrain: Terrain[] = [];
   nodes: NodePin[] = [];
+  links: NodeLink[] = [];
   cities: City[] = [];
   labels: LabelPin[] = [];
   countries: Country[] = [];
@@ -22,15 +26,18 @@ export class Parser {
     provinces: {},
     terrain: {},
     nodes: {},
+    links: {},
     cities: {},
     labels: {},
     countries: {},
     units: {}
   }
   activeProvince: boolean = false;
-  looseEndNodes: string[] = [];
   warnings: string[] = [];
   errors: string[] = [];
+  finalStatusCheck: FinalStatusCheck = initialFinalStatusCheck;
+
+
 
   // Rendering
   renderElements: RenderData = initialRenderData;
@@ -47,7 +54,7 @@ export class Parser {
     // 1) Province: fill from controller
     // 2) Units: flagKey from controller
     this.crossReferenceWave1();
-    this.validateNodeAdjacencies();
+    this.finalizeNodes();
 
     // Feedback
     //console.log('elementStrings', elementStrings);
@@ -190,24 +197,35 @@ export class Parser {
     });
   }
 
-  validateNodeAdjacencies() {
+  finalizeNodes() {
     this.nodes.forEach(node => {
       if (node.adj) {
-        node.adj.forEach(adjNode => {
-          if (!this.nodes[adjNode]) {
-            this.errors.push(`${node.name}'s adjacent node ${adjNode} does not exist!`);
-          } else if (!this.nodes[adjNode].adj.includes(node.name)) {
-            this.errors.push(`Node ${adjNode} does not reciprocate ${node.name}'s adjacency!`);
+        node.adj.forEach(adjNodeName => {
+          if (!this.nodes[adjNodeName]) {
+            this.errors.push(`${node.name}'s adjacent node ${adjNodeName} does not exist!`);
+            node.revokeApproval();
+          } else {
+            let adjNode: NodePin = this.referenceElement('node', adjNodeName);
+            let newNodeLink: NodeLink = new NodeLink(node, adjNode);
+            if (!this.nodes[adjNodeName].adj.includes(node.name)) {
+              this.errors.push(`Node ${adjNode.name} does not reciprocate ${node.name}'s adjacency!`);
+              node.revokeApproval();
+              newNodeLink.setStroke('red');
+            }
+            this.registerElement(newNodeLink, 'links', ['nodes', 'links', newNodeLink.type]);
           }
         });
+
+        if (node.approved) {
+          this.finalStatusCheck.nodes.pass.push(node.name);
+        } else {
+          this.finalStatusCheck.nodes.fail.push(node.name);
+        }
       }
     });
   }
 
-  registerElement(element: any, elementType: string,
-      renderPath?: string[],
-      // renderCategory?: string, renderSubCategory?: string, renderSubCategory2?: string,
-    ) {
+  registerElement(element: any, elementType: string, renderPath?: string[]) {
     this[elementType].push(element);
     this.nameToIndexLibraries[elementType][element.name] = this[elementType].length - 1;
 
@@ -218,21 +236,6 @@ export class Parser {
       });
       renderProp.push(element);
     }
-
-    // if (renderCategory) {
-    //   let renderField = this.renderElements[renderCategory];
-    //   if (renderSubCategory) {
-    //     renderField = renderField[renderSubCategory];
-    //     if (renderSubCategory2) {
-    //       renderField = renderField[renderSubCategory2];
-    //       renderField.push(element);
-    //     } else {
-    //       renderField.push(element);
-    //     }
-    //   } else {
-    //     renderField.push(element);
-    //   }
-    // }
   }
 
   referenceElement(elementType: string, name: string): any {

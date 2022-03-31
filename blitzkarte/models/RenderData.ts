@@ -1,6 +1,6 @@
 import { City } from "../utils/parsing/classes/city"
 import { LabelPin } from "../utils/parsing/classes/label"
-import { Link } from "../utils/parsing/classes/link"
+import { NodeLink } from "../utils/parsing/classes/nodeLink"
 import { NodePin } from "../utils/parsing/classes/node"
 import { Terrain } from "../utils/parsing/classes/terrain"
 import { Unit } from "../utils/parsing/classes/unit"
@@ -30,9 +30,9 @@ export interface RenderData {
         sea: boolean,
         air: boolean
       },
-      land: NodePin[],
-      sea: NodePin[],
-      air: NodePin[]
+      land: NodeLink[],
+      sea: NodeLink[],
+      air: NodeLink[]
     }
   },
   cities: {
