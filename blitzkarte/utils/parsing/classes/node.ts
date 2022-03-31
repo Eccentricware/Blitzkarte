@@ -72,7 +72,7 @@ export class NodePin {
           return false;
         }
       });
-    } else {
+    } else if (!this.adj && typeWithAdjReq.includes(this.type)) {
       this.errors.push(`Missing Adj Array: ${this.name}`);
       return false;
     }

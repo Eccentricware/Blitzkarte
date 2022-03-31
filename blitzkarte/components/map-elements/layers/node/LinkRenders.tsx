@@ -24,7 +24,31 @@ export const LinkRenders: FC<LinkRenderProps> = ({links}: LinkRenderProps) => {
           {
             links.land.map(link => {
               return (
+                <line key={link.name} transform={`translate(-16000 0)`}
+                  x1={link.alpha.x} y1={link.alpha.y}
+                  x2={link.omega.x} y2={link.omega.y}
+                  stroke={link.stroke}
+                  strokeWidth={15}
+                />
+              )
+            })
+          }
+          {
+            links.land.map(link => {
+              return (
                 <line key={link.name}
+                  x1={link.alpha.x} y1={link.alpha.y}
+                  x2={link.omega.x} y2={link.omega.y}
+                  stroke={link.stroke}
+                  strokeWidth={15}
+                />
+              )
+            })
+          }
+          {
+            links.land.map(link => {
+              return (
+                <line key={link.name} transform={`translate(16000 0)`}
                   x1={link.alpha.x} y1={link.alpha.y}
                   x2={link.omega.x} y2={link.omega.y}
                   stroke={link.stroke}
@@ -41,7 +65,31 @@ export const LinkRenders: FC<LinkRenderProps> = ({links}: LinkRenderProps) => {
           {
             links.sea.map(link => {
               return (
+                <line key={link.name} transform={`translate(-16000 0)`}
+                  x1={link.alpha.x} y1={link.alpha.y}
+                  x2={link.omega.x} y2={link.omega.y}
+                  stroke={link.stroke}
+                  strokeWidth={15}
+                />
+              )
+            })
+          }
+          {
+            links.sea.map(link => {
+              return (
                 <line key={link.name}
+                  x1={link.alpha.x} y1={link.alpha.y}
+                  x2={link.omega.x} y2={link.omega.y}
+                  stroke={link.stroke}
+                  strokeWidth={15}
+                />
+              )
+            })
+          }
+          {
+            links.sea.map(link => {
+              return (
+                <line key={link.name} transform={`translate(16000 0)`}
                   x1={link.alpha.x} y1={link.alpha.y}
                   x2={link.omega.x} y2={link.omega.y}
                   stroke={link.stroke}
@@ -58,7 +106,31 @@ export const LinkRenders: FC<LinkRenderProps> = ({links}: LinkRenderProps) => {
           {
             links.air.map(link => {
               return (
+                <line key={link.name} transform={`translate(-16000 0)`}
+                  x1={link.alpha.x} y1={link.alpha.y}
+                  x2={link.omega.x} y2={link.omega.y}
+                  stroke={link.stroke}
+                  strokeWidth={15}
+                />
+              )
+            })
+          }
+          {
+            links.air.map(link => {
+              return (
                 <line key={link.name}
+                  x1={link.alpha.x} y1={link.alpha.y}
+                  x2={link.omega.x} y2={link.omega.y}
+                  stroke={link.stroke}
+                  strokeWidth={15}
+                />
+              )
+            })
+          }
+          {
+            links.air.map(link => {
+              return (
+                <line key={link.name} transform={`translate(16000 0)`}
                   x1={link.alpha.x} y1={link.alpha.y}
                   x2={link.omega.x} y2={link.omega.y}
                   stroke={link.stroke}

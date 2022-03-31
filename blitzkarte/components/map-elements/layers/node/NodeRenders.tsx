@@ -23,8 +23,24 @@ export const NodeRenders: FC<NodeRenderProps> = ({pins}: NodeRenderProps) => {
           {
             pins.land.map(node => {
               return <circle key={node.name}
+                cx={node.loc[0] - 16000} cy={node.loc[1]}
+                fill={node.fill} r="22.5"
+              />
+            })
+          }
+          {
+            pins.land.map(node => {
+              return <circle key={node.name}
                 cx={node.loc[0]} cy={node.loc[1]}
-                fill={node.fill}
+                fill={node.fill} r="22.5"
+              />
+            })
+          }
+          {
+            pins.land.map(node => {
+              return <circle key={node.name}
+                cx={node.loc[0] + 16000} cy={node.loc[1]}
+                fill={node.fill} r="22.5"
               />
             })
           }
@@ -36,7 +52,23 @@ export const NodeRenders: FC<NodeRenderProps> = ({pins}: NodeRenderProps) => {
           {
             pins.sea.map(node => {
               return <circle key={node.name}
+                cx={node.loc[0] - 16000} cy={node.loc[1]}
+                fill={node.fill} r="22.5"
+              />
+            })
+          }
+          {
+            pins.sea.map(node => {
+              return <circle key={node.name}
                 cx={node.loc[0]} cy={node.loc[1]}
+                fill={node.fill} r="22.5"
+              />
+            })
+          }
+          {
+            pins.sea.map(node => {
+              return <circle key={node.name}
+                cx={node.loc[0] + 16000} cy={node.loc[1]}
                 fill={node.fill} r="22.5"
               />
             })
@@ -49,8 +81,24 @@ export const NodeRenders: FC<NodeRenderProps> = ({pins}: NodeRenderProps) => {
           {
             pins.air.map(node => {
               return <circle key={node.name}
+                cx={node.loc[0] - 16000} cy={node.loc[1]}
+                fill={node.fill} r="22.5"
+              />
+            })
+          }
+          {
+            pins.air.map(node => {
+              return <circle key={node.name}
                 cx={node.loc[0]} cy={node.loc[1]}
-                fill={node.fill}
+                fill={node.fill} r="22.5"
+              />
+            })
+          }
+          {
+            pins.air.map(node => {
+              return <circle key={node.name}
+                cx={node.loc[0] + 16000} cy={node.loc[1]}
+                fill={node.fill} r="22.5"
               />
             })
           }

@@ -120,7 +120,11 @@ export class Parser {
     if (newPin.pinType === 'node') {
       let newNode: NodePin = new NodePin(newPin);
       if (newNode.valid) {
-        this.registerElement(newNode, 'nodes', ['nodes', 'pins', newNode.type]);
+        if (newNode.type !== 'other' && newNode.type !== 'o') {
+          this.registerElement(newNode, 'nodes', ['nodes', 'pins', newNode.type]);
+        } else {
+          this.registerElement(newNode, 'nodes');
+        }
         if (newNode.unit) {
           let newUnit: Unit = new Unit(newPin, province.country);
           if (newUnit.valid) {
