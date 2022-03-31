@@ -18,6 +18,7 @@ export class Parser {
   terrain: Terrain[] = [];
   nodes: NodePin[] = [];
   links: NodeLink[] = [];
+  linkNames: string[] = [];
   cities: City[] = [];
   labels: LabelPin[] = [];
   countries: Country[] = [];
@@ -201,18 +202,22 @@ export class Parser {
     this.nodes.forEach(node => {
       if (node.adj) {
         node.adj.forEach(adjNodeName => {
-          if (!this.nodes[adjNodeName]) {
+          if (!this.nameToIndexLibraries.nodes[adjNodeName]) {
             this.errors.push(`${node.name}'s adjacent node ${adjNodeName} does not exist!`);
             node.revokeApproval();
           } else {
-            let adjNode: NodePin = this.referenceElement('node', adjNodeName);
+            let adjNode: NodePin = this.referenceElement('nodes', adjNodeName);
             let newNodeLink: NodeLink = new NodeLink(node, adjNode);
-            if (!this.nodes[adjNodeName].adj.includes(node.name)) {
-              this.errors.push(`Node ${adjNode.name} does not reciprocate ${node.name}'s adjacency!`);
+            if (adjNode.adj?.includes(node.name)) {
+              if (!this.linkNames.includes(newNodeLink.name)) {
+                this.registerElement(newNodeLink, 'links', ['nodes', 'links', newNodeLink.type]);
+                this.linkNames.push(newNodeLink.name);
+              }
+            } else {
               node.revokeApproval();
               newNodeLink.setStroke('red');
+              this.errors.push(`Node ${adjNode.name} does not reciprocate ${node.name}'s adjacency!`);
             }
-            this.registerElement(newNodeLink, 'links', ['nodes', 'links', newNodeLink.type]);
           }
         });
 

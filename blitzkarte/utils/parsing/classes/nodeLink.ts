@@ -14,7 +14,7 @@ export class NodeLink {
   stroke: string | undefined;
 
   constructor(node: NodePin, adjNode: NodePin) {
-    this.name = [node.name, adjNode.name].sort().join('<->');
+    this.name = [node.name, adjNode.name].sort().join('-');
     this.type = node.type;
 
     let firstNode: NodePin;
@@ -32,8 +32,8 @@ export class NodeLink {
       y: firstNode.loc[1]
     };
     this.omega = {
-      x: secondNode[0],
-      y: secondNode[1]
+      x: secondNode.loc[0],
+      y: secondNode.loc[1]
     };
 
     this.stroke = this.initializeStroke();
