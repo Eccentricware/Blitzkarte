@@ -37,6 +37,7 @@ const GameParserPage: NextPage = () => {
     setShowLandNetwork(!showLandNetwork);
     let updateRenderData = renderData;
     updateRenderData.nodes.pins.display.land = !updateRenderData.nodes.pins.display.land;
+    updateRenderData.nodes.links.display.land = !updateRenderData.nodes.links.display.land;
     setRenderData(updateRenderData);
   }
 
@@ -44,6 +45,7 @@ const GameParserPage: NextPage = () => {
     setShowSeaNetwork(!showSeaNetwork);
     let updateRenderData = renderData;
     updateRenderData.nodes.pins.display.sea = !updateRenderData.nodes.pins.display.sea;
+    updateRenderData.nodes.links.display.sea = !updateRenderData.nodes.links.display.sea;
     setRenderData(updateRenderData);
   }
 
@@ -51,6 +53,7 @@ const GameParserPage: NextPage = () => {
     setShowAirNetwork(!showAirNetwork);
     let updateRenderData = renderData;
     updateRenderData.nodes.pins.display.air = !updateRenderData.nodes.pins.display.air;
+    updateRenderData.nodes.links.display.air = !updateRenderData.nodes.links.display.air;
     setRenderData(updateRenderData);
   }
 
@@ -75,17 +78,17 @@ const GameParserPage: NextPage = () => {
           <input type="checkbox" checked={showLandNetwork} onChange={
             (e: React.ChangeEvent<HTMLInputElement>) => { handleLandDisplayChange(); }
           }/>
-          Show Land Nodes ||||
+          Show Land Network ||||
 
           <input type="checkbox" checked={showSeaNetwork} onChange={
             (e: React.ChangeEvent<HTMLInputElement>) => { handleSeaDisplayChange(); }
           }/>
-          Show Sea Nodes ||||
+          Show Sea Network ||||
 
           <input type="checkbox" checked={showAirNetwork} onChange={
             (e: React.ChangeEvent<HTMLInputElement>) => { handleAirDisplayChange(); }
           }/>
-          Show Air Nodes
+          Show Air Network
         </div>
       </form>
       <GameMap renderData={renderData}/>
