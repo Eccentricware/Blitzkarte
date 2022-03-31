@@ -1,12 +1,12 @@
 import { link } from 'fs';
 import { FC } from 'react';
-import { Link } from '../../../../utils/parsing/classes/link';
+import { NodeLink } from '../../../../utils/parsing/classes/nodeLink';
 
 interface LinkRenderProps {
   links: {
-    land: Link[];
-    sea: Link[];
-    air: Link[];
+    land: NodeLink[];
+    sea: NodeLink[];
+    air: NodeLink[];
     display: {
       land: boolean;
       sea: boolean;
@@ -25,9 +25,10 @@ export const LinkRenders: FC<LinkRenderProps> = ({links}: LinkRenderProps) => {
             links.land.map(link => {
               return (
                 <line key={link.name}
-                  x1={link.origin.x} y1={link.origin.y}
-                  x2={link.destination.x} y2={link.destination.y}
+                  x1={link.alpha.x} y1={link.alpha.y}
+                  x2={link.omega.x} y2={link.omega.y}
                   stroke={link.stroke}
+                  strokeWidth={15}
                 />
               )
             })
@@ -41,9 +42,10 @@ export const LinkRenders: FC<LinkRenderProps> = ({links}: LinkRenderProps) => {
             links.sea.map(link => {
               return (
                 <line key={link.name}
-                  x1={link.origin.x} y1={link.origin.y}
-                  x2={link.destination.x} y2={link.destination.y}
+                  x1={link.alpha.x} y1={link.alpha.y}
+                  x2={link.omega.x} y2={link.omega.y}
                   stroke={link.stroke}
+                  strokeWidth={15}
                 />
               )
             })
@@ -57,9 +59,10 @@ export const LinkRenders: FC<LinkRenderProps> = ({links}: LinkRenderProps) => {
             links.air.map(link => {
               return (
                 <line key={link.name}
-                  x1={link.origin.x} y1={link.origin.y}
-                  x2={link.destination.x} y2={link.destination.y}
+                  x1={link.alpha.x} y1={link.alpha.y}
+                  x2={link.omega.x} y2={link.omega.y}
                   stroke={link.stroke}
+                  strokeWidth={15}
                 />
               )
             })
