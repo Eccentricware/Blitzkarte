@@ -18,11 +18,13 @@ export interface RenderData {
       display: {
         land: boolean,
         sea: boolean,
-        air: boolean
+        air: boolean,
+        event: boolean
       },
       land: NodePin[],
       sea: NodePin[],
-      air: NodePin[]
+      air: NodePin[],
+      event: NodeLink[]
     },
     links: {
       display: {
@@ -56,11 +58,13 @@ export const initialRenderData = {
       display: {
         land: true,
         sea: true,
-        air: true
+        air: true,
+        event: true
       },
       land: [],
       sea: [],
-      air: []
+      air: [],
+      event: []
     },
     links: {
       display: {
