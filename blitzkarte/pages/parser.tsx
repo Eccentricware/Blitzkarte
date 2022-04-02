@@ -57,6 +57,13 @@ const GameParserPage: NextPage = () => {
     setRenderData(updateRenderData);
   }
 
+  function handleEventDisplayChange() {
+    setShowAirNetwork(!showAirNetwork);
+    let updateRenderData = renderData;
+    updateRenderData.nodes.pins.display.event = !updateRenderData.nodes.pins.display.event;
+    setRenderData(updateRenderData);
+  }
+
   return (
     <div>
       <form className="map-parser">
@@ -88,7 +95,12 @@ const GameParserPage: NextPage = () => {
           <input type="checkbox" checked={showAirNetwork} onChange={
             (e: React.ChangeEvent<HTMLInputElement>) => { handleAirDisplayChange(); }
           }/>
-          Show Air Network
+          Show Air Network  ||||
+
+          <input type="checkbox" checked={showAirNetwork} onChange={
+            (e: React.ChangeEvent<HTMLInputElement>) => { handleEventDisplayChange(); }
+          }/>
+          Show Events  ||||
         </div>
       </form>
       <GameMap renderData={renderData}/>

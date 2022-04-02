@@ -33,6 +33,8 @@ export class NodePin {
         return 'blue';
       case 'air':
         return 'gold';
+      case 'event':
+        return 'purple';
     }
   }
 
@@ -49,7 +51,7 @@ export class NodePin {
   }
 
   validateType(): boolean {
-    let validTypes: string[] = ['l', 'land', 's', 'sea', 'a', 'air', 'o', 'other'];
+    let validTypes: string[] = ['l', 'land', 's', 'sea', 'a', 'air', 'e', 'event'];
     if (this.type) {
       if (!validTypes.includes(this.type)) {
         this.errors.push(`Invalid Node Type: ${this.name}`);

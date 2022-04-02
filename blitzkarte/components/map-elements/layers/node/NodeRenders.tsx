@@ -6,10 +6,12 @@ interface NodeRenderProps {
     land: NodePin[];
     sea: NodePin[];
     air: NodePin[];
+    event: NodePin[];
     display: {
       land: boolean;
       sea: boolean;
       air: boolean;
+      event: boolean;
     };
   }
 }
@@ -96,6 +98,35 @@ export const NodeRenders: FC<NodeRenderProps> = ({pins}: NodeRenderProps) => {
           }
           {
             pins.air.map(node => {
+              return <circle key={node.name}
+                cx={node.loc[0] + 16000} cy={node.loc[1]}
+                fill={node.fill} r="22.5"
+              />
+            })
+          }
+        </g>
+      }
+      {
+        pins.display.event &&
+        <g className="events-pins">
+          {
+            pins.event.map(node => {
+              return <circle key={node.name}
+                cx={node.loc[0] - 16000} cy={node.loc[1]}
+                fill={node.fill} r="22.5"
+              />
+            })
+          }
+          {
+            pins.event.map(node => {
+              return <circle key={node.name}
+                cx={node.loc[0]} cy={node.loc[1]}
+                fill={node.fill} r="22.5"
+              />
+            })
+          }
+          {
+            pins.event.map(node => {
               return <circle key={node.name}
                 cx={node.loc[0] + 16000} cy={node.loc[1]}
                 fill={node.fill} r="22.5"
