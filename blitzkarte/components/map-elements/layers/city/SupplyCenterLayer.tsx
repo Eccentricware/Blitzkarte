@@ -18,7 +18,7 @@ export const SupplyCenterLayer: FC<Props> = ({supplyCenters}: Props) => {
               r={25}
               fill={city.statusColor}
               stroke="black"
-              strokeWidth={3}
+              strokeWidth={4}
             />
             <circle
               cx={city.loc[0]}
@@ -26,7 +26,7 @@ export const SupplyCenterLayer: FC<Props> = ({supplyCenters}: Props) => {
               r={25}
               fill={city.statusColor}
               stroke="black"
-              strokeWidth={3}
+              strokeWidth={4}
             />
             <circle
               cx={city.loc[0] + 16000}
@@ -34,7 +34,7 @@ export const SupplyCenterLayer: FC<Props> = ({supplyCenters}: Props) => {
               r={25}
               fill={city.statusColor}
               stroke="black"
-              strokeWidth={3}
+              strokeWidth={4}
             />
           </g>
         )

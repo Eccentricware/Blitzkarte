@@ -14,18 +14,24 @@ export const LabelLayer: FC<Props> = ({labelRenderData}: Props) => {
             <text className={`label label-type-${label.type}`}
               transform={`translate(${label.loc[0] - 16000} ${label.loc[1]})`}
               pointerEvents="none"
+              fontSize={label.size}
+              fill={label.fill}
             >
               {label.text}
             </text>
             <text className={`label label-type-${label.type}`}
               transform={`translate(${label.loc[0]} ${label.loc[1]})`}
               pointerEvents="none"
+              fontSize={label.size}
+              fill={label.fill}
             >
               {label.text}
             </text>
             <text className={`label label-type-${label.type}`}
               transform={`translate(${label.loc[0] + 16000} ${label.loc[1]})`}
               pointerEvents="none"
+              fontSize={label.size}
+              fill={label.fill}
             >
               {label.text}
             </text>

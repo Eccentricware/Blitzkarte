@@ -36,6 +36,7 @@ export class Parser {
   activeProvince: boolean = false;
   warnings: string[] = [];
   errors: string[] = [];
+  critical: string[] = [];
   finalStatusCheck: FinalStatusCheck = initialFinalStatusCheck;
 
 
@@ -70,6 +71,7 @@ export class Parser {
     console.log('Render Elements:', this.renderElements);
     //console.log('Warnings:', this.warnings);
     console.log('Errors:', this.errors);
+    console.log('Critical:', this.critical);
   }
 
   parseElement(element: Element) {
@@ -235,6 +237,9 @@ export class Parser {
   }
 
   registerElement(element: any, elementType: string, renderPath?: string[]) {
+    if (this.nameToIndexLibraries[elementType][element.name]) {
+      this.critical.push(`ELEMENT ${element.name} IS ALREADY REGISTERED!`);
+    }
     this[elementType].push(element);
     this.nameToIndexLibraries[elementType][element.name] = this[elementType].length - 1;
 
