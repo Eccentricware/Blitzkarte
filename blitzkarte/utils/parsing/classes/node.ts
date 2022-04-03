@@ -7,7 +7,7 @@ export class NodePin {
   adj: string[] | undefined;
   loc!: number[];
   fill: string | undefined;
-  unit?: string;
+  unit: string | undefined;
   warnings: string[] = [];
   errors: string[] = [];
   valid: boolean;
@@ -20,7 +20,9 @@ export class NodePin {
     this.fill = this.initializeFill();
     this.loc = pin.loc;
     this.adj = pin.adj?.split('/');
-    this.unit = pin.unit;
+    if (pin.unit) {
+      this.unit = pin.unit;
+    }
 
     this.valid = this.validate();
   }

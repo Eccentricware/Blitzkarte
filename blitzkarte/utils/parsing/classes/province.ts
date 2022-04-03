@@ -1,11 +1,52 @@
+interface TerrainApproval {
+  land: string[];
+  sea: string[];
+  canal: string[];
+  bridge: string[];
+  pole: string[];
+  impassible: string[];
+  decorative: string[];
+}
+
+interface NodeApproval {
+  event: string[];
+  land: string[];
+  sea: string[];
+  air: string[];
+}
+
+interface UnitApproval {
+  name: string,
+  type: string
+}
+
 export class Province {
   name!: string;
-  type: string | undefined;
+  type: string = '';
   city: string | undefined;
   fullName: string | undefined;
   country!: string;
   isTracemap: boolean = false;
+  terrainApproval: TerrainApproval = {
+    land: [],
+    sea: [],
+    canal: [],
+    bridge: [],
+    pole: [],
+    impassible: [],
+    decorative: []
+  };
+  nodeApproval: NodeApproval = {
+    event: [],
+    land: [],
+    sea: [],
+    air: []
+  };
+  labelApproval: string[] = [];
+  cities: string[] = [];
+  unit: UnitApproval[] = [];
   valid: boolean;
+  approved: boolean = true;
   errors: string[] = [];
   constructor(provinceString: string) {
     let properties = provinceString.split(' ');
@@ -21,6 +62,9 @@ export class Province {
       });
 
       this.valid = this.validate(provinceString);
+      if (this.valid && this.fullName) {
+        this.fullName = this.fullName.replace('_', ' ');
+      }
 
     } else {
       this.valid = false;
@@ -51,9 +95,6 @@ export class Province {
     let validProvinceTypes: string[] = [
       'coast',
       'decorative',
-      'fogland',
-      'fogwater',
-      'fogOther',
       'impassible',
       'inland',
       'island',
@@ -71,5 +112,177 @@ export class Province {
     }
 
     return true;
+  }
+
+  attemptApproval() {
+    let terrainApproved: boolean = this.approveTerrain();
+    let nodesApproved: boolean = this.approveNodes();
+    let labelsApproved: boolean = this.approveLabels();
+    let cityApproved: boolean = this.approveCity();
+    let unitApproved: boolean = this.approveUnit();
+
+    this.approved = terrainApproved
+      && nodesApproved
+      && labelsApproved
+      && cityApproved
+      && unitApproved;
+  }
+
+  approveTerrain(): boolean {
+    let terrainApproved: boolean = true;
+
+    let expectsLandTerrain: string[] = ['coast', 'impassible', 'inland', 'island'];
+    if (expectsLandTerrain.includes(this.type) && this.terrainApproval.land.length === 0) {
+      this.errors.push(`${this.type} province ${this.name} expects at least 1 land terrain`);
+      terrainApproved = false;
+    }
+
+    let expectsSeaTerrain: string[] = ['island', 'sea'];
+    if (expectsSeaTerrain.includes(this.type) && this.terrainApproval.sea.length === 0) {
+      this.errors.push(`${this.type} province ${this.name} expects at least 1 sea terrain`);
+      terrainApproved = false;
+    }
+
+    let expectsNoLandTerrain: string[] = ['pole', 'sea']
+    if (expectsNoLandTerrain.includes(this.type) && this.terrainApproval.land.length > 0) {
+      this.errors.push(`${this.type} province ${this.name} should not have land terrain`);
+      terrainApproved = false;
+    }
+
+    let expectsNoSeaTerrain: string[] = ['coast', 'impassible', 'inland', 'pole'];
+    if (expectsNoSeaTerrain.includes(this.type) && this.terrainApproval.sea.length > 0) {
+      this.errors.push(`${this.type} province ${this.name} should not have sea terrain`);
+      terrainApproved = false;
+    }
+
+    return terrainApproved;
+  }
+
+  approveNodes(): boolean {
+    let nodesApproved: boolean = true;
+
+    if (this.type !== 'decorative') {
+
+
+      if (this.nodeApproval.event.length === 0) {
+        this.errors.push(`${this.type} province ${this.name} has no event node`);
+        nodesApproved = false;
+      } else if (this.nodeApproval.event.length > 1) {
+        this.errors.push(`${this.type} province ${this.name} has more than 1 event node`);
+        nodesApproved = false;
+      }
+
+      let expectsLandNode: string[] = ['coast', 'inland', 'island'];
+      if (expectsLandNode.includes(this.type)) {
+        if (this.nodeApproval.land.length === 0) {
+          this.errors.push(`${this.type} province ${this.name} has no land node`);
+          nodesApproved = false;
+        } else if (this.nodeApproval.land.length > 1) {
+          this.errors.push(`${this.type} province ${this.name} has more than 1 land node`);
+          nodesApproved = false;
+        }
+      }
+
+      let expectsSeaNode: string[] = ['coast', 'island', 'pole', 'sea'];
+      if (expectsSeaNode.includes(this.type) && this.nodeApproval.sea.length === 0) {
+        this.errors.push(`${this.type} province expects at least 1 sea node`);
+        nodesApproved = false;
+      }
+
+      if (this.nodeApproval.air.length === 0) {
+        this.errors.push(`${this.type} province ${this.name} has no air node`);
+        nodesApproved = false;
+      } else if (this.nodeApproval.air.length > 1) {
+        this.errors.push(`${this.type} province ${this.name} has more than 1 air node`);
+        nodesApproved = false;
+      }
+
+      let expectsNoLandNode: string[] = ['decorative', 'impassible', 'pole', 'sea'];
+      if (expectsNoLandNode.includes(this.type) && this.nodeApproval.land.length > 0) {
+        this.errors.push(`${this.type} province ${this.name} should not have a land node`);
+        nodesApproved = false;
+      }
+
+      let expectsNoSeaNode: string[] = ['decorative', 'impassible', 'inland'];
+      if (expectsNoSeaNode.includes(this.type) && this.nodeApproval.land.length > 0) {
+        this.errors.push(`${this.type} province ${this.name} should not have a sea node`);
+        nodesApproved = false;
+      }
+    } else {
+      if (this.nodeApproval.event.length > 0
+      || this.nodeApproval.land.length > 0
+      || this.nodeApproval.sea.length > 0
+      || this.nodeApproval.air.length > 0) {
+        this.errors.push(`${this.type} province ${this.name} has at least one standard node`);
+        nodesApproved = false;
+      }
+    }
+
+    return nodesApproved;
+  }
+
+  approveLabels(): boolean {
+    let labelsApproved: boolean = true;
+
+    if (this.type !== 'decorative') {
+      if (this.labelApproval.length === 0) {
+        this.errors.push(`${this.type} province ${this.name} expects at least 1 label`);
+        labelsApproved = false;
+      }
+    } else {
+      if (this.labelApproval.length > 0) {
+        this.errors.push(`${this.type} province ${this.name} should not have any labels`);
+        labelsApproved = false;
+      }
+    }
+
+    return labelsApproved;
+  }
+
+  approveCity(): boolean {
+    let cityApproved: boolean = true;
+
+    let noCityExpected: string[] = ['docorative', 'impassible', 'pole', 'sea'];
+    if (noCityExpected.includes(this.type) && this.cities.length > 0) {
+      this.errors.push(`${this.type} province should not have a city`);
+      cityApproved = false;
+    }
+
+    if (this.cities.length > 1) {
+      this.errors.push(`Province ${this.name} has more than 1 city`);
+      cityApproved = false;
+    }
+
+    return cityApproved;
+  }
+
+  approveUnit(): boolean {
+    let unitApproved: boolean = true;
+
+    if (this.type === 'decorative' && this.unit.length > 0) {
+      this.errors.push(`${this.type} province ${this.name} should never have a unit. Make province non-decorative or fix the unit's node`);
+      unitApproved = false;
+    }
+
+    if (this.unit.length > 1) {
+      this.errors.push(`More than 1 unit is in ${this.name}`);
+      unitApproved = false;
+    }
+
+    let noLandUnits: string[] = ['decorative', 'impassible', 'pole', 'sea'];
+    if (noLandUnits.includes(this.type)
+    && this.unit.length === 1
+    && (this.unit[0].type === 'army' || this.unit[0].type === 'nuke')) {
+      this.errors.push(`Land unit ${this.unit[0].name} can not occupy ${this.type} province ${this.name}`);
+    }
+
+    let noSeaUnits: string[] = ['decorative', 'impassible', 'inland'];
+    if (noSeaUnits.includes(this.type)
+      && this.unit.length === 1
+      && this.unit[0].type === 'fleet') {
+      this.errors.push(`Sea unit ${this.unit[0].name} can not occupy ${this.type} province ${this.name}`);
+    }
+
+    return unitApproved;
   }
 }

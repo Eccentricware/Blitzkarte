@@ -3,20 +3,19 @@ import { convertSpaceToCamelCase } from "../../general/utils";
 
 export class Unit {
   name: string;
-  type: string | undefined;
+  type: string;
   node: string;
-  loc: number[] | undefined;
+  loc: number[];
   countryKey!: string;
   valid: boolean;
   errors: string[] = [];
 
   constructor(node: Pin, country: string) {
     this.name = `${country}_${node.unit}_${node.name}`;
-    this.type = node.unit;
+    this.type = `${node.unit}`;
     this.countryKey = convertSpaceToCamelCase(country);
     this.node = node.name;
     this.loc = node.loc;
-
     this.valid = this.validate();
   }
 

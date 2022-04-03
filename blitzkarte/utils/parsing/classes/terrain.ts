@@ -2,6 +2,7 @@ export class Terrain {
   name: string = '';
   province!: string;
   type!: string;
+  link: string | undefined;
   renderCategory!: string;
   points: string | undefined;
   fill: string | undefined;
@@ -116,8 +117,9 @@ export class Terrain {
 
   validate(): boolean {
     let typeValid: boolean = this.validateType();
+    let bridgeValid: boolean = this.validateBridge();
 
-    return typeValid;
+    return typeValid && bridgeValid;
   }
 
   validateType(): boolean {
@@ -128,6 +130,13 @@ export class Terrain {
       return false;
     }
 
+    return true;
+  }
+
+  validateBridge(): boolean {
+    if (this.type === 'bridge' && !this.link) {
+      return false;
+    }
     return true;
   }
 }
