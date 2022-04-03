@@ -9,8 +9,8 @@ export interface RenderData {
   terrain: {
     sea: Terrain[],
     land: Terrain[],
-    bridge: Terrain[],
     canal: Terrain[]
+    line: Terrain[],
   },
   nodes: {
     display: boolean,
@@ -49,8 +49,8 @@ export const initialRenderData = {
   terrain: {
     sea: [],
     land: [],
-    bridge: [],
-    canal: []
+    canal: [],
+    line: []
   },
   nodes: {
     display: false,

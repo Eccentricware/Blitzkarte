@@ -173,7 +173,7 @@ export class Parser {
     let newTerrain = new Terrain(terrainString, provinceName);
 
     if (newTerrain.valid) {
-      this.registerElement(newTerrain, 'terrain', ['terrain', newTerrain.type]);
+      this.registerElement(newTerrain, 'terrain', ['terrain', newTerrain.renderCategory]);
     } else {
       this.collectErrors(newTerrain.errors);
     }

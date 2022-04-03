@@ -57,13 +57,14 @@ export class Terrain {
         this.type = 'bridge';
         this.fill = 'none';
         this.stroke = 'red';
-        this.renderCategory = 'bridge';
+        this.renderCategory = 'line';
         break;
       case 'o':
         this.type = 'border';
         this.fill = 'none';
         this.stroke = 'darkgray';
-        this.renderCategory = 'bridge';
+        this.renderCategory = 'line';
+        break;
       case 'c':
         this.type = 'canal';
         this.fill = '#42cafe';
@@ -72,15 +73,15 @@ export class Terrain {
         break;
       case 'p':
         this.type = 'pole';
-        this.fill = 'fdfdfd';
-        this.stroke = 'none';
-        this.renderCategory = 'pole';
+        this.fill = '#fdfdfd';
+        this.stroke = '#fdfdfd';
+        this.renderCategory = 'land';
         break;
       case 'i':
         this.type = 'impassible';
         this.fill = 'darkgray';
         this.stroke = 'black';
-        this.renderCategory = 'impassible';
+        this.renderCategory = 'land';
         break;
       default:
         this.type = 'fail';

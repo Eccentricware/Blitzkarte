@@ -17,6 +17,7 @@ a {
 
 .map {
   background-image: url('../images/BlitzkarteMapGreenWireframe.jpg');
+  border: 1px black solid;
 }
 
 .label {
