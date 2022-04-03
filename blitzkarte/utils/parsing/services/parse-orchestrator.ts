@@ -53,18 +53,20 @@ export class Parser {
       this.parseElement(element);
     });
 
-    // 1) Province: fill from controller
-    // 2) Units: flagKey from controller
-    this.crossReferenceWave1();
-    this.finalizeNodes();
+    // Registers terrain on province
+    // Assigns controller country color to fill value
+    this.terrainReferences();
+    this.nodeReferences();
+    this.labelReferences();
+    this.cityReferences();
+    this.unitReferences();
+    this.validateProvinces();
 
     // Feedback
-    //console.log('elementStrings', elementStrings);
     console.log('Provinces: ', this.provinces);
     console.log('Nodes:', this.nodes);
     console.log('Cities', this.cities);
     console.log('Labels:', this.labels);
-    //console.log('NodePins:', this.nodePins);
     console.log('Countries:', this.countries);
     console.log('Units:', this.units);
     console.log('Name To Index Libraries:', this.nameToIndexLibraries);
@@ -185,56 +187,7 @@ export class Parser {
     this.activeProvince = false;
   }
 
-  crossReferenceWave1() {
-    this.terrainWave1();
-    // this.unitWave1();
-  }
 
-  terrainWave1() {
-    this.renderElements.terrain.land.forEach(land => {
-      let province: Province = this.referenceElement('provinces', land.province);
-      if (province.country) {
-        let country: Country | undefined = this.referenceElement('countries', province.country);
-        if (country) {
-          land.setFill(country.color);
-        } else {
-          this.errors.push(`Province ${province.name} country ${province.country} is not created!`);
-        }
-      }
-    });
-  }
-
-  finalizeNodes() {
-    this.nodes.forEach(node => {
-      if (node.adj) {
-        node.adj.forEach(adjNodeName => {
-          if (!this.nameToIndexLibraries.nodes[adjNodeName]) {
-            this.errors.push(`${node.name}'s adjacent node ${adjNodeName} does not exist!`);
-            node.revokeApproval();
-          } else {
-            let adjNode: NodePin = this.referenceElement('nodes', adjNodeName);
-            let newNodeLink: NodeLink = new NodeLink(node, adjNode);
-            if (adjNode.adj?.includes(node.name)) {
-              if (!this.linkNames.includes(newNodeLink.name)) {
-                this.registerElement(newNodeLink, 'links', ['nodes', 'links', newNodeLink.type]);
-                this.linkNames.push(newNodeLink.name);
-              }
-            } else {
-              node.revokeApproval();
-              newNodeLink.setStroke('red');
-              this.errors.push(`Node ${adjNode.name} does not reciprocate ${node.name}'s adjacency!`);
-            }
-          }
-        });
-
-        if (node.approved) {
-          this.finalStatusCheck.nodes.pass.push(node.name);
-        } else {
-          this.finalStatusCheck.nodes.fail.push(node.name);
-        }
-      }
-    });
-  }
 
   registerElement(element: any, elementType: string, renderPath?: string[]) {
     if (this.nameToIndexLibraries[elementType][element.name]) {
@@ -266,6 +219,89 @@ export class Parser {
   collectWarnings(warnings: string[]) {
     warnings.forEach(warning => {
       this.warnings.push(warning);
+    });
+  }
+
+  terrainReferences() {
+    this.terrain.forEach(terrain => {
+      let province: Province = this.referenceElement('provinces', terrain.province);
+      province.terrainApproval[terrain.type].push(terrain.name);
+      if (terrain.type === 'land' && province.country) {
+        let country: Country | undefined = this.referenceElement('countries', province.country);
+        if (country) {
+          terrain.setFill(country.color);
+        } else {
+          this.errors.push(`Province ${province.name} country ${province.country} is not created!`);
+        }
+      }
+    });
+  }
+
+  nodeReferences() {
+    this.nodes.forEach(node => {
+      let province: Province = this.referenceElement('provinces', node.province);
+      province.nodeApproval[node.type].push(node.name);
+      if (node.adj) {
+        node.adj.forEach(adjNodeName => {
+          if (!this.nameToIndexLibraries.nodes[adjNodeName]) {
+            this.errors.push(`${node.name}'s adjacent node ${adjNodeName} does not exist!`);
+            node.revokeApproval();
+          } else {
+            let adjNode: NodePin = this.referenceElement('nodes', adjNodeName);
+            let newNodeLink: NodeLink = new NodeLink(node, adjNode);
+            if (adjNode.adj?.includes(node.name)) {
+              if (!this.linkNames.includes(newNodeLink.name)) {
+                this.registerElement(newNodeLink, 'links', ['nodes', 'links', newNodeLink.type]);
+                this.linkNames.push(newNodeLink.name);
+              }
+            } else {
+              node.revokeApproval();
+              newNodeLink.setStroke('red');
+              this.errors.push(`Node ${adjNode.name} does not reciprocate ${node.name}'s adjacency!`);
+            }
+          }
+        });
+
+        if (node.approved) {
+          this.finalStatusCheck.nodes.pass.push(node.name);
+        } else {
+          this.finalStatusCheck.nodes.fail.push(node.name);
+        }
+      }
+    });
+  }
+
+  labelReferences() {
+    this.labels.forEach(label => {
+      let province: Province = this.referenceElement('provinces', label.province);
+      province.labelApproval.push(label.name);
+    });
+  }
+
+  cityReferences() {
+    this.cities.forEach(city => {
+      let province: Province = this.referenceElement('provinces', city.province);
+      province.cities.push(city.name);
+    })
+  }
+
+  unitReferences() {
+    this.units.forEach(unit => {
+      let node: NodePin = this.referenceElement('nodes', unit.node);
+      let province: Province = this.referenceElement('provinces', node.province);
+      province.unit.push({
+        name: unit.name,
+        type: unit.type
+      });
+    });
+  }
+
+  validateProvinces() {
+    this.provinces.forEach(province => {
+      province.attemptApproval();
+      if (!province.approved) {
+        this.collectErrors(province.errors);
+      }
     });
   }
 }
