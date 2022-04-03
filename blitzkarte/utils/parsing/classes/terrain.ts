@@ -38,51 +38,72 @@ export class Terrain {
     this.valid = this.validate();
   }
 
-  setType(input: string): void {
-    let firstLetter: string = input.charAt(0).toLocaleLowerCase();
-    switch (firstLetter) {
-      case 'l':
+  setType(type: string): void {
+    switch (type) {
+      case 'land':
         this.type = 'land';
         this.fill = '#83a584';
         this.stroke = 'black';
         this.renderCategory = 'land';
         break;
-      case 's':
+      case 'sea':
         this.type = 'sea';
         this.fill = '#42cafe';
         this.stroke = 'white';
         this.renderCategory = 'sea';
         break;
-      case 'b':
+      case 'bridge':
         this.type = 'bridge';
         this.fill = 'none';
         this.stroke = 'red';
         this.renderCategory = 'line';
         break;
-      case 'o':
-        this.type = 'border';
-        this.fill = 'none';
-        this.stroke = 'darkgray';
-        this.renderCategory = 'line';
-        break;
-      case 'c':
+      // case 'other':
+      //   this.type = 'border';
+      //   this.fill = 'none';
+      //   this.stroke = 'darkgray';
+      //   this.renderCategory = 'line';
+      //   break;
+      case 'canal':
         this.type = 'canal';
         this.fill = '#42cafe';
         this.stroke = 'white';
         this.renderCategory = 'canal';
         break;
-      case 'p':
+      case 'pole':
         this.type = 'pole';
         this.fill = '#fdfdfd';
         this.stroke = '#fdfdfd';
         this.renderCategory = 'land';
         break;
-      case 'i':
+      case 'impassible':
         this.type = 'impassible';
         this.fill = 'darkgray';
         this.stroke = 'black';
         this.renderCategory = 'land';
         break;
+
+      // Decorative terrain
+      case 'ice':
+        this.type = 'decorative';
+        this.fill = '#fdfdfd';
+        this.stroke = 'none';
+        this.renderCategory = 'land';
+        break;
+      case 'isle':
+        this.type = 'decorative';
+        this.fill = '#83a584';
+        this.stroke = 'none';
+        this.renderCategory = 'land';
+        break;
+      case 'lake':
+        this.type = 'decorative';
+        this.fill = '#c5e6c5';
+        this.stroke = 'black';
+        this.renderCategory = 'sea';
+        break;
+
+      // Never
       default:
         this.type = 'fail';
         this.renderCategory = 'This does not mean you are a bad person, necessarily'
@@ -100,7 +121,7 @@ export class Terrain {
   }
 
   validateType(): boolean {
-    const validTypes: string[] = ['l', 's', 'b', 'o', 'c', 'p', 'i'];
+    const validTypes: string[] = ['l', 's', 'b', 'o', 'c', 'p', 'i', 'd'];
 
     if (!validTypes.includes(this.type[0].toLowerCase())) {
       this.errors.push(`Invalid Terrain Type: ${this.name}`);
