@@ -67,20 +67,34 @@ export class NodePin {
   }
 
   validateAdj(): boolean {
-    let typeWithAdjReq = ['l', 'land', 's', 'sea', 'a', 'air'];
+    let adjValid: boolean = true;
+    let typeWithAdjReq = ['land', 'sea', 'air'];
     if (this.adj && typeWithAdjReq.includes(this.type)) {
       let type: string = this.name.split('_')[1];
       this.adj.forEach(node => {
         if (node.split('_')[1] !== type) {
           this.errors.push(`Incompatible Adjacent Node ${node} in ${this.name}`);
-          return false;
+          adjValid = false;
         }
       });
     } else if (!this.adj && typeWithAdjReq.includes(this.type)) {
       this.errors.push(`Missing Adj Array: ${this.name}`);
-      return false;
+      adjValid = false;
     }
-    return true;
+
+    let adjNodes: string[] = [];
+    if (this.adj) {
+      this.adj.forEach(adjNode => {
+        if (!adjNodes.includes(adjNode)) {
+          adjNodes.push(adjNode);
+        } else {
+          this.errors.push(`${this.name} has adjNode ${adjNode} more than once`);
+          adjValid = false;
+        }
+      });
+    }
+
+    return adjValid;
   }
 
   revokeApproval() {

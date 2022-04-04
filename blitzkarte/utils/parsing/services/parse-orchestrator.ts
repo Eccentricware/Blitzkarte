@@ -257,6 +257,7 @@ export class Parser {
             } else {
               node.revokeApproval();
               newNodeLink.setStroke('red');
+              this.registerElement(newNodeLink, 'links', ['nodes', 'links', newNodeLink.type]);
               this.errors.push(`Node ${adjNode.name} does not reciprocate ${node.name}'s adjacency!`);
             }
           }
