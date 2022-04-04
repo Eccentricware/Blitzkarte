@@ -2,7 +2,8 @@ export class Terrain {
   name: string = '';
   province!: string;
   type!: string;
-  link: string | undefined;
+  start: string | undefined;
+  end: string | undefined;
   renderCategory!: string;
   points: string | undefined;
   fill: string | undefined;
@@ -31,7 +32,7 @@ export class Terrain {
       }
     });
 
-    this.name = `${this.province}_${this.type}` + this.name;
+    this.name = this.setName();
 
     this.points = terrain.slice(pointsStartIndex + 8, pointsEndIndex);
 
@@ -59,12 +60,12 @@ export class Terrain {
         this.stroke = 'red';
         this.renderCategory = 'line';
         break;
-      // case 'other':
-      //   this.type = 'border';
-      //   this.fill = 'none';
-      //   this.stroke = 'darkgray';
-      //   this.renderCategory = 'line';
-      //   break;
+      case 'border':
+        this.type = 'border';
+        this.fill = 'none';
+        this.stroke = 'darkgray';
+        this.renderCategory = 'line';
+        break;
       case 'canal':
         this.type = 'canal';
         this.fill = '#42cafe';
@@ -111,6 +112,14 @@ export class Terrain {
     }
   }
 
+  setName() {
+    if (this.type === 'bridge') {
+      return `${this.start}_${this.end}_bridge`;
+    } else {
+      return `${this.province}_${this.type}` + this.name;
+    }
+  }
+
   setFill(color: string) {
     this.fill = color;
   }
@@ -134,7 +143,8 @@ export class Terrain {
   }
 
   validateBridge(): boolean {
-    if (this.type === 'bridge' && !this.link) {
+    if (this.type === 'bridge' && (!this.start || !this.end)) {
+      this.errors.push(`Bridge ${this.name} is missing at least 1 linked province.`)
       return false;
     }
     return true;
