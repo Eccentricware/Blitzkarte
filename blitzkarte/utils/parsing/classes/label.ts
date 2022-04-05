@@ -5,7 +5,7 @@ export class LabelPin {
   type!: string;
   text!: string | undefined;
   size: number = 100;
-  fill: string;
+  fill?: string;
   province!: string;
   loc!: number[];
   valid: boolean;
@@ -16,7 +16,10 @@ export class LabelPin {
     this.setSizeAndColor(pin.type);
 
     this.text = pin.text ? pin.text : pin.province;
-    this.name = `${pin.province}_label_${this.text}`;
+    this.name = `${pin.province}_label`;
+    if (pin.number) {
+      this.name += `_${pin.number}`;
+    }
     this.province = pin.province;
     this.loc = pin.loc;
 

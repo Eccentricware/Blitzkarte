@@ -4,6 +4,7 @@ export class Pin {
   pinType!: string | undefined;
   type!: string;
   text: string | undefined;
+  number: string | undefined;
   unit: string | undefined;
   country: string | undefined;
   key: string | undefined;
