@@ -265,7 +265,7 @@ export class Parser {
     this.nodes.forEach(node => {
       let province: Province = this.referenceElement('provinces', node.province);
       province.nodeApproval[node.type].push(node.name);
-      if (node.adj) {
+      if (node.adj && node.adj[0] !== 'none') {
         node.adj.forEach(adjNodeName => {
           if (!this.nameToIndexLibraries.nodes[adjNodeName]) {
             this.errors.push(`${node.name}'s adjacent node ${adjNodeName} does not exist!`);

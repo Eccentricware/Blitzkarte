@@ -134,6 +134,11 @@ export class Terrain {
   validateType(): boolean {
     const validTypes: string[] = ['l', 's', 'b', 'o', 'c', 'p', 'i', 'd'];
 
+    if (!this.type) {
+      this.errors.push(`${this.name} has inavlid type`);
+      return false;
+    }
+
     if (!validTypes.includes(this.type[0].toLowerCase())) {
       this.errors.push(`Invalid Terrain Type: ${this.name}`);
       return false;
