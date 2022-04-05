@@ -1,9 +1,10 @@
-import { City } from "../utils/parsing/classes/city"
-import { LabelPin } from "../utils/parsing/classes/label"
-import { NodeLink } from "../utils/parsing/classes/nodeLink"
-import { NodePin } from "../utils/parsing/classes/node"
-import { Terrain } from "../utils/parsing/classes/terrain"
-import { Unit } from "../utils/parsing/classes/unit"
+import { City } from '../utils/parsing/classes/city'
+import { LabelPin } from '../utils/parsing/classes/label'
+import { NodeLink } from '../utils/parsing/classes/nodeLink'
+import { NodePin } from '../utils/parsing/classes/node'
+import { Terrain } from '../utils/parsing/classes/terrain'
+import { Unit } from '../utils/parsing/classes/unit'
+import { LabelLine } from '../utils/parsing/classes/labelLine'
 
 export interface RenderData {
   terrain: {
@@ -43,6 +44,7 @@ export interface RenderData {
   },
   units: Unit[]
   labels: LabelPin[],
+  labelLines: LabelLine[]
 }
 
 export const initialRenderData = {
@@ -82,5 +84,6 @@ export const initialRenderData = {
     votingCenters: []
   },
   units: [],
-  labels: []
+  labels: [],
+  labelLines: []
 }

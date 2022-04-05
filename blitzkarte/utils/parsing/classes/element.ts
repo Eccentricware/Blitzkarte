@@ -22,8 +22,8 @@ export class Element {
         return 'renderElement';
       case 'circle':
         return 'coordinate';
-      case 'text':
-        return 'country';
+      case 'line':
+        return 'labelLine';
       case '/g':
         return 'finishProvince';
       default:

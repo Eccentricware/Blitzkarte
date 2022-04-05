@@ -1,43 +1,20 @@
 import React, { FC } from 'react';
 import { LabelPin } from '../../../../utils/parsing/classes/label';
+import { LabelLine } from '../../../../utils/parsing/classes/labelLine';
+import { LabelLineRenders } from './LabelLineRenders';
+import { LabelPinRenders } from './LabelPinRenders';
 
 interface Props {
-  labelRenderData: LabelPin[];
+  labelPinData: LabelPin[];
+  labelLineData: LabelLine[];
 }
 
-export const LabelLayer: FC<Props> = ({labelRenderData}: Props) => {
+export const LabelLayer: FC<Props> = ({labelPinData, labelLineData}: Props) => {
   return (
-    <React.Fragment>
-      {
-        labelRenderData.map((label, i) => (
-          <g key={i}>
-            <text className={`label label-type-${label.type}`}
-              transform={`translate(${label.loc[0] - 16000} ${label.loc[1]})`}
-              pointerEvents="none"
-              fontSize={label.size}
-              fill={label.fill}
-            >
-              {label.text}
-            </text>
-            <text className={`label label-type-${label.type}`}
-              transform={`translate(${label.loc[0]} ${label.loc[1]})`}
-              pointerEvents="none"
-              fontSize={label.size}
-              fill={label.fill}
-            >
-              {label.text}
-            </text>
-            <text className={`label label-type-${label.type}`}
-              transform={`translate(${label.loc[0] + 16000} ${label.loc[1]})`}
-              pointerEvents="none"
-              fontSize={label.size}
-              fill={label.fill}
-            >
-              {label.text}
-            </text>
-          </g>
-        ))
-      }
-    </React.Fragment>
+    <g className="label-layer">
+      <LabelPinRenders labelPinData={labelPinData} />
+      <LabelLineRenders labelLineData={labelLineData} />
+    </g>
+
   )
 }

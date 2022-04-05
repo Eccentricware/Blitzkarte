@@ -14,7 +14,7 @@ export const GameMap: FC<Props> = ({renderData}: Props) => {
     <svg id="map" className="map" width="1488" height="930" viewBox="0 0 16000 10000">
       <TerrainLayer terrainRenderData={renderData.terrain} />
       <CityLayer cityData={renderData.cities}/>
-      <LabelLayer labelRenderData={renderData.labels} />
+      <LabelLayer labelPinData={renderData.labels} labelLineData={renderData.labelLines} />
       { renderData.nodes.display ?
         <NodeLayer nodeData={renderData.nodes}/>
         :

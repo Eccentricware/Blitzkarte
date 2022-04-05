@@ -3,6 +3,7 @@ import { Province } from '../classes/province';
 import { Pin } from '../classes/pin';
 import { City } from '../classes/city';
 import { LabelPin } from '../classes/label';
+import { LabelLine } from '../classes/labelLine';
 import { NodePin } from '../classes/node';
 import { Country } from '../classes/country';
 import { Unit } from '../classes/unit';
@@ -21,6 +22,7 @@ export class Parser {
   linkNames: string[] = [];
   cities: City[] = [];
   labels: LabelPin[] = [];
+  labelLines: LabelLine[] = [];
   countries: Country[] = [];
   units: Unit[] = [];
   nameToIndexLibraries = {
@@ -30,6 +32,7 @@ export class Parser {
     links: {},
     cities: {},
     labels: {},
+    labelLines: {},
     countries: {},
     units: {}
   }
@@ -67,6 +70,7 @@ export class Parser {
     console.log('Nodes:', this.nodes);
     console.log('Cities', this.cities);
     console.log('Labels:', this.labels);
+    console.log('Label Lines:', this.labelLines);
     console.log('Countries:', this.countries);
     console.log('Units:', this.units);
     console.log('Name To Index Libraries:', this.nameToIndexLibraries);
@@ -75,6 +79,8 @@ export class Parser {
     console.log('Errors:', this.errors);
     console.log('Critical:', this.critical);
   }
+
+  // Save information into their respective classes
 
   parseElement(element: Element) {
     switch (element.type) {
@@ -86,6 +92,9 @@ export class Parser {
         break;
       case 'coordinate':
         this.parseCoordinate(element.fullString);
+        break;
+      case 'labelLine':
+        this.parseLabelLine(element.fullString);
         break;
       case 'finishProvince':
         this.finishProvince();
@@ -183,11 +192,26 @@ export class Parser {
     }
   }
 
+  parseLabelLine(labelLineString: string) {
+    if (!this.activeProvince) {
+      let props: string[] = labelLineString.split(' ');
+      this.errors.push(`Invalid province association: ${props[0]} ${props[1]}`);
+      return;
+    }
+    let provinceName: string = this.provinces[this.provinces.length - 1].name;
+    let newLabelLine = new LabelLine(labelLineString, provinceName);
+
+    if (newLabelLine.valid) {
+      this.registerElement(newLabelLine, 'labelLines', ['labelLines']);
+    } else {
+      this.collectErrors(newLabelLine.errors);
+    }
+  }
+
+  // General Utilities
   finishProvince() {
     this.activeProvince = false;
   }
-
-
 
   registerElement(element: any, elementType: string, renderPath?: string[]) {
     if (this.nameToIndexLibraries[elementType][element.name]) {
