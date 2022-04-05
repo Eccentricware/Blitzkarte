@@ -68,6 +68,11 @@ export class NodePin {
 
   validateAdj(): boolean {
     let adjValid: boolean = true;
+
+    if (this.adj && this.adj[0] === 'none') {
+      return true;
+    }
+
     let typeWithAdjReq = ['land', 'sea', 'air'];
     if (this.adj && typeWithAdjReq.includes(this.type)) {
       let type: string = this.name.split('_')[1];
