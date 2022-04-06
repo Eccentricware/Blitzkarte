@@ -53,7 +53,7 @@ export class NodePin {
   }
 
   validateType(): boolean {
-    let validTypes: string[] = ['l', 'land', 's', 'sea', 'a', 'air', 'e', 'event'];
+    let validTypes: string[] = ['land', 'sea','air', 'event'];
     if (this.type) {
       if (!validTypes.includes(this.type)) {
         this.errors.push(`Invalid Node Type: ${this.name}`);
