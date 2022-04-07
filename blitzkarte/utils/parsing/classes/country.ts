@@ -12,6 +12,7 @@ export class Country {
   nuke: number;
   bankedBuilds: number;
   provinces: string[] = [];
+  votes: number = 1;
   cities: number = 0;
   units: string[] = [];
   valid: boolean;

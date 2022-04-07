@@ -63,6 +63,7 @@ export class Parser {
     this.labelReferences();
     this.cityReferences();
     this.unitReferences();
+    this.provinceReferences();
     this.validateProvinces();
 
     // Feedback
@@ -139,11 +140,15 @@ export class Parser {
           this.registerElement(newNode, 'nodes');
         }
         if (newNode.unit) {
-          let newUnit: Unit = new Unit(newPin, province.country);
-          if (newUnit.valid) {
-            this.registerElement(newUnit, 'units', ['units']);
+          if (province.country) {
+            let newUnit: Unit = new Unit(newPin, province.country);
+            if (newUnit.valid) {
+              this.registerElement(newUnit, 'units', ['units']);
+            } else {
+              this.collectErrors(newUnit.errors);
+            }
           } else {
-            this.collectErrors(newUnit.errors);
+            this.errors.push(`Unit at ${newPin.name} is in a province not assigned to a country.`);
           }
         }
       } else {
@@ -307,17 +312,40 @@ export class Parser {
     this.cities.forEach(city => {
       let province: Province = this.referenceElement('provinces', city.province);
       province.cities.push(city.name);
-    })
+
+
+    });
+  }
+
+  provinceReferences() {
+    this.provinces.forEach(province => {
+      if (province.country) {
+        let country: Country = this.referenceElement('countries', province.country);
+        if (country) {
+          country.provinces.push(province.name);
+          if (province.cities.length === 1) {
+            country.cities++;
+          }
+        } else {
+          this.errors.push(`Province ${province.name} country does not exist: ${province.country}`);
+        }
+      }
+    });
   }
 
   unitReferences() {
     this.units.forEach(unit => {
       let node: NodePin = this.referenceElement('nodes', unit.node);
       let province: Province = this.referenceElement('provinces', node.province);
-      province.unit.push({
-        name: unit.name,
-        type: unit.type
-      });
+      province.unit.push(unit);
+      if (province.country) {
+        let country: Country = this.referenceElement('countries', province.country);
+        if (country) {
+          country.units.push(unit.name);
+        } else {
+          this.errors.push(`Unit ${province.name} country does not exist: ${province.country}`);
+        }
+      }
     });
   }
 

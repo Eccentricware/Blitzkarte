@@ -25,7 +25,7 @@ export class Province {
   type: string = '';
   city: string | undefined;
   fullName: string | undefined;
-  country!: string;
+  country: string | undefined;
   isTracemap: boolean = false;
   terrainApproval: TerrainApproval = {
     land: [],
