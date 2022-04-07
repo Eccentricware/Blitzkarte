@@ -1,7 +1,7 @@
 import { Pin } from "./pin";
 
 export class City {
-  type!: string;
+  type: string;
   name: string;
   province!: string;
   //status!: string;
@@ -33,7 +33,7 @@ export class City {
       this.statusColor = 'gray';
       this.renderCategory = 'supplyCenters';
     } else {
-      this.renderCategory = 'errorCenter'
+      this.renderCategory = 'errorLayer'
     }
 
     this.valid = this.validate();
@@ -48,7 +48,8 @@ export class City {
   validateType(): boolean {
     const validTypes: string[] = ['c', 'v', 's', 'd'];
     if (!validTypes.includes(this.type)) {
-      this.errors.push(`Invalid City Type: ${this.name}`)
+      this.errors.push(`Invalid City Type: ${this.name}`);
+      return false;
     }
 
     return true;
