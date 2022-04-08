@@ -17,3 +17,14 @@ export const convertSnakeToTitleCase = (snakeCase: string): string => {
   }
   return snakeSplit.join(' ');
 }
+
+export const convertSnakeToCamelCase = (snakeCase: string): string => {
+  let snakeSplit: string[] = snakeCase.split('_');
+  for (let index: number = 0; index < snakeSplit.length; index++) {
+    snakeSplit[index] = snakeSplit[index].toLowerCase();
+    if (index > 0) {
+      snakeSplit[index] = snakeSplit[index][0].toUpperCase() + snakeSplit[index].slice(1);
+    }
+  }
+  return snakeSplit.join('');
+}

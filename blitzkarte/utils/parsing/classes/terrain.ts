@@ -11,6 +11,9 @@ export class Terrain {
   valid: boolean;
   errors: string[] = [];
 
+  //Abbreviations
+  t: string | undefined; // type
+
   constructor(terrain: string, provinceName: string) {
     this.province = provinceName;
 
@@ -23,11 +26,7 @@ export class Terrain {
       let keyValuePair: string[] = property.split('=');
       this[keyValuePair[0]] = keyValuePair[1];
 
-      if (keyValuePair[0] === '#') {
-        this.name += ` ${keyValuePair[1]}`;
-      }
-
-      if (keyValuePair[0] === 'type') {
+      if (keyValuePair[0] === 'type' || keyValuePair[0] === 't') {
         this.setType(keyValuePair[1]);
       }
     });
@@ -36,25 +35,27 @@ export class Terrain {
 
     this.points = terrain.slice(pointsStartIndex + 8, pointsEndIndex);
 
-
     this.valid = this.validate();
   }
 
   setType(type: string): void {
     switch (type) {
       case 'land':
+      case 'l':
         this.type = 'land';
         this.fill = '#83a584';
         this.stroke = 'black';
         this.renderCategory = 'land';
         break;
       case 'sea':
+      case 's':
         this.type = 'sea';
         this.fill = '#42cafe';
         this.stroke = 'white';
         this.renderCategory = 'sea';
         break;
       case 'bridge':
+      case 'b':
         this.type = 'bridge';
         this.fill = 'none';
         this.stroke = 'red';
@@ -67,6 +68,7 @@ export class Terrain {
         this.renderCategory = 'line';
         break;
       case 'canal':
+      case 'c':
         this.type = 'canal';
         this.fill = '#42cafe';
         this.stroke = 'white';
@@ -79,6 +81,7 @@ export class Terrain {
         this.renderCategory = 'land';
         break;
       case 'impassible':
+      case 'i':
         this.type = 'impassible';
         this.fill = 'darkgray';
         this.stroke = 'black';

@@ -48,6 +48,13 @@ export class Province {
   valid: boolean;
   approved: boolean = true;
   errors: string[] = [];
+
+  // Abbreviations
+  n: string | undefined; // name
+  f: string | undefined; // fullName
+  t: string | undefined; // type
+  c: string | undefined; // country
+
   constructor(provinceString: string) {
     let properties = provinceString.split(' ');
 
@@ -61,6 +68,8 @@ export class Province {
         this[properKey] = value;
       });
 
+      this.applyAbbreviations();
+
       this.valid = this.validate(provinceString);
       if (this.valid && this.fullName) {
         this.fullName = this.fullName.replace('_', ' ');
@@ -71,6 +80,45 @@ export class Province {
       if (provinceString.slice(6, provinceString.length - 1) !== 'Tracemap') {
         this.errors.push(`Missing province data for ${provinceString.slice(6, provinceString.length - 1)}`);
       }
+    }
+  }
+
+  applyAbbreviations() {
+    if (this.n) {
+      this.name = this.n;
+    }
+
+    if (this.f) {
+      this.fullName = this.f;
+    }
+
+    if (this.t) {
+      this.type = this.t;
+    }
+
+    if (this.c) {
+      this.country = this.c;
+    }
+
+    switch(this.type) {
+      case 'c':
+        this.type = 'coast';
+        return;
+      case 's':
+        this.type = 'sea';
+        return;
+      case 'i':
+        this.type = 'inland';
+        return;
+      case 'is':
+        this.type = 'island';
+        return;
+      case 'im':
+        this.type = 'impassible';
+        return;
+      case 'd':
+        this.type = 'decorative';
+        return;
     }
   }
 
