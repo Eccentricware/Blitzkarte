@@ -7,10 +7,10 @@ interface Props {
 
 const LineLayer: FC<Props> = ({ lineRenderData }: Props) => {
   return (
-    <React.Fragment>
+    <g className="line-layer">
       {
         lineRenderData.map(line => (
-          <g key={line.province}>
+          <g key={line.name}>
             <polyline
               points={line.points}
               fill={line.fill}
@@ -37,7 +37,7 @@ const LineLayer: FC<Props> = ({ lineRenderData }: Props) => {
           </g>
         ))
       }
-    </React.Fragment>
+    </g>
   )
 }
 
