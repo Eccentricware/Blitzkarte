@@ -17,6 +17,7 @@ export class NodePin {
     this.name = pin.name;
     this.province = pin.province;
     this.type = pin.type;
+    this.applyAbbreviations();
     this.fill = this.initializeFill();
     this.loc = pin.loc;
     this.adj = pin.adj?.split('/');
@@ -25,6 +26,23 @@ export class NodePin {
     }
 
     this.valid = this.validate();
+  }
+
+  applyAbbreviations() {
+    switch (this.type) {
+      case 'l':
+        this.type = 'land';
+        return;
+      case 's':
+        this.type= 'sea';
+        return;
+      case 'a':
+        this.type = 'air';
+        return;
+      case 'e':
+        this.type = 'event';
+        return;
+    }
   }
 
   initializeFill() {

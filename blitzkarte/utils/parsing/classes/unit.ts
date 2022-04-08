@@ -1,5 +1,5 @@
 import { Pin } from "./pin";
-import { convertSpaceToCamelCase } from "../../general/utils";
+import { convertSnakeToCamelCase, convertSpaceToCamelCase } from "../../general/utils";
 
 export class Unit {
   name: string;
@@ -13,7 +13,7 @@ export class Unit {
   constructor(node: Pin, country: string) {
     this.name = `${country}_${node.unit}_${node.name}`;
     this.type = `${node.unit}`;
-    this.countryKey = convertSpaceToCamelCase(country);
+    this.countryKey = convertSnakeToCamelCase(country);
     this.node = node.name;
     this.loc = node.loc;
     this.valid = this.validate();

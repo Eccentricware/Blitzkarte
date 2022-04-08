@@ -1,8 +1,11 @@
 export class Pin {
   name!: string;
+
   province!: string;
   pinType!: string | undefined;
+
   type!: string;
+
   text: string | undefined;
   number: string | undefined;
   unit: string | undefined;
@@ -18,6 +21,12 @@ export class Pin {
   adj: string | undefined;
   valid: boolean | undefined;
   errors: string[] = [];
+
+  //Abbreviations
+  p: string | undefined; // pinType
+  t: string | undefined; // type
+  n: string | undefined; // name
+  a: string | undefined; // adj
 
   constructor(pinString: string, provinceName: string) {
     this.province = provinceName;
@@ -45,7 +54,39 @@ export class Pin {
       this.name = pinString;
     }
 
+    this.applyAbbreviations();
+
     this.valid = this.validate();
+  }
+
+  applyAbbreviations() {
+    if (this.p) {
+      this.pinType = this.p
+    }
+
+    if (this.t) {
+      this.type = this.t;
+    }
+
+    if (this.n) {
+      this.name = this.n;
+    }
+
+    if (this.a) {
+      this.adj = this.a;
+    }
+
+    switch(this.pinType) {
+       case 'n':
+         this.pinType = 'node';
+         return;
+        case 'l':
+          this.pinType = 'label';
+          return;
+        case 'c':
+          this.pinType = 'city';
+          return;
+    }
   }
 
   validate(): boolean {
