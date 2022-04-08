@@ -156,7 +156,7 @@ export class Parser {
       }
 
     } else if (newPin.pinType === 'label') {
-      let newLabel = new LabelPin(newPin);
+      let newLabel = new LabelPin(newPin, province.type);
       if (newLabel.valid) {
         this.registerElement(newLabel, 'labels', ['labels']);
       } else {
