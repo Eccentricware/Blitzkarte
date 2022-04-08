@@ -11,8 +11,8 @@ export class LabelPin {
   valid: boolean;
   errors: string[] = [];
 
-  constructor(pin: Pin) {
-    this.type = pin.type;
+  constructor(pin: Pin, provinceType: string) {
+    this.type = pin.type ? pin.type : this.setType(provinceType);
     this.setSizeAndColor(pin.type);
 
     this.text = pin.text ? pin.text : pin.province;
@@ -26,14 +26,23 @@ export class LabelPin {
     this.valid = this.validate();
   }
 
-  setSizeAndColor(type: string) {
-    if (type === 'c' || type === 'C') {
+  setType(provinceType: string): string {
+    let landTypes: string[] = ['coast', 'inland', 'island', 'pole'];
+    if (landTypes.includes(provinceType)) {
+      return 'L';
+    } else {
+      return 'S';
+    }
+  }
+
+  setSizeAndColor() {
+    if (this.type === 'c' || this.type === 'C') {
       this.size = 64;
     } else {
       this.size = 100;
     }
 
-    if (type === 's' || type === 'S') {
+    if (this.type === 's' || this.type === 'S') {
       this.fill = 'white';
     } else {
       this.fill = 'black';
