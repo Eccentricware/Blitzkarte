@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
-import { FlagSVGs } from '../../../Icons/FlagSVGs';
-import { UnitSVGs } from '../../../Icons/UnitSVGs';
+import { FlagSVGs } from '../../../icons/FlagSVGs';
+import { UnitSVGs } from '../../../icons/UnitSVGs';
 import Blitzkontext from '../../../../utils/Blitzkontext';
 
 interface Props {
@@ -15,26 +15,70 @@ export const UnitRender: FC<Props> = ({unit}: Props) => {
     <Blitzkontext.Consumer>
       {({mapView}) => {
         return (
-          <g transform={
-            `translate(
-              ${unit.loc[0] - mapView.unitSizing[unit.type].width / 2}
-              ${unit.loc[1] - mapView.unitSizing[unit.type].height / 2}
-            )`}
-          >
+          <g className={unit.name} key={unit.name}>
             <g transform={
               `translate(
-                ${mapView.flagSizing.offset[unit.type].x}
-                ${mapView.flagSizing.offset[unit.type].y}
-              )
-
-              scale(${0.5})
-              `}
+                ${unit.loc[0] - mapView.unitSizing[unit.type].width / 2 - 16000}
+                ${unit.loc[1] - mapView.unitSizing[unit.type].height / 2}
+              )`}
             >
-              {flagSVG}
+              <g transform={
+                `translate(
+                  ${mapView.flagSizing.offset[unit.type].x}
+                  ${mapView.flagSizing.offset[unit.type].y}
+                )
+
+                scale(${0.5})
+                `}
+              >
+                {flagSVG}
+              </g>
+
+              {unitSVG}
+
             </g>
+            <g transform={
+              `translate(
+                ${unit.loc[0] - mapView.unitSizing[unit.type].width / 2}
+                ${unit.loc[1] - mapView.unitSizing[unit.type].height / 2}
+              )`}
+            >
+              <g transform={
+                `translate(
+                  ${mapView.flagSizing.offset[unit.type].x}
+                  ${mapView.flagSizing.offset[unit.type].y}
+                )
 
-            {unitSVG}
+                scale(${0.5})
+                `}
+              >
+                {flagSVG}
+              </g>
 
+              {unitSVG}
+
+            </g>
+            <g transform={
+              `translate(
+                ${unit.loc[0] - mapView.unitSizing[unit.type].width / 2 + 16000}
+                ${unit.loc[1] - mapView.unitSizing[unit.type].height / 2}
+              )`}
+            >
+              <g transform={
+                `translate(
+                  ${mapView.flagSizing.offset[unit.type].x}
+                  ${mapView.flagSizing.offset[unit.type].y}
+                )
+
+                scale(${0.5})
+                `}
+              >
+                {flagSVG}
+              </g>
+
+              {unitSVG}
+
+            </g>
           </g>
         )
       }}

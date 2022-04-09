@@ -13,6 +13,8 @@ export class Terrain {
 
   //Abbreviations
   t: string | undefined; // type
+  s: string | undefined; // start
+  e: string | undefined; // end
 
   constructor(terrain: string, provinceName: string) {
     this.province = provinceName;
@@ -30,6 +32,14 @@ export class Terrain {
         this.setType(keyValuePair[1]);
       }
     });
+
+    if (this.s) {
+      this.start = this.s;
+    }
+
+    if (this.e) {
+      this.end = this.e;
+    }
 
     this.name = this.setName();
 

@@ -15,9 +15,19 @@ a {
   box-sizing: border-box;
 }
 
+.primary-display-container {
+  display: flex;
+  justify-content: space-evenly;
+}
+
 .map {
   background-image: url('../images/BlitzkarteMapGreenWireframe.jpg');
   border: 1px black solid;
+  flex-direction: row;
+}
+
+.omni-box {
+  flex-direction: row;
 }
 
 .label {
@@ -25,18 +35,3 @@ a {
   font-weight: bold;
   text-anchor: middle;
 }
-
-/* .label-type-l {
-  font-size: 100px;
-  fill: black;
-}
-
-.label-type-s {
-  font-size: 100px;
-  fill: white;
-}
-
-.label-type-c {
-  font-size: 60px;
-  fill: black;
-} */

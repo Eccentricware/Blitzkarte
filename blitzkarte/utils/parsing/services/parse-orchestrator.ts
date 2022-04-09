@@ -10,7 +10,6 @@ import { Unit } from '../classes/unit';
 import { Terrain } from '../classes/terrain';
 import { initialRenderData, RenderData } from '../../../models/RenderData';
 import { FinalStatusCheck, initialFinalStatusCheck } from '../../../models/FinalStatusCheck';
-import Link from 'next/link';
 import { NodeLink } from '../classes/nodeLink';
 
 export class Parser {
@@ -24,6 +23,10 @@ export class Parser {
   labels: LabelPin[] = [];
   labelLines: LabelLine[] = [];
   countries: Country[] = [];
+  // For table sorting
+  countryNames: string[] = [];
+  countryRanks: string[] = [];
+  countryDisplayArray: Country[] = [];
   units: Unit[] = [];
   nameToIndexLibraries = {
     provinces: {},
@@ -65,6 +68,7 @@ export class Parser {
     this.unitReferences();
     this.provinceReferences();
     this.validateProvinces();
+    this.sortCountries();
 
     // Feedback
     console.log('Provinces: ', this.provinces);
@@ -232,6 +236,11 @@ export class Parser {
       });
       renderProp.push(element);
     }
+
+    if (element instanceof Country) {
+      this.countryNames.push(element.name);
+      this.countryRanks.push(element.rank);
+    }
   }
 
   referenceElement(elementType: string, name: string): any {
@@ -324,7 +333,10 @@ export class Parser {
         if (country) {
           country.provinces.push(province.name);
           if (province.cities.length === 1) {
-            country.cities++;
+            let city: City = this.referenceElement('cities', province.cities[0]);
+            if (city.type === 's' || city.type === 'c') {
+              country.cities++;
+            }
           }
         } else {
           this.errors.push(`Province ${province.name} country does not exist: ${province.country}`);
@@ -347,6 +359,28 @@ export class Parser {
         }
       }
     });
+  }
+
+  sortCountries() {
+    while (this.countryNames.length > 0) {
+      let spliceIndex: number = 0;
+      let alpha: string = this.countryNames[0];
+      let rank: string = this.countryRanks[0];
+
+      for (let countryIndex: number = 0; countryIndex < this.countryNames.length; countryIndex++) {
+        if ((this.countryRanks[countryIndex] < rank
+          || (this.countryRanks[countryIndex] === rank && this.countryNames[countryIndex] < alpha))) {
+          spliceIndex = countryIndex;
+          alpha = this.countryNames[countryIndex];
+          rank = this.countryRanks[countryIndex];
+        }
+      }
+
+      this.countryDisplayArray.push(this.referenceElement('countries', this.countryNames[spliceIndex]));
+
+      this.countryNames.splice(spliceIndex, 1);
+      this.countryRanks.splice(spliceIndex, 1);
+    }
   }
 
   validateProvinces() {

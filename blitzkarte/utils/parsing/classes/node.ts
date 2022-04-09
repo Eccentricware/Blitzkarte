@@ -87,7 +87,7 @@ export class NodePin {
   validateAdj(): boolean {
     let adjValid: boolean = true;
 
-    if (this.adj && this.adj[0] === 'none') {
+    if (this.adj && (this.adj[0] === 'none' || this.adj[0] === 'n')) {
       return true;
     }
 
