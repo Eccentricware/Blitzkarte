@@ -15,6 +15,7 @@ export class Country {
   votes: number = 1;
   cities: number = 0;
   units: string[] = [];
+  adjustments: number = 0;
   valid: boolean;
   errors: string[] = [];
   // region: string | undefined;

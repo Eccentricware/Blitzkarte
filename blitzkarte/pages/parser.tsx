@@ -1,20 +1,20 @@
 import type { NextPage } from 'next';
 import React, { useState } from 'react';
 import { Parser } from '../utils/parsing/services/parse-orchestrator';
-import { Terrain } from '../utils/parsing/classes/terrain';
-import { Unit } from '../utils/parsing/classes/unit';
-import { LabelPin } from '../utils/parsing/classes/label';
-import { City } from '../utils/parsing/classes/city';
 
 import { GameMap } from '../components/map-elements/GameMap';
 import { RenderData, initialRenderData } from '../models/RenderData';
+import { OmniBox } from '../components/omni-box/omniBox';
+import { Country } from '../utils/parsing/classes/country';
 
 const GameParserPage: NextPage = () => {
+  const [infoTable, setInfoTable] = useState<Country[]>([]);
   const [renderData, setRenderData] = useState<RenderData>(initialRenderData);
   const [showNodeNetwork, setShowNodeNetwork] = useState(false);
   const [showLandNetwork, setShowLandNetwork] = useState(true);
   const [showSeaNetwork, setShowSeaNetwork] = useState(true);
   const [showAirNetwork, setShowAirNetwork] = useState(true);
+  const [showEventNodes, setShowEventNodes] = useState(true);
   const [fileString, setFileString] = useState('Paste File Here');
 
   let parser: Parser = new Parser();
@@ -23,6 +23,7 @@ const GameParserPage: NextPage = () => {
     setFileString(fileString);
     parser.parse(fileString);
     setRenderData(parser.renderElements);
+    setInfoTable(parser.countryDisplayArray);
     setFileString('Paste File Here Again');
   }
 
@@ -58,7 +59,7 @@ const GameParserPage: NextPage = () => {
   }
 
   function handleEventDisplayChange() {
-    setShowAirNetwork(!showAirNetwork);
+    setShowEventNodes(!showEventNodes);
     let updateRenderData = renderData;
     updateRenderData.nodes.pins.display.event = !updateRenderData.nodes.pins.display.event;
     setRenderData(updateRenderData);
@@ -97,15 +98,16 @@ const GameParserPage: NextPage = () => {
           }/>
           Show Air Network  ||||
 
-          <input type="checkbox" checked={showAirNetwork} onChange={
+          <input type="checkbox" checked={showEventNodes} onChange={
             (e: React.ChangeEvent<HTMLInputElement>) => { handleEventDisplayChange(); }
           }/>
-          Show Events  ||||
+          Show Events
         </div>
       </form>
-      <GameMap renderData={renderData}/>
-      <div><b>Tables</b></div>
-      <div>Coming soon!</div>
+      <div className="primary-display-container">
+        <GameMap renderData={renderData}/>
+        <OmniBox infoTable={infoTable}/>
+      </div>
     </div>
   );
 }

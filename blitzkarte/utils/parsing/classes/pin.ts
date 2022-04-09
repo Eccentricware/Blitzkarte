@@ -27,6 +27,7 @@ export class Pin {
   t: string | undefined; // type
   n: string | undefined; // name
   a: string | undefined; // adj
+  u: string | undefined; // unit
 
   constructor(pinString: string, provinceName: string) {
     this.province = provinceName;
@@ -76,16 +77,38 @@ export class Pin {
       this.adj = this.a;
     }
 
+    if (this.u) {
+      this.unit = this.u;
+    }
+
     switch(this.pinType) {
-       case 'n':
-         this.pinType = 'node';
-         return;
-        case 'l':
-          this.pinType = 'label';
-          return;
-        case 'c':
-          this.pinType = 'city';
-          return;
+      case 'n':
+        this.pinType = 'node';
+        break;
+      case 'l':
+        this.pinType = 'label';
+        break;
+      case 'c':
+        this.pinType = 'city';
+        break;
+    }
+
+    switch(this.unit) {
+      case 'a':
+        this.unit = 'army';
+        break;
+      case 'f':
+        this.unit = 'fleet';
+        break;
+      case 'w':
+        this.unit = 'wing';
+        break;
+      case 'n':
+        this.unit = 'nuke';
+        break;
+      case 'g':
+        this.unit = 'garrison';
+        break;
     }
   }
 
