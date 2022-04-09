@@ -47,7 +47,7 @@ export interface RenderData {
   labelLines: LabelLine[]
 }
 
-export const initialRenderData = {
+export const initialRenderData: RenderData = {
   terrain: {
     sea: [],
     land: [],

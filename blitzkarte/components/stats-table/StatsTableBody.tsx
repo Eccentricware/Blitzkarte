@@ -1,11 +1,11 @@
 import { FC } from 'react';
 import { Country } from '../../utils/parsing/classes/country';
 
-interface CountryInfoTableRow {
+interface StatsTableRow {
   countries: Country[];
 }
 
-export const CountryInfoTableBody: FC<CountryInfoTableRow> = ({countries}: CountryInfoTableRow) => {
+export const StatsTableBody: FC<StatsTableRow> = ({countries}: StatsTableRow) => {
   return (
     <tbody>
       {

@@ -4,12 +4,14 @@ import { Parser } from '../utils/parsing/services/parse-orchestrator';
 
 import { GameMap } from '../components/map-elements/GameMap';
 import { RenderData, initialRenderData } from '../models/RenderData';
-import { OmniBox } from '../components/omni-box/omniBox';
+import { OmniBox } from '../components/omni-box/OmniBox';
 import { Country } from '../utils/parsing/classes/country';
+import { initialOmniBoxData, OmniBoxData } from '../models/OmniBox';
 
 const GameParserPage: NextPage = () => {
   const [infoTable, setInfoTable] = useState<Country[]>([]);
   const [renderData, setRenderData] = useState<RenderData>(initialRenderData);
+  const [omniBoxData, setOmniBoxData] = useState<OmniBoxData>(initialOmniBoxData);
   const [showNodeNetwork, setShowNodeNetwork] = useState(false);
   const [showLandNetwork, setShowLandNetwork] = useState(true);
   const [showSeaNetwork, setShowSeaNetwork] = useState(true);
@@ -106,7 +108,7 @@ const GameParserPage: NextPage = () => {
       </form>
       <div className="primary-display-container">
         <GameMap renderData={renderData}/>
-        <OmniBox infoTable={infoTable}/>
+        <OmniBox omniBoxData={omniBoxData}/>
       </div>
     </div>
   );
