@@ -11,6 +11,7 @@ import { Terrain } from '../classes/terrain';
 import { initialRenderData, RenderData } from '../../../models/RenderData';
 import { FinalStatusCheck, initialFinalStatusCheck } from '../../../models/FinalStatusCheck';
 import { NodeLink } from '../classes/nodeLink';
+import { initialOmniBoxData, OmniBoxData } from '../../../models/OmniBox';
 
 export class Parser {
   // Logic
@@ -26,7 +27,6 @@ export class Parser {
   // For table sorting
   countryNames: string[] = [];
   countryRanks: string[] = [];
-  countryDisplayArray: Country[] = [];
   units: Unit[] = [];
   nameToIndexLibraries = {
     provinces: {},
@@ -49,6 +49,8 @@ export class Parser {
 
   // Rendering
   renderElements: RenderData = initialRenderData;
+
+  omniBox: OmniBoxData = initialOmniBoxData;
 
   constructor() {}
 
@@ -376,7 +378,7 @@ export class Parser {
         }
       }
 
-      this.countryDisplayArray.push(this.referenceElement('countries', this.countryNames[spliceIndex]));
+      this.omniBox.stats.countries.push(this.referenceElement('countries', this.countryNames[spliceIndex]));
 
       this.countryNames.splice(spliceIndex, 1);
       this.countryRanks.splice(spliceIndex, 1);
