@@ -13,7 +13,7 @@ export class City {
   errors: string[] = [];
 
   constructor(pin: Pin) {
-    this.type = pin.type[0].toLowerCase();
+    this.type = pin.type ? pin.type[0].toLowerCase() : '';
     this.province = pin.province;
     this.name = `${this.province}_${this.type}`;
     this.loc = pin.loc;
@@ -46,9 +46,14 @@ export class City {
   }
 
   validateType(): boolean {
-    const validTypes: string[] = ['c', 'v', 's', 'd'];
-    if (!validTypes.includes(this.type)) {
-      this.errors.push(`Invalid City Type: ${this.name}`);
+    if (this.type) {
+      const validTypes: string[] = ['c', 'v', 's', 'd'];
+      if (!validTypes.includes(this.type)) {
+        this.errors.push(`Invalid City Type: ${this.name}`);
+        return false;
+      }
+    } else {
+      this.errors.push(`No city type ${this.name}`);
       return false;
     }
 
