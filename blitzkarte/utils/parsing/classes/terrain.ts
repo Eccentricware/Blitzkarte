@@ -93,7 +93,7 @@ export class Terrain {
       case 'impassible':
       case 'i':
         this.type = 'impassible';
-        this.fill = 'darkgray';
+        this.fill = '#460002';
         this.stroke = 'black';
         this.renderCategory = 'land';
         break;

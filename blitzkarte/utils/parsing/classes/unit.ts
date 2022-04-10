@@ -13,7 +13,7 @@ export class Unit {
   constructor(node: Pin, country: string) {
     this.name = `${country}_${node.unit}_${node.name}`;
     this.type = `${node.unit}`;
-    this.countryKey = convertSnakeToCamelCase(country);
+    this.countryKey = convertSpaceToCamelCase(country);
     this.node = node.name;
     this.loc = node.loc;
     this.valid = this.validate();

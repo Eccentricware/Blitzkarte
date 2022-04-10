@@ -1,3 +1,5 @@
+import { convertSnakeToCamelCase, convertSnakeToTitleCase } from "../../general/utils";
+
 interface TerrainApproval {
   land: string[];
   sea: string[];
@@ -69,6 +71,10 @@ export class Province {
       });
 
       this.applyAbbreviations();
+
+      if (this.country && this.country.indexOf('_') > 0) {
+        this.country = convertSnakeToTitleCase(this.country);
+      }
 
       this.valid = this.validate(provinceString);
       if (this.valid && this.fullName) {

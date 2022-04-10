@@ -1,12 +1,12 @@
 import { Pin } from "./pin";
 import {
-  convertSpaceToCamelCase,
-  convertSnakeToTitleCase
+  convertSnakeToTitleCase,
+  convertSnakeToCamelCase
 } from "../../general/utils";
 
 export class Country {
   name: string;
-  key: string;
+  keyName: string;
   rank: string;
   color: string;
   nuke: number;
@@ -18,11 +18,10 @@ export class Country {
   adjustments: number = 0;
   valid: boolean;
   errors: string[] = [];
-  // region: string | undefined;
 
   constructor(pin: Pin) {
     this.name = this.setName(pin);
-    this.key = this.setKey();
+    this.keyName = this.setKey(pin);
     this.rank = this.setRank(pin);
     this.color = this.setColor(pin);
     this.nuke = this.setNuke(pin);
@@ -38,8 +37,12 @@ export class Country {
     return name;
   }
 
-  setKey(): string {
-    return convertSpaceToCamelCase(this.name);
+  setKey(pin: Pin): string {
+    let keyName: string = '';
+    if (pin.country) {
+      keyName = convertSnakeToCamelCase(pin.country);
+    }
+    return keyName;
   }
 
   setRank(pin: Pin): string {

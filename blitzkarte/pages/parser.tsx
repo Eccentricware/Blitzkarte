@@ -106,10 +106,10 @@ const GameParserPage: NextPage = () => {
           Show Events
         </div>
       </form>
-      <div className="primary-display-container">
+      {/* <div className="primary-display-container"> */}
         <GameMap renderData={renderData}/>
         <OmniBox omniBoxData={omniBoxData}/>
-      </div>
+      {/* </div> */}
     </div>
   );
 }

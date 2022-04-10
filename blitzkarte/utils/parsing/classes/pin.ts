@@ -28,6 +28,10 @@ export class Pin {
   n: string | undefined; // name
   a: string | undefined; // adj
   u: string | undefined; // unit
+  c: string | undefined; // country
+  r: string | undefined; // rank
+  f: string | undefined; // color
+  nr: string | undefined; // nuke
 
   constructor(pinString: string, provinceName: string) {
     this.province = provinceName;
@@ -79,6 +83,22 @@ export class Pin {
 
     if (this.u) {
       this.unit = this.u;
+    }
+
+    if (this.c) {
+      this.country = this.c;
+    }
+
+    if (this.r && !this.rank) {
+      this.rank = this.r;
+    }
+
+    if (this.f) {
+      this.color = this.f;
+    }
+
+    if (this.nr) {
+      this.nuke = Number(this.nr);
     }
 
     switch(this.pinType) {
