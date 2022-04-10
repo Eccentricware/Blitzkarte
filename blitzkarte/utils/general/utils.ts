@@ -1,12 +1,12 @@
 export const convertSpaceToCamelCase = (spaceCase: string): string => {
-  let spaceCaseSplit: string[] = spaceCase.split(' ');
-  for (let index = 0; index < spaceCaseSplit.length; index++) {
-    spaceCaseSplit[index] = spaceCaseSplit[index].toLowerCase();
+  let spaceSplit: string[] = spaceCase.split(' ');
+  for (let index = 0; index < spaceSplit.length; index++) {
+    spaceSplit[index] = spaceSplit[index].toLowerCase();
     if (index > 0) {
-      spaceCaseSplit[index] = spaceCaseSplit[index][0].toUpperCase();
+      spaceSplit[index] = spaceSplit[index][0].toUpperCase() + spaceSplit[index].slice(1);
     }
   }
-  return spaceCaseSplit.join('');
+  return spaceSplit.join('');
 }
 
 export const convertSnakeToTitleCase = (snakeCase: string): string => {
