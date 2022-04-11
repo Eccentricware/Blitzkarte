@@ -30,11 +30,11 @@ export class NodeLink {
     if (Math.abs(node.loc[0] - adjNode.loc[0]) > 8000) {
       let nudgeNode: NodePin;
       if (node.loc[0] < adjNode.loc[0]) {
-        nudgeNode = node;
-      } else {
         nudgeNode = adjNode;
+      } else {
+        nudgeNode = node;
       }
-      nudgeNode.loc[0] += 16000;
+      nudgeNode.loc[0] -= 16000;
     }
 
     this.alpha = {

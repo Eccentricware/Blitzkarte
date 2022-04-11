@@ -158,7 +158,7 @@ export class Province {
 
     if (this.type) {
       if (!validProvinceTypes.includes(this.type.toLowerCase())) {
-        this.errors.push(`Invalid Province Type: ${provinceString}`)
+        this.errors.push(`Invalid Province Type: ${this.name ? this.name : provinceString}`)
         return false;
       }
     } else {
