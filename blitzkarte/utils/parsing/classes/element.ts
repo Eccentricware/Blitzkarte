@@ -21,6 +21,7 @@ export class Element {
       case 'polygon':
         return 'renderElement';
       case 'circle':
+      case 'ellipse':
         return 'coordinate';
       case 'line':
         return 'labelLine';
