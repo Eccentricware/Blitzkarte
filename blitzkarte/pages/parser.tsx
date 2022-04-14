@@ -7,6 +7,7 @@ import { RenderData, initialRenderData } from '../models/RenderData';
 import { OmniBox } from '../components/omni-box/OmniBox';
 import { Country } from '../utils/parsing/classes/country';
 import { initialOmniBoxData, OmniBoxData } from '../models/OmniBox';
+import NavBar from '../components/navbar/NavBar';
 
 const GameParserPage: NextPage = () => {
   const [infoTable, setInfoTable] = useState<Country[]>([]);
@@ -25,7 +26,6 @@ const GameParserPage: NextPage = () => {
     setFileString(fileString);
     parser.parse(fileString);
     setRenderData(parser.renderElements);
-    setInfoTable(parser.countryDisplayArray);
     setFileString('Paste File Here Again');
   }
 
@@ -69,6 +69,7 @@ const GameParserPage: NextPage = () => {
 
   return (
     <div>
+      <NavBar/>
       <form className="map-parser">
         <div>
           <label>SVG Input</label>
