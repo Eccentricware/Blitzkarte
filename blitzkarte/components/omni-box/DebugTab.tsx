@@ -35,7 +35,7 @@ export const DebugTab: FC<DebugProps> = ({debug}: DebugProps) => {
     <div>
         <div>
           <label>SVG Input</label>
-          <textarea className="textarea" placeholder="Paste SVG Formatted File"
+          <textarea placeholder="Paste SVG Formatted File"
             value={debug.display.fileString}
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>): void => {
               handleDataInput(e.target.value);
