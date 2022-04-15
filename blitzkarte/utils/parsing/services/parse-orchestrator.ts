@@ -11,7 +11,7 @@ import { Terrain } from '../classes/terrain';
 import { initialRenderData, RenderData } from '../../../models/RenderData';
 import { FinalStatusCheck, initialFinalStatusCheck } from '../../../models/FinalStatusCheck';
 import { NodeLink } from '../classes/nodeLink';
-import { initialOmniBoxData, OmniBoxData } from '../../../models/OmniBox';
+import { initialOmniBoxData, OmniBoxData } from '../../../models/OmniBoxData';
 
 export class Parser {
   // Logic
@@ -72,6 +72,8 @@ export class Parser {
     this.validateProvinces();
     this.sortCountries();
 
+    initialOmniBoxData.debug.errors = this.errors;
+
     // Feedback
     console.log('Provinces: ', this.provinces);
     console.log('Nodes:', this.nodes);
@@ -85,6 +87,7 @@ export class Parser {
     //console.log('Warnings:', this.warnings);
     console.log('Errors:', this.errors);
     console.log('Critical:', this.critical);
+
   }
 
   // Save information into their respective classes

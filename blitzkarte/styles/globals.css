@@ -15,9 +15,14 @@ a {
   box-sizing: border-box;
 }
 
-.primary-display-container {
+/* .primary-display-container {
   display: flex;
   justify-content: space-evenly;
+} */
+
+p {
+  width: 400px;
+  word-wrap: break-word;
 }
 
 .map {
@@ -26,9 +31,9 @@ a {
   flex-direction: row;
 }
 
-.omni-box {
+/* .omni-box {
   flex-direction: row;
-}
+} */
 
 .label {
   font-family: Calibri;

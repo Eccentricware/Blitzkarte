@@ -1,21 +1,48 @@
-import { FC } from "react";
-import { OmniBoxData } from "../../models/OmniBox";
-import { StatsTable } from "../stats-table/StatsTable";
+import { Box, Tab, Tabs } from "@mui/material";
+import React, { FC } from "react";
+import { OmniBoxData } from "../../models/OmniBoxData";
+import { DebugTab } from "./DebugTab";
+import { StatsTable } from "./StatsTable";
 
 interface OmniProps {
   omniBoxData: OmniBoxData;
 }
 
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+const TabPanel = ({index, value, children}: TabPanelProps) => {
+  return (
+    <div role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+    >
+      {value === index && children}
+    </div>
+  )
+}
+
 export const OmniBox: FC<OmniProps> = ({omniBoxData}: OmniProps) => {
+  const [panel, setPanel] = React.useState(0);
+
+  const handleChange = (event: React.ChangeEvent<{}>, newPanel: number) => {
+    setPanel(newPanel);
+  }
+
   return (
     <div className="omni-box">
-      <div className="tabs is-fullwidth is-toggle">
-        <ul>
-          <li className="is-active">Upload/Debug</li>
-          <li>Stats</li>
-        </ul>
-      </div>
-      <StatsTable stats={omniBoxData.stats} />
+      <Box>
+        <Tabs value={panel} onChange={handleChange} centered>
+          <Tab label="Creation"/>
+          <Tab label="Stats"/>
+        </Tabs>
+      </Box>
+      <TabPanel value={panel} index={0}><DebugTab debug={omniBoxData.debug} /></TabPanel>
+      <TabPanel value={panel} index={1}><StatsTable stats={omniBoxData.stats} /></TabPanel>
     </div>
   )
 }

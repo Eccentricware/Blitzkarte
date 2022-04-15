@@ -13,7 +13,7 @@ export class LabelPin {
 
   constructor(pin: Pin, provinceType: string) {
     this.type = pin.type ? pin.type : this.setType(provinceType);
-    this.setSizeAndColor(pin.type);
+    this.setSizeAndColor();
 
     this.text = pin.text ? pin.text : pin.province;
     this.name = `${pin.province}_label`;
