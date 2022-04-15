@@ -6,12 +6,12 @@ import { GameMap } from '../components/map-elements/GameMap';
 import { RenderData, initialRenderData } from '../models/RenderData';
 import { OmniBox } from '../components/omni-box/OmniBox';
 import { Country } from '../utils/parsing/classes/country';
-import { initialOmniBoxData, OmniBoxData } from '../models/OmniBox';
+import { initialOmniBoxData, OmniBoxData } from '../models/OmniBoxData';
 import { NavBar } from '../components/nav-bar/Navbar';
 import Head from 'next/head';
+import { Grid } from '@mui/material';
 
 const GameParserPage: NextPage = () => {
-  const [infoTable, setInfoTable] = useState<Country[]>([]);
   const [renderData, setRenderData] = useState<RenderData>(initialRenderData);
   const [omniBoxData, setOmniBoxData] = useState<OmniBoxData>(initialOmniBoxData);
   const [showNodeNetwork, setShowNodeNetwork] = useState(false);
@@ -21,23 +21,44 @@ const GameParserPage: NextPage = () => {
   const [showEventNodes, setShowEventNodes] = useState(true);
   const [fileString, setFileString] = useState('');
 
+  const displayChecks: any = {
+    fileString: fileString,
+    node: showNodeNetwork,
+    land: showLandNetwork,
+    sea: showSeaNetwork,
+    air: showAirNetwork,
+    event: showEventNodes
+  }
+
+  const functions: any = {
+    triggerParse: triggerParse,
+    toggleNodes: toggleNodes,
+    toggleLand: toggleLand,
+    toggleSea: toggleSea,
+    toggleAir: toggleAir,
+    toggleEvent: toggleEvent
+  }
+
+  initialOmniBoxData.debug.display = displayChecks;
+  initialOmniBoxData.debug.functions = functions;
+
   let parser: Parser = new Parser();
 
-  function handleFileFieldChange(fileString: string) {
+  function triggerParse(fileString: string) {
     setFileString(fileString);
     parser.parse(fileString);
     setRenderData(parser.renderElements);
     setFileString('Thank you. For now, you must reload the page to update the map');
   }
 
-  function handleNodeDisplayChange() {
+  function toggleNodes() {
     setShowNodeNetwork(!showNodeNetwork);
     let updateRenderData = renderData;
     updateRenderData.nodes.display = !updateRenderData.nodes.display;
     setRenderData(updateRenderData);
   }
 
-  function handleLandDisplayChange() {
+  function toggleLand() {
     setShowLandNetwork(!showLandNetwork);
     let updateRenderData = renderData;
     updateRenderData.nodes.pins.display.land = !updateRenderData.nodes.pins.display.land;
@@ -45,7 +66,7 @@ const GameParserPage: NextPage = () => {
     setRenderData(updateRenderData);
   }
 
-  function handleSeaDisplayChange() {
+  function toggleSea() {
     setShowSeaNetwork(!showSeaNetwork);
     let updateRenderData = renderData;
     updateRenderData.nodes.pins.display.sea = !updateRenderData.nodes.pins.display.sea;
@@ -53,7 +74,7 @@ const GameParserPage: NextPage = () => {
     setRenderData(updateRenderData);
   }
 
-  function handleAirDisplayChange() {
+  function toggleAir() {
     setShowAirNetwork(!showAirNetwork);
     let updateRenderData = renderData;
     updateRenderData.nodes.pins.display.air = !updateRenderData.nodes.pins.display.air;
@@ -61,7 +82,7 @@ const GameParserPage: NextPage = () => {
     setRenderData(updateRenderData);
   }
 
-  function handleEventDisplayChange() {
+  function toggleEvent() {
     setShowEventNodes(!showEventNodes);
     let updateRenderData = renderData;
     updateRenderData.nodes.pins.display.event = !updateRenderData.nodes.pins.display.event;
@@ -76,47 +97,15 @@ const GameParserPage: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <NavBar/>
-      <form className="map-parser">
-        <div>
-          <label>SVG Input</label>
-          <textarea className="textarea" placeholder="Paste SVG Formatted File"
-            value={fileString}
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>): void => {
-              handleFileFieldChange(e.target.value);
-            }}
-          ></textarea>
-        </div>
-        <div className="view-checkbox">
-          <input type="checkbox" checked={showNodeNetwork} onChange={
-            (e: React.ChangeEvent<HTMLInputElement>) => { handleNodeDisplayChange(); }
-          }/>
-          Show Node Network ||||
 
-          <input type="checkbox" checked={showLandNetwork} onChange={
-            (e: React.ChangeEvent<HTMLInputElement>) => { handleLandDisplayChange(); }
-          }/>
-          Show Land Network ||||
-
-          <input type="checkbox" checked={showSeaNetwork} onChange={
-            (e: React.ChangeEvent<HTMLInputElement>) => { handleSeaDisplayChange(); }
-          }/>
-          Show Sea Network ||||
-
-          <input type="checkbox" checked={showAirNetwork} onChange={
-            (e: React.ChangeEvent<HTMLInputElement>) => { handleAirDisplayChange(); }
-          }/>
-          Show Air Network  ||||
-
-          <input type="checkbox" checked={showEventNodes} onChange={
-            (e: React.ChangeEvent<HTMLInputElement>) => { handleEventDisplayChange(); }
-          }/>
-          Show Events
-        </div>
-      </form>
-      <div className="columns">
-        <div className="column"><GameMap renderData={renderData} /></div>
-        <div className="column"><OmniBox omniBoxData={omniBoxData} /></div>
-      </div>
+      <Grid container columns={2}>
+        <Grid item>
+          <div className="column"><GameMap renderData={renderData}/></div>
+        </Grid>
+        <Grid item>
+          <div className="column"><OmniBox omniBoxData={omniBoxData}/></div>
+        </Grid>
+      </Grid>
     </div>
   );
 }

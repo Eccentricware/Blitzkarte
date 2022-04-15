@@ -7,13 +7,23 @@ export interface OmniBoxData {
     countries: Country[];
   }
   rules: any;
+  debug: {
+    display: {},
+    functions: {},
+    errors: string[]
+  }
 }
 
-export const initialOmniBoxData = {
+export const initialOmniBoxData: OmniBoxData = {
   messaging: null,
   orders: null,
   stats: {
     countries: [],
   },
-  rules: null
+  rules: null,
+  debug: {
+    display: {},
+    functions: {},
+    errors: []
+  }
 }
