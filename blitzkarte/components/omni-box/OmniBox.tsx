@@ -9,6 +9,12 @@ interface OmniProps {
 export const OmniBox: FC<OmniProps> = ({omniBoxData}: OmniProps) => {
   return (
     <div className="omni-box">
+      <div className="tabs is-fullwidth is-toggle">
+        <ul>
+          <li className="is-active">Upload/Debug</li>
+          <li>Stats</li>
+        </ul>
+      </div>
       <StatsTable stats={omniBoxData.stats} />
     </div>
   )

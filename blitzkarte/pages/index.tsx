@@ -9,6 +9,7 @@ const Home: NextPage = () => {
       <Head>
         <title>Blitzkarte</title>
         <meta name="description" content="Fully automated game of global domination" />
+        <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

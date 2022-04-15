@@ -7,7 +7,8 @@ import { RenderData, initialRenderData } from '../models/RenderData';
 import { OmniBox } from '../components/omni-box/OmniBox';
 import { Country } from '../utils/parsing/classes/country';
 import { initialOmniBoxData, OmniBoxData } from '../models/OmniBox';
-import NavBar from '../components/navbar/NavBar';
+import { NavBar } from '../components/nav-bar/Navbar';
+import Head from 'next/head';
 
 const GameParserPage: NextPage = () => {
   const [infoTable, setInfoTable] = useState<Country[]>([]);
@@ -18,7 +19,7 @@ const GameParserPage: NextPage = () => {
   const [showSeaNetwork, setShowSeaNetwork] = useState(true);
   const [showAirNetwork, setShowAirNetwork] = useState(true);
   const [showEventNodes, setShowEventNodes] = useState(true);
-  const [fileString, setFileString] = useState('Paste File Here');
+  const [fileString, setFileString] = useState('');
 
   let parser: Parser = new Parser();
 
@@ -26,7 +27,7 @@ const GameParserPage: NextPage = () => {
     setFileString(fileString);
     parser.parse(fileString);
     setRenderData(parser.renderElements);
-    setFileString('Paste File Here Again');
+    setFileString('Thank you. For now, you must reload the page to update the map');
   }
 
   function handleNodeDisplayChange() {
@@ -69,16 +70,21 @@ const GameParserPage: NextPage = () => {
 
   return (
     <div>
+      <Head>
+        <title>Blitzkarte</title>
+        <meta name="description" content="Fully automated game of global domination" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <NavBar/>
       <form className="map-parser">
         <div>
           <label>SVG Input</label>
-          <input type="text"
+          <textarea className="textarea" placeholder="Paste SVG Formatted File"
             value={fileString}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>): void => {
               handleFileFieldChange(e.target.value);
-            }}>
-          </input>
+            }}
+          ></textarea>
         </div>
         <div className="view-checkbox">
           <input type="checkbox" checked={showNodeNetwork} onChange={
@@ -107,10 +113,10 @@ const GameParserPage: NextPage = () => {
           Show Events
         </div>
       </form>
-      {/* <div className="primary-display-container"> */}
-        <GameMap renderData={renderData}/>
-        <OmniBox omniBoxData={omniBoxData}/>
-      {/* </div> */}
+      <div className="columns">
+        <div className="column"><GameMap renderData={renderData} /></div>
+        <div className="column"><OmniBox omniBoxData={omniBoxData} /></div>
+      </div>
     </div>
   );
 }
