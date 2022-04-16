@@ -77,7 +77,7 @@ export const DebugTab: FC<DebugProps> = ({debug}: DebugProps) => {
           <p className="errors">
           {
             debug.errors.map((error: string, key: number) => {
-              return <React.Fragment key="key">-{error}<br /></React.Fragment>
+              return <React.Fragment key={key}>-{error}<br /></React.Fragment>
             })
           }
           </p>

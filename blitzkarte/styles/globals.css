@@ -35,6 +35,13 @@ p {
   flex-direction: row;
 }
 
+.view-controls {
+  position: relative;
+  background-color: red;
+  right: 0;
+  bottom: 0;
+}
+
 /* .omni-box {
   flex-direction: row;
 } */
