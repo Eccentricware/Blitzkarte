@@ -103,9 +103,10 @@ export class NodePin {
     } else if (!this.adj && typeWithAdjReq.includes(this.type)) {
       this.errors.push(`Missing Adj Array: ${this.name}`);
       adjValid = false;
-    } else if (this.adj && this.type === 'event') {
-      this.errors.push(`Event node ${this.name} has an adjacency array`);
-      adjValid = false;
+    }
+
+    if (this.adj && this.type === 'event') {
+      this.warnings.push(`Event node ${this.name} has an adjacency array`);
     }
 
     let adjNodes: string[] = [];
