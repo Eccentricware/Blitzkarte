@@ -25,6 +25,10 @@ p {
   word-wrap: break-word;
 }
 
+.errors {
+  font-size: smaller;
+}
+
 .map {
   background-image: url('../images/BlitzkarteMapGreenWireframe.jpg');
   border: 1px black solid;
