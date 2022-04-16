@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import React, { useState } from 'react';
 import { Parser } from '../utils/parsing/services/parse-orchestrator';
 
-import { GameMap } from '../components/map-elements/GameMap';
+import { GameMap } from '../components/map-elements/map/GameMap';
 import { RenderData, initialRenderData } from '../models/RenderData';
 import { OmniBox } from '../components/omni-box/OmniBox';
 import { Country } from '../utils/parsing/classes/country';
@@ -10,6 +10,7 @@ import { initialOmniBoxData, OmniBoxData } from '../models/OmniBoxData';
 import { NavBar } from '../components/nav-bar/Navbar';
 import Head from 'next/head';
 import { Grid } from '@mui/material';
+import { MapContainer } from '../components/map-elements/map/MapContainer';
 
 const GameParserPage: NextPage = () => {
   const [renderData, setRenderData] = useState<RenderData>(initialRenderData);
@@ -100,7 +101,7 @@ const GameParserPage: NextPage = () => {
 
       <Grid container columns={2}>
         <Grid item>
-          <div className="column"><GameMap renderData={renderData}/></div>
+          <div className="column"><MapContainer renderData={renderData}/></div>
         </Grid>
         <Grid item>
           <div className="column"><OmniBox omniBoxData={omniBoxData}/></div>
