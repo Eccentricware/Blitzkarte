@@ -18,7 +18,7 @@ const GameParserPage: NextPage = () => {
   const [showLandNetwork, setShowLandNetwork] = useState(true);
   const [showSeaNetwork, setShowSeaNetwork] = useState(true);
   const [showAirNetwork, setShowAirNetwork] = useState(true);
-  const [showEventNodes, setShowEventNodes] = useState(true);
+  const [showEventNodes, setShowEventNodes] = useState(false);
   const [fileString, setFileString] = useState('');
 
   const displayChecks: any = {
