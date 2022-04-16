@@ -84,7 +84,7 @@ export class Parser {
     console.log('Units:', this.units);
     console.log('Name To Index Libraries:', this.nameToIndexLibraries);
     console.log('Render Elements:', this.renderElements);
-    //console.log('Warnings:', this.warnings);
+    console.log('Warnings:', this.warnings);
     console.log('Errors:', this.errors);
     console.log('Critical:', this.critical);
 
@@ -163,7 +163,9 @@ export class Parser {
       } else {
         this.collectErrors(newNode.errors);
       }
-
+      if (newNode.warnings.length > 0) {
+        this.collectWarnings(newNode.warnings);
+      }
     } else if (newPin.pinType === 'label') {
       let newLabel = new LabelPin(newPin, province.type);
       if (newLabel.valid) {
@@ -284,7 +286,7 @@ export class Parser {
     this.nodes.forEach(node => {
       let province: Province = this.referenceElement('provinces', node.province);
       province.nodeApproval[node.type].push(node.name);
-      if (node.adj && node.adj[0] !== 'none') {
+      if (node.adj && node.adj[0] !== 'none' && node.type !== 'event') {
         node.adj.forEach(adjNodeName => {
           if (!this.nameToIndexLibraries.nodes[adjNodeName]) {
             this.errors.push(`${node.name}'s adjacent node ${adjNodeName} does not exist!`);
@@ -326,8 +328,6 @@ export class Parser {
     this.cities.forEach(city => {
       let province: Province = this.referenceElement('provinces', city.province);
       province.cities.push(city.name);
-
-
     });
   }
 
