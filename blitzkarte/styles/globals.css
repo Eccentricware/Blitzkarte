@@ -15,6 +15,10 @@ a {
   box-sizing: border-box;
 }
 
+.MuiToolbar-root {
+  min-height: 45px;
+}
+
 /* .primary-display-container {
   display: flex;
   justify-content: space-evenly;
