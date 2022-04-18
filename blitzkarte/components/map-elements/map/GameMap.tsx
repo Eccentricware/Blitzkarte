@@ -4,7 +4,6 @@ import { LabelLayer } from '../layers/label/LabelLayer';
 import { CityLayer } from '../layers/city/CityLayer';
 import { UnitLayer } from '../layers/unit/UnitLayer';
 import { NodeLayer } from '../layers/node/NodeLayer';
-import { ViewControls } from './ViewControls';
 
 interface Props {
   renderData: any;

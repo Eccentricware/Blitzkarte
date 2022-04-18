@@ -28,6 +28,10 @@ export class NodePin {
     this.valid = this.validate();
   }
 
+  processName(pinName: string) {
+
+  }
+
   applyAbbreviations() {
     switch (this.type) {
       case 'l':
@@ -63,11 +67,16 @@ export class NodePin {
   }
 
   validate(): boolean {
+    let nameValid: boolean = this.validateName();
     let typeValid: boolean = this.validateType();
     let adjValid: boolean = this.validateAdj();
     // Province and Loc are validated in passed in generic Pin
 
     return typeValid && adjValid;
+  }
+
+  validateName(): boolean {
+
   }
 
   validateType(): boolean {
@@ -96,7 +105,7 @@ export class NodePin {
       let type: string = this.name.split('_')[1];
       this.adj.forEach(node => {
         if (node.split('_')[1] !== type) {
-          this.errors.push(`Incompatible Adjacent Node ${node} in ${this.name}`);
+          this.errors.push(`${this.name} has incompatible adjacent node: ${node}`);
           adjValid = false;
         }
       });
