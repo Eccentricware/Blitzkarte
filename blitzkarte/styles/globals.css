@@ -46,6 +46,10 @@ p {
   bottom: 0;
 }
 
+.map-view-button:hover {
+  cursor: pointer;
+}
+
 /* .omni-box {
   flex-direction: row;
 } */
