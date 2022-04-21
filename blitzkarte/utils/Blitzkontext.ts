@@ -2,11 +2,11 @@ import React from 'react';
 import { MapView, mapViewDefault } from '../models/MapView';
 
 interface ContextStructure {
-  mapView: MapView
+  map: MapView
   setMapView: any
 }
 
 export default React.createContext<ContextStructure>({
-  mapView: mapViewDefault,
+  map: mapViewDefault,
   setMapView: undefined
 });

@@ -4,10 +4,10 @@ import Blitzkontext from "../../utils/Blitzkontext"
 export const UnitSVGs = {
   army:
     <Blitzkontext.Consumer>
-      {({mapView}) => {
+      {({map}) => {
         return (
-          <svg width={mapView.unitSizing.army.width / mapView.zoom}
-            height={mapView.unitSizing.army.height / mapView.zoom}
+          <svg width={map.unitSizing.army.width}
+            height={map.unitSizing.army.height}
             viewBox="0 0 291.05 265.77"
           >
             < polygon id="bottom_right_track" data-name="bottom right track" points="213.92 258.09 153.24 230.63 150.64 224.18 149.7 218.36 161.57 218.36 170.13 229.37 222.9 249.64 213.92 258.09" fill="#424244" stroke="#272425" strokeMiterlimit="10" />
@@ -40,14 +40,10 @@ export const UnitSVGs = {
     </Blitzkontext.Consumer>,
   fleet:
     <Blitzkontext.Consumer>
-      {({mapView}) => {
-        const width: number = mapView.unitSizing.fleet.width;
-        const height: number = mapView.unitSizing.fleet.height;
-        const modifier: number = mapView.unitSizing.fleet.modifier;
-        const zoom: number = mapView.zoom;
+      {({map}) => {
         return (
-          <svg width={(width * modifier) / zoom}
-            height={(height * modifier) / zoom}
+          <svg width={map.unitSizing.fleet.width}
+            height={map.unitSizing.fleet.height}
             viewBox="0 0 294.66 256.8"
           >
             <title>Fleet</title>
@@ -76,15 +72,10 @@ export const UnitSVGs = {
     </Blitzkontext.Consumer>,
   wing:
     <Blitzkontext.Consumer>
-      {({mapView}) => {
-        const width: number = mapView.unitSizing.wing.width;
-        const height: number = mapView.unitSizing.wing.height;
-        const modifier: number = mapView.unitSizing.wing.modifier;
-        const zoom: number = mapView.zoom;
-
+      {({map}) => {
         return (
-          <svg width={(width * modifier) / zoom}
-            height={(height * modifier) / zoom}
+          <svg width={map.unitSizing.wing.width}
+            height={map.unitSizing.wing.height}
           viewBox="0 0 291.8 222.97">
             <title>Wing</title>
             <polygon id="hull" points="31.34 222.32 42.42 218.47 50 214.74 57.58 209.99 70.59 199.36 84.5 186.46 97.62 171.87 128.72 173.4 156.79 147.07 164.41 147.07 168.62 140.25 160.68 129.52 192.84 92.43 195.95 94.58 198.1 93.39 215.44 69.38 195.21 71.53 188.85 74.26 185.41 71.18 181.11 68.75 177.25 67.82 173.03 68.11 167.59 69.18 162.36 68.11 159.42 64.88 156.06 62.52 151.26 61.16 149.14 61.16 144.99 61.57 149.39 59.25 139.31 49.47 113.5 71.21 111.61 75.68 78.08 107.11 61.49 110.71 57.25 117.11 60.52 120.3 41.73 148.67 57.27 159.94 50.52 169.05 43.36 179.18 38.45 187.67 34.16 196.16 30.78 204.65 29.54 210.13 29.86 216.67 31.34 222.32" fill="#58595b" stroke="#272425" strokeMiterlimit="10" />
@@ -113,102 +104,122 @@ export const UnitSVGs = {
       }}
     </Blitzkontext.Consumer>,
   nuke:
-    <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="296.62" height="296.04" viewBox="0 0 296.62 296.04">
-      <title>Nuke</title>
-      <rect id="rocket_rim" data-name="rocket rim" x="193.51" y="5.76" width="65.52" height="136.51" strokeMiterlimit="10" fill="#58595b" stroke="#272425" transform="translate(12.14 179.8) rotate(-45)" />
-      <ellipse cx="95.9" cy="203.55" rx="114.24" ry="66.83" transform="translate(-117.64 125.55) rotate(-45)" fill="#424244" stroke="#272425" strokeMiterlimit="10" />
-      <polygon points="152.23 87.93 82.94 126.13 169.65 212.84 208.54 144.25 214.78 108.77 187.7 81.69 152.23 87.93" fill="#6c6d70" stroke="#272425" strokeMiterlimit="10" />
-      <polygon id="top_fin" data-name="top fin" points="214.78 108.77 196.57 144.88 248.15 142.14 214.78 108.77" fill="#424244" stroke="#272425" strokeMiterlimit="10" />
-      <polygon id="bottom_fin" data-name="bottom fin" points="187.7 81.69 151.59 99.91 154.33 48.32 187.7 81.69" fill="#424244" stroke="#272425" strokeMiterlimit="10" />
-      <path d="M102.91,281.89c-34.43,19-68.92,21.31-87.53,2.7S-1,231.76,17.86,197.45" transform="translate(-1.8 -1.88)" fill="#e42b2d" stroke="#272425" strokeMiterlimit="10" />
-    </svg>,
+    <Blitzkontext.Consumer>
+      {({map}) => {
+        return (
+          <svg width={map.unitSizing.nuke.width} height={map.unitSizing.nuke.height}
+          viewBox="0 0 296.62 296.04">
+            <title>Nuke</title>
+            <rect id="rocket_rim" data-name="rocket rim" x="193.51" y="5.76" width="65.52" height="136.51" strokeMiterlimit="10" fill="#58595b" stroke="#272425" transform="translate(12.14 179.8) rotate(-45)" />
+            <ellipse cx="95.9" cy="203.55" rx="114.24" ry="66.83" transform="translate(-117.64 125.55) rotate(-45)" fill="#424244" stroke="#272425" strokeMiterlimit="10" />
+            <polygon points="152.23 87.93 82.94 126.13 169.65 212.84 208.54 144.25 214.78 108.77 187.7 81.69 152.23 87.93" fill="#6c6d70" stroke="#272425" strokeMiterlimit="10" />
+            <polygon id="top_fin" data-name="top fin" points="214.78 108.77 196.57 144.88 248.15 142.14 214.78 108.77" fill="#424244" stroke="#272425" strokeMiterlimit="10" />
+            <polygon id="bottom_fin" data-name="bottom fin" points="187.7 81.69 151.59 99.91 154.33 48.32 187.7 81.69" fill="#424244" stroke="#272425" strokeMiterlimit="10" />
+            <path d="M102.91,281.89c-34.43,19-68.92,21.31-87.53,2.7S-1,231.76,17.86,197.45" transform="translate(-1.8 -1.88)" fill="#e42b2d" stroke="#272425" strokeMiterlimit="10" />
+          </svg>
+        )
+      }}
+    </Blitzkontext.Consumer>,
   detonation:
-    <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 290.64 298.82">
-      <defs>
-        <radialGradient id="radial-gradient" cx="150.25" cy="262.47" r="144.1" gradientTransform="translate(-4.93 195.4) scale(1 0.25)" gradientUnits="userSpaceOnUse">
-          <stop offset="0.46" stopColor="#e53a2d" />
-          <stop offset="0.46" stopColor="#e13a2d" />
-          <stop offset="0.47" stopColor="#b6352b" />
-          <stop offset="0.48" stopColor="#8f3029" />
-          <stop offset="0.48" stopColor="#6f2c28" />
-          <stop offset="0.49" stopColor="#552927" />
-          <stop offset="0.5" stopColor="#402726" />
-          <stop offset="0.52" stopColor="#322525" />
-          <stop offset="0.53" stopColor="#2a2425" />
-          <stop offset="0.55" stopColor="#272425" />
-          <stop offset="0.68" stopColor="#272425" />
-          <stop offset="0.7" stopColor="#272425" />
-          <stop offset="0.81" stopColor="#292425" />
-          <stop offset="0.86" stopColor="#302425" />
-          <stop offset="0.88" stopColor="#3b2526" />
-          <stop offset="0.91" stopColor="#4c2527" />
-          <stop offset="0.93" stopColor="#622628" />
-          <stop offset="0.95" stopColor="#7e2729" />
-          <stop offset="0.96" stopColor="#9e282b" />
-          <stop offset="0.98" stopColor="#c22a2c" />
-          <stop offset="0.99" stopColor="#e42b2e" />
-          <stop offset="1" stopColor="#272425" />
-        </radialGradient>
-        <linearGradient id="linear-gradient" x1="-80.14" y1="261.02" x2="-79.55" y2="261.02" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="#fef740" />
-          <stop offset="0.04" stopColor="#fceb37" />
-          <stop offset="0.12" stopColor="#f9d829" />
-          <stop offset="0.2" stopColor="#f7cd21" />
-          <stop offset="0.28" stopColor="#f6c91e" />
-          <stop offset="0.67" stopColor="#eb9243" />
-          <stop offset="0.89" stopColor="#e46c41" />
-          <stop offset="1" stopColor="#e0453e" />
-        </linearGradient>
-        <radialGradient id="radial-gradient-2" cx="181.86" cy="174.45" r="66.13" href="#linear-gradient" />
-        <radialGradient id="radial-gradient-3" cx="118.63" cy="174.45" r="66.13" href="#linear-gradient" />
-        <radialGradient id="radial-gradient-4" cx="149.82" cy="78.46" fx="79.5504253733004" r="75.76" gradientTransform="matrix(0, 0.95, -1.45, 0, 258.3, -67.76)" gradientUnits="userSpaceOnUse">
-          <stop offset="0.04" stopColor="#e42b2d" />
-          <stop offset="0.07" stopColor="#e63e2c" />
-          <stop offset="0.13" stopColor="#ea702b" />
-          <stop offset="0.15" stopColor="#e9682b" />
-          <stop offset="0.18" stopColor="#e8542c" />
-          <stop offset="0.22" stopColor="#e5322d" />
-          <stop offset="0.23" stopColor="#e42c2d" />
-          <stop offset="0.3" stopColor="#e85229" stopOpacity="0.88" />
-          <stop offset="0.4" stopColor="#ee8624" stopOpacity="0.71" />
-          <stop offset="0.51" stopColor="#f3ab21" stopOpacity="0.6" />
-          <stop offset="0.6" stopColor="#f5c11f" stopOpacity="0.52" />
-          <stop offset="0.68" stopColor="#f6c91e" stopOpacity="0.5" />
-          <stop offset="0.68" stopColor="#f6c91e" stopOpacity="0.5" />
-          <stop offset="0.71" stopColor="#f6c91e" stopOpacity="0.5" />
-          <stop offset="0.72" stopColor="#f4ba1f" stopOpacity="0.55" />
-          <stop offset="0.79" stopColor="#ed7d25" stopOpacity="0.74" />
-          <stop offset="0.85" stopColor="#e85029" stopOpacity="0.88" />
-          <stop offset="0.9" stopColor="#e5352c" stopOpacity="0.97" />
-          <stop offset="0.94" stopColor="#e42b2d" />
-          <stop offset="0.98" stopColor="#fefefe" />
-        </radialGradient>
-      </defs>
-      <ellipse id="Outer_Shockwave_Ring" data-name="Outer Shockwave Ring" cx="145.32" cy="261.02" rx="145.32" ry="37.79" fill="url(#radial-gradient)" />
-      <ellipse id="Cloud_Pillar_Base" data-name="Cloud Pillar Base" cx="145.32" cy="261.02" rx="63.23" ry="16.44" fill="url(#linear-gradient)" />
-      <path id="Cloud_Right" data-name="Cloud Right" d="M213.48,262.47c-19.78-39.62-39.38-20-46.83-120.93-4.09-55.37-16.4-55.11-16.4-55.11v176Z" transform="translate(-4.93 -1.44)" fill="url(#radial-gradient-2)" />
-      <path id="Cloud_Left" data-name="Cloud Left" d="M87,262.47c19.78-39.62,39.38-20,46.82-120.93,4.09-55.37,16.41-55.11,16.41-55.11v176Z" transform="translate(-4.93 -1.44)" fill="url(#radial-gradient-3)" />
-      <ellipse cx="145.32" cy="99.63" rx="119.2" ry="65.39" fill="#fefefe" />
-      <ellipse id="Base" cx="145.32" cy="80.75" rx="106.59" ry="80.75" fill="#fefefe" />
-      <ellipse cx="145.32" cy="79.1" rx="106.59" ry="76.75" fill="url(#radial-gradient-4)" />
-      <path d="M31,101.08c0,40.29,61,65.38,119.21,65.38s119.2-24.54,119.2-65.38H253.91s-20.7,47.25-103.66,47.25S46.59,101.08,46.59,101.08Z" transform="translate(-4.93 -1.44)" fill="#fefefe" />
-      <ellipse cx="145.32" cy="39.33" rx="63.23" ry="38.15" fill="#fefefe" />
-    </svg>,
+    <Blitzkontext.Consumer>
+      {({map}) => {
+        return (
+          <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 290.64 298.82">
+            <defs>
+              <radialGradient id="radial-gradient" cx="150.25" cy="262.47" r="144.1" gradientTransform="translate(-4.93 195.4) scale(1 0.25)" gradientUnits="userSpaceOnUse">
+                <stop offset="0.46" stopColor="#e53a2d" />
+                <stop offset="0.46" stopColor="#e13a2d" />
+                <stop offset="0.47" stopColor="#b6352b" />
+                <stop offset="0.48" stopColor="#8f3029" />
+                <stop offset="0.48" stopColor="#6f2c28" />
+                <stop offset="0.49" stopColor="#552927" />
+                <stop offset="0.5" stopColor="#402726" />
+                <stop offset="0.52" stopColor="#322525" />
+                <stop offset="0.53" stopColor="#2a2425" />
+                <stop offset="0.55" stopColor="#272425" />
+                <stop offset="0.68" stopColor="#272425" />
+                <stop offset="0.7" stopColor="#272425" />
+                <stop offset="0.81" stopColor="#292425" />
+                <stop offset="0.86" stopColor="#302425" />
+                <stop offset="0.88" stopColor="#3b2526" />
+                <stop offset="0.91" stopColor="#4c2527" />
+                <stop offset="0.93" stopColor="#622628" />
+                <stop offset="0.95" stopColor="#7e2729" />
+                <stop offset="0.96" stopColor="#9e282b" />
+                <stop offset="0.98" stopColor="#c22a2c" />
+                <stop offset="0.99" stopColor="#e42b2e" />
+                <stop offset="1" stopColor="#272425" />
+              </radialGradient>
+              <linearGradient id="linear-gradient" x1="-80.14" y1="261.02" x2="-79.55" y2="261.02" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stopColor="#fef740" />
+                <stop offset="0.04" stopColor="#fceb37" />
+                <stop offset="0.12" stopColor="#f9d829" />
+                <stop offset="0.2" stopColor="#f7cd21" />
+                <stop offset="0.28" stopColor="#f6c91e" />
+                <stop offset="0.67" stopColor="#eb9243" />
+                <stop offset="0.89" stopColor="#e46c41" />
+                <stop offset="1" stopColor="#e0453e" />
+              </linearGradient>
+              <radialGradient id="radial-gradient-2" cx="181.86" cy="174.45" r="66.13" href="#linear-gradient" />
+              <radialGradient id="radial-gradient-3" cx="118.63" cy="174.45" r="66.13" href="#linear-gradient" />
+              <radialGradient id="radial-gradient-4" cx="149.82" cy="78.46" fx="79.5504253733004" r="75.76" gradientTransform="matrix(0, 0.95, -1.45, 0, 258.3, -67.76)" gradientUnits="userSpaceOnUse">
+                <stop offset="0.04" stopColor="#e42b2d" />
+                <stop offset="0.07" stopColor="#e63e2c" />
+                <stop offset="0.13" stopColor="#ea702b" />
+                <stop offset="0.15" stopColor="#e9682b" />
+                <stop offset="0.18" stopColor="#e8542c" />
+                <stop offset="0.22" stopColor="#e5322d" />
+                <stop offset="0.23" stopColor="#e42c2d" />
+                <stop offset="0.3" stopColor="#e85229" stopOpacity="0.88" />
+                <stop offset="0.4" stopColor="#ee8624" stopOpacity="0.71" />
+                <stop offset="0.51" stopColor="#f3ab21" stopOpacity="0.6" />
+                <stop offset="0.6" stopColor="#f5c11f" stopOpacity="0.52" />
+                <stop offset="0.68" stopColor="#f6c91e" stopOpacity="0.5" />
+                <stop offset="0.68" stopColor="#f6c91e" stopOpacity="0.5" />
+                <stop offset="0.71" stopColor="#f6c91e" stopOpacity="0.5" />
+                <stop offset="0.72" stopColor="#f4ba1f" stopOpacity="0.55" />
+                <stop offset="0.79" stopColor="#ed7d25" stopOpacity="0.74" />
+                <stop offset="0.85" stopColor="#e85029" stopOpacity="0.88" />
+                <stop offset="0.9" stopColor="#e5352c" stopOpacity="0.97" />
+                <stop offset="0.94" stopColor="#e42b2d" />
+                <stop offset="0.98" stopColor="#fefefe" />
+              </radialGradient>
+            </defs>
+            <ellipse id="Outer_Shockwave_Ring" data-name="Outer Shockwave Ring" cx="145.32" cy="261.02" rx="145.32" ry="37.79" fill="url(#radial-gradient)" />
+            <ellipse id="Cloud_Pillar_Base" data-name="Cloud Pillar Base" cx="145.32" cy="261.02" rx="63.23" ry="16.44" fill="url(#linear-gradient)" />
+            <path id="Cloud_Right" data-name="Cloud Right" d="M213.48,262.47c-19.78-39.62-39.38-20-46.83-120.93-4.09-55.37-16.4-55.11-16.4-55.11v176Z" transform="translate(-4.93 -1.44)" fill="url(#radial-gradient-2)" />
+            <path id="Cloud_Left" data-name="Cloud Left" d="M87,262.47c19.78-39.62,39.38-20,46.82-120.93,4.09-55.37,16.41-55.11,16.41-55.11v176Z" transform="translate(-4.93 -1.44)" fill="url(#radial-gradient-3)" />
+            <ellipse cx="145.32" cy="99.63" rx="119.2" ry="65.39" fill="#fefefe" />
+            <ellipse id="Base" cx="145.32" cy="80.75" rx="106.59" ry="80.75" fill="#fefefe" />
+            <ellipse cx="145.32" cy="79.1" rx="106.59" ry="76.75" fill="url(#radial-gradient-4)" />
+            <path d="M31,101.08c0,40.29,61,65.38,119.21,65.38s119.2-24.54,119.2-65.38H253.91s-20.7,47.25-103.66,47.25S46.59,101.08,46.59,101.08Z" transform="translate(-4.93 -1.44)" fill="#fefefe" />
+            <ellipse cx="145.32" cy="39.33" rx="63.23" ry="38.15" fill="#fefefe" />
+          </svg>
+        )
+      }}
+    </Blitzkontext.Consumer>,
   garrison:
-    <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="301.05" height="300.92" viewBox="0 0 301.05 300.92">
-      <title>Garrison</title>
-      <polygon id="TLS" points="150.53 0.66 114.64 10.82 105.83 168.01 150.53 168.01 150.53 0.66" fill="#eff0f0" stroke="#272425" strokeMiterlimit="10" />
-      <polygon id="TRS" points="150.78 0.66 186.67 10.81 195.48 168.01 150.78 168.01 150.78 0.66" fill="#58595b" stroke="#272425" strokeMiterlimit="10" />
-      <polygon id="MRC" points="162.19 87.2 156.53 168.25 206.26 174.49 206.26 76.69 162.19 87.2" fill="#cfd0d2" stroke="#272425" strokeMiterlimit="10" />
-      <polygon id="MRO" points="206.26 76.69 242.15 86.84 250.96 169.85 206.26 174.49 206.26 76.69" fill="#6c6d70" stroke="#272425" strokeMiterlimit="10" />
-      <polygon id="MLC" points="138.86 87.2 144.53 168.25 94.79 174.49 94.79 76.69 138.86 87.2" fill="#6c6d70" stroke="#272425" strokeMiterlimit="10" />
-      <polygon id="MLO" points="94.79 76.69 58.9 86.84 50.09 169.85 94.79 174.49 94.79 76.69" fill="#e4e5e6" stroke="#272425" strokeMiterlimit="10" />
-      <polygon id="DLC" points="76.64 168.01 81.5 290.82 38.85 300.26 38.85 152.09 76.64 168.01" fill="#7f8083" stroke="#272425" strokeMiterlimit="10" />
-      <polygon id="DLO" points="38.85 152.09 8.08 167.47 0.53 293.25 38.85 300.26 38.85 152.09" fill="#cfd0d2" stroke="#272425" strokeMiterlimit="10" />
-      <polygon id="DRC" points="224.41 168.01 219.56 290.82 262.2 300.26 262.2 152.09 224.41 168.01" fill="#cfd0d2" stroke="#272425" strokeMiterlimit="10" />
-      <polygon id="DRO" points="262.2 152.09 292.97 167.47 300.53 293.25 262.2 300.26 262.2 152.09" fill="#7f8083" stroke="#272425" strokeMiterlimit="10" />
-      <polygon id="DCW" points="76.64 168.01 224.41 168.01 219.56 290.82 81.5 290.82 76.64 168.01" fill="#babbbe" stroke="#272425" strokeMiterlimit="10" />
-      <polygon id="TLS-2" data-name="TLS" points="150.43 184.71 123.25 191.33 116.58 290.78 150.43 300.26 150.43 184.71" fill="#a5a7a9" stroke="#272425" strokeMiterlimit="10" />
-      <polygon id="TRS-2" data-name="TRS" points="150.62 184.71 177.8 191.32 184.48 290.78 150.62 300.26 150.62 184.71" fill="#58595b" stroke="#272425" strokeMiterlimit="10" />
-    </svg>
+    <Blitzkontext.Consumer>
+      {({map}) => {
+        return (
+          <svg width={map.unitSizing.garrison.width} height={map.unitSizing.garrison.height}
+          viewBox="0 0 301.05 300.92">
+            <title>Garrison</title>
+            <polygon id="TLS" points="150.53 0.66 114.64 10.82 105.83 168.01 150.53 168.01 150.53 0.66" fill="#eff0f0" stroke="#272425" strokeMiterlimit="10" />
+            <polygon id="TRS" points="150.78 0.66 186.67 10.81 195.48 168.01 150.78 168.01 150.78 0.66" fill="#58595b" stroke="#272425" strokeMiterlimit="10" />
+            <polygon id="MRC" points="162.19 87.2 156.53 168.25 206.26 174.49 206.26 76.69 162.19 87.2" fill="#cfd0d2" stroke="#272425" strokeMiterlimit="10" />
+            <polygon id="MRO" points="206.26 76.69 242.15 86.84 250.96 169.85 206.26 174.49 206.26 76.69" fill="#6c6d70" stroke="#272425" strokeMiterlimit="10" />
+            <polygon id="MLC" points="138.86 87.2 144.53 168.25 94.79 174.49 94.79 76.69 138.86 87.2" fill="#6c6d70" stroke="#272425" strokeMiterlimit="10" />
+            <polygon id="MLO" points="94.79 76.69 58.9 86.84 50.09 169.85 94.79 174.49 94.79 76.69" fill="#e4e5e6" stroke="#272425" strokeMiterlimit="10" />
+            <polygon id="DLC" points="76.64 168.01 81.5 290.82 38.85 300.26 38.85 152.09 76.64 168.01" fill="#7f8083" stroke="#272425" strokeMiterlimit="10" />
+            <polygon id="DLO" points="38.85 152.09 8.08 167.47 0.53 293.25 38.85 300.26 38.85 152.09" fill="#cfd0d2" stroke="#272425" strokeMiterlimit="10" />
+            <polygon id="DRC" points="224.41 168.01 219.56 290.82 262.2 300.26 262.2 152.09 224.41 168.01" fill="#cfd0d2" stroke="#272425" strokeMiterlimit="10" />
+            <polygon id="DRO" points="262.2 152.09 292.97 167.47 300.53 293.25 262.2 300.26 262.2 152.09" fill="#7f8083" stroke="#272425" strokeMiterlimit="10" />
+            <polygon id="DCW" points="76.64 168.01 224.41 168.01 219.56 290.82 81.5 290.82 76.64 168.01" fill="#babbbe" stroke="#272425" strokeMiterlimit="10" />
+            <polygon id="TLS-2" data-name="TLS" points="150.43 184.71 123.25 191.33 116.58 290.78 150.43 300.26 150.43 184.71" fill="#a5a7a9" stroke="#272425" strokeMiterlimit="10" />
+            <polygon id="TRS-2" data-name="TRS" points="150.62 184.71 177.8 191.32 184.48 290.78 150.62 300.26 150.62 184.71" fill="#58595b" stroke="#272425" strokeMiterlimit="10" />
+          </svg>
+        )
+      }}
+    </Blitzkontext.Consumer>
 }

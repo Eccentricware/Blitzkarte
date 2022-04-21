@@ -10,7 +10,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <Blitzkontext.Provider value={{
-      mapView: mapView,
+      map: mapView,
       setMapView: setMapView
     }}>
       <Component {...pageProps} />
