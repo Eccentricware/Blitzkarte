@@ -13,19 +13,19 @@ export const UnitRender: FC<Props> = ({unit}: Props) => {
 
   return (
     <Blitzkontext.Consumer>
-      {({mapView}) => {
+      {({map}) => {
         return (
           <g className={unit.name} key={unit.name}>
             <g transform={
               `translate(
-                ${unit.loc[0] - mapView.unitSizing[unit.type].width / 2 - 16000}
-                ${unit.loc[1] - mapView.unitSizing[unit.type].height / 2}
+                ${unit.loc[0] - map.unitSizing[unit.type].width / 2 - 16000}
+                ${unit.loc[1] - map.unitSizing[unit.type].height / 2}
               )`}
             >
               <g transform={
                 `translate(
-                  ${mapView.flagSizing.offset[unit.type].x}
-                  ${mapView.flagSizing.offset[unit.type].y}
+                  ${map.flagSizing.offset[unit.type].x}
+                  ${map.flagSizing.offset[unit.type].y}
                 )
 
                 scale(${0.5})
@@ -39,14 +39,14 @@ export const UnitRender: FC<Props> = ({unit}: Props) => {
             </g>
             <g transform={
               `translate(
-                ${unit.loc[0] - mapView.unitSizing[unit.type].width / 2}
-                ${unit.loc[1] - mapView.unitSizing[unit.type].height / 2}
+                ${unit.loc[0] - map.unitSizing[unit.type].width / 2}
+                ${unit.loc[1] - map.unitSizing[unit.type].height / 2}
               )`}
             >
               <g transform={
                 `translate(
-                  ${mapView.flagSizing.offset[unit.type].x}
-                  ${mapView.flagSizing.offset[unit.type].y}
+                  ${map.flagSizing.offset[unit.type].x}
+                  ${map.flagSizing.offset[unit.type].y}
                 )
 
                 scale(${0.5})
@@ -60,14 +60,14 @@ export const UnitRender: FC<Props> = ({unit}: Props) => {
             </g>
             <g transform={
               `translate(
-                ${unit.loc[0] - mapView.unitSizing[unit.type].width / 2 + 16000}
-                ${unit.loc[1] - mapView.unitSizing[unit.type].height / 2}
+                ${unit.loc[0] - map.unitSizing[unit.type].width / 2 + 16000}
+                ${unit.loc[1] - map.unitSizing[unit.type].height / 2}
               )`}
             >
               <g transform={
                 `translate(
-                  ${mapView.flagSizing.offset[unit.type].x}
-                  ${mapView.flagSizing.offset[unit.type].y}
+                  ${map.flagSizing.offset[unit.type].x}
+                  ${map.flagSizing.offset[unit.type].y}
                 )
 
                 scale(${0.5})
