@@ -1,7 +1,17 @@
-import { FC } from 'react';
+import { FC} from 'react';
 
-export const ViewControls: FC = () => {
+interface ViewControlProps {
+  setViewBox: any;
+  animateViewBox: any;
+}
+
+export const ViewControls: FC<ViewControlProps> = ({
+  setViewBox,
+  animateViewBox
+}: ViewControlProps) => {
   const handlePanUp = () => {
+    animateViewBox();
+    // setViewBox('8000 5000 8000 5000');
     console.log('Pan Up Clicked!');
   }
 

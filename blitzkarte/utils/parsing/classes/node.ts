@@ -67,7 +67,7 @@ export class NodePin {
   }
 
   validate(): boolean {
-    let nameValid: boolean = this.validateName();
+    // let nameValid: boolean = this.validateName();
     let typeValid: boolean = this.validateType();
     let adjValid: boolean = this.validateAdj();
     // Province and Loc are validated in passed in generic Pin
@@ -75,9 +75,9 @@ export class NodePin {
     return typeValid && adjValid;
   }
 
-  validateName(): boolean {
+  // validateName(): boolean {
 
-  }
+  // }
 
   validateType(): boolean {
     let validTypes: string[] = ['land', 'sea','air', 'event'];
