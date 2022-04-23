@@ -1,17 +1,13 @@
 import { FC} from 'react';
 
 interface ViewControlProps {
-  setViewBox: any;
-  animateViewBox: any;
+  viewOps: any;
 }
 
 export const ViewControls: FC<ViewControlProps> = ({
-  setViewBox,
-  animateViewBox
+  viewOps
 }: ViewControlProps) => {
   const handlePanUp = () => {
-    animateViewBox();
-    // setViewBox('8000 5000 8000 5000');
     console.log('Pan Up Clicked!');
   }
 
@@ -28,6 +24,7 @@ export const ViewControls: FC<ViewControlProps> = ({
   }
 
   const handleZoomIn = () => {
+    viewOps.zoomIn();
     console.log('Zoom In Clicked!');
   }
 

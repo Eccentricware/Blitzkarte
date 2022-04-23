@@ -1,11 +1,22 @@
 export interface MapView {
   zoom: number,
   view: {
-    x: number,
-    y: number,
-    width: number,
-    height: number
+    default: {
+      x: number,
+      y: number,
+      width: number,
+      height: number,
+      center: number[]
+    },
+    current: {
+      x: number,
+      y: number,
+      width: number,
+      height: number,
+      center: number[]
+    }
   },
+
   unitSizing: {
     army: {
       width: number,
@@ -86,13 +97,22 @@ export interface MapView {
 export const mapViewDefault = {
   zoom: 1,
   view: {
-    x: 0,
-    y: 0,
-    width: 16000,
-    height: 10000,
-    baseWidth: 16000,
-    baseHeight: 10000
-  },
+    default: {
+      x: 0,
+      y: 0,
+      width: 16000,
+      height: 10000,
+      center: [8000, 5000]
+    },
+    current: {
+      x: 0,
+      y: 0,
+      width: 16000,
+      height: 10000,
+      center: [8000, 5000]
+    }
+  }
+    ,
   unitSizing: {
     army: {
       width: 291.05,
