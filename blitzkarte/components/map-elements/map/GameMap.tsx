@@ -5,7 +5,6 @@ import { CityLayer } from '../layers/city/CityLayer';
 import { UnitLayer } from '../layers/unit/UnitLayer';
 import { NodeLayer } from '../layers/node/NodeLayer';
 import Blitzkontext from '../../../utils/Blitzkontext';
-import { height, width } from '@mui/system';
 
 interface Props {
   renderData: any;
