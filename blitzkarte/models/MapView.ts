@@ -1,5 +1,7 @@
 export interface MapView {
   view: {
+    panRate: number,
+    zoomRate: number,
     default: {
       x: number,
       y: number,
@@ -101,6 +103,8 @@ export interface MapView {
 
 export const mapViewDefault = {
   view: {
+    zoomRate: 0.8,
+    panRate: 0.25,
     default: {
       x: 0,
       y: 0,

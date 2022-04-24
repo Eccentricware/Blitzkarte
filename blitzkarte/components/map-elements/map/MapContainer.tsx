@@ -12,44 +12,28 @@ interface Props {
 export const MapContainer: FC<Props> = ({ renderData }: Props) => {
   const [viewBox, setViewBox] = useState('0 0 16000 10000');
   const [zoomed, setZoomed] = useState(false);
+  const [atTop, setAtTop] = useState(true);
+  const [atBottom, setAtBottom] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = React.createRef<SVGSVGElement>();
   const q = gsap.utils.selector(containerRef);
   const mapCtx = useContext(Blitzkontext);
 
-  useEffect(() => {
-    // gsap.to(mapRef.current, {
-    //   viewbox: '8000 5000 8000 5000'
-    // })
-  })
-
-  const animateViewBox = () => {
-    gsap.fromTo(mapRef.current,
-      { attr: {viewBox: '0 0 8000 5000'}},
-      {
-        attr: { viewBox: '8000 5000 8000 5000' },
-        ease: 'power2.inOut',
-        duration: 1
-      }
-    )
-  }
-
   const zoomIn = () => {
-    const currentView = mapCtx.map.view.current;
-    const defaultView = mapCtx.map.view.default;
-    currentView.zoom *= 0.8
+    const view = mapCtx.map.view;
+    view.current.zoom *= view.zoomRate;
 
-    const endWidth = defaultView.width * currentView.zoom;
-    currentView.width = endWidth;
+    const endWidth = view.default.width * view.current.zoom;
+    view.current.width = endWidth;
 
-    const endHeight = defaultView.height * currentView.zoom;
-    currentView.height = endHeight;
+    const endHeight = view.default.height * view.current.zoom;
+    view.current.height = endHeight;
 
-    const endX = currentView.center[0] - (endWidth / 2);
-    currentView.x = endX;
+    const endX = view.current.center[0] - (endWidth / 2);
+    view.current.x = endX;
 
-    const endY = currentView.center[1] - (endHeight / 2);
-    currentView.y = endY;
+    const endY = view.current.center[1] - (endHeight / 2);
+    view.current.y = endY;
 
     const endViewBox = `${endX} ${endY} ${endWidth} ${endHeight}`;
 
@@ -60,55 +44,64 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
     });
 
     setZoomed(true);
+    setAtTop(false);
+    setAtBottom(false);
   }
 
   const zoomOut = () => {
-    const currentView = mapCtx.map.view.current;
-    const defaultView = mapCtx.map.view.default;
+    const view = mapCtx.map.view;
     const constraints = mapCtx.map.view.constraints;
 
-    currentView.zoom /= 0.8;
-    if (currentView.zoom >= 1) {
-      currentView.zoom = 1;
+    view.current.zoom /= view.zoomRate;
+    if (view.current.zoom >= 1) {
+      view.current.zoom = 1;
       setZoomed(false);
+      setAtTop(true);
+      setAtBottom(true);
     }
 
-    const endWidth: number = defaultView.width * currentView.zoom;
-    const endHeight: number = defaultView.height * currentView.zoom;
+    const endWidth: number = view.default.width * view.current.zoom;
+    const endHeight: number = view.default.height * view.current.zoom;
 
     // Too Left
-    if (currentView.center[0] - (endWidth / 2) < constraints.left) {
-      currentView.center[0] += 16000;
+    if (view.current.center[0] - (endWidth / 2) < constraints.left) {
+      view.current.center[0] += 16000;
     }
 
     // Too Right
-    if (currentView.center[0] + (endWidth / 2) > constraints.right) {
-      currentView.center[0] -= 16000;
+    if (view.current.center[0] + (endWidth / 2) > constraints.right) {
+      view.current.center[0] -= 16000;
     }
 
-    const endX: number = currentView.center[0] - (endWidth / 2);
+    const endX: number = view.current.center[0] - (endWidth / 2);
 
+    let endY: number;
     // Too High
-    if (currentView.center[1] - (endHeight / 2) < constraints.top) {
-      currentView[1] = endHeight / 2;
+    if (view.current.y - (endHeight / 2) < constraints.top) {
+      endY = constraints.top;
+      view.current[1] = endHeight / 2;
+
+    // Too Low
+    } else if (view.current.center[1] + (endHeight / 2) > constraints.bottom) {
+      endY = constraints.bottom - (endHeight / 2);
+
+    // Just Right
+    } else {
+      endY = view.current.center[1] - (endHeight / 2);
     }
 
-    // Too low
-    if (currentView.center[1] + (endHeight / 2) > constraints.bottom) {
-      currentView[1] = constraints.bottom - (endHeight / 2);
-    }
-    const endY: number = currentView.center[1] - (endHeight / 2);
+    const startX: number = view.current.center[0] - (view.current.width / 2);
+    const startY: number = view.current.center[1] - (view.current.height / 2);
 
-    const startX: number = currentView.center[0] - (currentView.width / 2);
-    const startY: number = currentView.center[1] - (currentView.height / 2);
-
-    const startView: string = `${startX} ${startY} ${currentView.width} ${currentView.height}`;
+    const startView: string = `${startX} ${startY} ${view.current.width} ${view.current.height}`;
     const endView: string = `${endX} ${endY} ${endWidth} ${endHeight}`;
 
-    currentView.x = endX;
-    currentView.y = endY;
-    currentView.width = endWidth;
-    currentView.height = endHeight;
+    view.current.x = endX;
+    view.current.y = endY;
+    view.current.width = endWidth;
+    view.current.height = endHeight;
+    view.current.center[0] = view.current.x + (view.current.width / 2);
+    view.current.center[1] = view.current.y + (view.current.height / 2);
 
     gsap.fromTo(mapRef.current,
       { attr: { viewBox: startView } },
@@ -120,10 +113,56 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
     );
   }
 
+  const panUp = () => {
+    const view = mapCtx.map.view;
+    const constraints = mapCtx.map.view.constraints;
+
+    // Too High
+    if (view.current.y - (view.current.height * view.panRate) <= constraints.top) {
+      view.current.y = constraints.top;
+      view.current.center[1] = constraints.top + (view.current.height / 2);
+
+      setAtTop(true);
+    } else {
+      view.current.y -= view.current.height * view.panRate;
+    }
+
+    const endViewBox = `${view.current.x} ${view.current.y} ${view.current.width} ${view.current.height}`;
+
+    gsap.to(mapRef.current, {
+      attr: { viewBox: endViewBox },
+      ease: 'power2.inOut',
+      duration: 1
+    });
+  }
+
+  const panDown = () => {
+
+  }
+
+  const panLeft = () => {
+
+  }
+
+  const panRight = () => {
+
+  }
+
+  const reset = () => {
+
+  }
+
   const viewOps = {
     zoomIn: zoomIn,
     zoomOut: zoomOut,
-    zoomed: zoomed
+    panUp: panUp,
+    panDown: panDown,
+    panLeft: panLeft,
+    panRight: panRight,
+    reset: reset,
+    zoomed: zoomed,
+    atTop: atTop,
+    atBottom: atBottom
   }
 
 
