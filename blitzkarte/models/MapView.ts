@@ -1,5 +1,4 @@
 export interface MapView {
-  zoom: number,
   view: {
     default: {
       x: number,
@@ -14,9 +13,15 @@ export interface MapView {
       width: number,
       height: number,
       center: number[]
+      zoom: number,
+    }
+    constraints: {
+      left: number,
+      right: number,
+      top: number,
+      bottom: number
     }
   },
-
   unitSizing: {
     army: {
       width: number,
@@ -95,7 +100,6 @@ export interface MapView {
 }
 
 export const mapViewDefault = {
-  zoom: 1,
   view: {
     default: {
       x: 0,
@@ -109,7 +113,14 @@ export const mapViewDefault = {
       y: 0,
       width: 16000,
       height: 10000,
-      center: [8000, 5000]
+      center: [8000, 5000],
+      zoom: 1,
+    },
+    constraints: {
+      left: -12000,
+      right: 16000,
+      top: 0,
+      bottom: 10000
     }
   }
     ,

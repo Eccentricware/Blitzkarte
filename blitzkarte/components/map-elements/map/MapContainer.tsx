@@ -4,7 +4,6 @@ import { ViewControls } from './ViewControls';
 import { gsap } from 'gsap'
 import React from 'react';
 import Blitzkontext from '../../../utils/Blitzkontext';
-import { MapTwoTone } from '@mui/icons-material';
 
 interface Props {
   renderData: any;
@@ -12,6 +11,7 @@ interface Props {
 
 export const MapContainer: FC<Props> = ({ renderData }: Props) => {
   const [viewBox, setViewBox] = useState('0 0 16000 10000');
+  const [zoomed, setZoomed] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = React.createRef<SVGSVGElement>();
   const q = gsap.utils.selector(containerRef);
@@ -36,29 +36,94 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
 
   const zoomIn = () => {
     const currentView = mapCtx.map.view.current;
-    const nextWidth = currentView.width * 0.8;
-    currentView.width = nextWidth;
+    const defaultView = mapCtx.map.view.default;
+    currentView.zoom *= 0.8
 
-    const nextHeight = currentView.height * 0.8;
-    currentView.height = nextHeight;
+    const endWidth = defaultView.width * currentView.zoom;
+    currentView.width = endWidth;
 
-    const nextX = currentView.center[0] - (nextWidth / 2);
-    currentView.x = nextX;
+    const endHeight = defaultView.height * currentView.zoom;
+    currentView.height = endHeight;
 
-    const nextY = currentView.center[1] - (nextHeight / 2);
-    currentView.y = nextY;
+    const endX = currentView.center[0] - (endWidth / 2);
+    currentView.x = endX;
 
-    const nextViewBox = `${nextX} ${nextY} ${nextWidth} ${nextHeight}`;
+    const endY = currentView.center[1] - (endHeight / 2);
+    currentView.y = endY;
+
+    const endViewBox = `${endX} ${endY} ${endWidth} ${endHeight}`;
 
     gsap.to(mapRef.current, {
-      attr: { viewBox: nextViewBox },
+      attr: { viewBox: endViewBox },
       ease: 'power2.inOut',
       duration: 1
     });
+
+    setZoomed(true);
+  }
+
+  const zoomOut = () => {
+    const currentView = mapCtx.map.view.current;
+    const defaultView = mapCtx.map.view.default;
+    const constraints = mapCtx.map.view.constraints;
+
+    currentView.zoom /= 0.8;
+    if (currentView.zoom >= 1) {
+      currentView.zoom = 1;
+      setZoomed(false);
+    }
+
+    const endWidth: number = defaultView.width * currentView.zoom;
+    const endHeight: number = defaultView.height * currentView.zoom;
+
+    // Too Left
+    if (currentView.center[0] - (endWidth / 2) < constraints.left) {
+      currentView.center[0] += 16000;
+    }
+
+    // Too Right
+    if (currentView.center[0] + (endWidth / 2) > constraints.right) {
+      currentView.center[0] -= 16000;
+    }
+
+    const endX: number = currentView.center[0] - (endWidth / 2);
+
+    // Too High
+    if (currentView.center[1] - (endHeight / 2) < constraints.top) {
+      currentView[1] = endHeight / 2;
+    }
+
+    // Too low
+    if (currentView.center[1] + (endHeight / 2) > constraints.bottom) {
+      currentView[1] = constraints.bottom - (endHeight / 2);
+    }
+    const endY: number = currentView.center[1] - (endHeight / 2);
+
+    const startX: number = currentView.center[0] - (currentView.width / 2);
+    const startY: number = currentView.center[1] - (currentView.height / 2);
+
+    const startView: string = `${startX} ${startY} ${currentView.width} ${currentView.height}`;
+    const endView: string = `${endX} ${endY} ${endWidth} ${endHeight}`;
+
+    currentView.x = endX;
+    currentView.y = endY;
+    currentView.width = endWidth;
+    currentView.height = endHeight;
+
+    gsap.fromTo(mapRef.current,
+      { attr: { viewBox: startView } },
+      {
+        attr: { viewBox: endView },
+        ease: 'power2.inOut',
+        duration: 1
+      }
+    );
   }
 
   const viewOps = {
-    zoomIn: zoomIn
+    zoomIn: zoomIn,
+    zoomOut: zoomOut,
+    zoomed: zoomed
   }
 
 
