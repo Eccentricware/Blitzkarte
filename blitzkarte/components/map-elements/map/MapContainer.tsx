@@ -52,6 +52,10 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
     const view = mapCtx.map.view;
     const constraints = mapCtx.map.view.constraints;
 
+    if (view.current.zoom === 1) {
+      return;
+    }
+
     view.current.zoom /= view.zoomRate;
     if (view.current.zoom >= 1) {
       view.current.zoom = 1;
@@ -120,6 +124,10 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
     const view = mapCtx.map.view;
     const constraints = mapCtx.map.view.constraints;
 
+    if (view.current.y === constraints.top) {
+      return;
+    }
+
     // Too High
     if (view.current.y - (view.current.height * view.panRate) <= constraints.top) {
       view.current.y = constraints.top;
@@ -171,7 +179,28 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
   }
 
   const panLeft = () => {
+    const view = mapCtx.map.view;
+    const constraints = mapCtx.map.view.constraints;
 
+    let startX = view.current.x;
+
+    if (startX - (view.current.width * view.panRate) <= constraints.left) {
+      startX += 16000;
+    }
+
+    let startView: string = `${startX} ${view.current.y} ${view.current.width} ${view.current.height}`;
+    let endView: string = `${startX - (view.current.width * view.panRate)} ${view.current.y} ${view.current.width} ${view.current.height}`;
+    view.current.x = startX - (view.current.width * view.panRate);
+    view.current.center[0] = view.current.x + (view.current.width / 2);
+
+    gsap.fromTo(mapRef.current,
+      { attr: { viewBox: startView } },
+      {
+        attr: { viewBox: endView },
+        ease: 'power2.inOut',
+        duration: 1
+      }
+    );
   }
 
   const panRight = () => {
