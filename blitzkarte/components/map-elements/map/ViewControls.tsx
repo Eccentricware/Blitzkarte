@@ -1,7 +1,11 @@
 import { FC} from 'react';
 
 interface ViewControlProps {
-  viewOps: any;
+  viewOps: {
+    zoomIn: any;
+    zoomOut: any;
+    zoomed: boolean;
+  };
 }
 
 export const ViewControls: FC<ViewControlProps> = ({
@@ -29,6 +33,7 @@ export const ViewControls: FC<ViewControlProps> = ({
   }
 
   const handleZoomOut = () => {
+    viewOps.zoomOut();
     console.log('Zoom Out Clicked!');
   }
 
@@ -45,7 +50,7 @@ export const ViewControls: FC<ViewControlProps> = ({
       </g>
       <g id="Zoom_Out" className="map-view-button" data-name="Zoom Out" onClick={() => handleZoomOut()}>
         <circle cx="404.46" cy="405.09" r="80.84" fill="rgba(0, 0, 0, 0.001)" stroke="none" strokeMiterlimit="10" />
-        <rect x="323.62" y="387.62" width="161.68" height="32.88" fill="lime" stroke="#000" strokeMiterlimit="10" strokeWidth={5}/>
+        <rect x="323.62" y="387.62" width="161.68" height="32.88" fill={viewOps.zoomed ? 'lime' : 'gray'} stroke="#000" strokeMiterlimit="10" strokeWidth={5}/>
       </g>
       <g id="Zoom_In" className="map-view-button" data-name="Zoom In" onClick={handleZoomIn} strokeWidth={5}>
         <circle cx="404.46" cy="98.29" r="80.84" fill="rgba(0, 0, 0, 0.001)" stroke="none" strokeMiterlimit="10" />
