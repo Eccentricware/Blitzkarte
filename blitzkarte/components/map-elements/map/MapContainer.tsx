@@ -77,13 +77,16 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
 
     let endY: number;
     // Too High
-    if (view.current.y - (endHeight / 2) < constraints.top) {
+    if (view.current.y - (endHeight / 2) < constraints.top
+    && view.current.center[1] <= 5000) {
       endY = constraints.top;
       view.current[1] = endHeight / 2;
 
     // Too Low
-    } else if (view.current.center[1] + (endHeight / 2) > constraints.bottom) {
-      endY = constraints.bottom - (endHeight / 2);
+    } else if (view.current.center[1] + (endHeight / 2) > constraints.bottom
+    && view.current.center[1] > 5000) {
+      endY = constraints.bottom - endHeight;
+      view.current[1] = constraints.bottom - (endHeight / 2);
 
     // Just Right
     } else {
@@ -134,10 +137,37 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
       ease: 'power2.inOut',
       duration: 1
     });
+
+    if (view.current.zoom < 1) {
+      setAtBottom(false);
+    }
   }
 
   const panDown = () => {
+    const view = mapCtx.map.view;
+    const constraints = mapCtx.map.view.constraints;
 
+    // Too Low
+    if ((view.current.y + view.current.height) + (view.current.height * view.panRate) >= constraints.bottom) {
+      view.current.y = constraints.bottom - view.current.height;
+      view.current.center[1] = constraints.bottom - (view.current.height / 2);
+
+      setAtBottom(true);
+    } else {
+      view.current.y += view.current.height * view.panRate;
+    }
+
+    const endViewBox = `${view.current.x} ${view.current.y} ${view.current.width} ${view.current.height}`;
+
+    gsap.to(mapRef.current, {
+      attr: { viewBox: endViewBox },
+      ease: 'power2.inOut',
+      duration: 1
+    });
+
+    if (view.current.zoom < 1) {
+      setAtTop(false);
+    }
   }
 
   const panLeft = () => {
