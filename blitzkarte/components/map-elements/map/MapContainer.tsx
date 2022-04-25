@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const MapContainer: FC<Props> = ({ renderData }: Props) => {
-  const [viewBox, setViewBox] = useState('0 0 16000 10000');
+  // const [viewBox, setViewBox] = useState('0 0 16000 10000');
   const [zoomed, setZoomed] = useState(false);
   const [atTop, setAtTop] = useState(true);
   const [atBottom, setAtBottom] = useState(true);
@@ -239,7 +239,41 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
   }
 
   const reset = () => {
+    const view = mapCtx.map.view.current;
 
+    let startX = view.x;
+
+    // Too far right
+    if (view.center[0] >= 16000) {
+      startX -= 16000;
+    }
+
+    // Too far left
+    if (view.center[0] <= 0) {
+      startX += 16000;
+    }
+
+    let startView: string = `${startX} ${view.y} ${view.width} ${view.height}`;
+    let endView: string = '0 0 16000 10000';
+
+    gsap.fromTo(mapRef.current,
+      { attr: { viewBox: startView } },
+      {
+        attr: { viewBox: endView },
+        ease: 'power2.inOut',
+        duration: 1
+      }
+    );
+
+    view.x = 0;
+    view.y = 0;
+    view.width = 16000;
+    view.height = 10000;
+    view.center = [8000, 5000];
+    view.zoom = 1;
+    setZoomed(false);
+    setAtTop(true);
+    setAtBottom(true);
   }
 
   const viewOps = {
@@ -260,7 +294,7 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
   return (
     <div className="map-container" ref={containerRef}>
       <svg id="map-container" className="map-container" width="1488" height="930" viewBox="0 0 16000 10000">
-        <GameMap renderData={renderData} viewBox={viewBox} mapRef={mapRef}/>
+        <GameMap renderData={renderData} mapRef={mapRef}/>
         <g transform='translate(14500 8500)'>
           <ViewControls viewOps={viewOps}/>
         </g>
