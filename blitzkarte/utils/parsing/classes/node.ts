@@ -67,17 +67,34 @@ export class NodePin {
   }
 
   validate(): boolean {
-    // let nameValid: boolean = this.validateName();
+    let nameValid: boolean = this.validateName();
     let typeValid: boolean = this.validateType();
     let adjValid: boolean = this.validateAdj();
     // Province and Loc are validated in passed in generic Pin
 
-    return typeValid && adjValid;
+    return nameValid && typeValid && adjValid;
   }
 
-  // validateName(): boolean {
+  validateName(): boolean {
+    let nameValid: boolean = true;
+    const nameSections: string[] = this.name.split('_');
+    const validTypes: string = 'l, s, a, e';
 
-  // }
+    if (nameSections.length === 1) {
+      this.errors.push(`Node ${this.name} type is not defined`);
+      nameValid = false;
+    } else if (!validTypes.includes(nameSections[1])) {
+      this.errors.push(`Node ${this.name} is not a valid type`);
+      nameValid = false;
+    }
+
+    if (nameSections.length > 3 || (this.type !== 's' && nameSections.length > 2)) {
+      this.errors.push(`Node ${this.name} has too many sections`);
+      nameValid = false;
+    }
+
+    return nameValid;
+  }
 
   validateType(): boolean {
     let validTypes: string[] = ['land', 'sea','air', 'event'];

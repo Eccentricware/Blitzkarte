@@ -6,8 +6,8 @@ export const UnitSVGs = {
     <Blitzkontext.Consumer>
       {({map}) => {
         return (
-          <svg width={map.unitSizing.army.width}
-            height={map.unitSizing.army.height}
+          <svg width={map.unitSizing.army.width * map.view.current.zoom}
+            height={map.unitSizing.army.height * map.view.current.zoom}
             viewBox="0 0 291.05 265.77"
           >
             < polygon id="bottom_right_track" data-name="bottom right track" points="213.92 258.09 153.24 230.63 150.64 224.18 149.7 218.36 161.57 218.36 170.13 229.37 222.9 249.64 213.92 258.09" fill="#424244" stroke="#272425" strokeMiterlimit="10" />
