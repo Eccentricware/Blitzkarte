@@ -122,7 +122,7 @@ export const mapViewDefault = {
     },
     constraints: {
       left: -12000,
-      right: 16000,
+      right: 32000,
       top: 0,
       bottom: 10000
     }

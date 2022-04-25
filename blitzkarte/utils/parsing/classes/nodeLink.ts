@@ -17,33 +17,46 @@ export class NodeLink {
     this.name = [node.name, adjNode.name].sort().join('-');
     this.type = node.type;
 
-    let firstNode: NodePin;
-    let secondNode: NodePin;
+
+    let mainPoint: number[];
+    let adjPoint: number[];
     if (node.name < adjNode.name) {
-      firstNode = node;
-      secondNode = adjNode;
+      mainPoint = [
+        node.loc[0],
+        node.loc[1]
+      ];
+      adjPoint = [
+        adjNode.loc[0],
+        adjNode.loc[1]
+      ];
     } else {
-      firstNode = adjNode;
-      secondNode = node;
+      mainPoint = [
+        adjNode.loc[0],
+        adjNode.loc[1]
+      ];
+      adjPoint = [
+        node.loc[0],
+        node.loc[1]
+      ];
     }
 
-    if (Math.abs(node.loc[0] - adjNode.loc[0]) > 8000) {
-      let nudgeNode: NodePin;
-      if (node.loc[0] < adjNode.loc[0]) {
-        nudgeNode = adjNode;
+    if (Math.abs(mainPoint[0] - adjPoint[0]) > 8000) {
+      let nudgePoint: number[];
+      if (mainPoint[0] > adjPoint[0]) {
+        nudgePoint = mainPoint;
       } else {
-        nudgeNode = node;
+        nudgePoint = adjPoint;
       }
-      nudgeNode.loc[0] -= 16000;
+      nudgePoint[0] -= 16000;
     }
 
     this.alpha = {
-      x: firstNode.loc[0],
-      y: firstNode.loc[1]
+      x: mainPoint[0],
+      y: mainPoint[1]
     };
     this.omega = {
-      x: secondNode.loc[0],
-      y: secondNode.loc[1]
+      x: adjPoint[0],
+      y: adjPoint[1]
     };
 
     this.stroke = this.initializeStroke();
