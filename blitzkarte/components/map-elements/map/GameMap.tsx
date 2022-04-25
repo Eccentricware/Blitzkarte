@@ -8,11 +8,10 @@ import Blitzkontext from '../../../utils/Blitzkontext';
 
 interface Props {
   renderData: any;
-  viewBox: string;
   mapRef: any;
 }
 
-export const GameMap: FC<Props> = ({renderData, viewBox, mapRef}: Props) => {
+export const GameMap: FC<Props> = ({renderData, mapRef}: Props) => {
   const context = useContext(Blitzkontext);
 
   return (
