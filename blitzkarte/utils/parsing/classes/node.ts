@@ -93,6 +93,11 @@ export class NodePin {
       nameValid = false;
     }
 
+    if (nameSections[0].toUpperCase() !== this.province) {
+      this.errors.push(`Node name ${this.name} mismatches its province ${this.province}`);
+      nameValid = false;
+    }
+
     return nameValid;
   }
 
