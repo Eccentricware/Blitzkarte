@@ -7,7 +7,8 @@ export interface MapView {
       y: number,
       width: number,
       height: number,
-      center: number[]
+      center: number[],
+      lineWidth: number
     },
     current: {
       x: number,
@@ -22,6 +23,15 @@ export interface MapView {
       right: number,
       top: number,
       bottom: number
+    }
+  },
+  scaling: {
+    node: {
+      radius: number;
+    },
+    linkLine: {
+      width: number;
+      defaultWith: number;
     }
   },
   unitSizing: {
@@ -126,8 +136,16 @@ export const mapViewDefault = {
       top: 0,
       bottom: 10000
     }
-  }
-    ,
+  },
+  scaling: {
+    node: {
+      radius: 25
+    },
+    linkLine: {
+      width: 15,
+      defaultWidth: 15
+    }
+  },
   unitSizing: {
     army: {
       width: 291.05,

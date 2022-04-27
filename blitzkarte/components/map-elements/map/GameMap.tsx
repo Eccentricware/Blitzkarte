@@ -9,9 +9,10 @@ import Blitzkontext from '../../../utils/Blitzkontext';
 interface Props {
   renderData: any;
   mapRef: any;
+  refs: any;
 }
 
-export const GameMap: FC<Props> = ({renderData, mapRef}: Props) => {
+export const GameMap: FC<Props> = ({renderData, mapRef, refs}: Props) => {
   const context = useContext(Blitzkontext);
 
   return (
@@ -20,14 +21,17 @@ export const GameMap: FC<Props> = ({renderData, mapRef}: Props) => {
         return (
           <svg id="map" ref={mapRef} className="map" width="16000" height="10000"
             viewBox="0 0 16000 10000">
+            <g ref={refs}>
+
             <TerrainLayer terrainRenderData={renderData.terrain} />
             <CityLayer cityData={renderData.cities}/>
             <LabelLayer labelPinData={renderData.labels} labelLineData={renderData.labelLines} />
             { renderData.nodes.display ?
-              <NodeLayer nodeData={renderData.nodes}/>
+              <NodeLayer nodeData={renderData.nodes} nodeRefs={refs}/>
               :
               <UnitLayer unitData={renderData.units} />
             }
+            </g>
           </svg>
         )
       }}

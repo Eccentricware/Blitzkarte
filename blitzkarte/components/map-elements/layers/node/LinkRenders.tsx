@@ -12,23 +12,26 @@ interface LinkRenderProps {
       sea: boolean;
       air: boolean;
     };
-  }
+  },
+  lineRefs: any
 }
 
-export const LinkRenders: FC<LinkRenderProps> = ({links}: LinkRenderProps) => {
+export const LinkRenders: FC<LinkRenderProps> = ({links, lineRefs}: LinkRenderProps) => {
+  const defaultWidth = 15;
   return (
-    <g className="node-links">
+    <g className="node-links" >
       {
         links.display.land &&
         <g className="land-links">
           {
             links.land.map(link => {
               return (
-                <line key={link.name} transform={`translate(-16000 0)`}
+                <line key={link.name} className="link-line"
+                  transform={`translate(-16000 0)`}
                   x1={link.alpha.x} y1={link.alpha.y}
                   x2={link.omega.x} y2={link.omega.y}
                   stroke={link.stroke}
-                  strokeWidth={15}
+                  strokeWidth={defaultWidth}
                 />
               )
             })
@@ -36,11 +39,11 @@ export const LinkRenders: FC<LinkRenderProps> = ({links}: LinkRenderProps) => {
           {
             links.land.map(link => {
               return (
-                <line key={link.name}
+                <line key={link.name} className="link-line"
                   x1={link.alpha.x} y1={link.alpha.y}
                   x2={link.omega.x} y2={link.omega.y}
                   stroke={link.stroke}
-                  strokeWidth={15}
+                  strokeWidth={defaultWidth}
                 />
               )
             })
@@ -48,11 +51,12 @@ export const LinkRenders: FC<LinkRenderProps> = ({links}: LinkRenderProps) => {
           {
             links.land.map(link => {
               return (
-                <line key={link.name} transform={`translate(16000 0)`}
+                <line key={link.name} className="link-line"
+                  transform={`translate(16000 0)`}
                   x1={link.alpha.x} y1={link.alpha.y}
                   x2={link.omega.x} y2={link.omega.y}
                   stroke={link.stroke}
-                  strokeWidth={15}
+                  strokeWidth={defaultWidth}
                 />
               )
             })
@@ -65,11 +69,12 @@ export const LinkRenders: FC<LinkRenderProps> = ({links}: LinkRenderProps) => {
           {
             links.sea.map(link => {
               return (
-                <line key={link.name} transform={`translate(-16000 0)`}
+                <line key={link.name} className="link-line"
+                  transform={`translate(-16000 0)`}
                   x1={link.alpha.x} y1={link.alpha.y}
                   x2={link.omega.x} y2={link.omega.y}
                   stroke={link.stroke}
-                  strokeWidth={15}
+                  strokeWidth={defaultWidth}
                 />
               )
             })
@@ -77,11 +82,11 @@ export const LinkRenders: FC<LinkRenderProps> = ({links}: LinkRenderProps) => {
           {
             links.sea.map(link => {
               return (
-                <line key={link.name}
+                <line key={link.name} className="link-line"
                   x1={link.alpha.x} y1={link.alpha.y}
                   x2={link.omega.x} y2={link.omega.y}
                   stroke={link.stroke}
-                  strokeWidth={15}
+                  strokeWidth={defaultWidth}
                 />
               )
             })
@@ -89,11 +94,12 @@ export const LinkRenders: FC<LinkRenderProps> = ({links}: LinkRenderProps) => {
           {
             links.sea.map(link => {
               return (
-                <line key={link.name} transform={`translate(16000 0)`}
+                <line key={link.name} className="link-line"
+                  transform={`translate(16000 0)`}
                   x1={link.alpha.x} y1={link.alpha.y}
                   x2={link.omega.x} y2={link.omega.y}
                   stroke={link.stroke}
-                  strokeWidth={15}
+                  strokeWidth={defaultWidth}
                 />
               )
             })
@@ -106,11 +112,12 @@ export const LinkRenders: FC<LinkRenderProps> = ({links}: LinkRenderProps) => {
           {
             links.air.map(link => {
               return (
-                <line key={link.name} transform={`translate(-16000 0)`}
+                <line key={link.name} className="link-line"
+                  transform={`translate(-16000 0)`}
                   x1={link.alpha.x} y1={link.alpha.y}
                   x2={link.omega.x} y2={link.omega.y}
                   stroke={link.stroke}
-                  strokeWidth={15}
+                  strokeWidth={defaultWidth}
                 />
               )
             })
@@ -118,11 +125,11 @@ export const LinkRenders: FC<LinkRenderProps> = ({links}: LinkRenderProps) => {
           {
             links.air.map(link => {
               return (
-                <line key={link.name}
+                <line key={link.name} className="link-line"
                   x1={link.alpha.x} y1={link.alpha.y}
                   x2={link.omega.x} y2={link.omega.y}
                   stroke={link.stroke}
-                  strokeWidth={15}
+                  strokeWidth={defaultWidth}
                 />
               )
             })
@@ -130,11 +137,12 @@ export const LinkRenders: FC<LinkRenderProps> = ({links}: LinkRenderProps) => {
           {
             links.air.map(link => {
               return (
-                <line key={link.name} transform={`translate(16000 0)`}
+                <line key={link.name} className="link-line"
+                  transform={`translate(16000 0)`}
                   x1={link.alpha.x} y1={link.alpha.y}
                   x2={link.omega.x} y2={link.omega.y}
                   stroke={link.stroke}
-                  strokeWidth={15}
+                  strokeWidth={defaultWidth}
                 />
               )
             })
