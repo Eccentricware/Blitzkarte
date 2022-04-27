@@ -14,13 +14,18 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
   const [zoomed, setZoomed] = useState(false);
   const [atTop, setAtTop] = useState(true);
   const [atBottom, setAtBottom] = useState(true);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const mapRef = React.createRef<SVGSVGElement>();
-  const q = gsap.utils.selector(containerRef);
+
   const mapCtx = useContext(Blitzkontext);
+
+  const mapRef = React.createRef<SVGSVGElement>();
+  const llRef = React.createRef<SVGLineElement>();
+  const s = gsap.utils.selector(llRef);
+  const ease: string = 'power2.inOut';
 
   const zoomIn = () => {
     const view = mapCtx.map.view;
+    const scaling = mapCtx.map.scaling;
+
     view.current.zoom *= view.zoomRate;
 
     const endWidth = view.default.width * view.current.zoom;
@@ -28,13 +33,27 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
     const endX = view.current.center[0] - (endWidth / 2);
     const endY = view.current.center[1] - (endHeight / 2);
 
-
     const endViewBox = `${endX} ${endY} ${endWidth} ${endHeight}`;
+
+    const endLineWidth = scaling.linkLine.width * view.current.zoom;
+    const endNodeRadius = scaling.node.radius * view.current.zoom;
 
     gsap.to(mapRef.current, {
       attr: { viewBox: endViewBox },
-      ease: 'power2.inOut',
+      ease: ease,
       duration: 1
+    });
+
+    gsap.to(s('.link-line'), {
+      attr: { 'stroke-width': endLineWidth },
+      ease: ease,
+      duration: 0
+    });
+
+    gsap.to(s('.node'), {
+      attr: { 'r': endNodeRadius },
+      ease: ease,
+      duration: 0
     });
 
     view.current.width = endWidth;
@@ -50,6 +69,7 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
   const zoomOut = () => {
     const view = mapCtx.map.view;
     const constraints = mapCtx.map.view.constraints;
+    const scaling = mapCtx.map.scaling;
 
     if (view.current.zoom === 1) {
       return;
@@ -65,6 +85,9 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
 
     const endWidth: number = view.default.width * view.current.zoom;
     const endHeight: number = view.default.height * view.current.zoom;
+
+    const endLineWidth = scaling.linkLine.width * view.current.zoom;
+    const endNodeRadius = scaling.node.radius * view.current.zoom;
 
     let startX: number = view.current.x;
     let endX: number = view.current.center[0] - (endWidth / 2);
@@ -112,10 +135,22 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
       { attr: { viewBox: startView } },
       {
         attr: { viewBox: endView },
-        ease: 'power2.inOut',
+        ease: ease,
         duration: 1
       }
     );
+
+    gsap.to(s('.link-line'), {
+      attr: { 'stroke-width': endLineWidth },
+      ease: ease,
+      duration: 0
+    });
+
+    gsap.to(s('.node'), {
+      attr: { 'r': endNodeRadius },
+      ease: ease,
+      duration: 0
+    });
 
     view.current.x = endX;
     view.current.y = endY;
@@ -144,7 +179,7 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
 
     gsap.to(mapRef.current, {
       attr: { viewBox: endViewBox },
-      ease: 'power2.inOut',
+      ease: ease,
       duration: 1
     });
 
@@ -175,7 +210,7 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
 
     gsap.to(mapRef.current, {
       attr: { viewBox: endViewBox },
-      ease: 'power2.inOut',
+      ease: ease,
       duration: 1
     });
 
@@ -204,7 +239,7 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
       { attr: { viewBox: startView } },
       {
         attr: { viewBox: endView },
-        ease: 'power2.inOut',
+        ease: ease,
         duration: 1
       }
     );
@@ -232,7 +267,7 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
       { attr: { viewBox: startView } },
       {
         attr: { viewBox: endView },
-        ease: 'power2.inOut',
+        ease: ease,
         duration: 1
       }
     );
@@ -240,6 +275,7 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
 
   const reset = () => {
     const view = mapCtx.map.view.current;
+    const scaling = mapCtx.map.scaling;
 
     let startX = view.x;
 
@@ -260,10 +296,22 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
       { attr: { viewBox: startView } },
       {
         attr: { viewBox: endView },
-        ease: 'power2.inOut',
+        ease: ease,
         duration: 1
       }
     );
+
+    gsap.to(s('.link-line'), {
+      attr: { 'stroke-width': scaling.linkLine.width },
+      ease: ease,
+      duration: 0
+    });
+
+    gsap.to(s('.node'), {
+      attr: { 'r': scaling.node.radius },
+      ease: ease,
+      duration: 0
+    });
 
     view.x = 0;
     view.y = 0;
@@ -292,9 +340,9 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
 
 
   return (
-    <div className="map-container" ref={containerRef}>
+    <div className="map-container">
       <svg id="map-container" className="map-container" width="1488" height="930" viewBox="0 0 16000 10000">
-        <GameMap renderData={renderData} mapRef={mapRef}/>
+        <GameMap renderData={renderData} mapRef={mapRef} refs={llRef}/>
         <g transform='translate(14500 8500)'>
           <ViewControls viewOps={viewOps}/>
         </g>

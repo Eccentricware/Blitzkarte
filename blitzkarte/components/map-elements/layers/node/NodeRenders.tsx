@@ -17,6 +17,8 @@ interface NodeRenderProps {
 }
 
 export const NodeRenders: FC<NodeRenderProps> = ({pins}: NodeRenderProps) => {
+  const defaultRadius = 22.5;
+
   return (
     <g className="node-render">
       {
@@ -24,25 +26,25 @@ export const NodeRenders: FC<NodeRenderProps> = ({pins}: NodeRenderProps) => {
         <g className="land-pins">
           {
             pins.land.map(node => {
-              return <circle id={node.name} key={node.name}
+              return <circle id={node.name} key={node.name} className="node"
                 cx={node.loc[0] - 16000} cy={node.loc[1]}
-                fill={node.fill} r="22.5"
+                fill={node.fill} r={defaultRadius}
               />
             })
           }
           {
             pins.land.map(node => {
-              return <circle id={node.name} key={node.name}
+              return <circle id={node.name} key={node.name} className="node"
                 cx={node.loc[0]} cy={node.loc[1]}
-                fill={node.fill} r="22.5"
+                fill={node.fill} r={defaultRadius}
               />
             })
           }
           {
             pins.land.map(node => {
-              return <circle id={node.name} key={node.name}
+              return <circle id={node.name} key={node.name} className="node"
                 cx={node.loc[0] + 16000} cy={node.loc[1]}
-                fill={node.fill} r="22.5"
+                fill={node.fill} r={defaultRadius}
               />
             })
           }
@@ -53,25 +55,25 @@ export const NodeRenders: FC<NodeRenderProps> = ({pins}: NodeRenderProps) => {
         <g className="sea-pins">
           {
             pins.sea.map(node => {
-              return <circle id={node.name} key={node.name}
+              return <circle id={node.name} key={node.name} className="node"
                 cx={node.loc[0] - 16000} cy={node.loc[1]}
-                fill={node.fill} r="22.5"
+                fill={node.fill} r={defaultRadius}
               />
             })
           }
           {
             pins.sea.map(node => {
-              return <circle id={node.name} key={node.name}
+              return <circle id={node.name} key={node.name} className="node"
                 cx={node.loc[0]} cy={node.loc[1]}
-                fill={node.fill} r="22.5"
+                fill={node.fill} r={defaultRadius}
               />
             })
           }
           {
             pins.sea.map(node => {
-              return <circle id={node.name} key={node.name}
+              return <circle id={node.name} key={node.name} className="node"
                 cx={node.loc[0] + 16000} cy={node.loc[1]}
-                fill={node.fill} r="22.5"
+                fill={node.fill} r={defaultRadius}
               />
             })
           }
@@ -82,25 +84,25 @@ export const NodeRenders: FC<NodeRenderProps> = ({pins}: NodeRenderProps) => {
         <g className="air-pins">
           {
             pins.air.map(node => {
-              return <circle id={node.name} key={node.name}
+              return <circle id={node.name} key={node.name} className="node"
                 cx={node.loc[0] - 16000} cy={node.loc[1]}
-                fill={node.fill} r="22.5"
+                fill={node.fill} r={defaultRadius}
               />
             })
           }
           {
             pins.air.map(node => {
-              return <circle id={node.name} key={node.name}
+              return <circle id={node.name} key={node.name} className="node"
                 cx={node.loc[0]} cy={node.loc[1]}
-                fill={node.fill} r="22.5"
+                fill={node.fill} r={defaultRadius}
               />
             })
           }
           {
             pins.air.map(node => {
-              return <circle id={node.name} key={node.name}
+              return <circle id={node.name} key={node.name} className="node"
                 cx={node.loc[0] + 16000} cy={node.loc[1]}
-                fill={node.fill} r="22.5"
+                fill={node.fill} r={defaultRadius}
               />
             })
           }
@@ -111,25 +113,25 @@ export const NodeRenders: FC<NodeRenderProps> = ({pins}: NodeRenderProps) => {
         <g className="events-pins">
           {
             pins.event.map(node => {
-              return <circle id={node.name} key={node.name}
+              return <circle id={node.name} key={node.name} className="node"
                 cx={node.loc[0] - 16000} cy={node.loc[1]}
-                fill={node.fill} r="22.5"
+                fill={node.fill} r={defaultRadius}
               />
             })
           }
           {
             pins.event.map(node => {
-              return <circle id={node.name} key={node.name}
+              return <circle id={node.name} key={node.name} className="node"
                 cx={node.loc[0]} cy={node.loc[1]}
-                fill={node.fill} r="22.5"
+                fill={node.fill} r={defaultRadius}
               />
             })
           }
           {
             pins.event.map(node => {
-              return <circle id={node.name} key={node.name}
+              return <circle id={node.name} key={node.name} className="node"
                 cx={node.loc[0] + 16000} cy={node.loc[1]}
-                fill={node.fill} r="22.5"
+                fill={node.fill} r={defaultRadius}
               />
             })
           }
