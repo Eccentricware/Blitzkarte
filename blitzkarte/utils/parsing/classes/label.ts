@@ -5,17 +5,17 @@ export class LabelPin {
   type!: string;
   text!: string | undefined;
   size: number = 100;
-  fill?: string;
+  fill?: 'black';
   province!: string;
   loc!: number[];
   valid: boolean;
   errors: string[] = [];
 
   constructor(pin: Pin, provinceType: string) {
-    this.type = pin.type ? pin.type : this.setType(provinceType);
+    this.text = pin.text ? pin.text : pin.province;
+    this.type = this.setType(provinceType);
     this.setSizeAndColor();
 
-    this.text = pin.text ? pin.text : pin.province;
     this.name = `${pin.province}_label`;
     if (pin.number) {
       this.name += `_${pin.number}`;
@@ -29,23 +29,21 @@ export class LabelPin {
   setType(provinceType: string): string {
     let landTypes: string[] = ['coast', 'inland', 'island', 'pole'];
     if (landTypes.includes(provinceType)) {
-      return 'L';
+      return 'land';
+    } else if (provinceType === 'sea') {
+      return 'sea';
     } else {
-      return 'S';
+      return 'coast';
     }
   }
 
   setSizeAndColor() {
-    if (this.type === 'c' || this.type === 'C') {
+    if (this.type === 'coast') {
       this.size = 64;
-    } else {
-      this.size = 100;
     }
 
-    if (this.type === 's' || this.type === 'S') {
+    if (this.type === 'sea') {
       this.fill = 'white';
-    } else {
-      this.fill = 'black';
     }
   }
 
@@ -57,12 +55,18 @@ export class LabelPin {
   }
 
   validateType(): boolean {
-    const validLabelTypes: string[] = ['s', 'S', 'l', 'L', 'c', 'C'];
+    const validLabelTypes: string[] = ['land', 'sea', 'coast'];
 
-    if (!validLabelTypes.includes(this.type)) {
-      this.errors.push(`Invalid Label Type: ${this.name}`);
+    if (!this.type) {
+      this.errors.push(`Label ${this.name} has no label type`);
       return false;
     }
+
+    if (!validLabelTypes.includes(this.type)) {
+      this.errors.push(`${this.name} has invalid label type: ${this.type}`);
+      return false;
+    }
+
     return true;
   }
 

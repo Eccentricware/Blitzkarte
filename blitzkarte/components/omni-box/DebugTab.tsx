@@ -73,14 +73,39 @@ export const DebugTab: FC<DebugProps> = ({debug}: DebugProps) => {
           Show Events
         </div>
         <div>
-          {debug.errors.length} Errors:
-          <p className="errors">
           {
-            debug.errors.map((error: string, key: number) => {
-              return <React.Fragment key={key}>-{error}<br /></React.Fragment>
-            })
+            debug.critical.length > 0 &&
+            <p className="errors">
+              <b>{debug.critical.length} Critical:</b><br/>
+              {
+                debug.critical.map((critical: string, key: number) => {
+                  return <React.Fragment key={key}>-{critical}<br /></React.Fragment>
+                })
+              }
+            </p>
           }
-          </p>
+          {
+            debug.errors.length > 0 &&
+            <p className="errors">
+              <b>{debug.errors.length} Errors:</b><br/>
+              {
+                debug.errors.map((error: string, key: number) => {
+                  return <React.Fragment key={key}>-{error}<br /></React.Fragment>
+                })
+              }
+            </p>
+          }
+          {
+            debug.warnings.length > 0 &&
+            <p className="errors">
+              <b>{debug.warnings.length} Warnings:</b><br/>
+              {
+                debug.warnings.map((warning: string, key: number) => {
+                  return <React.Fragment key={key}>-{warning}<br /></React.Fragment>
+                })
+              }
+            </p>
+          }
         </div>
     </div>
   )

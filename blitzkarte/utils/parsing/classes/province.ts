@@ -24,7 +24,7 @@ interface UnitApproval {
 
 export class Province {
   name!: string;
-  type: string = '';
+  type: string | undefined;
   city: string | undefined;
   fullName: string | undefined;
   country: string | undefined;
@@ -49,6 +49,7 @@ export class Province {
   unit: UnitApproval[] = [];
   valid: boolean;
   approved: boolean = true;
+  warnings: string[] = [];
   errors: string[] = [];
 
   // Abbreviations
@@ -59,6 +60,7 @@ export class Province {
 
   constructor(provinceString: string) {
     let properties = provinceString.split(' ');
+    let validProperties: string[] = ['n', 'name', 'f', 'fullName', 't', 'type', 'c', 'country'];
 
     if (properties.length >= 3) {
       let data: string = properties[2];
@@ -66,6 +68,9 @@ export class Province {
 
       dataArray.forEach(property => {
         let properKey: string = property.split('=')[0];
+        if (!validProperties.includes(properKey)) {
+          this.warnings.push(`Invalid property ${properKey} in ${this.name ? this.name : provinceString}`);
+        }
         let value: string = property.split('=')[1];
         this[properKey] = value;
       });
@@ -79,6 +84,10 @@ export class Province {
       this.valid = this.validate(provinceString);
       if (this.valid && this.fullName) {
         this.fullName = this.fullName.replace('_', ' ');
+      }
+      if (properties.length > 3) {
+        this.errors.push(`Spaces detected defining province. Use _ instead: ${this.name ? this.name : provinceString}`);
+        this.valid = false;
       }
 
     } else {
@@ -163,6 +172,7 @@ export class Province {
       }
     } else {
       this.errors.push(`No Province Type: ${provinceString}`);
+      return false;
     }
 
     return true;
@@ -184,6 +194,11 @@ export class Province {
 
   approveTerrain(): boolean {
     let terrainApproved: boolean = true;
+
+    if (this.type === undefined) {
+      this.errors.push(`${this.name} has no type`);
+      return false;
+    }
 
     let expectsLandTerrain: string[] = ['coast', 'impassible', 'inland', 'island'];
     if (expectsLandTerrain.includes(this.type) && this.terrainApproval.land.length === 0) {
@@ -215,9 +230,12 @@ export class Province {
   approveNodes(): boolean {
     let nodesApproved: boolean = true;
 
+    if (this.type === undefined) {
+      this.errors.push(`${this.name} has no type`);
+      return false;
+    }
+
     if (this.type !== 'decorative') {
-
-
       if (this.nodeApproval.event.length === 0) {
         this.errors.push(`${this.type} province ${this.name} has no event node`);
         nodesApproved = false;
@@ -296,6 +314,11 @@ export class Province {
   approveCity(): boolean {
     let cityApproved: boolean = true;
 
+    if (this.type === undefined) {
+      this.errors.push(`${this.name} has no type`);
+      return false;
+    }
+
     let noCityExpected: string[] = ['docorative', 'impassible', 'pole', 'sea'];
     if (noCityExpected.includes(this.type) && this.cities.length > 0) {
       this.errors.push(`${this.type} province should not have a city`);
@@ -312,6 +335,11 @@ export class Province {
 
   approveUnit(): boolean {
     let unitApproved: boolean = true;
+
+    if (this.type === undefined) {
+      this.errors.push(`${this.name} has no type`);
+      return false;
+    }
 
     if (this.type === 'decorative' && this.unit.length > 0) {
       this.errors.push(`${this.type} province ${this.name} should never have a unit. Make province non-decorative or fix the unit's node`);
