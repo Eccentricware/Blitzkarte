@@ -34,6 +34,7 @@ export interface MapView {
       defaultWith: number;
     },
     label: {
+      size: number,
       land: number,
       sea: number,
       coast: number
@@ -151,8 +152,9 @@ export const mapViewDefault = {
       defaultWidth: 15
     },
     label: {
+      size: 100,
       land: 100,
-      S: 100,
+      sea: 100,
       coast: 64
     }
   },

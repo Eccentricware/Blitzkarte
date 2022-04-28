@@ -37,6 +37,7 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
 
     const endLineWidth = scaling.linkLine.width * view.current.zoom;
     const endNodeRadius = scaling.node.radius * view.current.zoom;
+    const endLabelSize = scaling.label.size * view.current.zoom;
 
     gsap.to(mapRef.current, {
       attr: { viewBox: endViewBox },
@@ -54,6 +55,12 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
       attr: { 'r': endNodeRadius },
       ease: ease,
       duration: 0
+    });
+
+    gsap.to(s('.label'), {
+      attr: { 'font-size': endLabelSize },
+      ease: ease,
+      duration: 1
     });
 
     view.current.width = endWidth;
@@ -88,6 +95,7 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
 
     const endLineWidth = scaling.linkLine.width * view.current.zoom;
     const endNodeRadius = scaling.node.radius * view.current.zoom;
+    const endLabelSize = scaling.label.size * view.current.zoom;
 
     let startX: number = view.current.x;
     let endX: number = view.current.center[0] - (endWidth / 2);
@@ -150,6 +158,12 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
       attr: { 'r': endNodeRadius },
       ease: ease,
       duration: 0
+    });
+
+    gsap.to(s('.label'), {
+      attr: { 'font-size': endLabelSize },
+      ease: ease,
+      duration: 1
     });
 
     view.current.x = endX;
@@ -304,11 +318,17 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
     gsap.to(s('.link-line'), {
       attr: { 'stroke-width': scaling.linkLine.width },
       ease: ease,
-      duration: 0
+      duration: 1
     });
 
     gsap.to(s('.node'), {
       attr: { 'r': scaling.node.radius },
+      ease: ease,
+      duration: 0
+    });
+
+    gsap.to(s('.label'), {
+      attr: { 'font-size': scaling.label.size },
       ease: ease,
       duration: 0
     });
