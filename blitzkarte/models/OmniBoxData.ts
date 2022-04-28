@@ -10,7 +10,9 @@ export interface OmniBoxData {
   debug: {
     display: {},
     functions: {},
-    errors: string[]
+    warnings: string[],
+    errors: string[],
+    critical: string[]
   }
 }
 
@@ -24,6 +26,8 @@ export const initialOmniBoxData: OmniBoxData = {
   debug: {
     display: {},
     functions: {},
-    errors: []
+    warnings: [],
+    errors: [],
+    critical: []
   }
 }

@@ -32,6 +32,11 @@ export interface MapView {
     linkLine: {
       width: number;
       defaultWith: number;
+    },
+    label: {
+      land: number,
+      sea: number,
+      coast: number
     }
   },
   unitSizing: {
@@ -144,6 +149,11 @@ export const mapViewDefault = {
     linkLine: {
       width: 15,
       defaultWidth: 15
+    },
+    label: {
+      land: 100,
+      S: 100,
+      coast: 64
     }
   },
   unitSizing: {

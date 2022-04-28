@@ -22,15 +22,14 @@ export const GameMap: FC<Props> = ({renderData, mapRef, refs}: Props) => {
           <svg id="map" ref={mapRef} className="map" width="16000" height="10000"
             viewBox="0 0 16000 10000">
             <g ref={refs}>
-
-            <TerrainLayer terrainRenderData={renderData.terrain} />
-            <CityLayer cityData={renderData.cities}/>
-            <LabelLayer labelPinData={renderData.labels} labelLineData={renderData.labelLines} />
-            { renderData.nodes.display ?
-              <NodeLayer nodeData={renderData.nodes} nodeRefs={refs}/>
-              :
-              <UnitLayer unitData={renderData.units} />
-            }
+              <TerrainLayer terrainRenderData={renderData.terrain} />
+              <CityLayer cityData={renderData.cities}/>
+              <LabelLayer labelPinData={renderData.labels} labelLineData={renderData.labelLines} />
+              { renderData.nodes.display ?
+                <NodeLayer nodeData={renderData.nodes} nodeRefs={refs}/>
+                :
+                <UnitLayer unitData={renderData.units} />
+              }
             </g>
           </svg>
         )

@@ -72,7 +72,9 @@ export class Parser {
     this.validateProvinces();
     this.sortCountries();
 
+    initialOmniBoxData.debug.warnings = this.warnings;
     initialOmniBoxData.debug.errors = this.errors;
+    initialOmniBoxData.debug.critical = this.critical;
 
     // Feedback
     console.log('Provinces: ', this.provinces);
@@ -121,6 +123,7 @@ export class Parser {
       this.activeProvince = true;
       this.registerElement(province, 'provinces');
     } else {
+      this.collectWarnings(province.warnings);
       this.collectErrors(province.errors);
     }
   }
@@ -166,7 +169,7 @@ export class Parser {
       if (newNode.warnings.length > 0) {
         this.collectWarnings(newNode.warnings);
       }
-    } else if (newPin.pinType === 'label') {
+    } else if (newPin.pinType === 'label' && province.type) {
       let newLabel = new LabelPin(newPin, province.type);
       if (newLabel.valid) {
         this.registerElement(newLabel, 'labels', ['labels']);
@@ -255,17 +258,19 @@ export class Parser {
     return this[elementType][elementIndex];
   }
 
-  collectErrors(errors: string[]) {
-    errors.forEach(error => {
-      this.errors.push(error);
-    });
-  }
 
   collectWarnings(warnings: string[]) {
     warnings.forEach(warning => {
       this.warnings.push(warning);
     });
   }
+
+  collectErrors(errors: string[]) {
+    errors.forEach(error => {
+      this.errors.push(error);
+    });
+  }
+
 
   terrainReferences() {
     this.terrain.forEach(terrain => {
@@ -392,6 +397,7 @@ export class Parser {
     this.provinces.forEach(province => {
       province.attemptApproval();
       if (!province.approved) {
+        this.collectWarnings(province.warnings);
         this.collectErrors(province.errors);
       }
     });
