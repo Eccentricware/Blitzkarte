@@ -134,6 +134,8 @@ export class Province {
       case 'd':
         this.type = 'decorative';
         return;
+      case 'p':
+        this.type = 'pole'
     }
   }
 
