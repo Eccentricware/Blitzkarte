@@ -19,7 +19,7 @@ const GameParserPage: NextPage = () => {
   const [showLandNetwork, setShowLandNetwork] = useState(true);
   const [showSeaNetwork, setShowSeaNetwork] = useState(true);
   const [showAirNetwork, setShowAirNetwork] = useState(true);
-  const [showEventNodes, setShowEventNodes] = useState(false);
+  const [showEventNodes, setShowEventNodes] = useState(true);
   const [fileString, setFileString] = useState('');
 
   const displayChecks: any = {
@@ -31,7 +31,15 @@ const GameParserPage: NextPage = () => {
     event: showEventNodes
   }
 
-  const functions: any = {
+  const inputData: any = {
+    fileString: fileString
+  };
+
+  const inputFunctions: any = {
+    triggerParse: triggerParse
+  }
+
+  const debugFunctions: any = {
     triggerParse: triggerParse,
     toggleNodes: toggleNodes,
     toggleLand: toggleLand,
@@ -40,8 +48,10 @@ const GameParserPage: NextPage = () => {
     toggleEvent: toggleEvent
   }
 
+  initialOmniBoxData.input.functions = inputFunctions;
+  initialOmniBoxData.input.data = inputData;
   initialOmniBoxData.debug.display = displayChecks;
-  initialOmniBoxData.debug.functions = functions;
+  initialOmniBoxData.debug.functions = debugFunctions;
 
   let parser: Parser = new Parser();
 

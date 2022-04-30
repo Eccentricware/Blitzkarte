@@ -13,6 +13,10 @@ export interface OmniBoxData {
     warnings: string[],
     errors: string[],
     critical: string[]
+  },
+  input: {
+    functions: {}
+    data: {}
   }
 }
 
@@ -29,5 +33,9 @@ export const initialOmniBoxData: OmniBoxData = {
     warnings: [],
     errors: [],
     critical: []
+  },
+  input: {
+    functions: {},
+    data: {}
   }
 }
