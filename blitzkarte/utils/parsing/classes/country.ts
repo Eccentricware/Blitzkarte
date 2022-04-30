@@ -19,6 +19,7 @@ export class Country {
   valid: boolean;
   approved: boolean = true;
   errors: string[] = [];
+  critical: string[] = [];
 
   constructor(pin: Pin) {
     this.name = this.setName(pin);
@@ -114,10 +115,10 @@ export class Country {
   approve() {
     this.setAdjustments();
     if (this.adjustments > 0) {
-      this.errors.push(`${this.name} has ${this.cities.length} cities but ${this.units.length}`);
+      this.critical.push(`${this.name} has ${this.cities.length} cities but ${this.units.length} units`);
       this.approved = false;
     } else if (this.adjustments < 0) {
-      this.errors.push(`${this.name} has ${this.cities.length} cities but ${this.units.length}`);
+      this.critical.push(`${this.name} has ${this.cities.length} cities but ${this.units.length} units`);
       this.approved = false;
     }
   }
