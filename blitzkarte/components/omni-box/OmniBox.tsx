@@ -1,6 +1,7 @@
 import { Box, Tab, Tabs } from "@mui/material";
 import React, { FC } from "react";
 import { OmniBoxData } from "../../models/OmniBoxData";
+import { InputTab } from "./InputTab";
 import { DebugTab } from "./DebugTab";
 import { StatsTable } from "./StatsTable";
 
@@ -37,12 +38,20 @@ export const OmniBox: FC<OmniProps> = ({omniBoxData}: OmniProps) => {
     <div className="omni-box">
       <Box>
         <Tabs value={panel} onChange={handleChange} centered>
-          <Tab label="Creation"/>
+          <Tab label="Input"/>
+          <Tab label="Debug"/>
           <Tab label="Stats"/>
         </Tabs>
       </Box>
-      <TabPanel value={panel} index={0}><DebugTab debug={omniBoxData.debug} /></TabPanel>
-      <TabPanel value={panel} index={1}><StatsTable stats={omniBoxData.stats} /></TabPanel>
+      <TabPanel value={panel} index={0}>
+        <InputTab input={omniBoxData.input} />
+      </TabPanel>
+      <TabPanel value={panel} index={1}>
+        <DebugTab debug={omniBoxData.debug} />
+      </TabPanel>
+      <TabPanel value={panel} index={2}>
+        <StatsTable stats={omniBoxData.stats} />
+      </TabPanel>
     </div>
   )
 }
