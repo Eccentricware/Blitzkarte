@@ -70,6 +70,7 @@ export class Parser {
     this.unitReferences();
     this.provinceReferences();
     this.validateProvinces();
+    this.validateCountries();
     this.sortCountries();
 
     initialOmniBoxData.debug.warnings = this.warnings;
@@ -345,7 +346,7 @@ export class Parser {
           if (province.cities.length === 1) {
             let city: City = this.referenceElement('cities', province.cities[0]);
             if (city.type === 's' || city.type === 'c') {
-              country.cities++;
+              country.cities.push(city.name);
             }
           }
         } else {
@@ -399,6 +400,15 @@ export class Parser {
       if (!province.approved) {
         this.collectWarnings(province.warnings);
         this.collectErrors(province.errors);
+      }
+    });
+  }
+
+  validateCountries() {
+    this.countries.forEach(country => {
+      country.approve();
+      if (!country.approved) {
+        this.collectErrors(country.errors);
       }
     });
   }
