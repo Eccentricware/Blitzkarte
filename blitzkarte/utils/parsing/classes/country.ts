@@ -13,11 +13,13 @@ export class Country {
   bankedBuilds: number;
   provinces: string[] = [];
   votes: number = 1;
-  cities: number = 0;
+  cities: string[] = [];
   units: string[] = [];
   adjustments: number = 0;
   valid: boolean;
+  approved: boolean = true;
   errors: string[] = [];
+  critical: string[] = [];
 
   constructor(pin: Pin) {
     this.name = this.setName(pin);
@@ -108,5 +110,20 @@ export class Country {
       return false;
     }
     return true;
+  }
+
+  approve() {
+    this.setAdjustments();
+    if (this.adjustments > 0) {
+      this.critical.push(`${this.name} has ${this.cities.length} cities but ${this.units.length} units`);
+      this.approved = false;
+    } else if (this.adjustments < 0) {
+      this.critical.push(`${this.name} has ${this.cities.length} cities but ${this.units.length} units`);
+      this.approved = false;
+    }
+  }
+
+  setAdjustments() {
+    this.adjustments = this.cities.length - this.units.length;
   }
 }

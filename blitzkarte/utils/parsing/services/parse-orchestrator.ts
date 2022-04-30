@@ -42,7 +42,7 @@ export class Parser {
   activeProvince: boolean = false;
   warnings: string[] = [];
   errors: string[] = [];
-  critical: string[] = [];
+  criticals: string[] = [];
   finalStatusCheck: FinalStatusCheck = initialFinalStatusCheck;
 
 
@@ -70,6 +70,7 @@ export class Parser {
     this.unitReferences();
     this.provinceReferences();
     this.validateProvinces();
+    this.validateCountries();
     this.sortCountries();
 
     initialOmniBoxData.debug.warnings = this.warnings;
@@ -234,7 +235,7 @@ export class Parser {
 
   registerElement(element: any, elementType: string, renderPath?: string[]) {
     if (this.nameToIndexLibraries[elementType][element.name]) {
-      this.critical.push(`ELEMENT ${element.name} IS ALREADY REGISTERED!`);
+      this.criticals.push(`ELEMENT ${element.name} IS ALREADY REGISTERED!`);
     }
     this[elementType].push(element);
     this.nameToIndexLibraries[elementType][element.name] = this[elementType].length - 1;
@@ -268,6 +269,12 @@ export class Parser {
   collectErrors(errors: string[]) {
     errors.forEach(error => {
       this.errors.push(error);
+    });
+  }
+
+  collectCriticals(criticals: string[]) {
+    criticals.forEach(critical => {
+      this.criticals.push(critical);
     });
   }
 
@@ -345,7 +352,7 @@ export class Parser {
           if (province.cities.length === 1) {
             let city: City = this.referenceElement('cities', province.cities[0]);
             if (city.type === 's' || city.type === 'c') {
-              country.cities++;
+              country.cities.push(city.name);
             }
           }
         } else {
@@ -399,6 +406,16 @@ export class Parser {
       if (!province.approved) {
         this.collectWarnings(province.warnings);
         this.collectErrors(province.errors);
+      }
+    });
+  }
+
+  validateCountries() {
+    this.countries.forEach(country => {
+      country.approve();
+      if (!country.approved) {
+        this.collectErrors(country.errors);
+        this.collectCriticals(country.critical);
       }
     });
   }

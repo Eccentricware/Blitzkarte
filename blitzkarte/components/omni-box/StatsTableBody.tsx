@@ -13,7 +13,7 @@ export const StatsTableBody: FC<StatsTableRow> = ({countries}: StatsTableRow) =>
           return (
             <tr key={country.name}>
               <td>{country.name} ({country.rank.toUpperCase()})</td>
-              <td>{country.cities}</td>
+              <td>{country.cities.length}</td>
               <td>{country.votes}</td>
               <td>{country.bankedBuilds}</td>
               <td>{country.nuke}</td>
