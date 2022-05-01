@@ -5,12 +5,6 @@ interface DebugProps {
 }
 
 export const DebugTab: FC<DebugProps> = ({debug}: DebugProps) => {
-   const handleDataInput = (fileString: string) => {
-
-    debug.functions.triggerParse(fileString);
-
-  }
-
   const handleNodeDisplayChange = () => {
     debug.functions.toggleNodes();
   }
@@ -65,11 +59,11 @@ export const DebugTab: FC<DebugProps> = ({debug}: DebugProps) => {
       </div>
       <div>
         {
-          debug.critical.length > 0 &&
+          debug.criticals.length > 0 &&
           <p className="errors">
-            <b>{debug.critical.length} Critical:</b><br/>
+            <b>{debug.criticals.length} Critical:</b><br/>
             {
-              debug.critical.map((critical: string, key: number) => {
+              debug.criticals.map((critical: string, key: number) => {
                 return <React.Fragment key={key}>-{critical}<br /></React.Fragment>
               })
             }

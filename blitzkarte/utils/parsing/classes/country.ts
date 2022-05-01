@@ -115,10 +115,10 @@ export class Country {
   approve() {
     this.setAdjustments();
     if (this.adjustments > 0) {
-      this.critical.push(`${this.name} has ${this.cities.length} cities but ${this.units.length} units`);
+      this.critical.push(`${this.name} has ${this.cities.length} ${this.cities.length === 1 ? 'city' : 'cities'} but ${this.units.length} ${this.units.length === 1 ? 'unit' : 'units'}`);
       this.approved = false;
     } else if (this.adjustments < 0) {
-      this.critical.push(`${this.name} has ${this.cities.length} cities but ${this.units.length} units`);
+      this.critical.push(`${this.name} has ${this.cities.length} ${this.cities.length === 1 ? 'city' : 'cities'} but ${this.units.length} ${this.units.length === 1 ? 'unit' : 'units'}`);
       this.approved = false;
     }
   }

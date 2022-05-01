@@ -278,7 +278,7 @@ export class Province {
       }
 
       let expectsNoSeaNode: string[] = ['decorative', 'impassible', 'inland'];
-      if (expectsNoSeaNode.includes(this.type) && this.nodeApproval.land.length > 0) {
+      if (expectsNoSeaNode.includes(this.type) && this.nodeApproval.sea.length > 0) {
         this.errors.push(`${this.type} province ${this.name} should not have a sea node`);
         nodesApproved = false;
       }
