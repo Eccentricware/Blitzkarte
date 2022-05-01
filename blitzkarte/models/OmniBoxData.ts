@@ -12,7 +12,7 @@ export interface OmniBoxData {
     functions: {},
     warnings: string[],
     errors: string[],
-    critical: string[]
+    criticals: string[]
   },
   input: {
     functions: {}
@@ -32,7 +32,7 @@ export const initialOmniBoxData: OmniBoxData = {
     functions: {},
     warnings: [],
     errors: [],
-    critical: []
+    criticals: []
   },
   input: {
     functions: {},

@@ -75,7 +75,7 @@ export class Parser {
 
     initialOmniBoxData.debug.warnings = this.warnings;
     initialOmniBoxData.debug.errors = this.errors;
-    initialOmniBoxData.debug.critical = this.critical;
+    initialOmniBoxData.debug.criticals = this.criticals;
 
     // Feedback
     console.log('Provinces: ', this.provinces);
@@ -89,7 +89,7 @@ export class Parser {
     console.log('Render Elements:', this.renderElements);
     console.log('Warnings:', this.warnings);
     console.log('Errors:', this.errors);
-    console.log('Critical:', this.critical);
+    console.log('Critical:', this.criticals);
 
   }
 
@@ -300,7 +300,7 @@ export class Parser {
       province.nodeApproval[node.type].push(node.name);
       if (node.adj && node.adj[0] !== 'none' && node.type !== 'event') {
         node.adj.forEach(adjNodeName => {
-          if (!this.nameToIndexLibraries.nodes[adjNodeName]) {
+          if (this.nameToIndexLibraries.nodes[adjNodeName] === undefined) {
             this.errors.push(`${node.name}'s adjacent node ${adjNodeName} does not exist!`);
             node.revokeApproval();
           } else {

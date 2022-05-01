@@ -14,8 +14,8 @@ export class NodePin {
   approved: boolean = true;
 
   constructor(pin: Pin) {
-    this.name = pin.name;
     this.province = pin.province;
+    this.name = this.processName(pin.name);
     this.type = pin.type;
     this.applyAbbreviations();
     this.fill = this.initializeFill();
@@ -28,8 +28,11 @@ export class NodePin {
     this.valid = this.validate();
   }
 
-  processName(pinName: string) {
-
+  processName(pinName: string): string {
+    if (pinName.indexOf(' ') > -1) {
+      return `Node_in_${this.province}`;
+    }
+    return pinName;
   }
 
   applyAbbreviations() {
@@ -88,13 +91,13 @@ export class NodePin {
       nameValid = false;
     }
 
-    if (nameSections.length > 3 || (this.type !== 's' && nameSections.length > 2)) {
+    if ((this.type !== 'sea' && nameSections.length > 2) || (this.type === 'sea' && nameSections.length > 3)) {
       this.errors.push(`Node ${this.name} has too many sections`);
       nameValid = false;
     }
 
     if (nameSections[0].toUpperCase() !== this.province) {
-      this.errors.push(`Node name ${this.name} mismatches its province ${this.province}`);
+      this.errors.push(`Node ${this.name ? this.name : `in ${this.province}`} mismatches its province ${this.province}`);
       nameValid = false;
     }
 

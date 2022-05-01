@@ -56,7 +56,7 @@ export class Pin {
     }
 
     if (!this.name) {
-      this.name = pinString;
+      this.name = `Pin_in_${provinceName}`;
     }
 
     this.applyAbbreviations();
