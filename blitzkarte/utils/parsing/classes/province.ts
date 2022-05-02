@@ -202,7 +202,7 @@ export class Province {
       return false;
     }
 
-    let expectsLandTerrain: string[] = ['coast', 'impassible', 'inland', 'island'];
+    let expectsLandTerrain: string[] = ['coast', 'inland', 'island'];
     if (expectsLandTerrain.includes(this.type) && this.terrainApproval.land.length === 0) {
       this.errors.push(`${this.type} province ${this.name} expects at least 1 land terrain`);
       terrainApproved = false;
@@ -214,13 +214,13 @@ export class Province {
       terrainApproved = false;
     }
 
-    let expectsNoLandTerrain: string[] = ['pole', 'sea']
+    let expectsNoLandTerrain: string[] = ['pole', 'sea', 'impassible']
     if (expectsNoLandTerrain.includes(this.type) && this.terrainApproval.land.length > 0) {
       this.errors.push(`${this.type} province ${this.name} should not have land terrain`);
       terrainApproved = false;
     }
 
-    let expectsNoSeaTerrain: string[] = ['coast', 'impassible', 'inland', 'pole'];
+    let expectsNoSeaTerrain: string[] = ['coast', 'inland', 'pole'];
     if (expectsNoSeaTerrain.includes(this.type) && this.terrainApproval.sea.length > 0) {
       this.errors.push(`${this.type} province ${this.name} should not have sea terrain`);
       terrainApproved = false;
@@ -259,7 +259,7 @@ export class Province {
 
       let expectsSeaNode: string[] = ['coast', 'island', 'pole', 'sea'];
       if (expectsSeaNode.includes(this.type) && this.nodeApproval.sea.length === 0) {
-        this.errors.push(`${this.type} province expects at least 1 sea node`);
+        this.errors.push(`${this.type} province ${this.name} expects at least 1 sea node`);
         nodesApproved = false;
       }
 
