@@ -49,7 +49,12 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
           <br/>
           <b>Example Abbreviated:</b> p=n,t=s,n=syd_s,a=bri_s/tas_s/mel_s
           <br/>
-          <b>pinType (p):</b> Choose n or node. Other
+          <b>Nodes</b><br/>
+          <b>pinType (p):</b> Choose n or node<br/>
+          <b>type (t):</b> land (l), sea (s), air (a), event (e). Always required.<br/>
+          <b>name:</b> Prefix should match province. Suffix should match first letter of node type. All lower case. Always required. Example: n=syd_s for SYD sea node.<br/>
+          <b>adj (a)</b>: Adjacent nodes. List of the names of nodes the unit type can travel to. Split with &quot; /&quot;. Required if not an event node. Example: a=bri_s/tas_s/mel_s
+          <b>unit (u):</b> army (a), fleet (f), wing (w), nuke (n), garrison (g). Not required
         </p>
       </div>
     </div>
