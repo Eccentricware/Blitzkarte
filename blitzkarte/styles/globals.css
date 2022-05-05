@@ -28,6 +28,10 @@ p {
   font-size: smaller;
 }
 
+.guidelines {
+  font-size: smaller;
+}
+
 .map-container {
   background-image: url('../images/BlitzkarteMapGreenWireframe.jpg');
   border: 1px black solid;
@@ -59,5 +63,4 @@ p {
 
 text {
   alignment-baseline: middle;
-
 }
