@@ -38,7 +38,8 @@ export interface MapView {
       land: number,
       sea: number,
       coast: number
-    }
+    },
+    unit: number
   },
   unitSizing: {
     army: {
@@ -156,7 +157,8 @@ export const mapViewDefault = {
       land: 100,
       sea: 100,
       coast: 64
-    }
+    },
+    unit: 145
   },
   unitSizing: {
     army: {
@@ -164,42 +166,42 @@ export const mapViewDefault = {
       height: 265.77,
       baseWidth: 291.05,
       baseHeight: 265.77,
-      modifier: 1
+      modifier: 0.5
     },
     fleet: {
       width: 294.66,
       height: 256.8,
       baseWidth: 294.66,
       baseHeight: 256.8,
-      modifier: 1
+      modifier: 0.5
     },
     wing: {
       width: 291.8,
       height: 222.97,
       baseWidth: 291.8,
       baseHeight: 222.97,
-      modifier: 1
+      modifier: 0.5
     },
     nuke: {
       width: 296.62,
       height: 296.04,
       baseWidth: 296.62,
       baseHeight: 296.04,
-      modifier: 1
+      modifier: 0.5
     },
     detonation: {
       width: 300,
       height: 300,
       baseWidth: 300,
       baseHeight: 300,
-      modifier: 1
+      modifier: 0.5
     },
     garrison: {
       width: 301.05,
       height: 300.92,
       baseWidth: 301.05,
       baseHeight: 300.92,
-      modifier: 1
+      modifier: 0.5
     }
   },
   flagSizing: {
