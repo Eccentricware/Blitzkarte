@@ -68,22 +68,28 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
     renderData.units.forEach((unit: any) => {
       gsap.to(s(`.${unit.name}_left`), {
         attr: {
-          'transform': `translate (${unit.loc[0] - 16000} ${unit.loc[1]})
-            scale(${view.current.zoom})` },
+          'transform': `translate (${unit.loc[0] - 16000 - (mapCtx.map.unitSizing[unit.type].baseWidth / 2 * view.current.zoom)}
+            ${unit.loc[1] - (mapCtx.map.unitSizing[unit.type].baseHeight / 2 * view.current.zoom)})
+            scale(${view.current.zoom})`
+        },
         ease: ease,
         duration: 1
       });
       gsap.to(s(`.${unit.name}_center`), {
         attr: {
-          'transform': `translate (${unit.loc[0]} ${unit.loc[1]})
-            scale(${view.current.zoom})` },
+          'transform': `translate (${unit.loc[0] - (mapCtx.map.unitSizing[unit.type].baseWidth / 2 * view.current.zoom)}
+            ${unit.loc[1] - (mapCtx.map.unitSizing[unit.type].baseHeight / 2 * view.current.zoom)})
+            scale(${view.current.zoom})`
+        },
         ease: ease,
         duration: 1
       });
       gsap.to(s(`.${unit.name}_right`), {
         attr: {
-          'transform': `translate (${unit.loc[0] + 16000} ${unit.loc[1]})
-            scale(${view.current.zoom})` },
+          'transform': `translate (${unit.loc[0] + 16000 - (mapCtx.map.unitSizing[unit.type].baseWidth / 2 * view.current.zoom)}
+            ${unit.loc[1] - (mapCtx.map.unitSizing[unit.type].baseHeight / 2 * view.current.zoom)})
+            scale(${view.current.zoom})`
+        },
         ease: ease,
         duration: 1
       });
@@ -191,6 +197,36 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
       attr: { 'font-size': endLabelSize },
       ease: ease,
       duration: 1
+    });
+
+    renderData.units.forEach((unit: any) => {
+      gsap.to(s(`.${unit.name}_left`), {
+        attr: {
+          'transform': `translate (${unit.loc[0] - 16000 - (mapCtx.map.unitSizing[unit.type].baseWidth / 2 * view.current.zoom)}
+            ${unit.loc[1] - (mapCtx.map.unitSizing[unit.type].baseHeight / 2 * view.current.zoom)})
+            scale(${view.current.zoom})`
+        },
+        ease: ease,
+        duration: 1
+      });
+      gsap.to(s(`.${unit.name}_center`), {
+        attr: {
+          'transform': `translate (${unit.loc[0] - (mapCtx.map.unitSizing[unit.type].baseWidth / 2 * view.current.zoom)}
+            ${unit.loc[1] - (mapCtx.map.unitSizing[unit.type].baseHeight / 2 * view.current.zoom)})
+            scale(${view.current.zoom})`
+        },
+        ease: ease,
+        duration: 1
+      });
+      gsap.to(s(`.${unit.name}_right`), {
+        attr: {
+          'transform': `translate (${unit.loc[0] + 16000 - (mapCtx.map.unitSizing[unit.type].baseWidth / 2 * view.current.zoom)}
+            ${unit.loc[1] - (mapCtx.map.unitSizing[unit.type].baseHeight / 2 * view.current.zoom)})
+            scale(${view.current.zoom})`
+        },
+        ease: ease,
+        duration: 1
+      });
     });
 
     view.current.x = endX;
@@ -358,6 +394,36 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
       attr: { 'font-size': scaling.label.size },
       ease: ease,
       duration: 0
+    });
+
+    renderData.units.forEach((unit: any) => {
+      gsap.to(s(`.${unit.name}_left`), {
+        attr: {
+          'transform': `translate (${unit.loc[0] - 16000 - (mapCtx.map.unitSizing[unit.type].baseWidth / 2)}
+            ${unit.loc[1] - (mapCtx.map.unitSizing[unit.type].baseHeight / 2)})
+            scale(1)`
+        },
+        ease: ease,
+        duration: 1
+      });
+      gsap.to(s(`.${unit.name}_center`), {
+        attr: {
+          'transform': `translate (${unit.loc[0] - (mapCtx.map.unitSizing[unit.type].baseWidth / 2)}
+            ${unit.loc[1] - (mapCtx.map.unitSizing[unit.type].baseHeight / 2)})
+            scale(1)`
+        },
+        ease: ease,
+        duration: 1
+      });
+      gsap.to(s(`.${unit.name}_right`), {
+        attr: {
+          'transform': `translate (${unit.loc[0] + 16000 - (mapCtx.map.unitSizing[unit.type].baseWidth / 2)}
+            ${unit.loc[1] - (mapCtx.map.unitSizing[unit.type].baseHeight / 2)})
+            scale(1)`
+        },
+        ease: ease,
+        duration: 1
+      });
     });
 
     view.x = 0;
