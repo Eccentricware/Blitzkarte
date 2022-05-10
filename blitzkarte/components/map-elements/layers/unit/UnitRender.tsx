@@ -16,20 +16,20 @@ export const UnitRender: FC<Props> = ({unit}: Props) => {
       {({map}) => {
         return (
           <g className={unit.name} key={unit.name}>
-            <g transform={
+            <g className={unit.name + '_left'} transform={
               `translate(
-                ${unit.loc[0] - map.unitSizing[unit.type].width / 2 - 16000}
-                ${unit.loc[1] - map.unitSizing[unit.type].height / 2}
-              )`}
+              ${unit.loc[0] - map.unitSizing[unit.type].width / 2 - 16000}
+              ${unit.loc[1] - map.unitSizing[unit.type].height / 2}
+            )`}
             >
               <g transform={
                 `translate(
-                  ${map.flagSizing.offset[unit.type].x}
-                  ${map.flagSizing.offset[unit.type].y}
-                )
+                ${map.flagSizing.offset[unit.type].x}
+                ${map.flagSizing.offset[unit.type].y}
+              )
 
-                scale(${0.5})
-                `}
+              scale(${0.5})
+              `}
               >
                 {flagSVG}
               </g>
@@ -37,41 +37,40 @@ export const UnitRender: FC<Props> = ({unit}: Props) => {
               {unitSVG}
 
             </g>
-            <g transform={
-              `translate(
+            <g className={unit.name + '_center'} transform={
+                `translate(
                 ${unit.loc[0] - map.unitSizing[unit.type].width / 2}
                 ${unit.loc[1] - map.unitSizing[unit.type].height / 2}
               )`}
-            >
-              <g transform={
-                `translate(
-                  ${map.flagSizing.offset[unit.type].x}
-                  ${map.flagSizing.offset[unit.type].y}
-                )
-
-                scale(${0.5})
-                `}
               >
-                {flagSVG}
-              </g>
-
-              {unitSVG}
-
-            </g>
-            <g transform={
-              `translate(
-                ${unit.loc[0] - map.unitSizing[unit.type].width / 2 + 16000}
-                ${unit.loc[1] - map.unitSizing[unit.type].height / 2}
-              )`}
-            >
-              <g transform={
-                `translate(
+                <g transform={
+                  `translate(
                   ${map.flagSizing.offset[unit.type].x}
                   ${map.flagSizing.offset[unit.type].y}
                 )
 
                 scale(${0.5})
                 `}
+                >
+                  {flagSVG}
+                </g>
+
+                {unitSVG}
+            </g>
+            <g className={unit.name + '_right'} transform={
+              `translate(
+              ${unit.loc[0] - map.unitSizing[unit.type].width / 2 + 16000}
+              ${unit.loc[1] - map.unitSizing[unit.type].height / 2}
+            )`}
+            >
+              <g transform={
+                `translate(
+                ${map.flagSizing.offset[unit.type].x}
+                ${map.flagSizing.offset[unit.type].y}
+              )
+
+              scale(${0.5})
+              `}
               >
                 {flagSVG}
               </g>

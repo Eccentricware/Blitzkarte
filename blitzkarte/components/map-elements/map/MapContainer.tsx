@@ -38,6 +38,8 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
     const endLineWidth = scaling.linkLine.width * view.current.zoom;
     const endNodeRadius = scaling.node.radius * view.current.zoom;
     const endLabelSize = scaling.label.size * view.current.zoom;
+    const endUnitTransform = `translate (150 150) `
+      + `scale(${view.current.zoom})`;
 
     gsap.to(mapRef.current, {
       attr: { viewBox: endViewBox },
@@ -62,6 +64,31 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
       ease: ease,
       duration: 1
     });
+
+    renderData.units.forEach((unit: any) => {
+      gsap.to(s(`.${unit.name}_left`), {
+        attr: {
+          'transform': `translate (${unit.loc[0] - 16000} ${unit.loc[1]})
+            scale(${view.current.zoom})` },
+        ease: ease,
+        duration: 1
+      });
+      gsap.to(s(`.${unit.name}_center`), {
+        attr: {
+          'transform': `translate (${unit.loc[0]} ${unit.loc[1]})
+            scale(${view.current.zoom})` },
+        ease: ease,
+        duration: 1
+      });
+      gsap.to(s(`.${unit.name}_right`), {
+        attr: {
+          'transform': `translate (${unit.loc[0] + 16000} ${unit.loc[1]})
+            scale(${view.current.zoom})` },
+        ease: ease,
+        duration: 1
+      });
+    });
+
 
     view.current.width = endWidth;
     view.current.height = endHeight;

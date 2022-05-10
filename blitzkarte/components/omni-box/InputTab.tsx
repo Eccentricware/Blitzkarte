@@ -32,7 +32,7 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
           <br />
           <b>fullName (f):</b> The real-world name of the location (Sydney). Never required. Use underscores if there are spaces. Ex: New_York_City
           <br />
-          <b>type (t):</b> Type of province impacts game rules and helps with validation and design.Always required.Options: coast (c), decorative (d), impassible (im), inland (i), island (is), sea (s), land (l), pole (p)
+          <b>type (t):</b> Type of province impacts game rules and helps with validation and design. Always required. Options: coast (c), decorative (d), impassible (im), inland (i), island (is), sea (s), land (l), pole (p)
           <br />
           <b>country (c):</b> Leave empty if no country owns it. Use underscores instead of spaces. Ex: United_States
           <br />

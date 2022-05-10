@@ -12,6 +12,7 @@ export class Unit {
 
   constructor(node: Pin, country: string) {
     this.name = `${country}_${node.unit}_${node.name}`;
+    this.name = this.name.replace(' ', '_');
     this.type = `${node.unit}`;
     this.countryKey = convertSpaceToCamelCase(country);
     this.node = node.name;
