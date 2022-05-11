@@ -12,26 +12,26 @@ export const SupplyCenterLayer: FC<Props> = ({supplyCenters}: Props) => {
       supplyCenters.map((city, i) => {
         return (
           <g key={i}>
-            <circle
+            <circle className="supply-center"
               cx={city.loc[0] - 16000}
               cy={city.loc[1]}
-              r={25}
+              r={50}
               fill={city.statusColor}
               stroke="black"
               strokeWidth={4}
             />
-            <circle
+            <circle className="supply-center"
               cx={city.loc[0]}
               cy={city.loc[1]}
-              r={25}
+              r={50}
               fill={city.statusColor}
               stroke="black"
               strokeWidth={4}
             />
-            <circle
+            <circle className="supply-center"
               cx={city.loc[0] + 16000}
               cy={city.loc[1]}
-              r={25}
+              r={50}
               fill={city.statusColor}
               stroke="black"
               strokeWidth={4}

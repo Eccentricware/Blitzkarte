@@ -45,11 +45,11 @@ export const UnitRender: FC<Props> = ({unit}: Props) => {
               >
                 <g transform={
                   `translate(
-                  ${map.flagSizing.offset[unit.type].x}
-                  ${map.flagSizing.offset[unit.type].y}
-                )
+                    ${map.flagSizing.offset[unit.type].x}
+                    ${map.flagSizing.offset[unit.type].y}
+                  )
 
-                scale(${0.5})
+                  scale(${0.5})
                 `}
                 >
                   {flagSVG}

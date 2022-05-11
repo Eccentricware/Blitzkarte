@@ -39,7 +39,11 @@ export interface MapView {
       sea: number,
       coast: number
     },
-    unit: number
+    unit: number,
+    supplyCenter: {
+      r: number,
+      strokeWidth: number
+    }
   },
   unitSizing: {
     army: {
@@ -158,7 +162,11 @@ export const mapViewDefault = {
       sea: 100,
       coast: 64
     },
-    unit: 145
+    unit: 145,
+    supplyCenter: {
+      r: 50,
+      strokeWidth: 4
+    }
   },
   unitSizing: {
     army: {
