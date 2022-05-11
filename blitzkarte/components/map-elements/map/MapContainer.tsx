@@ -22,6 +22,39 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
   const s = gsap.utils.selector(llRef);
   const ease: string = 'power2.inOut';
 
+  useEffect(() => {
+    const view = mapCtx.map.view;
+    renderData.units.forEach((unit: any) => {
+      gsap.to(s(`.${unit.name}_left`), {
+        attr: {
+          'transform': `translate (${unit.loc[0] - 16000 - (mapCtx.map.unitSizing[unit.type].baseWidth / 2 * view.current.zoom)}
+            ${unit.loc[1] - (mapCtx.map.unitSizing[unit.type].baseHeight / 2 * view.current.zoom)})
+            scale(1)`
+        },
+        ease: ease,
+        duration: 0
+      });
+      gsap.to(s(`.${unit.name}_center`), {
+        attr: {
+          'transform': `translate (${unit.loc[0] - (mapCtx.map.unitSizing[unit.type].baseWidth / 2 * view.current.zoom)}
+            ${unit.loc[1] - (mapCtx.map.unitSizing[unit.type].baseHeight / 2 * view.current.zoom)})
+            scale(1)`
+        },
+        ease: ease,
+        duration: 0
+      });
+      gsap.to(s(`.${unit.name}_right`), {
+        attr: {
+          'transform': `translate (${unit.loc[0] + 16000 - (mapCtx.map.unitSizing[unit.type].baseWidth / 2 * view.current.zoom)}
+            ${unit.loc[1] - (mapCtx.map.unitSizing[unit.type].baseHeight / 2 * view.current.zoom)})
+            scale(1)`
+        },
+        ease: ease,
+        duration: 0
+      });
+    });
+  });
+
   const zoomIn = () => {
     const view = mapCtx.map.view;
     const scaling = mapCtx.map.scaling;
@@ -38,8 +71,6 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
     const endLineWidth = scaling.linkLine.width * view.current.zoom;
     const endNodeRadius = scaling.node.radius * view.current.zoom;
     const endLabelSize = scaling.label.size * view.current.zoom;
-    const endUnitTransform = `translate (150 150) `
-      + `scale(${view.current.zoom})`;
 
     gsap.to(mapRef.current, {
       attr: { viewBox: endViewBox },
