@@ -71,6 +71,8 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
     const endLineWidth = scaling.linkLine.width * view.current.zoom;
     const endNodeRadius = scaling.node.radius * view.current.zoom;
     const endLabelSize = scaling.label.size * view.current.zoom;
+    const endSupplyCenterR = scaling.supplyCenter.r * view.current.zoom;
+    const endSupplyCenterStrokeWidth = scaling.supplyCenter.strokeWidth * view.current.zoom;
 
     gsap.to(mapRef.current, {
       attr: { viewBox: endViewBox },
@@ -92,6 +94,15 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
 
     gsap.to(s('.label'), {
       attr: { 'font-size': endLabelSize },
+      ease: ease,
+      duration: 1
+    });
+
+    gsap.to(s('.supply-center'), {
+      attr: {
+        'r': endSupplyCenterR,
+        'stroke-width': endSupplyCenterStrokeWidth
+      },
       ease: ease,
       duration: 1
     });
@@ -160,6 +171,8 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
     const endLineWidth = scaling.linkLine.width * view.current.zoom;
     const endNodeRadius = scaling.node.radius * view.current.zoom;
     const endLabelSize = scaling.label.size * view.current.zoom;
+    const endSupplyCenterR = scaling.supplyCenter.r * (1 + view.current.zoom) / 2;
+    const endSupplyCenterStrokeWidth = scaling.supplyCenter.strokeWidth
 
     let startX: number = view.current.x;
     let endX: number = view.current.center[0] - (endWidth / 2);
@@ -226,6 +239,15 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
 
     gsap.to(s('.label'), {
       attr: { 'font-size': endLabelSize },
+      ease: ease,
+      duration: 1
+    });
+
+    gsap.to(s('.supply-center'), {
+      attr: {
+        'r': endSupplyCenterR,
+        'stroke-width': endSupplyCenterStrokeWidth
+      },
       ease: ease,
       duration: 1
     });
@@ -425,6 +447,15 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
       attr: { 'font-size': scaling.label.size },
       ease: ease,
       duration: 0
+    });
+
+    gsap.to(s('.supply-center'), {
+      attr: {
+        'r': scaling.supplyCenter.r,
+        'stroke-width': scaling.supplyCenter.strokeWidth
+      },
+      ease: ease,
+      duration: 1
     });
 
     renderData.units.forEach((unit: any) => {
