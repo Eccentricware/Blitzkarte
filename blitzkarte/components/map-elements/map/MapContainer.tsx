@@ -24,6 +24,8 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
 
   useEffect(() => {
     const view = mapCtx.map.view;
+    const scaling = mapCtx.map.scaling;
+
     renderData.units.forEach((unit: any) => {
       gsap.to(s(`.${unit.name}_left`), {
         attr: {
@@ -34,6 +36,7 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
         ease: ease,
         duration: 0
       });
+
       gsap.to(s(`.${unit.name}_center`), {
         attr: {
           'transform': `translate (${unit.loc[0] - (mapCtx.map.unitSizing[unit.type].baseWidth / 2 * view.current.zoom)}
@@ -43,11 +46,44 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
         ease: ease,
         duration: 0
       });
+
       gsap.to(s(`.${unit.name}_right`), {
         attr: {
           'transform': `translate (${unit.loc[0] + 16000 - (mapCtx.map.unitSizing[unit.type].baseWidth / 2 * view.current.zoom)}
             ${unit.loc[1] - (mapCtx.map.unitSizing[unit.type].baseHeight / 2 * view.current.zoom)})
             scale(1)`
+        },
+        ease: ease,
+        duration: 0
+      });
+    });
+
+    renderData.cities.votingCenters.forEach((city: any) => {
+      gsap.to(s(`.${city.name}_left`), {
+        attr: {
+          'transform': `translate (${city.loc[0] - 16000 - (scaling.votingCenter.width / 2 * view.current.zoom)}
+            ${city.loc[1] - (scaling.votingCenter.height / 2 * view.current.zoom)})
+            scale(${view.current.zoom})`
+        },
+        ease: ease,
+        duration: 0
+      });
+
+      gsap.to(s(`.${city.name}_center`), {
+        attr: {
+          'transform': `translate (${city.loc[0] - (scaling.votingCenter.width / 2 * view.current.zoom)}
+            ${city.loc[1] - (scaling.votingCenter.height / 2 * view.current.zoom)})
+            scale(${view.current.zoom})`
+        },
+        ease: ease,
+        duration: 0
+      });
+
+      gsap.to(s(`.${city.name}_right`), {
+        attr: {
+          'transform': `translate (${city.loc[0] + 16000 - (scaling.votingCenter.width / 2 * view.current.zoom)}
+            ${city.loc[1] - (scaling.votingCenter.height / 2 * view.current.zoom)})
+            scale(${view.current.zoom})`
         },
         ease: ease,
         duration: 0
@@ -137,6 +173,37 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
       });
     });
 
+    renderData.cities.votingCenters.forEach((city: any) => {
+      gsap.to(s(`.${city.name}_left`), {
+        attr: {
+          'transform': `translate (${city.loc[0] - 16000 - (scaling.votingCenter.width / 2 * view.current.zoom)}
+            ${city.loc[1] - (scaling.votingCenter.height / 2 * view.current.zoom)})
+            scale(${view.current.zoom})`
+        },
+        ease: ease,
+        duration: 1
+      });
+
+      gsap.to(s(`.${city.name}_center`), {
+        attr: {
+          'transform': `translate (${city.loc[0] - (scaling.votingCenter.width / 2 * view.current.zoom)}
+            ${city.loc[1] - (scaling.votingCenter.height / 2 * view.current.zoom)})
+            scale(${view.current.zoom})`
+        },
+        ease: ease,
+        duration: 1
+      });
+
+      gsap.to(s(`.${city.name}_right`), {
+        attr: {
+          'transform': `translate (${city.loc[0] + 16000 - (scaling.votingCenter.width / 2 * view.current.zoom)}
+            ${city.loc[1] - (scaling.votingCenter.height / 2 * view.current.zoom)})
+            scale(${view.current.zoom})`
+        },
+        ease: ease,
+        duration: 1
+      });
+    });
 
     view.current.width = endWidth;
     view.current.height = endHeight;
@@ -275,6 +342,38 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
         attr: {
           'transform': `translate (${unit.loc[0] + 16000 - (mapCtx.map.unitSizing[unit.type].baseWidth / 2 * view.current.zoom)}
             ${unit.loc[1] - (mapCtx.map.unitSizing[unit.type].baseHeight / 2 * view.current.zoom)})
+            scale(${view.current.zoom})`
+        },
+        ease: ease,
+        duration: 1
+      });
+    });
+
+    renderData.cities.votingCenters.forEach((city: any) => {
+      gsap.to(s(`.${city.name}_left`), {
+        attr: {
+          'transform': `translate (${city.loc[0] - 16000 - (scaling.votingCenter.width / 2 * view.current.zoom)}
+            ${city.loc[1] - (scaling.votingCenter.height / 2 * view.current.zoom)})
+            scale(${view.current.zoom})`
+        },
+        ease: ease,
+        duration: 1
+      });
+
+      gsap.to(s(`.${city.name}_center`), {
+        attr: {
+          'transform': `translate (${city.loc[0] - (scaling.votingCenter.width / 2 * view.current.zoom)}
+            ${city.loc[1] - (scaling.votingCenter.height / 2 * view.current.zoom)})
+            scale(${view.current.zoom})`
+        },
+        ease: ease,
+        duration: 1
+      });
+
+      gsap.to(s(`.${city.name}_right`), {
+        attr: {
+          'transform': `translate (${city.loc[0] + 16000 - (scaling.votingCenter.width / 2 * view.current.zoom)}
+            ${city.loc[1] - (scaling.votingCenter.height / 2 * view.current.zoom)})
             scale(${view.current.zoom})`
         },
         ease: ease,
@@ -461,8 +560,8 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
     renderData.units.forEach((unit: any) => {
       gsap.to(s(`.${unit.name}_left`), {
         attr: {
-          'transform': `translate (${unit.loc[0] - 16000 - (mapCtx.map.unitSizing[unit.type].baseWidth / 2)}
-            ${unit.loc[1] - (mapCtx.map.unitSizing[unit.type].baseHeight / 2)})
+          'transform': `translate (${unit.loc[0] - 16000 - mapCtx.map.unitSizing[unit.type].baseWidth / 2}
+            ${unit.loc[1] - mapCtx.map.unitSizing[unit.type].baseHeight / 2})
             scale(1)`
         },
         ease: ease,
@@ -470,8 +569,8 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
       });
       gsap.to(s(`.${unit.name}_center`), {
         attr: {
-          'transform': `translate (${unit.loc[0] - (mapCtx.map.unitSizing[unit.type].baseWidth / 2)}
-            ${unit.loc[1] - (mapCtx.map.unitSizing[unit.type].baseHeight / 2)})
+          'transform': `translate (${unit.loc[0] - mapCtx.map.unitSizing[unit.type].baseWidth / 2}
+            ${unit.loc[1] - mapCtx.map.unitSizing[unit.type].baseHeight / 2})
             scale(1)`
         },
         ease: ease,
@@ -479,8 +578,40 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
       });
       gsap.to(s(`.${unit.name}_right`), {
         attr: {
-          'transform': `translate (${unit.loc[0] + 16000 - (mapCtx.map.unitSizing[unit.type].baseWidth / 2)}
-            ${unit.loc[1] - (mapCtx.map.unitSizing[unit.type].baseHeight / 2)})
+          'transform': `translate (${unit.loc[0] + 16000 - mapCtx.map.unitSizing[unit.type].baseWidth / 2}
+            ${unit.loc[1] - mapCtx.map.unitSizing[unit.type].baseHeight / 2})
+            scale(1)`
+        },
+        ease: ease,
+        duration: 1
+      });
+    });
+
+    renderData.cities.votingCenters.forEach((city: any) => {
+      gsap.to(s(`.${city.name}_left`), {
+        attr: {
+          'transform': `translate (${city.loc[0] - 16000 - scaling.votingCenter.width / 2}
+            ${city.loc[1] - scaling.votingCenter.height / 2})
+            scale(1)`
+        },
+        ease: ease,
+        duration: 1
+      });
+
+      gsap.to(s(`.${city.name}_center`), {
+        attr: {
+          'transform': `translate (${city.loc[0] - scaling.votingCenter.width / 2}
+            ${city.loc[1] - scaling.votingCenter.height / 2})
+            scale(1)`
+        },
+        ease: ease,
+        duration: 1
+      });
+
+      gsap.to(s(`.${city.name}_right`), {
+        attr: {
+          'transform': `translate (${city.loc[0] + 16000 - scaling.votingCenter.width / 2}
+            ${city.loc[1] - scaling.votingCenter.height / 2})
             scale(1)`
         },
         ease: ease,
