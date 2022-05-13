@@ -8,6 +8,7 @@ export class City {
   loc!: number[];
   voteColor: string | undefined;
   statusColor: string | undefined;
+  strokeColor: string = 'black';
   renderCategory: string;
   valid: boolean;
   errors: string[] = [];
@@ -23,9 +24,10 @@ export class City {
       this.statusColor = 'gold';
       this.renderCategory = 'votingCenters';
     } else if (this.type === 'v') {
-      this.voteColor = 'red';
-      this.statusColor = 'red';
+      this.voteColor = 'gray';
+      this.statusColor = 'gray';
       this.renderCategory = 'votingCenters';
+      this.strokeColor = 'red';
     } else if (this.type === 's') {
       this.statusColor = 'white';
       this.renderCategory = 'supplyCenters';
