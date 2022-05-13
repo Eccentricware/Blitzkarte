@@ -15,24 +15,24 @@ const SeaLayer: FC<Props> = ({seaRenderData}: Props) => {
               <polygon
                 points={sea.points}
                 fill="#42cafe"
-                strokeMiterlimit="10"
+                strokeMiterlimit="1"
                 stroke="white"
-                strokeWidth="8"
+                strokeWidth="4"
                 transform={`translate(-16000 0)`}
               />
               <polygon
                 points={sea.points}
                 fill="#42cafe"
-                strokeMiterlimit="10"
+                strokeMiterlimit="1"
                 stroke="white"
-                strokeWidth="8"
+                strokeWidth="4"
               />
               <polygon
                 points={sea.points}
                 fill="#42cafe"
-                strokeMiterlimit="10"
+                strokeMiterlimit="1"
                 stroke="white"
-                strokeWidth="8"
+                strokeWidth="4"
                 transform={`translate(16000 0)`}
               />
             </g>

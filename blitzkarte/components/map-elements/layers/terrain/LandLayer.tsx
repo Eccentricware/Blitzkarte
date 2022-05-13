@@ -14,24 +14,24 @@ const LandLayer: FC<Props> = ({landRenderData}: Props) => {
             <polygon
               points={land.points}
               fill={land.fill}
-              strokeMiterlimit="10"
+              strokeMiterlimit="1"
               stroke={land.stroke}
-              strokeWidth="8"
+              strokeWidth="4"
               transform={`translate(-16000 0)`}
             />
             <polygon
               points={land.points}
               fill={land.fill}
-              strokeMiterlimit="10"
+              strokeMiterlimit="1"
               stroke={land.stroke}
-              strokeWidth="8"
+              strokeWidth="4"
             />
             <polygon
               points={land.points}
               fill={land.fill}
-              strokeMiterlimit="10"
+              strokeMiterlimit="1"
               stroke={land.stroke}
-              strokeWidth="8"
+              strokeWidth="4"
               transform={`translate(16000 0)`}
             />
           </g>

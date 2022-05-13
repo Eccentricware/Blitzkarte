@@ -7,8 +7,7 @@ export interface MapView {
       y: number,
       width: number,
       height: number,
-      center: number[],
-      lineWidth: number
+      center: number[]
     },
     current: {
       x: number,
@@ -31,7 +30,7 @@ export interface MapView {
     },
     linkLine: {
       width: number;
-      defaultWith: number;
+      defaultWidth: number;
     },
     label: {
       size: number,
@@ -42,6 +41,11 @@ export interface MapView {
     unit: number,
     supplyCenter: {
       r: number,
+      strokeWidth: number
+    },
+    votingCenter: {
+      width: number,
+      height: number,
       strokeWidth: number
     }
   },
@@ -122,7 +126,7 @@ export interface MapView {
   }
 }
 
-export const mapViewDefault = {
+export const mapViewDefault: MapView = {
   view: {
     zoomRate: 0.8,
     panRate: 0.25,
@@ -164,8 +168,13 @@ export const mapViewDefault = {
     },
     unit: 145,
     supplyCenter: {
-      r: 50,
+      r: 40,
       strokeWidth: 4
+    },
+    votingCenter: {
+      width: 160,
+      height: 150,
+      strokeWidth: 5
     }
   },
   unitSizing: {
