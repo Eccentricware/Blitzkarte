@@ -6,6 +6,17 @@ export class Terrain {
   end: string | undefined;
   renderCategory!: string;
   points: string | undefined;
+  bounds: {
+    top: number | undefined,
+    bottom: number | undefined,
+    left: number | undefined,
+    right: number | undefined
+  } = {
+    top: undefined,
+    bottom: undefined,
+    left: undefined,
+    right: undefined
+  };
   fill: string | undefined;
   stroke: string | undefined;
   valid: boolean;
@@ -44,6 +55,8 @@ export class Terrain {
     this.name = this.setName();
 
     this.points = terrain.slice(pointsStartIndex + 8, pointsEndIndex);
+
+    this.findBounds();
 
     this.valid = this.validate();
   }
@@ -135,6 +148,48 @@ export class Terrain {
 
   setFill(color: string) {
     this.fill = color;
+  }
+
+  findBounds() {
+    const points = this.points?.split(' ');
+    points?.forEach((point: string, index: number) => {
+      let value: number = Number(point);
+      if (index % 2 === 0) {
+
+        if (this.bounds.left === undefined) {
+          this.bounds.left = value;
+        }
+
+        if (this.bounds.right === undefined) {
+          this.bounds.right = value;
+        }
+
+        if (value < this.bounds.left) {
+          this.bounds.left = value;
+        }
+
+
+        if (value > this.bounds.right) {
+          this.bounds.right = value;
+        }
+      } else {
+        if (this.bounds.top === undefined) {
+          this.bounds.top = value;
+        }
+
+        if (value < this.bounds.top) {
+          this.bounds.top = value;
+        }
+
+        if (this.bounds.bottom === undefined) {
+          this.bounds.bottom = value;
+        }
+
+        if (value > this.bounds.bottom) {
+          this.bounds.bottom = value;
+        }
+      }
+    })
   }
 
   validate(): boolean {
