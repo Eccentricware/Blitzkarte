@@ -1,13 +1,10 @@
 import type { NextPage } from 'next';
 import React, { useState } from 'react';
 import { Parser } from '../utils/parsing/services/parse-orchestrator';
-
-import { GameMap } from '../components/map-elements/map/GameMap';
 import { RenderData, initialRenderData } from '../models/RenderData';
 import { OmniBox } from '../components/omni-box/OmniBox';
-import { Country } from '../utils/parsing/classes/country';
 import { initialOmniBoxData, OmniBoxData } from '../models/OmniBoxData';
-import { NavBar } from '../components/nav-bar/Navbar';
+import { NavBarSignedOut } from '../components/nav-bar/NavbarSignedOut';
 import Head from 'next/head';
 import { Grid } from '@mui/material';
 import { MapContainer } from '../components/map-elements/map/MapContainer';
@@ -107,7 +104,7 @@ const GameParserPage: NextPage = () => {
         <meta name="description" content="Fully automated game of global domination" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <NavBar/>
+      <NavBarSignedOut/>
 
       <Grid container columns={2}>
         <Grid item>
