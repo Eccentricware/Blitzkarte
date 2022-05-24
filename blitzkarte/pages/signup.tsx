@@ -5,6 +5,7 @@ import { useState } from "react";
 import { NavBarSignedOut  } from "../components/nav-bar/NavbarSignedOut";
 import { erzahler } from "../utils/general/erzahler";
 
+
 const SignupPage: NextPage = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -41,7 +42,6 @@ const SignupPage: NextPage = () => {
       }),
     })
     .then((response: any) => {
-      //console.log('Response:', response.json());
       return response.json();
     })
     .then((data: any) => {
@@ -51,6 +51,24 @@ const SignupPage: NextPage = () => {
       console.log('Error', error.stack);
     })
   }
+
+  const handleSignInWithGoogleClick = () => {
+    fetch(`${erzahler.url}:${erzahler.port}/api/sign-in-with-google`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({o: 'o'})
+    }).then((response: any) => {
+      console.log('response', response);
+      return response.json();
+    }).then((data: any) => {
+      console.log('data', data)
+      return data;
+    }).catch((error: Error) => {
+      console.log('Error:', error);
+    })
+  };
 
   return (
     <div>
@@ -62,7 +80,7 @@ const SignupPage: NextPage = () => {
       </Head>
       <NavBarSignedOut/>
 
-      <Grid container columns={1}>
+      {/* <Grid container columns={1}>
         <Grid item>
           <TextField id="outlined-basic" label="Username" variant="outlined"
             onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
@@ -86,14 +104,19 @@ const SignupPage: NextPage = () => {
           />
           <Button color="primary"
             variant="contained"
-            onClick={() => {
-              handleEmailSignUpSubmit();
-            }}
+            onClick={() => { handleEmailSignUpSubmit(); }}
           >
             Sign Up
           </Button>
+          <Button color="primary"
+            variant="contained"
+            onClick={() => { handleSignInWithGoogleClick(); }}
+          >
+            <span className="firebaseui-idp-text firebaseui-idp-text-long">Sign in with Google</span>
+          </Button>
         </Grid>
-      </Grid>
+      </Grid> */}
+      <div id="firebaseui-container"></div>
     </div>
   )
 }
