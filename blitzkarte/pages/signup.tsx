@@ -1,16 +1,33 @@
-import { Button, Grid, TextField } from "@mui/material";
 import type { NextPage } from "next";
 import Head from 'next/head';
 import { useState } from "react";
 import { NavBarSignedOut  } from "../components/nav-bar/NavbarSignedOut";
 import { erzahler } from "../utils/general/erzahler";
-
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import { firebaseConfig } from "../utils/firebase/firebase";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { Grid, TextField, Button } from "@mui/material";
 
 const SignupPage: NextPage = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
+
+  const firebaseApp = firebase.initializeApp(firebaseConfig);
+  const auth = getAuth(firebaseApp);
+  const provider = new GoogleAuthProvider();
+
+  const fuiConfig = {
+    signInFlow: 'popup',
+    signInSuccessfulUrl: '/parser',
+    signInOption: [
+      firebase.auth.EmailAuthProvider.PROVIDER_ID,
+      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+      firebase.auth.FacebookAuthProvider.PROVIDER_ID
+    ]
+  };
 
   const handleUsernameChange = (username: string) => {
     setUsername(username);
@@ -53,21 +70,49 @@ const SignupPage: NextPage = () => {
   }
 
   const handleSignInWithGoogleClick = () => {
-    fetch(`${erzahler.url}:${erzahler.port}/api/sign-in-with-google`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({o: 'o'})
-    }).then((response: any) => {
-      console.log('response', response);
-      return response.json();
-    }).then((data: any) => {
-      console.log('data', data)
-      return data;
-    }).catch((error: Error) => {
-      console.log('Error:', error);
-    })
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        console.log('credential', credential);
+        if (credential) {
+          const token = credential.accessToken;
+          console.log('token', token);
+        }
+        // The signed-in user info.
+        const user = result.user;
+        console.log('user', user);
+        return user;
+        // ...
+      }).catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        console.log('signup error:', error.message);
+        return {
+          error: error.message
+        };
+        // ...
+      });
+    // fetch(`${erzahler.url}:${erzahler.port}/api/sign-in-with-google`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify({o: 'o'})
+    // }).then((response: any) => {
+    //   console.log('response', response);
+    //   return response.json();
+    // }).then((data: any) => {
+    //   console.log('data', data)
+    //   return data;
+    // }).catch((error: Error) => {
+    //   console.log('Error:', error);
+    // })
   };
 
   return (
@@ -80,7 +125,7 @@ const SignupPage: NextPage = () => {
       </Head>
       <NavBarSignedOut/>
 
-      {/* <Grid container columns={1}>
+      <Grid container columns={1}>
         <Grid item>
           <TextField id="outlined-basic" label="Username" variant="outlined"
             onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
@@ -115,8 +160,8 @@ const SignupPage: NextPage = () => {
             <span className="firebaseui-idp-text firebaseui-idp-text-long">Sign in with Google</span>
           </Button>
         </Grid>
-      </Grid> */}
-      <div id="firebaseui-container"></div>
+      </Grid>
+      {/* <StyledFirebaseAuth uiConfig={fuiConfig} firebaseAuth={firebase.auth()} /> */}
     </div>
   )
 }
