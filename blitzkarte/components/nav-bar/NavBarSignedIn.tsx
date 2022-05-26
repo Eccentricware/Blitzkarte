@@ -1,12 +1,12 @@
 import { FC, Fragment, useState } from 'react';
 import { AppBar, Button, Menu, MenuItem, TextField, Toolbar, Typography } from '@mui/material';
-import { Router, useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 
 interface AppBarProps {
 
 }
 
-export const NavBarSignedOut: FC<AppBarProps> = () => {
+export const NavBarSignedIn: FC<AppBarProps> = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const router = useRouter();
 
@@ -60,13 +60,7 @@ export const NavBarSignedOut: FC<AppBarProps> = () => {
             onClick={handleProfileMenuOpen}
             color="inherit"
           >
-            Login
-          </Button>
-          <Button
-            color="inherit"
-            onClick={handleSignupClick}
-          >
-            Sign Up
+            Log Out
           </Button>
         </Toolbar>
       </AppBar>
