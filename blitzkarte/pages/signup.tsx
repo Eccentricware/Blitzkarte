@@ -1,12 +1,10 @@
 import type { NextPage } from "next";
 import Head from 'next/head';
 import { useContext, useState } from "react";
-import { NavBarSignedOut  } from "../components/nav-bar/NavbarSignedOut";
+import { NavBarSignedOut  } from "../components/nav-bar/NavBarSignedOut";
 import { erzahler } from "../utils/general/erzahler";
-import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
-import { firebaseConfig, signInWithFacebook, signInWithGoogle } from "../utils/firebase/firebase";
-import { FacebookAuthProvider, getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { signInWithFacebook, signInWithGoogle } from "../utils/firebase/firebase";
 import { Grid, TextField, Button } from "@mui/material";
 import Blitzkontext from "../utils/Blitzkontext";
 
