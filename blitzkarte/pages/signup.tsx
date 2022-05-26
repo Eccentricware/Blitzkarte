@@ -1,34 +1,21 @@
 import type { NextPage } from "next";
 import Head from 'next/head';
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { NavBarSignedOut  } from "../components/nav-bar/NavbarSignedOut";
 import { erzahler } from "../utils/general/erzahler";
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
-import { firebaseConfig } from "../utils/firebase/firebase";
+import { firebaseConfig, signInWithFacebook, signInWithGoogle } from "../utils/firebase/firebase";
 import { FacebookAuthProvider, getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { Grid, TextField, Button } from "@mui/material";
+import Blitzkontext from "../utils/Blitzkontext";
 
 const SignupPage: NextPage = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
-
-  const firebaseApp = firebase.initializeApp(firebaseConfig);
-  const auth = getAuth(firebaseApp);
-  const googleProvider = new GoogleAuthProvider();
-  const facebookProvider = new FacebookAuthProvider();
-
-  const fuiConfig = {
-    signInFlow: 'popup',
-    signInSuccessfulUrl: '/parser',
-    signInOption: [
-      firebase.auth.EmailAuthProvider.PROVIDER_ID,
-      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-      firebase.auth.FacebookAuthProvider.PROVIDER_ID
-    ]
-  };
+  const firebaseCtx = useContext(Blitzkontext).firebase;
 
   const handleUsernameChange = (username: string) => {
     setUsername(username);
@@ -71,67 +58,11 @@ const SignupPage: NextPage = () => {
   }
 
   const handleSignInWithGoogleClick = () => {
-    console.log('Sign in with Google Clicked');
-    signInWithPopup(auth, googleProvider)
-      .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        console.log('credential', credential);
-        if (credential) {
-          const token = credential.accessToken;
-          console.log('token', token);
-        }
-        // The signed-in user info.
-        const user = result.user;
-        console.log('user', user);
-        return user;
-        // ...
-      }).catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        console.log('signup error:', error.message);
-        return {
-          error: error.message
-        };
-        // ...
-      });
+    signInWithGoogle(firebaseCtx.auth);
   };
 
   const handleSignInWithFacebookClick = () => {
-    console.log('Sign in with Facebook Clicked');
-    signInWithPopup(auth, facebookProvider)
-      .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = FacebookAuthProvider.credentialFromResult(result);
-        console.log('credential', credential);
-        if (credential) {
-          const token = credential.accessToken;
-          console.log('token', token);
-        }
-        // The signed-in user info.
-        const user = result.user;
-        console.log('user', user);
-        return user;
-        // ...
-      }).catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        console.log('signup error:', error.message);
-        return {
-          error: error.message
-        };
-        // ...
-      });
+    signInWithFacebook(firebaseCtx.auth);
   };
 
   return (
