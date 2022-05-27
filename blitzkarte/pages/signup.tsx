@@ -7,6 +7,7 @@ import 'firebase/compat/auth';
 import { checkUsername, signInWithFacebook, signInWithGoogle } from "../utils/firebase/firebase";
 import { Grid, TextField, Button } from "@mui/material";
 import Blitzkontext from "../utils/Blitzkontext";
+import { signUpWithEmail } from "../utils/firebase/firebase";
 
 const SignupPage: NextPage = () => {
   const [username, setUsername] = useState('');
@@ -40,31 +41,15 @@ const SignupPage: NextPage = () => {
     setPassword2(password2);
   }
 
-  const handleEmailSignUpSubmit = () => {
-    fetch(`${erzahler.url}:${erzahler.port}/api/register-by-email`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        username: username,
-        email: email,
-        password: password1
-      }),
-    }).then((response: any) => {
-      return response.json();
-    }).then((data: any) => {
-      console.log('Success data', data);
-    }).catch((error: Error) => {
-      console.log('Error', error.stack);
-    })
-  }
+  const handleSignUpWithEmailClick = () => {
+    signUpWithEmail(username, email, password1);
+  };
 
-  const handleSignInWithGoogleClick = () => {
+  const handleSignUpWithGoogleClick = () => {
     signInWithGoogle(firebaseCtx.auth);
   };
 
-  const handleSignInWithFacebookClick = () => {
+  const handleSignUpWithFacebookClick = () => {
     signInWithFacebook(firebaseCtx.auth);
   };
 
@@ -91,19 +76,19 @@ const SignupPage: NextPage = () => {
           /><br/>
           <Button color="error"
             variant="contained"
-            onClick={() => { handleSignInWithGoogleClick(); }}
+            onClick={() => { handleSignUpWithEmailClick(); }}
           >
             <span className="firebaseui-idp-text firebaseui-idp-text-long">Email</span>
           </Button>
           <Button color="success"
             variant="contained"
-            onClick={() => { handleSignInWithGoogleClick(); }}
+            onClick={() => { handleSignUpWithGoogleClick(); }}
           >
             <span className="firebaseui-idp-text firebaseui-idp-text-long">Google</span>
           </Button>
           <Button color="primary"
             variant="contained"
-            onClick={() => { handleSignInWithFacebookClick(); }}
+            onClick={() => { handleSignUpWithFacebookClick(); }}
           >
             <span className="firebaseui-idp-text firebaseui-idp-text-long">Facebook</span>
           </Button><br/>
@@ -131,7 +116,6 @@ const SignupPage: NextPage = () => {
 
         </Grid>
       </Grid>
-      {/* <StyledFirebaseAuth uiConfig={fuiConfig} firebaseAuth={firebase.auth()} /> */}
     </div>
   )
 }
