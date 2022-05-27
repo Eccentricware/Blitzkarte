@@ -34,14 +34,16 @@ export const NavBarSignedOut: FC<AppBarProps> = () => {
       open={isMenuOpen}
     >
       <MenuItem>
-        <TextField id="outlined-basic" label="Username" variant="outlined" />
+        <TextField id="outlined-basic" label="Username" variant="outlined" fullWidth/>
       </MenuItem>
       <MenuItem>
-        <TextField id="outlined-basic" label="Password" variant="outlined" />
+        <TextField id="outlined-basic" label="Password" variant="outlined" fullWidth/>
       </MenuItem>
       <MenuItem>
-        <Button>Sign In</Button>
-        <Button onClick={handleMenuClose}>Cancel</Button>
+        <Button>></Button>
+        <Button >G</Button>
+        <Button>F</Button>
+        <Button onClick={handleMenuClose}>X</Button>
       </MenuItem>
     </Menu>
   )

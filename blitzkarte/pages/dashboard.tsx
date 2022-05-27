@@ -27,25 +27,24 @@ const DashboardPage: NextPage = () => {
       </Head>
       <NavBarSignedIn/>
       Username: &#123;username&#125;<br/>
-      Email: {user?.email}
+      Email: {user?.email}<br/>
       <Button
         color="inherit"
         variant="contained"
       >
         Change Email
-      </Button>
+      </Button><br/>
       <Button
         color="inherit"
         variant="contained"
       >
         Change Password
       </Button><br/>
-      Email Verified: {user?.emailVerified === true ? 'Yes' : 'No'}
       <Button
         color="warning"
         variant="contained"
       >
-        Resend
+        Resend Verification
       </Button><br />
       Provder merge request: <br/>
       Account: &#123;accountName&#125;<br/>

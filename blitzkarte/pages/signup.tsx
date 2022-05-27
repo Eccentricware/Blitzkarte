@@ -79,12 +79,30 @@ const SignupPage: NextPage = () => {
             onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
               handleUsernameChange(event.target.value);
             }}
-          />
+          /><br/>
+          <Button color="error"
+            variant="contained"
+            onClick={() => { handleSignInWithGoogleClick(); }}
+          >
+            <span className="firebaseui-idp-text firebaseui-idp-text-long">Email</span>
+          </Button>
+          <Button color="success"
+            variant="contained"
+            onClick={() => { handleSignInWithGoogleClick(); }}
+          >
+            <span className="firebaseui-idp-text firebaseui-idp-text-long">Google</span>
+          </Button>
+          <Button color="primary"
+            variant="contained"
+            onClick={() => { handleSignInWithFacebookClick(); }}
+          >
+            <span className="firebaseui-idp-text firebaseui-idp-text-long">Facebook</span>
+          </Button><br/>
           <TextField id="outlined-basic" label="Email" variant="outlined"
             onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
               handleEmailChange(event.target.value);
             }}
-          />
+          /><br />
           <TextField id="outlined-basic" label="Password" type="password" variant="outlined"
             onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
               handlePassword1Change(event.target.value);
@@ -94,25 +112,14 @@ const SignupPage: NextPage = () => {
             onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
               handlePassword2Change(event.target.value);
             }}
-          />
+          /><br />
           <Button color="primary"
             variant="contained"
             onClick={() => { handleEmailSignUpSubmit(); }}
           >
-            Sign Up
+            Submit
           </Button>
-          <Button color="primary"
-            variant="contained"
-            onClick={() => { handleSignInWithGoogleClick(); }}
-          >
-            <span className="firebaseui-idp-text firebaseui-idp-text-long">Sign in with Google</span>
-          </Button>
-          <Button color="primary"
-            variant="contained"
-            onClick={() => { handleSignInWithFacebookClick(); }}
-          >
-            <span className="firebaseui-idp-text firebaseui-idp-text-long">Sign in with Facebook</span>
-          </Button>
+
         </Grid>
       </Grid>
       {/* <StyledFirebaseAuth uiConfig={fuiConfig} firebaseAuth={firebase.auth()} /> */}
