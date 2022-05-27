@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { signInWithPopup, GoogleAuthProvider, Auth, AuthProvider, FacebookAuthProvider } from "firebase/auth";
 import { useContext } from "react";
 import Blitzkontext from "../Blitzkontext";
+import { erzahler } from "../general/erzahler";
 // import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -94,4 +95,20 @@ export const signInWithFacebook = (auth: Auth | null) => {
         // ...
       });
   }
+}
+
+// Guest function. It's not "really" firebase
+export const checkUsername = (username: string): any => {
+  return fetch(`${erzahler.url}:${erzahler.port}/check-username/${username}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }).then((result: any) => {
+    return result.json();
+  }).then((available: boolean) => {
+    return available;
+  }).catch((error: Error) => {
+    return error.message;
+  });
 }

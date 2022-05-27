@@ -16,36 +16,6 @@ export const NavBarSignedIn: FC<AppBarProps> = () => {
     setAnchorEl(event.currentTarget);
   }
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  }
-
-  const handleSignupClick = () => {
-    router.push('/signup');
-  }
-
-  // const renderMenu = (
-  //   <Menu
-  //     anchorEl={anchorEl}
-  //     anchorOrigin={{
-  //       vertical: 'top',
-  //       horizontal: 'right'
-  //     }}
-  //     open={isMenuOpen}
-  //   >
-  //     <MenuItem>
-  //       <TextField id="outlined-basic" label="Username" variant="outlined" />
-  //     </MenuItem>
-  //     <MenuItem>
-  //       <TextField id="outlined-basic" label="Password" variant="outlined" />
-  //     </MenuItem>
-  //     <MenuItem>
-  //       <Button>Login</Button>
-  //       <Button onClick={handleMenuClose}>Cancel</Button>
-  //     </MenuItem>
-  //   </Menu>
-  // )
-
   return (
     <Fragment>
       <AppBar position="sticky">
