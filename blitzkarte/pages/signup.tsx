@@ -4,12 +4,13 @@ import { useContext, useState } from "react";
 import { NavBarSignedOut  } from "../components/nav-bar/NavBarSignedOut";
 import { erzahler } from "../utils/general/erzahler";
 import 'firebase/compat/auth';
-import { signInWithFacebook, signInWithGoogle } from "../utils/firebase/firebase";
+import { checkUsername, signInWithFacebook, signInWithGoogle } from "../utils/firebase/firebase";
 import { Grid, TextField, Button } from "@mui/material";
 import Blitzkontext from "../utils/Blitzkontext";
 
 const SignupPage: NextPage = () => {
   const [username, setUsername] = useState('');
+  const [usernameAvailable, setUsernameAvailable] = useState(false);
   const [email, setEmail] = useState('');
   const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
@@ -17,6 +18,14 @@ const SignupPage: NextPage = () => {
 
   const handleUsernameChange = (username: string) => {
     setUsername(username);
+    console.log(username);
+    if (username.length > 0) {
+      const availabilityResult: Promise<any> = checkUsername(username);
+      availabilityResult.then((result: any) => {
+        console.log('checkUsername(username)', result);
+        setUsernameAvailable(result);
+      });
+    }
   }
 
   const handleEmailChange = (email: string) => {
@@ -32,7 +41,6 @@ const SignupPage: NextPage = () => {
   }
 
   const handleEmailSignUpSubmit = () => {
-    console.log(`Username: ${username} | Email: ${email} | Password: ${password1}`);
     fetch(`${erzahler.url}:${erzahler.port}/api/register-by-email`, {
       method: 'POST',
       headers: {
@@ -43,14 +51,11 @@ const SignupPage: NextPage = () => {
         email: email,
         password: password1
       }),
-    })
-    .then((response: any) => {
+    }).then((response: any) => {
       return response.json();
-    })
-    .then((data: any) => {
+    }).then((data: any) => {
       console.log('Success data', data);
-    })
-    .catch((error: Error) => {
+    }).catch((error: Error) => {
       console.log('Error', error.stack);
     })
   }
@@ -75,7 +80,11 @@ const SignupPage: NextPage = () => {
 
       <Grid container columns={1}>
         <Grid item>
-          <TextField id="outlined-basic" label="Username" variant="outlined"
+          <TextField
+            label="Username"
+            required
+            variant="outlined"
+            error={!usernameAvailable && username.length > 0 ? true : false}
             onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
               handleUsernameChange(event.target.value);
             }}
