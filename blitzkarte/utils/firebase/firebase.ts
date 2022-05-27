@@ -24,6 +24,26 @@ export const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 //const analytics = getAnalytics(firebaseApp);
 
+export const signUpWithEmail = (username: string, email: string, password: string): void => {
+  fetch(`${erzahler.url}:${erzahler.port}/api/register-by-email`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      username: username,
+      email: email,
+      password: password
+    }),
+  }).then((response: any) => {
+    return response.json();
+  }).then((data: any) => {
+    console.log('Success data', data);
+  }).catch((error: Error) => {
+    console.log('Error', error.stack);
+  });
+}
+
 export const signInWithGoogle = (auth: Auth | null) => {
   console.log('Attempting sign in with Google...');
 
