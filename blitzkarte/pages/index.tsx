@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { NavBarSignedOut } from '../components/nav-bar/NavbarSignedOut'
+import { NavBarSignedOut } from '../components/nav-bar/NavBarSignedOut'
 import styles from '../styles/Home.module.css'
 
 const Home: NextPage = () => {

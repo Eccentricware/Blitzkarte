@@ -24,27 +24,27 @@ export const NavBarSignedIn: FC<AppBarProps> = () => {
     router.push('/signup');
   }
 
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right'
-      }}
-      open={isMenuOpen}
-    >
-      <MenuItem>
-        <TextField id="outlined-basic" label="Username" variant="outlined" />
-      </MenuItem>
-      <MenuItem>
-        <TextField id="outlined-basic" label="Password" variant="outlined" />
-      </MenuItem>
-      <MenuItem>
-        <Button>Login</Button>
-        <Button onClick={handleMenuClose}>Cancel</Button>
-      </MenuItem>
-    </Menu>
-  )
+  // const renderMenu = (
+  //   <Menu
+  //     anchorEl={anchorEl}
+  //     anchorOrigin={{
+  //       vertical: 'top',
+  //       horizontal: 'right'
+  //     }}
+  //     open={isMenuOpen}
+  //   >
+  //     <MenuItem>
+  //       <TextField id="outlined-basic" label="Username" variant="outlined" />
+  //     </MenuItem>
+  //     <MenuItem>
+  //       <TextField id="outlined-basic" label="Password" variant="outlined" />
+  //     </MenuItem>
+  //     <MenuItem>
+  //       <Button>Login</Button>
+  //       <Button onClick={handleMenuClose}>Cancel</Button>
+  //     </MenuItem>
+  //   </Menu>
+  // )
 
   return (
     <Fragment>
@@ -64,7 +64,7 @@ export const NavBarSignedIn: FC<AppBarProps> = () => {
           </Button>
         </Toolbar>
       </AppBar>
-      {renderMenu}
+      {/* {renderMenu} */}
     </Fragment>
   )
 }
