@@ -3,10 +3,10 @@ import { AppBar, Button, Menu, MenuItem, TextField, Toolbar, Typography } from '
 import { useRouter } from 'next/router';
 
 interface AppBarProps {
-
+  title: string;
 }
 
-export const NavBarSignedOut: FC<AppBarProps> = () => {
+export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const router = useRouter();
 
@@ -24,7 +24,7 @@ export const NavBarSignedOut: FC<AppBarProps> = () => {
     router.push('/signup');
   }
 
-  const renderMenu = (
+  const loginMenu = (
     <Menu
       anchorEl={anchorEl}
       anchorOrigin={{
@@ -40,7 +40,7 @@ export const NavBarSignedOut: FC<AppBarProps> = () => {
         <TextField id="outlined-basic" label="Password" variant="outlined" fullWidth/>
       </MenuItem>
       <MenuItem>
-        <Button>></Button>
+        <Button>&gt;</Button>
         <Button >G</Button>
         <Button>F</Button>
         <Button onClick={handleMenuClose}>X</Button>
@@ -72,7 +72,7 @@ export const NavBarSignedOut: FC<AppBarProps> = () => {
           </Button>
         </Toolbar>
       </AppBar>
-      {renderMenu}
+      {loginMenu}
     </Fragment>
   )
 }

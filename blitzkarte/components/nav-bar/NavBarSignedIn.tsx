@@ -1,12 +1,12 @@
-import { FC, Fragment, useState } from 'react';
+import React, { FC, Fragment, useState } from 'react';
 import { AppBar, Button, Menu, MenuItem, TextField, Toolbar, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 
 interface AppBarProps {
-
+  title: string;
 }
 
-export const NavBarSignedIn: FC<AppBarProps> = () => {
+export const NavBarSignedIn: FC<AppBarProps> = ({title}: AppBarProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const router = useRouter();
 
@@ -14,7 +14,37 @@ export const NavBarSignedIn: FC<AppBarProps> = () => {
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
+    console.log('url', router.pathname);
   }
+
+  const handleProfileMenuClose = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(null);
+  }
+
+  const handleDashboardClick = () => {
+    router.push('/dashboard');
+  }
+
+  const profileMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'right'
+      }}
+      open={isMenuOpen}
+    >
+      {router.pathname !== '/dashboard' &&
+        <MenuItem>
+          <Button onClick={handleDashboardClick}>Dashboard</Button>
+        </MenuItem>
+      }
+      <MenuItem>
+        <Button>Log Out</Button>
+        <Button onClick={handleProfileMenuClose}>X</Button>
+      </MenuItem>
+    </Menu>
+  )
 
   return (
     <Fragment>
@@ -26,15 +56,33 @@ export const NavBarSignedIn: FC<AppBarProps> = () => {
           >
             Blitzkarte
           </Typography>
+          <Typography variant="h6"
+            noWrap
+            component="div"
+          >
+            {title}
+          </Typography>
+          <Button
+            disabled
+            color="inherit"
+          >
+            Alerts
+          </Button>
+          <Button
+            disabled
+            color="inherit"
+          >
+            Messages
+          </Button>
           <Button
             onClick={handleProfileMenuOpen}
             color="inherit"
           >
-            Log Out
+            Person Icon
           </Button>
         </Toolbar>
       </AppBar>
-      {/* {renderMenu} */}
+      {profileMenu}
     </Fragment>
   )
 }
