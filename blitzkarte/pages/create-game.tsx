@@ -1,15 +1,16 @@
 import type { NextPage } from 'next';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Parser } from '../utils/parsing/services/parse-orchestrator';
 import { RenderData, initialRenderData } from '../models/RenderData';
 import { OmniBox } from '../components/omni-box/OmniBox';
 import { initialOmniBoxData, OmniBoxData } from '../models/OmniBoxData';
-import { NavBarSignedOut } from '../components/nav-bar/NavbarSignedOut';
+import { NavBarSignedIn } from '../components/nav-bar/NavBarSignedIn';
 import Head from 'next/head';
 import { Grid } from '@mui/material';
 import { MapContainer } from '../components/map-elements/map/MapContainer';
 
-const GameParserPage: NextPage = () => {
+const CreateGamePage: NextPage = () => {
+  const [gameName, setGameName] = useState('');
   const [renderData, setRenderData] = useState<RenderData>(initialRenderData);
   const [omniBoxData, setOmniBoxData] = useState<OmniBoxData>(initialOmniBoxData);
   const [showNodeNetwork, setShowNodeNetwork] = useState(false);
@@ -104,7 +105,7 @@ const GameParserPage: NextPage = () => {
         <meta name="description" content="Fully automated game of global domination" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <NavBarSignedOut/>
+      <NavBarSignedIn title={`New Game ${gameName}`}/>
 
       <Grid container columns={2}>
         <Grid item>
@@ -118,4 +119,4 @@ const GameParserPage: NextPage = () => {
   );
 }
 
-export default GameParserPage;
+export default CreateGamePage;
