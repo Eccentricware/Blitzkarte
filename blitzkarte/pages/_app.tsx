@@ -4,13 +4,15 @@ import Blitzkontext from '../utils/Blitzkontext';
 import { useEffect, useState } from 'react';
 import { MapView, mapViewDefault } from '../models/MapView'
 import { FacebookAuthProvider, getAuth, GoogleAuthProvider, onAuthStateChanged, User } from 'firebase/auth';
-import { firebaseConfig } from '../utils/firebase/firebase';
+import { firebaseConfig } from '../utils/firebase/firebaseService';
 import firebase, { initializeApp } from 'firebase/app';
 
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [mapView, setMapView] = useState<MapView>(mapViewDefault);
   const [firebaseUser, setFirebaseUser] = useState<User | null>(null);
+  const [blitzkarteUser, setBlitzkarteUser] = useState<any | null>(null);
+
 
   const firebaseApp = initializeApp(firebaseConfig);
   const auth = getAuth(firebaseApp);
@@ -26,9 +28,10 @@ function MyApp({ Component, pageProps }: AppProps) {
     <Blitzkontext.Provider value={{
       map: mapView,
       setMapView: setMapView,
-      firebase: {
+      user: {
         auth: auth,
-        user: firebaseUser
+        firebaseUser: firebaseUser,
+        blitzkarteUser: blitzkarteUser
       }
     }}>
       <Component {...pageProps} />

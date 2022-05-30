@@ -5,17 +5,19 @@ import { MapView, mapViewDefault } from '../models/MapView';
 interface ContextStructure {
   map: MapView
   setMapView: any,
-  firebase:{
+  user:{
     auth: Auth | null;
-    user: User | null;
+    firebaseUser: User | null;
+    blitzkarteUser: any | null;
   }
 }
 
 export default React.createContext<ContextStructure>({
   map: mapViewDefault,
   setMapView: undefined,
-  firebase: {
+  user: {
     auth: null,
-    user: null
+    firebaseUser: null,
+    blitzkarteUser: null
   }
 });

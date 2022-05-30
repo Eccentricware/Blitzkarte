@@ -5,7 +5,7 @@ import { NavBarSignedOut } from "../components/nav-bar/NavbarSignedOut";
 import { erzahler } from "../utils/general/erzahler";
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
-import { firebaseConfig } from "../utils/firebase/firebase";
+import { firebaseConfig } from "../utils/firebase/firebaseService";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { Grid, TextField, Button } from "@mui/material";
 

@@ -58,6 +58,12 @@ export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
           >
             Blitzkarte
           </Typography>
+          <Typography variant="h6"
+            noWrap
+            component="div"
+          >
+            {title}
+          </Typography>
           <Button
             onClick={handleProfileMenuOpen}
             color="inherit"
