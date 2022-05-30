@@ -5,19 +5,19 @@ import { Fragment, useContext, useEffect, useState } from "react";
 import { NavBarSignedIn } from "../components/nav-bar/NavBarSignedIn";
 import Blitzkontext from "../utils/Blitzkontext";
 import { useRouter } from 'next/router';
-import { signInWithGoogle, signInWithFacebook, signUpWithEmail } from "../utils/firebase/firebase";
-import { erzahler } from "../utils/general/erzahler";
+import { FirebaseService } from "../utils/firebase/firebaseService";
 
 const DashboardPage: NextPage = () => {
-  const user = useContext(Blitzkontext).firebase.user;
+  const user = useContext(Blitzkontext).user;
   const [username, setUsername] = useState('');
   const [usernameAvailable, setUsernameAvailable] = useState(false);
   const [presentAddEmail, setPresentAddEmail] = useState(false);
   const [email, setEmail] = useState('');
   const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
-  const firebaseCtx = useContext(Blitzkontext).firebase;
   const router = useRouter();
+
+  const firebaseService = new FirebaseService();
 
   const handleSignUpWithEmailEnableClick = () => {
     setPresentAddEmail(!presentAddEmail);
@@ -36,15 +36,15 @@ const DashboardPage: NextPage = () => {
   }
 
   const handleSignUpWithEmailSubmitClick = () => {
-    signUpWithEmail(username, email, password1);
+    firebaseService.signUpWithEmail(username, email, password1);
   };
 
   const handleSignUpWithGoogleClick = () => {
-    signInWithGoogle(firebaseCtx.auth);
+    firebaseService.signInWithGoogle(user.auth);
   };
 
   const handleSignUpWithFacebookClick = () => {
-    signInWithFacebook(firebaseCtx.auth);
+    firebaseService.signInWithFacebook(user.auth);
   };
 
   return (
@@ -55,7 +55,7 @@ const DashboardPage: NextPage = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link rel="icon" href="/favicon.ico"/>
       </Head>
-      <NavBarSignedIn/>
+      <NavBarSignedIn title={`${user.blitzkarteUser}'s Dashboard`}/>
       Username: &#123;username&#125;<br/>
       <br/>
       Email: &#123;email&#125;<br/>

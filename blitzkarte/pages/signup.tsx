@@ -2,55 +2,102 @@ import type { NextPage } from "next";
 import Head from 'next/head';
 import { useContext, useState } from "react";
 import { NavBarSignedOut  } from "../components/nav-bar/NavBarSignedOut";
-import { erzahler } from "../utils/general/erzahler";
 import 'firebase/compat/auth';
-import { checkUsername, signInWithFacebook, signInWithGoogle } from "../utils/firebase/firebase";
+import { FirebaseService } from "../utils/firebase/firebaseService";
 import { Grid, TextField, Button } from "@mui/material";
 import Blitzkontext from "../utils/Blitzkontext";
-import { signUpWithEmail } from "../utils/firebase/firebase";
+import { UsernameValidator } from "../utils/general/usernameValidator";
+import { truncate } from "fs/promises";
 
 const SignupPage: NextPage = () => {
   const [username, setUsername] = useState('');
-  const [usernameAvailable, setUsernameAvailable] = useState(false);
+  const [usernameAvailable, setUsernameAvailable] = useState(true);
+  const [usernameErrorMsg, setUsernameErrorMsg] = useState('');
+  const [showEmailOps, setShowEmailOps] = useState(false);
   const [email, setEmail] = useState('');
+  const [validEmail, setValidEmail] = useState(true);
   const [password1, setPassword1] = useState('');
+  const [password1Valid, setPassword1Valid] = useState(true);
   const [password2, setPassword2] = useState('');
-  const firebaseCtx = useContext(Blitzkontext).firebase;
+  const [password2Valid, setPassword2Valid] = useState(true);
+  const firebaseCtx = useContext(Blitzkontext).user;
+
+  const firebaseService = new FirebaseService();
+  const validEmailRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/g
 
   const handleUsernameChange = (username: string) => {
-    setUsername(username);
+    let usernameValidator = new UsernameValidator(username);
+
     console.log(username);
-    if (username.length > 0) {
-      const availabilityResult: Promise<any> = checkUsername(username);
-      availabilityResult.then((result: any) => {
-        console.log('checkUsername(username)', result);
-        setUsernameAvailable(result);
+    if (usernameValidator.invalidChar) {
+      setUsernameErrorMsg('Invalid Character');
+    } else if (usernameValidator.invalidStart) {
+      setUsernameErrorMsg('Invalid first character');
+    } else if (usernameValidator.chainedChar) {
+      setUsernameErrorMsg('Don\'t chain that. Come on!');
+    } else if (usernameValidator.badWords) {
+      setUsernameErrorMsg('Can\'t let you do that');
+    } else if (usernameValidator.invalidEnd) {
+      setUsername(username);
+      setUsernameAvailable(false);
+      setUsernameErrorMsg('Can\'t end username with a space');
+    } else {
+      const availabilityResult: Promise<any> = firebaseService.checkUsername(username);
+      setUsername(username);
+      availabilityResult.then((usernameAvailable: any) => {
+        console.log(`checkUsername(${username})`, usernameAvailable);
+        setUsernameAvailable(usernameAvailable);
+        if (!usernameAvailable) {
+          setUsernameErrorMsg('Username unavailable');
+        } else {
+          setUsernameErrorMsg('');
+        }
       });
     }
   }
 
   const handleEmailChange = (email: string) => {
+    const validEmail = email.match(validEmailRegex);
     setEmail(email);
+    if ((validEmail)) {
+      setValidEmail(true);
+    } else {
+      setValidEmail(false);
+    }
   }
 
   const handlePassword1Change = (password1: string) => {
     setPassword1(password1);
+    if (password1.length < 6) {
+      setPassword1Valid(false);
+    } else {
+      setPassword1Valid(true);
+    }
   }
 
   const handlePassword2Change = (password2: string) => {
     setPassword2(password2);
+    if (password1 !== password2) {
+      setPassword2Valid(false);
+    } else {
+      setPassword2Valid(true);
+    }
   }
 
-  const handleSignUpWithEmailClick = () => {
-    signUpWithEmail(username, email, password1);
+  const handleToggleEmailOpsClick = () => {
+    setShowEmailOps(!showEmailOps);
+  };
+
+  const handleEmailSignUpClick = () => {
+    firebaseService.signUpWithEmail(username, email, password1);
   };
 
   const handleSignUpWithGoogleClick = () => {
-    signInWithGoogle(firebaseCtx.auth);
+    firebaseService.signInWithGoogle(firebaseCtx.auth);
   };
 
   const handleSignUpWithFacebookClick = () => {
-    signInWithFacebook(firebaseCtx.auth);
+    firebaseService.signInWithFacebook(firebaseCtx.auth);
   };
 
   return (
@@ -69,14 +116,19 @@ const SignupPage: NextPage = () => {
             label="Username"
             required
             variant="outlined"
-            error={!usernameAvailable && username.length > 0 ? true : false}
+            value={username}
+            error={
+              !usernameAvailable
+              || usernameErrorMsg
+              ? true : false}
+            helperText={usernameErrorMsg.length > 0 ? usernameErrorMsg : null}
             onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
               handleUsernameChange(event.target.value);
             }}
           /><br/>
           <Button color="error"
             variant="contained"
-            onClick={() => { handleSignUpWithEmailClick(); }}
+            onClick={() => { handleToggleEmailOpsClick(); }}
           >
             <span className="firebaseui-idp-text firebaseui-idp-text-long">Email</span>
           </Button>
@@ -92,28 +144,46 @@ const SignupPage: NextPage = () => {
           >
             <span className="firebaseui-idp-text firebaseui-idp-text-long">Facebook</span>
           </Button><br/>
-          <TextField id="outlined-basic" label="Email" variant="outlined"
-            onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
-              handleEmailChange(event.target.value);
-            }}
-          /><br />
-          <TextField id="outlined-basic" label="Password" type="password" variant="outlined"
-            onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
-              handlePassword1Change(event.target.value);
-            }}
-          />
-          <TextField id="outlined-basic" label="Confirm Password" type="password" variant="outlined"
-            onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
-              handlePassword2Change(event.target.value);
-            }}
-          /><br />
-          <Button color="primary"
-            variant="contained"
-            onClick={() => { handleEmailSignUpSubmit(); }}
-          >
-            Submit
-          </Button>
-
+          {
+            showEmailOps &&
+            <div>
+              <TextField id="outlined-basic"
+                required
+                label="Email"
+                variant="outlined"
+                error={!validEmail}
+                onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
+                  handleEmailChange(event.target.value);
+                }}
+              /><br />
+              <TextField id="outlined-basic"
+                label="Password"
+                type="password"
+                variant="outlined"
+                error={!password1Valid}
+                helperText={!password1Valid && password1.length > 0 ? "Too shot" : null}
+                onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
+                  handlePassword1Change(event.target.value);
+                }}
+              />
+              <TextField id="outlined-basic"
+                label="Confirm Password"
+                type="password"
+                variant="outlined"
+                error={!password2Valid}
+                helperText={!password2Valid && password2.length > 0 ? "Passwords don't match" : null}
+                onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
+                  handlePassword2Change(event.target.value);
+                }}
+              /><br />
+              <Button color="primary"
+                variant="contained"
+                onClick={() => { handleEmailSignUpClick(); }}
+              >
+                Submit
+              </Button>
+            </div>
+          }
         </Grid>
       </Grid>
     </div>
