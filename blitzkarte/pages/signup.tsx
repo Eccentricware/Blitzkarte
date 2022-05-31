@@ -6,7 +6,7 @@ import 'firebase/compat/auth';
 import { FirebaseService } from "../utils/firebase/firebaseService";
 import { Grid, TextField, Button } from "@mui/material";
 import Blitzkontext from "../utils/Blitzkontext";
-import { UsernameValidator } from "../utils/general/usernameValidator";
+import { CredentialValidator } from "../utils/general/credentialValidator";
 import { truncate } from "fs/promises";
 
 const SignupPage: NextPage = () => {
@@ -23,10 +23,9 @@ const SignupPage: NextPage = () => {
   const firebaseCtx = useContext(Blitzkontext).user;
 
   const firebaseService = new FirebaseService();
-  const validEmailRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/g
 
   const handleUsernameChange = (username: string) => {
-    let usernameValidator = new UsernameValidator(username);
+    let usernameValidator = new CredentialValidator(username);
 
     console.log(username);
     if (usernameValidator.invalidChar) {
@@ -44,22 +43,27 @@ const SignupPage: NextPage = () => {
     } else {
       const availabilityResult: Promise<any> = firebaseService.checkUsername(username);
       setUsername(username);
-      availabilityResult.then((usernameAvailable: any) => {
-        console.log(`checkUsername(${username})`, usernameAvailable);
-        setUsernameAvailable(usernameAvailable);
-        if (!usernameAvailable) {
-          setUsernameErrorMsg('Username unavailable');
-        } else {
-          setUsernameErrorMsg('');
-        }
-      });
+      if (username.length > 0) {
+        availabilityResult.then((usernameAvailable: any) => {
+          console.log(`checkUsername(${username})`, usernameAvailable);
+          setUsernameAvailable(usernameAvailable);
+          if (!usernameAvailable) {
+            setUsernameErrorMsg('Username unavailable');
+          } else {
+            setUsernameErrorMsg('');
+          }
+        });
+      }
     }
   }
 
   const handleEmailChange = (email: string) => {
-    const validEmail = email.match(validEmailRegex);
+    const emailValidator = new CredentialValidator(email);
+    firebaseCtx.auth?.currentUser?.getIdToken().then((token: any) => {
+      console.log('token', token);
+    });
     setEmail(email);
-    if ((validEmail)) {
+    if ((emailValidator.emailValid)) {
       setValidEmail(true);
     } else {
       setValidEmail(false);
@@ -89,15 +93,15 @@ const SignupPage: NextPage = () => {
   };
 
   const handleEmailSignUpClick = () => {
-    firebaseService.signUpWithEmail(username, email, password1);
+    firebaseService.signUpWithEmail(firebaseCtx.auth, username, email, password1);
   };
 
   const handleSignUpWithGoogleClick = () => {
-    firebaseService.signInWithGoogle(firebaseCtx.auth);
+    firebaseService.signUpWithGoogle(firebaseCtx.auth, username);
   };
 
   const handleSignUpWithFacebookClick = () => {
-    firebaseService.signInWithFacebook(firebaseCtx.auth);
+    firebaseService.signUpWithFacebook(firebaseCtx.auth, username);
   };
 
   return (
