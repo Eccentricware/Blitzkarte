@@ -1,5 +1,7 @@
 // Import the functions you need from the SDKs you need
-import { signInWithPopup, GoogleAuthProvider, Auth, AuthProvider, FacebookAuthProvider, sendEmailVerification, createUserWithEmailAndPassword, UserCredential } from "firebase/auth";
+import { initializeApp } from "firebase/app";
+import { signInWithPopup, GoogleAuthProvider, Auth, AuthProvider, FacebookAuthProvider, sendEmailVerification, createUserWithEmailAndPassword, UserCredential, User, getAuth, onAuthStateChanged } from "firebase/auth";
+import router from "next/router";
 import { erzahler } from "../general/erzahler";
 
 export const firebaseConfig = {
@@ -13,25 +15,44 @@ export const firebaseConfig = {
 };
 
 export class FirebaseService {
-  async signUpWithEmail(auth: Auth | null, username: string, email: string, password: string): Promise<any> {
-    if (auth) {
-      createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential: UserCredential) => {
-          let user = userCredential.user;
-          sendEmailVerification(user);
-          const idTokenPromise: Promise<string> = user.getIdToken();
-          return idTokenPromise.then((idToken: string) => {
+  async authenticateUser(): Promise<boolean> {
+    return true;
+  }
+
+  firebaseApp = initializeApp(firebaseConfig);
+  auth = getAuth(this.firebaseApp);
+
+  verifyUser() {
+    onAuthStateChanged(this.auth, (user: User | null) => {
+      if (user) {
+        return user.getIdToken();
+      } else {
+        router.push('/');
+      }
+    });
+  }
+
+  async signUpWithEmail(auth: Auth, username: string, email: string, password: string): Promise<any> {
+    return createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential: UserCredential) => {
+        let user = userCredential.user;
+        // const idTokenPromise: Promise<string> = user.getIdToken();
+        // return idTokenPromise.then((idToken: string) => {
+        //   const successResponse: any = this.addUserToDatabase(idToken, username);
+        //   return successResponse;
+        // });
+        return user.getIdToken()
+          .then((idToken: string) => {
             return this.addUserToDatabase(idToken, username);
           });
-        })
-        .catch((error: Error) => {
-          return error.message;
-        });
-    }
+      })
+      .catch((error: Error) => {
+        return error.message;
+      });
   }
 
   async addUserToDatabase(idToken: string, username: string): Promise<any> {
-    fetch(`${erzahler.url}:${erzahler.port}/register-user`, {
+    return fetch(`${erzahler.url}:${erzahler.port}/register-user`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -42,45 +63,54 @@ export class FirebaseService {
       }),
     }).then((response: any) => {
       return response.json();
-    }).then((data: any) => {
-      console.log('User Added to firebase!', data);
+    }).then((addResult: any) => {
+      console.log('User Added to database!', addResult);
+      return addResult;
     }).catch((error: Error) => {
-      console.log('Errorasdfdf', error.message);
+      console.log('Add user to firebase', error.message);
     });
   }
 
-  signUpWithGoogle = (auth: Auth | null, username: string) => {
+  signUpWithGoogle = (auth: Auth, username: string) => {
     console.log('Attempting sign in with Google...');
 
-    if (auth) {
-      const googleProvider: AuthProvider = new GoogleAuthProvider();
-      signInWithPopup(auth, googleProvider)
-        .then((userCredential: UserCredential) => {
-          const idTokenPromise: Promise<string> = userCredential.user.getIdToken();
-          return idTokenPromise.then((idToken: string) => {
-            return this.addUserToDatabase(idToken, username);
-          });
-        }).catch((error: Error) => {
-          return error.message
+    const googleProvider: AuthProvider = new GoogleAuthProvider();
+    signInWithPopup(auth, googleProvider)
+      .then((userCredential: UserCredential) => {
+        const idTokenPromise: Promise<string> = userCredential.user.getIdToken();
+        return idTokenPromise.then((idToken: string) => {
+          return this.addUserToDatabase(idToken, username);
         });
-    }
+      }).catch((error: Error) => {
+        return error.message
+      });
   }
 
-  signUpWithFacebook = (auth: Auth | null, username: string) => {
+  signUpWithFacebook = (auth: Auth, username: string) => {
     console.log('Sign in with Facebook Clicked');
 
-    if (auth) {
-      const facebookProvider: AuthProvider = new FacebookAuthProvider();
-      signInWithPopup(auth, facebookProvider)
-        .then((userCredential: UserCredential) => {
-          const idTokenPromise: Promise<string> = userCredential.user.getIdToken();
-          return idTokenPromise.then((idToken: string) => {
-            return this.addUserToDatabase(idToken, username);
-          });
-        }).catch((error: Error) => {
-          return error.message
+    const facebookProvider: AuthProvider = new FacebookAuthProvider();
+    signInWithPopup(auth, facebookProvider)
+      .then((userCredential: UserCredential) => {
+        const idTokenPromise: Promise<string> = userCredential.user.getIdToken();
+        return idTokenPromise.then((idToken: string) => {
+          return this.addUserToDatabase(idToken, username);
         });
-    }
+      }).catch((error: Error) => {
+        return error.message
+      });
+  }
+
+  addEmailProvider(auth: Auth, email: string, password: string) {
+    console.log('Not implemented yet');
+  }
+
+  addGoogleProvider(auth: Auth) {
+    console.log('Not implemented yet');
+  }
+
+  addFacebookProvider(auth: Auth) {
+    console.log('Not implemented yet');
   }
 
   // Guest function. It's not "really" firebase
@@ -97,5 +127,9 @@ export class FirebaseService {
     }).catch((error: Error) => {
       return error.message;
     });
+  }
+
+  triggerSendVerificationEmail = (user: User) => {
+    sendEmailVerification(user);
   }
 }

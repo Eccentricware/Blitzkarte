@@ -34,7 +34,7 @@ export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
       open={isMenuOpen}
     >
       <MenuItem>
-        <TextField id="outlined-basic" label="Username" variant="outlined" fullWidth/>
+        <TextField id="outlined-basic" label="Username / Email" variant="outlined" fullWidth/>
       </MenuItem>
       <MenuItem>
         <TextField id="outlined-basic" label="Password" variant="outlined" fullWidth/>

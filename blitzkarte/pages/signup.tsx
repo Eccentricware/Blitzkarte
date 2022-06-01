@@ -8,6 +8,7 @@ import { Grid, TextField, Button } from "@mui/material";
 import Blitzkontext from "../utils/Blitzkontext";
 import { CredentialValidator } from "../utils/general/credentialValidator";
 import { truncate } from "fs/promises";
+import { useRouter } from "next/router";
 
 const SignupPage: NextPage = () => {
   const [username, setUsername] = useState('');
@@ -22,12 +23,13 @@ const SignupPage: NextPage = () => {
   const [password2Valid, setPassword2Valid] = useState(true);
   const firebaseCtx = useContext(Blitzkontext).user;
 
+  const router = useRouter();
+
   const firebaseService = new FirebaseService();
 
   const handleUsernameChange = (username: string) => {
     let usernameValidator = new CredentialValidator(username);
 
-    console.log(username);
     if (usernameValidator.invalidChar) {
       setUsernameErrorMsg('Invalid Character');
     } else if (usernameValidator.invalidStart) {
@@ -45,7 +47,6 @@ const SignupPage: NextPage = () => {
       setUsername(username);
       if (username.length > 0) {
         availabilityResult.then((usernameAvailable: any) => {
-          console.log(`checkUsername(${username})`, usernameAvailable);
           setUsernameAvailable(usernameAvailable);
           if (!usernameAvailable) {
             setUsernameErrorMsg('Username unavailable');
@@ -59,9 +60,6 @@ const SignupPage: NextPage = () => {
 
   const handleEmailChange = (email: string) => {
     const emailValidator = new CredentialValidator(email);
-    firebaseCtx.auth?.currentUser?.getIdToken().then((token: any) => {
-      console.log('token', token);
-    });
     setEmail(email);
     if ((emailValidator.emailValid)) {
       setValidEmail(true);
@@ -93,15 +91,29 @@ const SignupPage: NextPage = () => {
   };
 
   const handleEmailSignUpClick = () => {
-    firebaseService.signUpWithEmail(firebaseCtx.auth, username, email, password1);
+    if (firebaseCtx.auth) {
+      firebaseService.signUpWithEmail(firebaseCtx.auth, username, email, password1)
+        .then((result: any) => {
+          console.log('super final top level add user feedback result', result);
+          if (result.success === true) {
+            router.push('/dashboard');
+          }
+        });
+    } else {
+      console.log('No firebase auth!');
+    }
   };
 
   const handleSignUpWithGoogleClick = () => {
-    firebaseService.signUpWithGoogle(firebaseCtx.auth, username);
+    if (firebaseCtx.auth) {
+      firebaseService.signUpWithGoogle(firebaseCtx.auth, username);
+    }
   };
 
   const handleSignUpWithFacebookClick = () => {
-    firebaseService.signUpWithFacebook(firebaseCtx.auth, username);
+    if (firebaseCtx.auth) {
+      firebaseService.signUpWithFacebook(firebaseCtx.auth, username);
+    }
   };
 
   return (

@@ -1,6 +1,7 @@
 import React, { FC, Fragment, useState } from 'react';
 import { AppBar, Button, Menu, MenuItem, TextField, Toolbar, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
+import { getAuth, signOut } from 'firebase/auth';
 
 interface AppBarProps {
   title: string;
@@ -19,6 +20,12 @@ export const NavBarSignedIn: FC<AppBarProps> = ({title}: AppBarProps) => {
 
   const handleProfileMenuClose = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(null);
+  }
+
+  const handleSignOutClick = () => {
+    const auth = getAuth();
+    signOut(auth);
+    router.push('/');
   }
 
   const handleDashboardClick = () => {
@@ -40,7 +47,7 @@ export const NavBarSignedIn: FC<AppBarProps> = ({title}: AppBarProps) => {
         </MenuItem>
       }
       <MenuItem>
-        <Button>Log Out</Button>
+        <Button onClick={handleSignOutClick}>Log Out</Button>
         <Button onClick={handleProfileMenuClose}>X</Button>
       </MenuItem>
     </Menu>
