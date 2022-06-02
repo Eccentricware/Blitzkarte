@@ -7,19 +7,18 @@ import { firebaseConfig } from './firebase/firebaseService';
 interface ContextStructure {
   map: MapView
   setMapView: any,
-  user:{
-    auth: Auth | null;
-    firebaseUser: User | null;
-    blitzkarteUser: any | null;
+  auth: {
+    auth: Auth;
   }
 }
+
+const firebaseApp = initializeApp(firebaseConfig);
+const auth = getAuth(firebaseApp);
 
 export default React.createContext<ContextStructure>({
   map: mapViewDefault,
   setMapView: undefined,
-  user: {
-    auth: null,
-    firebaseUser: null,
-    blitzkarteUser: null
+  auth: {
+    auth: auth
   }
 });
