@@ -6,6 +6,7 @@ import { MapView, mapViewDefault } from '../models/MapView'
 import { FacebookAuthProvider, getAuth, GoogleAuthProvider, onAuthStateChanged, User } from 'firebase/auth';
 import { firebaseConfig } from '../utils/firebase/firebaseService';
 import firebase, { initializeApp } from 'firebase/app';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -22,19 +23,18 @@ function MyApp({ Component, pageProps }: AppProps) {
   //     setFirebaseUser(user);
   //   });
   // }, [auth]);
+  const queryClient: QueryClient = new QueryClient();
 
   return (
-    <Blitzkontext.Provider value={{
-      map: mapView,
-      setMapView: setMapView,
-      user: {
-        auth: auth,
-        firebaseUser: firebaseUser,
-        blitzkarteUser: blitzkarteUser
-      }
-    }}>
-      <Component {...pageProps} />
-    </Blitzkontext.Provider>
+    <QueryClientProvider client={queryClient}>
+      <Blitzkontext.Provider value={{
+        map: mapView,
+        setMapView: setMapView,
+        user: { auth: auth }
+      }}>
+        <Component {...pageProps} />
+      </Blitzkontext.Provider>
+    </QueryClientProvider>
   )
 }
 

@@ -1,16 +1,18 @@
 import { Button, TextField } from '@mui/material';
+import { User } from 'firebase/auth';
 import { useRouter } from 'next/router';
-import { FC, Fragment, useContext, useState } from 'react';
+import { FC, Fragment, useContext, useEffect, useState } from 'react';
+import { QueryClient, useQuery, useQueryClient } from 'react-query';
 import { ProfileService } from '../../services/profile-service';
 import Blitzkontext from '../../utils/Blitzkontext';
 import { FirebaseService } from '../../utils/firebase/firebaseService';
-import { NavBarSignedIn } from '../nav-bar/NavBarSignedIn';
+import { erzahler } from '../../utils/general/erzahler';
 
 interface DashboardBodyProps {
-  uid: string;
+  user: User | null;
 }
 
-const DashboardBody: FC<DashboardBodyProps> = ({uid}: DashboardBodyProps) => {
+const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
   // const firebaseApp = initializeApp(firebaseConfig);
   // const auth = getAuth(firebaseApp);
   const firebase = useContext(Blitzkontext).user;
@@ -23,6 +25,29 @@ const DashboardBody: FC<DashboardBodyProps> = ({uid}: DashboardBodyProps) => {
   const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
   const router = useRouter();
+
+  const queryClient: QueryClient = useQueryClient();
+
+  const { isLoading, error, data, isFetching } = useQuery('userSettings', () => {
+      return user?.getIdToken().then((idToken: string) => {
+        return fetch(`${erzahler.url}:${erzahler.port}/get-user-settings/${idToken}`)
+          .then((response) => {
+            return response.json();
+          }).then((data) => {
+            console.log(data);
+            return data;
+          })
+          .catch((error: Error) => console.log(error.message));
+      });
+  });
+
+  if (isFetching) {
+    return <div>Fetcher? I hardly know her!!</div>
+  }
+
+  if (isLoading) {
+    return <div>loading</div>
+  }
 
   const handleEmailChange = (email: string) => {
     setEmail(email);
@@ -60,7 +85,7 @@ const DashboardBody: FC<DashboardBodyProps> = ({uid}: DashboardBodyProps) => {
 
   return (
     <div>
-      Username: &#123;username&#125;<br />
+      Welcome: {data && data.username}!!<br />
       <br />
       Email: &#123;email&#125;<br />
       <Button
