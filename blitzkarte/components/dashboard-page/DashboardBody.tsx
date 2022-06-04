@@ -1,5 +1,5 @@
 import { Button, TextField } from '@mui/material';
-import { User } from 'firebase/auth';
+import { reauthenticateWithCredential, User } from 'firebase/auth';
 import { useRouter } from 'next/router';
 import { FC, Fragment, useContext, useEffect, useState } from 'react';
 import { QueryClient, useQuery, useQueryClient } from 'react-query';
@@ -34,11 +34,12 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
           .then((response) => {
             return response.json();
           }).then((data) => {
-            console.log(data);
+            console.log('User:', user);
+            console.log(`Data:`, data);
             return data;
           })
           .catch((error: Error) => console.log(error.message));
-      });
+        });
   });
 
   if (isFetching) {

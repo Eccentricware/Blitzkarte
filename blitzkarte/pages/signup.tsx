@@ -7,7 +7,6 @@ import { FirebaseService } from "../utils/firebase/firebaseService";
 import { Grid, TextField, Button } from "@mui/material";
 import Blitzkontext from "../utils/Blitzkontext";
 import { CredentialValidator } from "../utils/general/credentialValidator";
-import { truncate } from "fs/promises";
 import { useRouter } from "next/router";
 
 const SignupPage: NextPage = () => {
