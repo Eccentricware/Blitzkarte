@@ -5,7 +5,7 @@ export class LabelPin {
   type!: string;
   text!: string | undefined;
   size: number = 100;
-  fill?: 'black';
+  fill: string = 'black';
   province!: string;
   loc!: number[];
   valid: boolean;

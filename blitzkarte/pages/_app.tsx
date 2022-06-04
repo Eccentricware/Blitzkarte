@@ -14,16 +14,14 @@ function MyApp({ Component, pageProps }: AppProps) {
   const auth = getAuth(firebaseApp);
 
   const [mapView, setMapView] = useState<MapView>(mapViewDefault);
-  const [firebaseUser, setFirebaseUser] = useState<User | null>(auth.currentUser);
-  const [blitzkarteUser, setBlitzkarteUser] = useState<any | null>(null);
 
-  // useEffect(() => {
-  //   onAuthStateChanged(auth, (user: User | null) => {
-  //     console.log('_app Auth state change user', user);
-  //     setFirebaseUser(user);
-  //   });
-  // }, [auth]);
-  const queryClient: QueryClient = new QueryClient();
+  const queryClient: QueryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false
+      }
+    }
+  });
 
   return (
     <QueryClientProvider client={queryClient}>
