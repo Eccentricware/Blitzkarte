@@ -23,6 +23,17 @@ p {
   width: 400px;
   word-wrap: break-word;
 }
+#stall-globe-container {
+  position: absolute;
+  top: 25%;
+  left: 50%
+}
+
+#stall-globe {
+  position: relative;
+  top: -50%;
+  left: -50%;
+}
 
 .errors {
   font-size: smaller;

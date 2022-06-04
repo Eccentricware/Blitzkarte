@@ -7,6 +7,7 @@ import { ProfileService } from '../../services/profile-service';
 import Blitzkontext from '../../utils/Blitzkontext';
 import { FirebaseService } from '../../utils/firebase/firebaseService';
 import { erzahler } from '../../utils/general/erzahler';
+import StallGlobe from '../icons/stall-globe';
 
 interface DashboardBodyProps {
   user: User | null;
@@ -43,11 +44,15 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
   });
 
   if (isFetching) {
-    return <div>Fetcher? I hardly know her!!</div>
+    return <StallGlobe mode="querying" />
   }
 
   if (isLoading) {
-    return <div>loading</div>
+    return <StallGlobe mode="querying" />
+  }
+
+  if (error) {
+    return <StallGlobe mode="error" />
   }
 
   const handleEmailChange = (email: string) => {
