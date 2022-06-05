@@ -6,6 +6,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import DashboardBody from "../components/dashboard-page/DashboardBody";
 import { getAuth } from "firebase/auth";
 import { NavBarSignedOut } from "../components/nav-bar/NavBarSignedOut";
+import StallGlobe from "../components/icons/stall-globe";
 
 const DashboardPage: NextPage = () => {
   const router = useRouter();
@@ -23,6 +24,7 @@ const DashboardPage: NextPage = () => {
           <link rel="icon" href="/favicon.ico"/>
         </Head>
         <NavBarSignedOut title={`User Dashboard`}/>
+        <StallGlobe mode="authenticating"/>
       </div>
     )
   }
@@ -43,7 +45,13 @@ const DashboardPage: NextPage = () => {
   }
 
   if (error) {
-    return <div>There was an error loading the page. Please report it to the administrator at zeldark@gmail.com</div>
+    return (
+      <div>
+        <StallGlobe mode="error" />
+        <div>
+          There was an error loading the page. Please report it to the administrator at zeldark@gmail.com
+        </div>
+      </div>)
   }
 
   router.push('/');
