@@ -6,7 +6,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import DashboardBody from "../components/dashboard-page/DashboardBody";
 import { getAuth } from "firebase/auth";
 import { NavBarSignedOut } from "../components/nav-bar/NavBarSignedOut";
-import StallGlobe from "../components/icons/stall-globe";
+import StallGlobe from "../components/icons/StallGlobe";
 
 const DashboardPage: NextPage = () => {
   const router = useRouter();

@@ -1,4 +1,4 @@
-import { FC, Fragment, useState } from 'react';
+import React, { FC, Fragment, useState } from 'react';
 import { AppBar, Button, Menu, MenuItem, TextField, Toolbar, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import { FirebaseService } from '../../utils/firebase/firebaseService';
@@ -9,12 +9,16 @@ interface AppBarProps {
 
 export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loginFailure, setLoginFailure] = useState(false);
+  const [passwordResetSent, setPasswordResetSent] = useState(false);
   const router = useRouter();
   const firebaseService = new FirebaseService();
 
   const isMenuOpen = Boolean(anchorEl);
 
-  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+  const handleSignInMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   }
 
@@ -26,29 +30,54 @@ export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
     router.push('/signup');
   }
 
-  const handleUsernameOrEmailLoginClick = () => {
-    console.log('Email login');
+  const handleEmailChange = (email: string) => {
+    setEmail(email);
+  }
+
+  const handlePasswordChange = (password: string) => {
+    setPassword(password);
+  }
+
+  const handlePasswordResetClick = () => {
+    firebaseService.resetPassword(email)
+      .then((success) => {
+        setPasswordResetSent(success);
+      });
+  }
+
+  const handleSignInWithEmailClick = () => {
+    firebaseService.signInWithEmail(email, password)
+      .then((result: any) => {
+        console.log('Email Result', result);
+        if (result.hasUsername === true) {
+          router.push('/dashboard');
+        }
+        setLoginFailure(true);
+      })
+      .catch((error: Error) => {
+        console.log(error.message);
+      });
   }
 
   const handleGoogleLoginClick = () => {
-    const signInResult: Promise<any> = firebaseService.signInWithGoogle();
-    signInResult.then((result: any) => {
-      console.log('Result', result)
-      if (result.length === 1) {
-        router.push('/dashboard');
-      }
-      router.push('/signup');
-    })
-    .catch((error: Error) => {
-      console.log(error.message);
-    });
+    firebaseService.signInWithGoogle()
+      .then((result: any) => {
+        console.log('Result', result)
+        if (result.hasUsername === true) {
+          router.push('/dashboard');
+        }
+        router.push('/signup');
+      })
+      .catch((error: Error) => {
+        console.log(error.message);
+      });
   }
 
   const handleFacebookLoginClick = () => {
     const signInResult: Promise<any> = firebaseService.signInWithFacebook();
     signInResult.then((result: any) => {
       console.log('Result', result)
-      if (result.length === 1) {
+      if (result.hasUsername === true) {
         router.push('/dashboard');
       }
       router.push('/signup');
@@ -68,13 +97,44 @@ export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
       open={isMenuOpen}
     >
       <MenuItem>
-        <TextField id="outlined-basic" label="Username / Email" variant="outlined" fullWidth/>
+        <TextField id="outlined-basic"
+          label="Email"
+          variant="outlined"
+          fullWidth
+          onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
+            handleEmailChange(event.target.value);
+          }}
+        />
       </MenuItem>
       <MenuItem>
-        <TextField id="outlined-basic" label="Password" variant="outlined" fullWidth/>
+        <TextField id="outlined-basic"
+          label="Password"
+          type="password"
+          variant="outlined"
+          fullWidth
+          error={loginFailure ? true : false}
+          helperText={loginFailure ? 'Incorrect Login Credentials' : ''}
+          onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
+            handlePasswordChange(event.target.value);
+          }}
+        />
       </MenuItem>
+      {
+        loginFailure &&
+        <MenuItem>
+          <Button
+            disabled={passwordResetSent ? true : false}
+            onClick={handlePasswordResetClick}>
+            {
+              passwordResetSent ?
+              'Sent Password Reset Email'
+              : 'Reset Password?'
+            }
+          </Button>
+        </MenuItem>
+      }
       <MenuItem>
-        <Button onClick={handleUsernameOrEmailLoginClick}>&gt;</Button>
+        <Button onClick={handleSignInWithEmailClick}>&gt;</Button>
         <Button onClick={handleGoogleLoginClick}>G</Button>
         <Button onClick={handleFacebookLoginClick}>F</Button>
         <Button onClick={handleMenuClose}>X</Button>
@@ -99,7 +159,7 @@ export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
             {title}
           </Typography>
           <Button
-            onClick={handleProfileMenuOpen}
+            onClick={handleSignInMenuOpen}
             color="inherit"
           >
             Sign In
