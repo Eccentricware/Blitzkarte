@@ -2,7 +2,7 @@ import { FC } from "react";
 import { erzahler } from "../../utils/general/erzahler";
 import { User } from "firebase/auth";
 import { useQuery } from "react-query";
-import StallGlobe from "../icons/stall-globe";
+import StallGlobe from "../icons/StallGlobe";
 import { NavBarSignedIn } from "../nav-bar/NavBarSignedIn";
 import { useRouter } from "next/router";
 import styles from '../../styles/Home.module.css'
@@ -44,18 +44,26 @@ const IndexBody: FC<IndexBodyProps> = ({user}: IndexBodyProps) => {
     return <StallGlobe mode="error" />
   }
 
+  if (data) {
+    return (
+      <div>
+       {data.length > 0 ? <NavBarSignedIn title={""}/> : <NavBarSignedOut title=""/>}
+        <main className={styles.main}>
+          <h1 className={styles.title}>
+            Welcome to Project Blitzkarte!
+          </h1>
+
+          <p className={styles.description}>
+            (It Means Lightning Maps)
+          </p>
+        </main>
+      </div>
+    )
+  }
+
   return (
     <div>
-     {data.length > 0 ? <NavBarSignedIn title={""}/> : <NavBarSignedOut title=""/>}
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to Project Blitzkarte!
-        </h1>
-
-        <p className={styles.description}>
-          (It Means Lightning Maps)
-        </p>
-      </main>
+      <StallGlobe mode="error" />
     </div>
   )
 }

@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { signInWithPopup, GoogleAuthProvider, Auth, AuthProvider, FacebookAuthProvider, sendEmailVerification, createUserWithEmailAndPassword, UserCredential, User, getAuth, onAuthStateChanged } from "firebase/auth";
+import { signInWithPopup, GoogleAuthProvider, Auth, AuthProvider, FacebookAuthProvider, sendEmailVerification, createUserWithEmailAndPassword, UserCredential, User, getAuth, onAuthStateChanged, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import router from "next/router";
 import { erzahler } from "../general/erzahler";
 
@@ -32,18 +32,6 @@ export class FirebaseService {
     });
   }
 
-  async signUpWithEmail(auth: Auth, username: string, email: string, password: string): Promise<any> {
-    return createUserWithEmailAndPassword(auth, email, password)
-      .then(async (userCredential: UserCredential) => {
-        let user = userCredential.user;
-        const idToken = await user.getIdToken();
-        return await this.addUserToDatabase(idToken, username);
-      })
-      .catch((error: Error) => {
-        return error.message;
-      });
-  }
-
   async addUserToDatabase(idToken: string, username: string): Promise<any> {
     return fetch(`${erzahler.url}:${erzahler.port}/register-user`, {
       method: 'POST',
@@ -64,14 +52,50 @@ export class FirebaseService {
     });
   }
 
+  async signUpWithEmail(auth: Auth, username: string, email: string, password: string): Promise<any> {
+    return createUserWithEmailAndPassword(auth, email, password)
+      .then(async (userCredential: UserCredential) => {
+        let user = userCredential.user;
+        const idToken = await user.getIdToken();
+        return await this.addUserToDatabase(idToken, username);
+      })
+      .catch((error: Error) => {
+        return error.message;
+      });
+  }
+
+  async signInWithEmail(email: string, password: string): Promise<any> {
+    const auth = getAuth();
+
+    return signInWithEmailAndPassword(auth, email, password)
+      .then(async (userCredential: UserCredential) => {
+        const idToken: string = await userCredential.user.getIdToken();
+        return this.checkUsernameLinked(idToken);
+      })
+      .catch((error: Error) => {
+        return error.message;
+      });
+  }
+
+  async resetPassword(email: string): Promise<any> {
+    const auth = getAuth();
+
+    return sendPasswordResetEmail(auth, email)
+      .then(() => {
+        return true;
+      }).
+      catch((error: Error) => {
+        return false;
+      });
+  }
+
   signUpWithGoogle = (auth: Auth, username: string) => {
     console.log('Attempting sign in with Google...');
 
     const googleProvider: AuthProvider = new GoogleAuthProvider();
     return signInWithPopup(auth, googleProvider)
       .then(async (userCredential: UserCredential) => {
-        const idTokenPromise: Promise<string> = userCredential.user.getIdToken();
-        const idToken: string = await idTokenPromise;
+        const idToken: string = await userCredential.user.getIdToken();
         return await this.addUserToDatabase(idToken, username);
       }).catch((error: Error) => {
         return error.message
@@ -84,8 +108,7 @@ export class FirebaseService {
     const googleProvider: AuthProvider = new GoogleAuthProvider();
     return signInWithPopup(auth, googleProvider)
       .then(async (userCredential: UserCredential) => {
-        const idTokenPromise: Promise<string> = userCredential.user.getIdToken();
-        const idToken = await idTokenPromise;
+        const idToken: string = await userCredential.user.getIdToken();
         return this.checkUsernameLinked(idToken);
       })
       .catch((error: Error) => {
@@ -99,8 +122,7 @@ export class FirebaseService {
     const facebookProvider: AuthProvider = new FacebookAuthProvider();
     return signInWithPopup(auth, facebookProvider)
       .then(async (userCredential: UserCredential) => {
-        const idTokenPromise: Promise<string> = userCredential.user.getIdToken();
-        const idToken: string = await idTokenPromise;
+        const idToken: string = await userCredential.user.getIdToken();
         return await this.addUserToDatabase(idToken, username);
       }).catch((error: Error) => {
         return error.message
