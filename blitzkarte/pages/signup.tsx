@@ -41,6 +41,16 @@ const SignupPage: NextPage = () => {
       setUsername(username);
       setUsernameAvailable(false);
       setUsernameErrorMsg('Can\'t end username with a space');
+    } else if (username.length > 20) {
+      setUsernameErrorMsg('Username max is 20 characters');
+    } else if (username.length > 0 && username.length < 3) {
+      setUsername(username);
+      setUsernameAvailable(false);
+      setUsernameErrorMsg('Username must be at least 3 characters');
+    } else if (username.length === 0) {
+      setUsername('');
+      setUsernameAvailable(true);
+      setUsernameErrorMsg('');
     } else {
       const availabilityResult: Promise<any> = firebaseService.checkUsername(username);
       setUsername(username);
@@ -90,13 +100,17 @@ const SignupPage: NextPage = () => {
   };
 
   const handleEmailSignUpClick = () => {
-    if (firebaseCtx.auth) {
+    if (firebaseCtx.auth && username.length > 0 && usernameAvailable
+      && validEmail && password1Valid && password2Valid) {
       firebaseService.signUpWithEmail(firebaseCtx.auth, username, email, password1)
         .then((result: any) => {
           console.log('super final top level add user feedback result', result);
           if (result.success === true) {
             router.push('/dashboard');
           }
+        })
+        .catch((error: Error) => {
+          console.log(error.message);
         });
     } else {
       console.log('No firebase auth!');
@@ -104,14 +118,30 @@ const SignupPage: NextPage = () => {
   };
 
   const handleSignUpWithGoogleClick = () => {
-    if (firebaseCtx.auth) {
-      firebaseService.signUpWithGoogle(firebaseCtx.auth, username);
+    if (firebaseCtx.auth && username.length > 0 && usernameAvailable ) {
+      firebaseService.signUpWithGoogle(firebaseCtx.auth, username)
+        .then((result: any) => {
+          if (result.success === true) {
+            router.push('/dashboard');
+          }
+        })
+        .catch((error: Error) => {
+          console.log(error.message);
+        });
     }
   };
 
   const handleSignUpWithFacebookClick = () => {
-    if (firebaseCtx.auth) {
-      firebaseService.signUpWithFacebook(firebaseCtx.auth, username);
+    if (firebaseCtx.auth && username.length > 0 && usernameAvailable) {
+      firebaseService.signUpWithFacebook(firebaseCtx.auth, username)
+        .then((result: any) => {
+          if (result.success === true) {
+            router.push('/dashboard');
+          }
+        })
+        .catch((error: Error) => {
+          console.log(error.message);
+        });
     }
   };
 

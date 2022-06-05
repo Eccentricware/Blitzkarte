@@ -34,17 +34,10 @@ export class FirebaseService {
 
   async signUpWithEmail(auth: Auth, username: string, email: string, password: string): Promise<any> {
     return createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential: UserCredential) => {
+      .then(async (userCredential: UserCredential) => {
         let user = userCredential.user;
-        // const idTokenPromise: Promise<string> = user.getIdToken();
-        // return idTokenPromise.then((idToken: string) => {
-        //   const successResponse: any = this.addUserToDatabase(idToken, username);
-        //   return successResponse;
-        // });
-        return user.getIdToken()
-          .then((idToken: string) => {
-            return this.addUserToDatabase(idToken, username);
-          });
+        const idToken = await user.getIdToken();
+        return await this.addUserToDatabase(idToken, username);
       })
       .catch((error: Error) => {
         return error.message;
@@ -75,14 +68,28 @@ export class FirebaseService {
     console.log('Attempting sign in with Google...');
 
     const googleProvider: AuthProvider = new GoogleAuthProvider();
-    signInWithPopup(auth, googleProvider)
-      .then((userCredential: UserCredential) => {
+    return signInWithPopup(auth, googleProvider)
+      .then(async (userCredential: UserCredential) => {
         const idTokenPromise: Promise<string> = userCredential.user.getIdToken();
-        return idTokenPromise.then((idToken: string) => {
-          return this.addUserToDatabase(idToken, username);
-        });
+        const idToken: string = await idTokenPromise;
+        return await this.addUserToDatabase(idToken, username);
       }).catch((error: Error) => {
         return error.message
+      });
+  }
+
+  signInWithGoogle = (): Promise<string> => {
+    const auth = getAuth();
+
+    const googleProvider: AuthProvider = new GoogleAuthProvider();
+    return signInWithPopup(auth, googleProvider)
+      .then(async (userCredential: UserCredential) => {
+        const idTokenPromise: Promise<string> = userCredential.user.getIdToken();
+        const idToken = await idTokenPromise;
+        return this.checkUsernameLinked(idToken);
+      })
+      .catch((error: Error) => {
+        return error.message;
       });
   }
 
@@ -90,14 +97,28 @@ export class FirebaseService {
     console.log('Sign in with Facebook Clicked');
 
     const facebookProvider: AuthProvider = new FacebookAuthProvider();
-    signInWithPopup(auth, facebookProvider)
-      .then((userCredential: UserCredential) => {
+    return signInWithPopup(auth, facebookProvider)
+      .then(async (userCredential: UserCredential) => {
         const idTokenPromise: Promise<string> = userCredential.user.getIdToken();
-        return idTokenPromise.then((idToken: string) => {
-          return this.addUserToDatabase(idToken, username);
-        });
+        const idToken: string = await idTokenPromise;
+        return await this.addUserToDatabase(idToken, username);
       }).catch((error: Error) => {
         return error.message
+      });
+  }
+
+  signInWithFacebook = (): Promise<string> => {
+    const auth = getAuth();
+
+    const facebookProvider: AuthProvider = new FacebookAuthProvider();
+    return signInWithPopup(auth, facebookProvider)
+      .then(async (userCredential: UserCredential) => {
+        const idTokenPromise: Promise<string> = userCredential.user.getIdToken();
+        const idToken = await idTokenPromise;
+        return this.checkUsernameLinked(idToken);
+      })
+      .catch((error: Error) => {
+        return error.message;
       });
   }
 
@@ -127,6 +148,28 @@ export class FirebaseService {
     }).catch((error: Error) => {
       return error.message;
     });
+  }
+
+  checkUsernameLinked = (idToken: string): any => {
+    return fetch(`${erzahler.url}:${erzahler.port}/get-user-profile/${idToken}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then((result: any) => {
+      return result.json();
+    })
+    .then((profile: any) => {
+      console.log('profile', profile);
+      if (profile.length === 1) {
+        return { hasUsername: true };
+      }
+      return { hasUsername: false };
+    })
+    .catch((error: Error) => {
+      return error.message;
+    })
   }
 
   triggerSendVerificationEmail = (user: User) => {
