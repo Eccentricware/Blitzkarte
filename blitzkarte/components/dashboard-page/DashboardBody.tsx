@@ -8,19 +8,19 @@ import Blitzkontext from '../../utils/Blitzkontext';
 import { FirebaseService } from '../../utils/firebase/firebaseService';
 import { erzahler } from '../../utils/general/erzahler';
 import StallGlobe from '../icons/stall-globe';
+import { NavBarSignedIn } from '../nav-bar/NavBarSignedIn';
 
 interface DashboardBodyProps {
   user: User | null;
 }
 
 const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
-  // const firebaseApp = initializeApp(firebaseConfig);
-  // const auth = getAuth(firebaseApp);
   const firebase = useContext(Blitzkontext).user;
   const firebaseService = new FirebaseService();
   const profileService = new ProfileService();
 
   const [username, setUsername] = useState('');
+  const [profile, setProfile] = useState<any>({});
   const [presentAddEmail, setPresentAddEmail] = useState(false);
   const [email, setEmail] = useState('');
   const [password1, setPassword1] = useState('');
@@ -29,31 +29,20 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
 
   const queryClient: QueryClient = useQueryClient();
 
-  const { isLoading, error, data, isFetching } = useQuery('userSettings', () => {
-      return user?.getIdToken().then((idToken: string) => {
-        return fetch(`${erzahler.url}:${erzahler.port}/get-user-settings/${idToken}`)
-          .then((response) => {
-            return response.json();
-          }).then((data) => {
-            console.log('User:', user);
-            console.log(`Data:`, data);
-            return data;
-          })
-          .catch((error: Error) => console.log(error.message));
+  const { isLoading, error, data, isFetching } = useQuery('userProfile', () => {
+    return user?.getIdToken().then((idToken: string) => {
+      return fetch(`${erzahler.url}:${erzahler.port}/get-user-profile/${idToken}`)
+        .then((response) => {
+          return response.json();
+        }).then((result) => {
+          return result[0];
+        })
+        .catch((error: Error) => {
+          console.log('idToken Error', error.message);
+          router.push('/');
         });
+      });
   });
-
-  if (isFetching) {
-    return <StallGlobe mode="querying" />
-  }
-
-  if (isLoading) {
-    return <StallGlobe mode="querying" />
-  }
-
-  if (error) {
-    return <StallGlobe mode="error" />
-  }
 
   const handleEmailChange = (email: string) => {
     setEmail(email);
@@ -89,31 +78,49 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
     }
   };
 
+  if (isFetching) {
+    return <StallGlobe mode="querying" />
+  }
+
+  if (isLoading) {
+    return <StallGlobe mode="querying" />
+  }
+
+  if (error) {
+    return <StallGlobe mode="error" />
+  }
+
   return (
     <div>
+      <NavBarSignedIn title={`User Dashboard`} />
       Welcome: {data && data.username}!!<br />
       <br />
-      Email: &#123;email&#125;<br />
-      <Button
-        color="inherit"
-        variant="contained"
-      >
-        Change Email
-      </Button><br />
-      <Button
-        color="inherit"
-        variant="contained"
-      >
-        Change Password
-      </Button><br />
-      <Button
-        color="warning"
-        variant="contained"
-      >
-        Resend Verification
-      </Button><br />
-      Verification time left: 23:59:32 or something like that<br />
-      <br />
+      {
+        data.email &&
+        <div>
+          Email: &#123;email&#125;<br />
+          <Button
+            color="inherit"
+            variant="contained"
+          >
+            Change Email
+          </Button><br />
+          <Button
+            color="inherit"
+            variant="contained"
+          >
+            Change Password
+          </Button><br />
+          <Button
+            color="warning"
+            variant="contained"
+          >
+            Resend Verification
+          </Button><br />
+          Verification time left: 23:59:32 or something like that<br />
+          <br />
+        </div>
+      }
       Add Login Methods <b>(which will be locked to this Bliztkarte account forever)</b>: <br />
       <Button color="error"
         variant="contained"

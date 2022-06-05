@@ -1,6 +1,7 @@
 import { FC, Fragment, useState } from 'react';
 import { AppBar, Button, Menu, MenuItem, TextField, Toolbar, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
+import { FirebaseService } from '../../utils/firebase/firebaseService';
 
 interface AppBarProps {
   title: string;
@@ -9,6 +10,7 @@ interface AppBarProps {
 export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const router = useRouter();
+  const firebaseService = new FirebaseService();
 
   const isMenuOpen = Boolean(anchorEl);
 
@@ -22,6 +24,38 @@ export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
 
   const handleSignupClick = () => {
     router.push('/signup');
+  }
+
+  const handleUsernameOrEmailLoginClick = () => {
+    console.log('Email login');
+  }
+
+  const handleGoogleLoginClick = () => {
+    const signInResult: Promise<any> = firebaseService.signInWithGoogle();
+    signInResult.then((result: any) => {
+      console.log('Result', result)
+      if (result.length === 1) {
+        router.push('/dashboard');
+      }
+      router.push('/signup');
+    })
+    .catch((error: Error) => {
+      console.log(error.message);
+    });
+  }
+
+  const handleFacebookLoginClick = () => {
+    const signInResult: Promise<any> = firebaseService.signInWithFacebook();
+    signInResult.then((result: any) => {
+      console.log('Result', result)
+      if (result.length === 1) {
+        router.push('/dashboard');
+      }
+      router.push('/signup');
+    })
+      .catch((error: Error) => {
+        console.log(error.message);
+      });
   }
 
   const loginMenu = (
@@ -40,9 +74,9 @@ export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
         <TextField id="outlined-basic" label="Password" variant="outlined" fullWidth/>
       </MenuItem>
       <MenuItem>
-        <Button>&gt;</Button>
-        <Button >G</Button>
-        <Button>F</Button>
+        <Button onClick={handleUsernameOrEmailLoginClick}>&gt;</Button>
+        <Button onClick={handleGoogleLoginClick}>G</Button>
+        <Button onClick={handleFacebookLoginClick}>F</Button>
         <Button onClick={handleMenuClose}>X</Button>
       </MenuItem>
     </Menu>
