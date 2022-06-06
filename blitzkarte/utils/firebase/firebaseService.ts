@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { signInWithPopup, GoogleAuthProvider, Auth, AuthProvider, FacebookAuthProvider, sendEmailVerification, createUserWithEmailAndPassword, UserCredential, User, getAuth, onAuthStateChanged, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
+import { signInWithPopup, GoogleAuthProvider, Auth, AuthProvider, FacebookAuthProvider, sendEmailVerification, createUserWithEmailAndPassword, UserCredential, User, getAuth, onAuthStateChanged, signInWithEmailAndPassword, sendPasswordResetEmail, updateProfile, updateEmail } from "firebase/auth";
 import router from "next/router";
 import { erzahler } from "../general/erzahler";
 
@@ -53,15 +53,51 @@ export class FirebaseService {
   }
 
   async signUpWithEmail(auth: Auth, username: string, email: string, password: string): Promise<any> {
+    const serverRunning: boolean = await fetch(`${erzahler.url}:${erzahler.port}/check-status`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then((response: any) => {
+      return response.json();
+    }).then((status: boolean) => {
+      return status;
+    })
+    .catch(() => false );
+
+    if (!serverRunning) {
+      return false;
+    }
+
     return createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential: UserCredential) => {
         let user = userCredential.user;
+        updateProfile(user, {
+          displayName: username
+        }).then(() => {
+          sendEmailVerification(user);
+        })
         const idToken = await user.getIdToken();
         return await this.addUserToDatabase(idToken, username);
       })
       .catch((error: Error) => {
         return error.message;
       });
+  }
+
+  async validateUserDBEmail() {
+    const user = getAuth().currentUser;
+
+    if (user) {
+      const idToken: string = await user.getIdToken();
+      fetch(`${erzahler.url}:${erzahler.port}/verify-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ idToken: idToken })
+      })
+    }
   }
 
   async signInWithEmail(email: string, password: string): Promise<any> {
@@ -75,6 +111,29 @@ export class FirebaseService {
       .catch((error: Error) => {
         return error.message;
       });
+  }
+
+  async changeEmail(email: string) {
+    const auth = getAuth();
+
+    if (auth.currentUser) {
+      updateEmail(auth.currentUser, email)
+        .then(async () => {
+          if (auth.currentUser) {
+            sendEmailVerification(auth.currentUser);
+            const idToken: string = await auth.currentUser.getIdToken();
+            fetch(`${erzahler.url}:${erzahler.port}/update-email/${idToken}`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ email: email })
+            })
+            .catch((error: Error) => { console.log(error.message); });
+          }
+        })
+        .catch((error: Error) => { console.log(error.message); });
+    }
   }
 
   async resetPassword(email: string): Promise<any> {
@@ -194,7 +253,10 @@ export class FirebaseService {
     })
   }
 
-  triggerSendVerificationEmail = (user: User) => {
-    sendEmailVerification(user);
+  resendEmailVerification = () => {
+    const user = getAuth().currentUser;
+    if (user) {
+      sendEmailVerification(user);
+    }
   }
 }

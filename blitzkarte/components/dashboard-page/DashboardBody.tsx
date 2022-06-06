@@ -1,12 +1,14 @@
 import { Button, TextField } from '@mui/material';
 import { reauthenticateWithCredential, User } from 'firebase/auth';
 import { useRouter } from 'next/router';
+import React from 'react';
 import { FC, Fragment, useContext, useEffect, useState } from 'react';
 import { QueryClient, useQuery, useQueryClient } from 'react-query';
 import { ProfileService } from '../../services/profile-service';
 import Blitzkontext from '../../utils/Blitzkontext';
 import { FirebaseService } from '../../utils/firebase/firebaseService';
 import { erzahler } from '../../utils/general/erzahler';
+import { deadlineTimer } from '../../utils/general/time-time-charm';
 import StallGlobe from '../icons/StallGlobe';
 import { NavBarSignedIn } from '../nav-bar/NavBarSignedIn';
 
@@ -19,12 +21,15 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
   const firebaseService = new FirebaseService();
   const profileService = new ProfileService();
 
-  const [username, setUsername] = useState('');
-  const [profile, setProfile] = useState<any>({});
   const [presentAddEmail, setPresentAddEmail] = useState(false);
+  const [changingEmail, setChangingEmail] = useState(false);
   const [email, setEmail] = useState('');
+  const [changingPassword, setChangingPassword] = useState(false);
   const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
+  const [emailValidated, setEmailValidated] = useState(true);
+  const [verificationTimer, setVerificationTimer] = useState('');
+  const [verificationSent, setVerificationSent] = useState(false);
   const router = useRouter();
 
   const queryClient: QueryClient = useQueryClient();
@@ -44,8 +49,43 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
       });
   });
 
+  useEffect(() => {
+    console.log('data', data);
+    console.log('user', user);
+    if (data && !data.email_verified && user?.emailVerified) {
+      firebaseService.validateUserDBEmail();
+      return;
+    }
+
+    if (data && data.email && !data.email_verified) {
+      setEmailValidated(false);
+      setInterval(() => {
+        setVerificationTimer(deadlineTimer(data.verification_deadline, 'minutes'));
+      }, 1000);
+    }
+  }, [data, user, firebaseService])
+
+  const handleChangingEmailClick = () => {
+    setChangingEmail(!changingEmail);
+  }
+
+  const handleSubmitChangeEmailClick = () => {
+    if (firebase.auth) {
+      firebaseService.changeEmail(email);
+    }
+  }
+
+  const handleChangingPasswordClick = () => {
+    setChangingPassword(!changingPassword);
+  }
+
   const handleEmailChange = (email: string) => {
     setEmail(email);
+  }
+
+  const handleResendEmailVerificationClick = () => {
+    firebaseService.resendEmailVerification();
+    setVerificationSent(true);
   }
 
   const handlePassword1Change = (password1: string) => {
@@ -94,41 +134,97 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
     return (
       <div>
         <NavBarSignedIn title={`User Dashboard`} />
-        Welcome: {data && data.username}!!<br />
+        Welcome, {data && data.username}<br />
         <br />
         {
           data.email &&
           <div>
-            Email: &#123;email&#125;<br />
+            Email: {data.email}<br />
             <Button
               color="inherit"
               variant="contained"
+              onClick={handleChangingEmailClick}
             >
               Change Email
             </Button><br />
+              {
+                changingEmail &&
+                <React.Fragment>
+                  <TextField
+                    label="New Email"
+                    variant="outlined"
+                    onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
+                      handleEmailChange(event.target.value);
+                    }}
+                  />
+                  <br/>
+                  <Button
+                  color="inherit"
+                  variant="contained"
+                  onClick={handleSubmitChangeEmailClick}
+                  >
+                    Submit Change
+                  </Button><br />
+                </React.Fragment>
+              }
+            <br/>
+              {
+                (!emailValidated) &&
+                <div>
+                  {
+                    verificationSent ?
+                    <div>Verification Sent</div>
+                    :
+                    <Button
+                      color="warning"
+                      variant="contained"
+                      onClick={handleResendEmailVerificationClick}
+                    >
+                      Resend Verification
+                    </Button>
+                  }
+                  <br />
+                  Verification time left: {verificationTimer}
+                  <br />
+                  <br />
+                </div>
+              }
             <Button
               color="inherit"
               variant="contained"
+              onClick={handleChangingPasswordClick}
             >
               Change Password
             </Button><br />
-            <Button
-              color="warning"
-              variant="contained"
-            >
-              Resend Verification
-            </Button><br />
-            Verification time left: 23:59:32 or something like that<br />
-            <br />
+
+            {
+              changingPassword &&
+              <div>
+                <TextField  label="New Password" type="password" variant="outlined"
+                  onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
+                    handlePassword1Change(event.target.value);
+                  }}
+                />
+                <TextField  label="Confirm New Password" type="password" variant="outlined"
+                  onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
+                    handlePassword2Change(event.target.value);
+                  }}
+                />
+              </div>
+            }
           </div>
         }
+        <br/>
         Add Login Methods <b>(which will be locked to this Bliztkarte account forever)</b>: <br />
-        <Button color="error"
-          variant="contained"
-          onClick={() => { handleEnableAddEmailProviderClick(); }}
-        >
-          <span className="firebaseui-idp-text firebaseui-idp-text-long">Email</span>
-        </Button>
+        {
+          !data.email &&
+          <Button color="error"
+            variant="contained"
+            onClick={() => { handleEnableAddEmailProviderClick(); }}
+          >
+            <span className="firebaseui-idp-text firebaseui-idp-text-long">Email</span>
+          </Button>
+        }
         <Button color="success"
           variant="contained"
           onClick={() => { handleAddGoogleProviderClick(); }}
@@ -144,17 +240,17 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
         {
           presentAddEmail &&
           <Fragment>
-            <TextField id="outlined-basic" label="Email" variant="outlined"
+            <TextField  label="Email" variant="outlined"
               onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
                 handleEmailChange(event.target.value);
               }}
             /><br />
-            <TextField id="outlined-basic" label="Password" type="password" variant="outlined"
+            <TextField  label="Password" type="password" variant="outlined"
               onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
                 handlePassword1Change(event.target.value);
               }}
             />
-            <TextField id="outlined-basic" label="Confirm Password" type="password" variant="outlined"
+            <TextField  label="Confirm Password" type="password" variant="outlined"
               onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
                 handlePassword2Change(event.target.value);
               }}
