@@ -1,4 +1,4 @@
-import { convertSnakeToCamelCase, convertSnakeToTitleCase } from "../../general/utils";
+import { convertSnakeToTitleCase } from "../../general/formatters";
 
 interface TerrainApproval {
   land: string[];

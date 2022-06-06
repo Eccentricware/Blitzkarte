@@ -1,5 +1,5 @@
 import { Pin } from "./pin";
-import { convertSnakeToCamelCase, convertSpaceToCamelCase } from "../../general/utils";
+import { convertSpaceToCamelCase } from "../../general/formatters";
 
 export class Unit {
   name: string;

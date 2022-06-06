@@ -2,7 +2,7 @@ import { Pin } from "./pin";
 import {
   convertSnakeToTitleCase,
   convertSnakeToCamelCase
-} from "../../general/utils";
+} from "../../general/formatters";
 
 export class Country {
   name: string;
