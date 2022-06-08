@@ -53,6 +53,8 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
     console.log('data', data);
     console.log('user', user);
     if (data && !data.email_verified && user?.emailVerified) {
+      // This just forces the validatio for UI/UX.
+      // If user does not navigate here before timer is up, it is assessed by back end at expiration time
       firebaseService.validateUserDBEmail();
       return;
     }
@@ -79,8 +81,8 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
     setChangingPassword(!changingPassword);
   }
 
-  const handleEmailChange = (email: string) => {
-    setEmail(email);
+  const handleEmailChange = (newEmail: string) => {
+    setEmail(newEmail);
   }
 
   const handleResendEmailVerificationClick = () => {
@@ -155,6 +157,11 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
                     variant="outlined"
                     onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
                       handleEmailChange(event.target.value);
+                    }}
+                  /><br/>
+                  <TextField label="Enter Password" type="password" variant="outlined"
+                    onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
+                      handlePassword1Change(event.target.value);
                     }}
                   />
                   <br/>
