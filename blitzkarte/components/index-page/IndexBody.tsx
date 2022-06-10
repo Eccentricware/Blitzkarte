@@ -44,6 +44,10 @@ const IndexBody: FC<IndexBodyProps> = ({user}: IndexBodyProps) => {
     return <StallGlobe mode="error" />
   }
 
+  if (data.error) {
+    return <StallGlobe mode="error" />
+  }
+
   if (data) {
     return (
       <div>

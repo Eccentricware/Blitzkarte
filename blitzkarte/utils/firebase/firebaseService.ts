@@ -113,26 +113,30 @@ export class FirebaseService {
       });
   }
 
-  async changeEmail(email: string) {
+  async changeEmail(oldEmail: string, newEmail: string, password: string) {
     const auth = getAuth();
 
     if (auth.currentUser) {
-      updateEmail(auth.currentUser, email)
-        .then(async () => {
-          if (auth.currentUser) {
-            sendEmailVerification(auth.currentUser);
-            const idToken: string = await auth.currentUser.getIdToken();
-            fetch(`${erzahler.url}:${erzahler.port}/update-email/${idToken}`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({ email: email })
+      signInWithEmailAndPassword(auth, oldEmail, password)
+        .then((userCredential: UserCredential) => {
+          updateEmail(userCredential.user, newEmail)
+            .then(async () => {
+              if (auth.currentUser) {
+                sendEmailVerification(auth.currentUser);
+                const idToken: string = await auth.currentUser.getIdToken();
+                fetch(`${erzahler.url}:${erzahler.port}/update-email/${idToken}`, {
+                  method: 'PUT',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({ newEmail: newEmail })
+                })
+                  .catch((error: Error) => { console.log(error.message); });
+              }
             })
             .catch((error: Error) => { console.log(error.message); });
-          }
         })
-        .catch((error: Error) => { console.log(error.message); });
+
     }
   }
 
