@@ -1,6 +1,23 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { signInWithPopup, GoogleAuthProvider, Auth, AuthProvider, FacebookAuthProvider, sendEmailVerification, createUserWithEmailAndPassword, UserCredential, User, getAuth, onAuthStateChanged, signInWithEmailAndPassword, sendPasswordResetEmail, updateProfile, updateEmail } from "firebase/auth";
+import {
+  signInWithPopup,
+  GoogleAuthProvider,
+  Auth,
+  AuthProvider,
+  FacebookAuthProvider,
+  sendEmailVerification,
+  createUserWithEmailAndPassword,
+  UserCredential,
+  User,
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+  updateProfile,
+  reauthenticateWithCredential,
+  updateEmail
+} from "firebase/auth";
 import router from "next/router";
 import { erzahler } from "../general/erzahler";
 
@@ -123,6 +140,7 @@ export class FirebaseService {
             .then(async () => {
               if (auth.currentUser) {
                 sendEmailVerification(auth.currentUser);
+
                 const idToken: string = await auth.currentUser.getIdToken();
                 fetch(`${erzahler.url}:${erzahler.port}/update-email/${idToken}`, {
                   method: 'PUT',
@@ -130,13 +148,14 @@ export class FirebaseService {
                     'Content-Type': 'application/json'
                   },
                   body: JSON.stringify({ newEmail: newEmail })
+                }).then((response: any) => {
+                  console.log('Email is probably updated');
                 })
-                  .catch((error: Error) => { console.log(error.message); });
+                .catch((error: Error) => { console.log(error.message); });
               }
             })
             .catch((error: Error) => { console.log(error.message); });
-        })
-
+        });
     }
   }
 

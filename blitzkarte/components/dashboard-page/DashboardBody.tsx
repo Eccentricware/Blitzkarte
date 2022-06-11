@@ -24,6 +24,7 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
   const [presentAddEmail, setPresentAddEmail] = useState(false);
   const [changingEmail, setChangingEmail] = useState(false);
   const [email, setEmail] = useState('');
+  const [providerEmail, setProviderEmail] = useState('');
   const [changingPassword, setChangingPassword] = useState(false);
   const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
@@ -55,25 +56,34 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
       // This just forces the validatio for UI/UX.
       // If user does not navigate here before timer is up, it is assessed by back end at expiration time
       firebaseService.validateUserDBEmail();
-      return;
+      router.reload();
     }
 
     if (data && data.email && !data.email_verified) {
+      console.log('Providers', data.providers);
+      let providerEmail: string = '';
+      data.providers.forEach((provider: any) => {
+        console.log('Provider[0]', provider[0]);
+        if (provider[0] === 'password') {
+          console.log('Provider[1]', provider[1]);
+          providerEmail = provider[1];
+        }
+      })
+      console.log('Provider Email', providerEmail)
+      setProviderEmail(providerEmail);
       setEmailValidated(false);
       setInterval(() => {
         setVerificationTimer(deadlineTimer(data.verification_deadline, 'minutes'));
       }, 1000);
     }
-  }, [data, user, firebaseService])
+  }, [data, user, firebaseService, router])
 
   const handleChangingEmailClick = () => {
     setChangingEmail(!changingEmail);
   }
 
   const handleSubmitChangeEmailClick = (oldEmail: string) => {
-    if (firebase.auth) {
-      firebaseService.changeEmail(oldEmail, email, password1);
-    }
+    firebaseService.changeEmail(oldEmail, email, password1);
   }
 
   const handleChangingPasswordClick = () => {
@@ -143,7 +153,7 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
         {
           data.email &&
           <div>
-            Email: {data.email}<br />
+            Email: {data.email} {data.user_status === 'changingEmail' && ` => ${providerEmail}`}<br />
             <Button
               color="inherit"
               variant="contained"
