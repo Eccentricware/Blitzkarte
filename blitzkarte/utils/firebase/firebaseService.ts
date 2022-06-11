@@ -1,6 +1,23 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { signInWithPopup, GoogleAuthProvider, Auth, AuthProvider, FacebookAuthProvider, sendEmailVerification, createUserWithEmailAndPassword, UserCredential, User, getAuth, onAuthStateChanged, signInWithEmailAndPassword, sendPasswordResetEmail, updateProfile, updateEmail } from "firebase/auth";
+import {
+  signInWithPopup,
+  GoogleAuthProvider,
+  Auth,
+  AuthProvider,
+  FacebookAuthProvider,
+  sendEmailVerification,
+  createUserWithEmailAndPassword,
+  UserCredential,
+  User,
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+  updateProfile,
+  reauthenticateWithCredential,
+  updateEmail
+} from "firebase/auth";
 import router from "next/router";
 import { erzahler } from "../general/erzahler";
 
@@ -113,26 +130,32 @@ export class FirebaseService {
       });
   }
 
-  async changeEmail(email: string) {
+  async changeEmail(oldEmail: string, newEmail: string, password: string) {
     const auth = getAuth();
 
     if (auth.currentUser) {
-      updateEmail(auth.currentUser, email)
-        .then(async () => {
-          if (auth.currentUser) {
-            sendEmailVerification(auth.currentUser);
-            const idToken: string = await auth.currentUser.getIdToken();
-            fetch(`${erzahler.url}:${erzahler.port}/update-email/${idToken}`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({ email: email })
+      signInWithEmailAndPassword(auth, oldEmail, password)
+        .then((userCredential: UserCredential) => {
+          updateEmail(userCredential.user, newEmail)
+            .then(async () => {
+              if (auth.currentUser) {
+                sendEmailVerification(auth.currentUser);
+
+                const idToken: string = await auth.currentUser.getIdToken();
+                fetch(`${erzahler.url}:${erzahler.port}/update-email/${idToken}`, {
+                  method: 'PUT',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({ newEmail: newEmail })
+                }).then((response: any) => {
+                  console.log('Email is probably updated');
+                })
+                .catch((error: Error) => { console.log(error.message); });
+              }
             })
             .catch((error: Error) => { console.log(error.message); });
-          }
-        })
-        .catch((error: Error) => { console.log(error.message); });
+        });
     }
   }
 

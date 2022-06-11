@@ -24,9 +24,11 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
   const [presentAddEmail, setPresentAddEmail] = useState(false);
   const [changingEmail, setChangingEmail] = useState(false);
   const [email, setEmail] = useState('');
+  const [providerEmail, setProviderEmail] = useState('');
   const [changingPassword, setChangingPassword] = useState(false);
   const [password1, setPassword1] = useState('');
   const [password2, setPassword2] = useState('');
+  const [passwordChangeSent, setPasswordChangeSent] = useState(false);
   const [emailValidated, setEmailValidated] = useState(true);
   const [verificationTimer, setVerificationTimer] = useState('');
   const [verificationSent, setVerificationSent] = useState(false);
@@ -50,35 +52,43 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
   });
 
   useEffect(() => {
-    console.log('data', data);
-    console.log('user', user);
     if (data && !data.email_verified && user?.emailVerified) {
       // This just forces the validatio for UI/UX.
       // If user does not navigate here before timer is up, it is assessed by back end at expiration time
       firebaseService.validateUserDBEmail();
-      return;
+      router.reload();
     }
 
     if (data && data.email && !data.email_verified) {
+      console.log('Providers', data.providers);
+      let providerEmail: string = '';
+      data.providers.forEach((provider: any) => {
+        console.log('Provider[0]', provider[0]);
+        if (provider[0] === 'password') {
+          console.log('Provider[1]', provider[1]);
+          providerEmail = provider[1];
+        }
+      })
+      console.log('Provider Email', providerEmail)
+      setProviderEmail(providerEmail);
       setEmailValidated(false);
       setInterval(() => {
         setVerificationTimer(deadlineTimer(data.verification_deadline, 'minutes'));
       }, 1000);
     }
-  }, [data, user, firebaseService])
+  }, [data, user, firebaseService, router])
 
   const handleChangingEmailClick = () => {
     setChangingEmail(!changingEmail);
   }
 
-  const handleSubmitChangeEmailClick = () => {
-    if (firebase.auth) {
-      firebaseService.changeEmail(email);
-    }
+  const handleSubmitChangeEmailClick = (oldEmail: string) => {
+    firebaseService.changeEmail(oldEmail, email, password1);
   }
 
   const handleChangingPasswordClick = () => {
-    setChangingPassword(!changingPassword);
+      firebaseService.resetPassword(email);
+      setPasswordChangeSent(true);
   }
 
   const handleEmailChange = (newEmail: string) => {
@@ -133,6 +143,8 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
   }
 
   if (data) {
+    console.log('user', user);
+    console.log('data', data);
     return (
       <div>
         <NavBarSignedIn title={`User Dashboard`} />
@@ -141,7 +153,7 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
         {
           data.email &&
           <div>
-            Email: {data.email}<br />
+            Email: {data.email} {data.user_status === 'changingEmail' && ` => ${providerEmail}`}<br />
             <Button
               color="inherit"
               variant="contained"
@@ -166,44 +178,55 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
                   />
                   <br/>
                   <Button
-                  color="inherit"
-                  variant="contained"
-                  onClick={handleSubmitChangeEmailClick}
+                    color="inherit"
+                    variant="contained"
+                    onClick={() => {handleSubmitChangeEmailClick(data.email)}}
                   >
                     Submit Change
                   </Button><br />
                 </React.Fragment>
               }
             <br/>
-              {
-                (!emailValidated) &&
-                <div>
-                  {
-                    verificationSent ?
-                    <div>Verification Sent</div>
-                    :
-                    <Button
-                      color="warning"
-                      variant="contained"
-                      onClick={handleResendEmailVerificationClick}
-                    >
-                      Resend Verification
-                    </Button>
-                  }
-                  <br />
-                  Verification time left: {verificationTimer}
-                  <br />
-                  <br />
-                </div>
-              }
+            {
+              (!emailValidated) &&
+              <div>
+                {
+                  verificationSent ?
+                  <div>Verification Sent</div>
+                  :
+                  <Button
+                    color="warning"
+                    variant="contained"
+                    onClick={handleResendEmailVerificationClick}
+                  >
+                    Resend Verification
+                  </Button>
+                }
+                <br />
+                Verification time left: {verificationTimer}
+                <br />
+                <br />
+              </div>
+            }
+            {
+              passwordChangeSent ?
+              <Button
+              color="inherit"
+              variant="contained"
+              disabled
+            >
+              Password Change Email Sent
+            </Button>
+            :
             <Button
               color="inherit"
               variant="contained"
               onClick={handleChangingPasswordClick}
             >
               Change Password
-            </Button><br />
-
+            </Button>
+            }
+              <br />
             {
               changingPassword &&
               <div>
