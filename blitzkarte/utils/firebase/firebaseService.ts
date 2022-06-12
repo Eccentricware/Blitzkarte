@@ -126,8 +126,13 @@ export class FirebaseService {
         return this.hasUsername(idToken);
       })
       .catch((error: Error) => {
-        return error.message;
+        console.log(error.message);
       });
+
+    if (user) {
+      const idToken: string = await user.getIdToken();
+      return await this.getUserProfile(idToken);
+    }
   }
 
   async changeEmail(oldEmail: string, newEmail: string, password: string) {

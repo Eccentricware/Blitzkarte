@@ -6,7 +6,6 @@ interface StallGlobeProps {
 }
 
 const StallGlobe: FC<StallGlobeProps> = ({mode, message}: StallGlobeProps) => {
-  console.log('message', message);
   return (
     <div id="stall-globe-container">
       <svg id="stall-globe" width="100" height="100" viewBox="0 0 503 503">

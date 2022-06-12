@@ -124,11 +124,11 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
   };
 
   if (isFetching) {
-    return <StallGlobe mode="querying" message='DashBoardBody: Fetching'/>
+    return <StallGlobe mode="querying" message={'DashBoardBody: Fetching'}/>
   }
 
   if (isLoading) {
-    return <StallGlobe mode="querying" message='DashBoardBody: Loading'/>
+    return <StallGlobe mode="querying" message={'DashBoardBody: Loading'}/>
   }
 
   if (error) {
@@ -141,12 +141,12 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
     return (
       <div>
         <NavBarSignedIn title={`User Dashboard`} />
-        Welcome, {data && data.username}<br />
+        Welcome, {data.username}<br />
         <br />
         {
           data.email &&
           <div>
-            Email: {data.email} {data.user_status === 'changingEmail' && ` => ${providerEmail}`}<br />
+            Email: {data.email}<br />
             {
               (!changeEmailSubmitted && data.email_verified === true) ?
               <React.Fragment>
