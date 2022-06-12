@@ -24,7 +24,7 @@ const DashboardPage: NextPage = () => {
           <link rel="icon" href="/favicon.ico"/>
         </Head>
         <NavBarSignedOut title={`User Dashboard`}/>
-        <StallGlobe mode="authenticating"/>
+        <StallGlobe mode="authenticating" message={"Dashboad Page: Loading"}/>
       </div>
     )
   }
@@ -46,7 +46,7 @@ const DashboardPage: NextPage = () => {
   if (error) {
     return (
       <div>
-        <StallGlobe mode="error" />
+        <StallGlobe mode="error" message={"DashBoard Page: Error"}/>
         <div>
           There was an error loading the page. Please report it to the administrator at zeldark@gmail.com
         </div>

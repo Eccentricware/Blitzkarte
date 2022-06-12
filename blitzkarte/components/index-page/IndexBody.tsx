@@ -26,6 +26,7 @@ const IndexBody: FC<IndexBodyProps> = ({user}: IndexBodyProps) => {
           return data;
         })
         .catch((error: Error) => {
+          return error;
           console.log('idToken Error', error.message);
           router.push('/');
         });
@@ -33,19 +34,16 @@ const IndexBody: FC<IndexBodyProps> = ({user}: IndexBodyProps) => {
   });
 
   if (isFetching) {
-    return <StallGlobe mode="querying" />
+    return <StallGlobe mode="querying" message={'IndexBody: Fetching'}/>
   }
 
   if (isLoading) {
-    return <StallGlobe mode="querying" />
+    return <StallGlobe mode="querying" message={'IndexBody: Loading'}/>
   }
 
   if (error) {
-    return <StallGlobe mode="error" />
-  }
-
-  if (data.error) {
-    return <StallGlobe mode="error" />
+    console.log('errer1', error);
+    return <StallGlobe mode="error" message={'IndexBody: Error'}/>
   }
 
   if (data) {
@@ -67,7 +65,7 @@ const IndexBody: FC<IndexBodyProps> = ({user}: IndexBodyProps) => {
 
   return (
     <div>
-      <StallGlobe mode="error" />
+      <StallGlobe mode="error" message={'IndexBody: Return'}/>
     </div>
   )
 }

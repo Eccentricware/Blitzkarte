@@ -23,7 +23,7 @@ const Home: NextPage = () => {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <NavBarSignedOut title={""} />
-        <StallGlobe mode='authenticating'/>
+        <StallGlobe mode='authenticating' message={'Index Page: Loading'}/>
       </div>
     )
   }
@@ -45,15 +45,13 @@ const Home: NextPage = () => {
   if (error) {
     return (
       <div>
-        <StallGlobe mode="error" />
+        <StallGlobe mode="error"  message={'Index Page: Error'}/>
         <div>
           There was an error loading the page. Please report it to the administrator at zeldark@gmail.com
         </div>
       </div>
     )
   }
-
-  console.log(user);
 
   return (
     <div>

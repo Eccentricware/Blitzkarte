@@ -2,9 +2,11 @@ import { FC } from "react";
 
 interface StallGlobeProps {
   mode: string;
+  message: string;
 }
 
-const StallGlobe: FC<StallGlobeProps> = ({mode}: StallGlobeProps) => {
+const StallGlobe: FC<StallGlobeProps> = ({mode, message}: StallGlobeProps) => {
+  console.log('message', message);
   return (
     <div id="stall-globe-container">
       <svg id="stall-globe" width="500" height="500" viewBox="0 0 503 503">
@@ -64,6 +66,7 @@ const StallGlobe: FC<StallGlobeProps> = ({mode}: StallGlobeProps) => {
           strokeWidth={mode === 'querying' ? 9 : 3}
         />
       </svg>
+      <h2>{message}</h2>
     </div>
 
   )
