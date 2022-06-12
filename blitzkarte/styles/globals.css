@@ -23,7 +23,8 @@ p {
   width: 400px;
   word-wrap: break-word;
 }
-#stall-globe-container {
+
+/* #stall-globe-container {
   position: absolute;
   top: 15%;
   left: 50%
@@ -33,7 +34,7 @@ p {
   position: relative;
   top: -50%;
   left: -50%;
-}
+} */
 
 .errors {
   font-size: smaller;

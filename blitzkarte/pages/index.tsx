@@ -28,6 +28,7 @@ const Home: NextPage = () => {
     )
   }
 
+  // Signed in
   if (user) {
     return (
       <div>
@@ -53,6 +54,7 @@ const Home: NextPage = () => {
     )
   }
 
+  // Signed Out
   return (
     <div>
       <Head>

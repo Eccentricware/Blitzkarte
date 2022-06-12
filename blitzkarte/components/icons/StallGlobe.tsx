@@ -9,7 +9,7 @@ const StallGlobe: FC<StallGlobeProps> = ({mode, message}: StallGlobeProps) => {
   console.log('message', message);
   return (
     <div id="stall-globe-container">
-      <svg id="stall-globe" width="500" height="500" viewBox="0 0 503 503">
+      <svg id="stall-globe" width="100" height="100" viewBox="0 0 503 503">
         <defs>
           <clipPath id="stall-globe-circle">
             <circle cx="251.5" cy="251.5" r="250" strokeMiterlimit="10"
