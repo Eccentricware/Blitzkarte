@@ -44,9 +44,8 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
         .then((response) => {
           return response.json();
         }).then((result) => {
-          return result[0];
-        })
-        .catch((error: Error) => {
+          return result;
+        }).catch((error: Error) => {
           console.log('idToken Error', error.message);
           router.push('/');
         });
@@ -54,21 +53,21 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
   });
 
   useEffect(() => {
-    if (data && !data.email_verified && user?.emailVerified) {
-      // This just forces the validatio for UI/UX.
-      // If user does not navigate here before timer is up, it is assessed by back end at expiration time
-      firebaseService.validateUserDBEmail()
-        .then(() => { setEmailValidated(true); });
-    }
+    // if (data && !data.email_verified && user?.emailVerified) {
+    //   // This just forces the validatio for UI/UX.
+    //   // If user does not navigate here before timer is up, it is assessed by back end at expiration time
+    //   firebaseService.validateUserDBEmail()
+    //     .then(() => { setEmailValidated(true); });
+    // }
 
     if (data && data.email && !data.email_verified) {
-      let providerEmail: string = '';
-      data.providers.forEach((provider: any) => {
-        if (provider[0] === 'password') {
-          providerEmail = provider[1];
-        }
-      });
-      setProviderEmail(providerEmail);
+      // let providerEmail: string = '';
+      // data.providers.forEach((provider: any) => {
+      //   if (provider[0] === 'password') {
+      //     providerEmail = provider[1];
+      //   }
+      // });
+      // setProviderEmail(providerEmail);
       setEmailValidated(false);
       setInterval(() => {
         setVerificationTimer(deadlineTimer(data.verification_deadline, 'minutes'));
@@ -133,11 +132,11 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
   };
 
   if (isFetching) {
-    return <StallGlobe mode="querying" message='DashBoardBody: Fetching'/>
+    return <StallGlobe mode="querying" message={'DashBoardBody: Fetching'}/>
   }
 
   if (isLoading) {
-    return <StallGlobe mode="querying" message='DashBoardBody: Loading'/>
+    return <StallGlobe mode="querying" message={'DashBoardBody: Loading'}/>
   }
 
   if (error) {
@@ -150,12 +149,12 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
     return (
       <div>
         <NavBarSignedIn title={`User Dashboard`} />
-        Welcome, {data && data.username}<br />
+        Welcome, {data.username}<br />
         <br />
         {
           data.email &&
           <div>
-            Email: {data.email} {data.user_status === 'changingEmail' && ` => ${providerEmail}`}<br />
+            Email: {data.email}<br />
             {
               !changeEmailSubmitted &&
               <React.Fragment>

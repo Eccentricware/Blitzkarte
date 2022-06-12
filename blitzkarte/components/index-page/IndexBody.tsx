@@ -26,8 +26,6 @@ const IndexBody: FC<IndexBodyProps> = ({user}: IndexBodyProps) => {
           return data;
         })
         .catch((error: Error) => {
-          return error;
-          console.log('idToken Error', error.message);
           router.push('/');
         });
     });
@@ -42,14 +40,13 @@ const IndexBody: FC<IndexBodyProps> = ({user}: IndexBodyProps) => {
   }
 
   if (error) {
-    console.log('errer1', error);
     return <StallGlobe mode="error" message={'IndexBody: Error'}/>
   }
 
   if (data) {
     return (
       <div>
-       {data.length > 0 ? <NavBarSignedIn title={""}/> : <NavBarSignedOut title=""/>}
+       {data ? <NavBarSignedIn title={""}/> : <NavBarSignedOut title={''}/>}
         <main className={styles.main}>
           <h1 className={styles.title}>
             Welcome to Project Blitzkarte!

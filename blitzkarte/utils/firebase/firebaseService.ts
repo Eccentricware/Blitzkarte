@@ -120,15 +120,16 @@ export class FirebaseService {
   async signInWithEmail(email: string, password: string): Promise<any> {
     const auth = getAuth();
 
-    return signInWithEmailAndPassword(auth, email, password)
-      .then(async (userCredential: UserCredential) => {
-        const idToken: string = await userCredential.user.getIdToken();
-
-        return this.getUserProfile(idToken);
-      })
+    const user: User | void = await signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential: UserCredential) => { return userCredential.user } )
       .catch((error: Error) => {
-        return error.message;
+        console.log(error.message);
       });
+
+    if (user) {
+      const idToken: string = await user.getIdToken();
+      return await this.getUserProfile(idToken);
+    }
   }
 
   async changeEmail(oldEmail: string, newEmail: string, password: string) {
@@ -266,14 +267,13 @@ export class FirebaseService {
       return result.json();
     })
     .then((profile: any) => {
-      console.log('profile', profile);
-      if (profile.length === 1) {
         return { hasUsername: true };
-      }
-      return { hasUsername: false };
     })
     .catch((error: Error) => {
-      return error.message;
+      return {
+        hasUsername: false,
+        error: error.message
+      };
     });
   }
 
