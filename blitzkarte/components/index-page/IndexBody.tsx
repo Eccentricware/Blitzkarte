@@ -46,7 +46,7 @@ const IndexBody: FC<IndexBodyProps> = ({user}: IndexBodyProps) => {
   if (data) {
     return (
       <div>
-       {data ? <NavBarSignedIn title={""}/> : <NavBarSignedOut title={''}/>}
+       {data.username ? <NavBarSignedIn title={""}/> : <NavBarSignedOut title=""/>}
         <main className={styles.main}>
           <h1 className={styles.title}>
             Welcome to Project Blitzkarte!

@@ -15,7 +15,6 @@ import {
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
   updateProfile,
-  reauthenticateWithCredential,
   updateEmail
 } from "firebase/auth";
 import router from "next/router";
@@ -120,8 +119,12 @@ export class FirebaseService {
   async signInWithEmail(email: string, password: string): Promise<any> {
     const auth = getAuth();
 
-    const user: User | void = await signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential: UserCredential) => { return userCredential.user } )
+    return signInWithEmailAndPassword(auth, email, password)
+      .then(async (userCredential: UserCredential) => {
+        const idToken: string = await userCredential.user.getIdToken();
+
+        return this.hasUsername(idToken);
+      })
       .catch((error: Error) => {
         console.log(error.message);
       });
@@ -136,28 +139,11 @@ export class FirebaseService {
     const auth = getAuth();
 
     if (auth.currentUser) {
-      signInWithEmailAndPassword(auth, oldEmail, password)
-        .then((userCredential: UserCredential) => {
-          updateEmail(userCredential.user, newEmail)
-            .then(async () => {
-              if (auth.currentUser) {
-                sendEmailVerification(auth.currentUser);
+      const currentUser: User = await signInWithEmailAndPassword(auth, oldEmail, password)
+        .then((userCredential: UserCredential) => userCredential.user);
 
-                const idToken: string = await auth.currentUser.getIdToken();
-                fetch(`${erzahler.url}:${erzahler.port}/update-email/${idToken}`, {
-                  method: 'PUT',
-                  headers: {
-                    'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify({ newEmail: newEmail })
-                }).then((response: any) => {
-                  console.log('Email is probably updated');
-                })
-                .catch((error: Error) => { console.log(error.message); });
-              }
-            })
-            .catch((error: Error) => { console.log(error.message); });
-        });
+      await updateEmail(currentUser, newEmail);
+      await sendEmailVerification(currentUser);
     }
   }
 
@@ -193,7 +179,7 @@ export class FirebaseService {
     return signInWithPopup(auth, googleProvider)
       .then(async (userCredential: UserCredential) => {
         const idToken: string = await userCredential.user.getIdToken();
-        return this.getUserProfile(idToken);
+        return this.hasUsername(idToken);
       })
       .catch((error: Error) => {
         return error.message;
@@ -221,7 +207,7 @@ export class FirebaseService {
       .then(async (userCredential: UserCredential) => {
         const idTokenPromise: Promise<string> = userCredential.user.getIdToken();
         const idToken = await idTokenPromise;
-        return this.getUserProfile(idToken);
+        return this.hasUsername(idToken);
       })
       .catch((error: Error) => {
         return error.message;
@@ -256,7 +242,7 @@ export class FirebaseService {
     });
   }
 
-  getUserProfile = (idToken: string): any => {
+  hasUsername = (idToken: string): any => {
     return fetch(`${erzahler.url}:${erzahler.port}/get-user-profile/${idToken}`, {
       method: 'GET',
       headers: {
@@ -267,7 +253,11 @@ export class FirebaseService {
       return result.json();
     })
     .then((profile: any) => {
+      console.log('profile', profile);
+      if (profile.username) {
         return { hasUsername: true };
+      }
+      return { hasUsername: false };
     })
     .catch((error: Error) => {
       return {

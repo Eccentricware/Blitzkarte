@@ -1,10 +1,9 @@
 import { Button, TextField } from '@mui/material';
-import { reauthenticateWithCredential, User } from 'firebase/auth';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { User } from 'firebase/auth';
 import { FC, Fragment, useContext, useEffect, useState } from 'react';
 import { QueryClient, useQuery, useQueryClient } from 'react-query';
-import { ProfileService } from '../../services/profile-service';
 import Blitzkontext from '../../utils/Blitzkontext';
 import { FirebaseService } from '../../utils/firebase/firebaseService';
 import { erzahler } from '../../utils/general/erzahler';
@@ -19,7 +18,6 @@ interface DashboardBodyProps {
 const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
   const firebase = useContext(Blitzkontext).user;
   const firebaseService = new FirebaseService();
-  const profileService = new ProfileService();
 
   const [presentAddEmail, setPresentAddEmail] = useState(false);
   const [changingEmail, setChangingEmail] = useState(false);
@@ -42,10 +40,13 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
     return user?.getIdToken().then((idToken: string) => {
       return fetch(`${erzahler.url}:${erzahler.port}/get-user-profile/${idToken}`)
         .then((response) => {
+          console.log('Dashboard body response', response);
           return response.json();
         }).then((result) => {
+          console.log('Dashboard Body Result', result);
           return result;
-        }).catch((error: Error) => {
+        })
+        .catch((error: Error) => {
           console.log('idToken Error', error.message);
           router.push('/');
         });
@@ -53,34 +54,25 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
   });
 
   useEffect(() => {
-    // if (data && !data.email_verified && user?.emailVerified) {
-    //   // This just forces the validatio for UI/UX.
-    //   // If user does not navigate here before timer is up, it is assessed by back end at expiration time
-    //   firebaseService.validateUserDBEmail()
-    //     .then(() => { setEmailValidated(true); });
-    // }
-
     if (data && data.email && !data.email_verified) {
-      // let providerEmail: string = '';
-      // data.providers.forEach((provider: any) => {
-      //   if (provider[0] === 'password') {
-      //     providerEmail = provider[1];
-      //   }
-      // });
-      // setProviderEmail(providerEmail);
-      setEmailValidated(false);
       setInterval(() => {
         setVerificationTimer(deadlineTimer(data.verification_deadline, 'minutes'));
       }, 1000);
     }
-  }, [data, user, firebaseService, router])
+  }, [data, user])
 
   const handleChangingEmailClick = () => {
     setChangingEmail(!changingEmail);
   }
 
   const handleSubmitChangeEmailClick = () => {
-    firebaseService.changeEmail(currentEmail, newEmail, password1);
+    firebaseService.changeEmail(currentEmail, newEmail, password1)
+      .then(() => {
+        router.reload();
+      })
+      .catch((error: Error) => {
+        console.log('Change Email Error:', error.message);
+      });
   }
 
   const handlePasswordResetClick = () => {
@@ -109,14 +101,14 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
     setPassword2(password2);
   }
 
+  const handleEnableAddEmailProviderClick = () => {
+    setPresentAddEmail(!presentAddEmail);
+  };
+
   const handleAddEmailProviderSubmitClick = () => {
     if (firebase.auth) {
       firebaseService.addEmailProvider(firebase.auth, newEmail, password1);
     }
-  };
-
-  const handleEnableAddEmailProviderClick = () => {
-    setPresentAddEmail(!presentAddEmail);
   };
 
   const handleAddGoogleProviderClick = () => {
@@ -156,7 +148,7 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
           <div>
             Email: {data.email}<br />
             {
-              !changeEmailSubmitted &&
+              (!changeEmailSubmitted && data.email_verified === true) ?
               <React.Fragment>
                 <Button
                   color="inherit"
@@ -199,10 +191,21 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
                   </React.Fragment>
                 }
               </React.Fragment>
+              :
+              <React.Fragment>
+                <Button
+                  color="inherit"
+                  variant="contained"
+                  disabled={true}
+                  onClick={() => { handleSubmitChangeEmailClick(); }}
+                >
+                  Unverified Emails Cant Be Changed
+                </Button><br />
+              </React.Fragment>
             }
             <br/>
             {
-              (!emailValidated) &&
+              (!data.email_verified) &&
               <div>
                 {
                   verificationSent ?
@@ -217,7 +220,7 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
                   </Button>
                 }
                 <br />
-                Verification time left: {verificationTimer}
+                {data.verification_deadline && `Verification time left: ${verificationTimer}`}
                 <br />
                 <br />
               </div>
