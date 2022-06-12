@@ -23,7 +23,9 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
 
   const [presentAddEmail, setPresentAddEmail] = useState(false);
   const [changingEmail, setChangingEmail] = useState(false);
-  const [email, setEmail] = useState('');
+  const [changeEmailSubmitted, setChangeEmailSubmitted] = useState(false);
+  const [currentEmail, setCurrentEmail] = useState('');
+  const [newEmail, setNewEmail] = useState('');
   const [providerEmail, setProviderEmail] = useState('');
   const [changingPassword, setChangingPassword] = useState(false);
   const [password1, setPassword1] = useState('');
@@ -55,21 +57,17 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
     if (data && !data.email_verified && user?.emailVerified) {
       // This just forces the validatio for UI/UX.
       // If user does not navigate here before timer is up, it is assessed by back end at expiration time
-      firebaseService.validateUserDBEmail();
-      router.reload();
+      firebaseService.validateUserDBEmail()
+        .then(() => { setEmailValidated(true); });
     }
 
     if (data && data.email && !data.email_verified) {
-      console.log('Providers', data.providers);
       let providerEmail: string = '';
       data.providers.forEach((provider: any) => {
-        console.log('Provider[0]', provider[0]);
         if (provider[0] === 'password') {
-          console.log('Provider[1]', provider[1]);
           providerEmail = provider[1];
         }
-      })
-      console.log('Provider Email', providerEmail)
+      });
       setProviderEmail(providerEmail);
       setEmailValidated(false);
       setInterval(() => {
@@ -82,17 +80,21 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
     setChangingEmail(!changingEmail);
   }
 
-  const handleSubmitChangeEmailClick = (oldEmail: string) => {
-    firebaseService.changeEmail(oldEmail, email, password1);
+  const handleSubmitChangeEmailClick = () => {
+    firebaseService.changeEmail(currentEmail, newEmail, password1);
   }
 
-  const handleChangingPasswordClick = () => {
-      firebaseService.resetPassword(email);
+  const handlePasswordResetClick = () => {
+      firebaseService.resetPassword(currentEmail);
       setPasswordChangeSent(true);
   }
 
-  const handleEmailChange = (newEmail: string) => {
-    setEmail(newEmail);
+  const handleCurrentEmailChange = (currentEmail: string) => {
+    setCurrentEmail(currentEmail);
+  }
+
+  const handleNewEmailChange = (newEmail: string) => {
+    setNewEmail(newEmail);
   }
 
   const handleResendEmailVerificationClick = () => {
@@ -110,7 +112,7 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
 
   const handleAddEmailProviderSubmitClick = () => {
     if (firebase.auth) {
-      firebaseService.addEmailProvider(firebase.auth, email, password1);
+      firebaseService.addEmailProvider(firebase.auth, newEmail, password1);
     }
   };
 
@@ -131,15 +133,15 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
   };
 
   if (isFetching) {
-    return <StallGlobe mode="querying" />
+    return <StallGlobe mode="querying" message='DashBoardBody: Fetching'/>
   }
 
   if (isLoading) {
-    return <StallGlobe mode="querying" />
+    return <StallGlobe mode="querying" message='DashBoardBody: Loading'/>
   }
 
   if (error) {
-    return <StallGlobe mode="error" />
+    return <StallGlobe mode="error" message={'DashBoardBody: Error'}/>
   }
 
   if (data) {
@@ -154,38 +156,51 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
           data.email &&
           <div>
             Email: {data.email} {data.user_status === 'changingEmail' && ` => ${providerEmail}`}<br />
-            <Button
-              color="inherit"
-              variant="contained"
-              onClick={handleChangingEmailClick}
-            >
-              Change Email
-            </Button><br />
-              {
-                changingEmail &&
-                <React.Fragment>
-                  <TextField
-                    label="New Email"
-                    variant="outlined"
-                    onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
-                      handleEmailChange(event.target.value);
-                    }}
-                  /><br/>
-                  <TextField label="Enter Password" type="password" variant="outlined"
-                    onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
-                      handlePassword1Change(event.target.value);
-                    }}
-                  />
-                  <br/>
-                  <Button
-                    color="inherit"
-                    variant="contained"
-                    onClick={() => {handleSubmitChangeEmailClick(data.email)}}
-                  >
-                    Submit Change
-                  </Button><br />
-                </React.Fragment>
-              }
+            {
+              !changeEmailSubmitted &&
+              <React.Fragment>
+                <Button
+                  color="inherit"
+                  variant="contained"
+                  onClick={handleChangingEmailClick}
+                >
+                  Change Email
+                </Button><br />
+                {
+                  changingEmail &&
+                  <React.Fragment>
+                    <h3 style={{color: 'red'}}>Enter Information To Confirm Email Change!</h3>
+                    <TextField
+                      label="Current Email"
+                      variant="outlined"
+                      onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
+                        handleCurrentEmailChange(event.target.value);
+                      }}
+                    /><br />
+                    <TextField
+                      label="New Email"
+                      variant="outlined"
+                      onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
+                        handleNewEmailChange(event.target.value);
+                      }}
+                    /><br />
+                    <TextField label="Enter Password" type="password" variant="outlined"
+                      onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
+                        handlePassword1Change(event.target.value);
+                      }}
+                    />
+                    <br />
+                    <Button
+                      color="inherit"
+                      variant="contained"
+                      onClick={() => { handleSubmitChangeEmailClick(); }}
+                    >
+                      Submit Change
+                    </Button><br />
+                  </React.Fragment>
+                }
+              </React.Fragment>
+            }
             <br/>
             {
               (!emailValidated) &&
@@ -221,7 +236,7 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
             <Button
               color="inherit"
               variant="contained"
-              onClick={handleChangingPasswordClick}
+              onClick={handlePasswordResetClick}
             >
               Change Password
             </Button>
@@ -272,7 +287,7 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
           <Fragment>
             <TextField  label="Email" variant="outlined"
               onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
-                handleEmailChange(event.target.value);
+                handleNewEmailChange(event.target.value);
               }}
             /><br />
             <TextField  label="Password" type="password" variant="outlined"
@@ -298,7 +313,7 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
   }
 
   return (
-    <StallGlobe mode="error" />
+    <StallGlobe mode="error" message="DashBoardBody: Return"/>
   )
 }
 

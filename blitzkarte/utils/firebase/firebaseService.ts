@@ -65,7 +65,7 @@ export class FirebaseService {
       console.log('User Added to database!', addResult);
       return addResult;
     }).catch((error: Error) => {
-      console.log('Add user to firebase', error.message);
+      console.log('Add user confirmation failure', error.message);
     });
   }
 
@@ -123,7 +123,8 @@ export class FirebaseService {
     return signInWithEmailAndPassword(auth, email, password)
       .then(async (userCredential: UserCredential) => {
         const idToken: string = await userCredential.user.getIdToken();
-        return this.checkUsernameLinked(idToken);
+
+        return this.getUserProfile(idToken);
       })
       .catch((error: Error) => {
         return error.message;
@@ -191,7 +192,7 @@ export class FirebaseService {
     return signInWithPopup(auth, googleProvider)
       .then(async (userCredential: UserCredential) => {
         const idToken: string = await userCredential.user.getIdToken();
-        return this.checkUsernameLinked(idToken);
+        return this.getUserProfile(idToken);
       })
       .catch((error: Error) => {
         return error.message;
@@ -219,7 +220,7 @@ export class FirebaseService {
       .then(async (userCredential: UserCredential) => {
         const idTokenPromise: Promise<string> = userCredential.user.getIdToken();
         const idToken = await idTokenPromise;
-        return this.checkUsernameLinked(idToken);
+        return this.getUserProfile(idToken);
       })
       .catch((error: Error) => {
         return error.message;
@@ -254,7 +255,7 @@ export class FirebaseService {
     });
   }
 
-  checkUsernameLinked = (idToken: string): any => {
+  getUserProfile = (idToken: string): any => {
     return fetch(`${erzahler.url}:${erzahler.port}/get-user-profile/${idToken}`, {
       method: 'GET',
       headers: {
@@ -273,7 +274,7 @@ export class FirebaseService {
     })
     .catch((error: Error) => {
       return error.message;
-    })
+    });
   }
 
   resendEmailVerification = () => {
