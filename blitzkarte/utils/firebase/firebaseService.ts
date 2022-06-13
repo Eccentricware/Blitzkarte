@@ -128,11 +128,6 @@ export class FirebaseService {
       .catch((error: Error) => {
         console.log(error.message);
       });
-
-    if (user) {
-      const idToken: string = await user.getIdToken();
-      return await this.getUserProfile(idToken);
-    }
   }
 
   async changeEmail(oldEmail: string, newEmail: string, password: string) {
@@ -159,7 +154,7 @@ export class FirebaseService {
       });
   }
 
-  signUpWithGoogle = (auth: Auth, username: string) => {
+  async signUpWithGoogle(auth: Auth, username: string) {
     console.log('Attempting sign in with Google...');
 
     const googleProvider: AuthProvider = new GoogleAuthProvider();
@@ -172,10 +167,10 @@ export class FirebaseService {
       });
   }
 
-  signInWithGoogle = (): Promise<string> => {
+  async signInWithGoogle(): Promise<any> {
     const auth = getAuth();
-
     const googleProvider: AuthProvider = new GoogleAuthProvider();
+
     return signInWithPopup(auth, googleProvider)
       .then(async (userCredential: UserCredential) => {
         const idToken: string = await userCredential.user.getIdToken();
@@ -186,10 +181,10 @@ export class FirebaseService {
       });
   }
 
-  signUpWithFacebook = (auth: Auth, username: string) => {
+  async signUpWithFacebook(auth: Auth, username: string) {
     console.log('Sign in with Facebook Clicked');
-
     const facebookProvider: AuthProvider = new FacebookAuthProvider();
+
     return signInWithPopup(auth, facebookProvider)
       .then(async (userCredential: UserCredential) => {
         const idToken: string = await userCredential.user.getIdToken();
@@ -199,7 +194,7 @@ export class FirebaseService {
       });
   }
 
-  signInWithFacebook = (): Promise<string> => {
+  async signInWithFacebook(): Promise<string> {
     const auth = getAuth();
 
     const facebookProvider: AuthProvider = new FacebookAuthProvider();
@@ -214,16 +209,65 @@ export class FirebaseService {
       });
   }
 
-  addEmailProvider(auth: Auth, email: string, password: string) {
-    console.log('Not implemented yet');
+  async addEmailProvider(email: string, password: string, username: string) {
+    const auth = getAuth();
+
+    const idToken: string =
+      await createUserWithEmailAndPassword(auth, email, password)
+        .then(async (userCredential: UserCredential) => {
+          let user = userCredential.user;
+          updateProfile(user, {
+            displayName: username
+          }).then(() => {
+            sendEmailVerification(user);
+          });
+          return await userCredential.user.getIdToken();
+        })
+        .catch((error: Error) => error.message);
+
+    return this.postProvider(idToken, username);
   }
 
-  addGoogleProvider(auth: Auth) {
-    console.log('Not implemented yet');
+  async addGoogleProvider(username: string) {
+    const auth = getAuth();
+    const googleProvider: AuthProvider = new GoogleAuthProvider();
+
+    const idToken: string =
+      await signInWithPopup(auth, googleProvider)
+        .then(async (userCredential: UserCredential) =>
+          await userCredential.user.getIdToken())
+        .catch((error: Error) => error.message);
+
+    return this.postProvider(idToken, username);
   }
 
-  addFacebookProvider(auth: Auth) {
-    console.log('Not implemented yet');
+  async addFacebookProvider(username: string) {
+    const auth = getAuth();
+    const facebookProvider: AuthProvider = new FacebookAuthProvider();
+
+    const idToken: string =
+      await signInWithPopup(auth, facebookProvider)
+        .then(async (userCredential: UserCredential) =>
+          await userCredential.user.getIdToken())
+        .catch((error: Error) => error.message);
+
+    return this.postProvider(idToken, username);
+  }
+
+  async postProvider(idToken: string, username: string) {
+    return fetch(`${erzahler.url}:${erzahler.port}/add-provider`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        idToken: idToken,
+        username: username
+      })
+    })
+      .then((response: any) => response.json())
+      .then((data: any) => data)
+      .catch((error: Error) => error.message);
   }
 
   // Guest function. It's not "really" firebase

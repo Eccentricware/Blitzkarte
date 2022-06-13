@@ -10,24 +10,29 @@ import { erzahler } from '../../utils/general/erzahler';
 import { deadlineTimer } from '../../utils/general/time-time-charm';
 import StallGlobe from '../icons/StallGlobe';
 import { NavBarSignedIn } from '../nav-bar/NavBarSignedIn';
+import { CredentialValidator } from '../../utils/general/credentialValidator';
 
 interface DashboardBodyProps {
   user: User | null;
 }
 
 const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
-  const firebase = useContext(Blitzkontext).user;
+  const firebaseCtx = useContext(Blitzkontext).user;
   const firebaseService = new FirebaseService();
 
   const [presentAddEmail, setPresentAddEmail] = useState(false);
   const [changingEmail, setChangingEmail] = useState(false);
   const [changeEmailSubmitted, setChangeEmailSubmitted] = useState(false);
   const [currentEmail, setCurrentEmail] = useState('');
+  const [currentEmailValid, setCurrentEmailValid] = useState(true);
   const [newEmail, setNewEmail] = useState('');
+  const [newEmailValid, setNewEmailValid] = useState(true);
   const [providerEmail, setProviderEmail] = useState('');
   const [changingPassword, setChangingPassword] = useState(false);
   const [password1, setPassword1] = useState('');
+  const [password1Valid, setPasswor1Valid] = useState(true);
   const [password2, setPassword2] = useState('');
+  const [password2Valid, setPassword2Valid] = useState(true);
   const [passwordChangeSent, setPasswordChangeSent] = useState(false);
   const [emailValidated, setEmailValidated] = useState(true);
   const [verificationTimer, setVerificationTimer] = useState('');
@@ -81,11 +86,23 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
   }
 
   const handleCurrentEmailChange = (currentEmail: string) => {
+    const emailValidator = new CredentialValidator(currentEmail);
     setCurrentEmail(currentEmail);
+    if ((emailValidator.emailValid)) {
+      setCurrentEmailValid(true);
+    } else {
+      setCurrentEmailValid(false);
+    }
   }
 
   const handleNewEmailChange = (newEmail: string) => {
+    const emailValidator = new CredentialValidator(newEmail);
     setNewEmail(newEmail);
+    if ((emailValidator.emailValid)) {
+      setNewEmailValid(true);
+    } else {
+      setNewEmailValid(false);
+    }
   }
 
   const handleResendEmailVerificationClick = () => {
@@ -95,10 +112,20 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
 
   const handlePassword1Change = (password1: string) => {
     setPassword1(password1);
+    if (password1.length < 6) {
+      setPasswor1Valid(false);
+    } else {
+      setPasswor1Valid(true);
+    }
   }
 
   const handlePassword2Change = (password2: string) => {
     setPassword2(password2);
+    if (password1 !== password2) {
+      setPassword2Valid(false);
+    } else {
+      setPassword2Valid(true);
+    }
   }
 
   const handleEnableAddEmailProviderClick = () => {
@@ -106,21 +133,30 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
   };
 
   const handleAddEmailProviderSubmitClick = () => {
-    if (firebase.auth) {
-      firebaseService.addEmailProvider(firebase.auth, newEmail, password1);
+    if (firebaseCtx.auth && newEmailValid && password1Valid && password2Valid) {
+      firebaseService.addEmailProvider(newEmail, password1, data.username)
+        .then((result: any) => {
+          console.log('Add email provider result:', result);
+          if (result.success === true) {
+            router.reload();
+          }
+        })
+        .catch((error: Error) => {
+          console.log(error.message);
+        });
+    } else {
+      console.log('No firebase auth?!');
     }
   };
 
   const handleAddGoogleProviderClick = () => {
-    if (firebase.auth) {
-      firebaseService.addGoogleProvider(firebase.auth);
-    }
+    const result = firebaseService.addGoogleProvider(data.username);
+    console.log(result);
   };
 
   const handleAddFacebookProviderClick = () => {
-    if (firebase.auth) {
-      firebaseService.addFacebookProvider(firebase.auth);
-    }
+    const result = firebaseService.addFacebookProvider(data.username);
+    console.log(result);
   };
 
   if (isFetching) {
@@ -164,6 +200,7 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
                     <TextField
                       label="Current Email"
                       variant="outlined"
+                      error={!currentEmailValid}
                       onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
                         handleCurrentEmailChange(event.target.value);
                       }}
@@ -171,6 +208,7 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
                     <TextField
                       label="New Email"
                       variant="outlined"
+                      error={!newEmailValid}
                       onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
                         handleNewEmailChange(event.target.value);
                       }}
@@ -287,17 +325,31 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
         {
           presentAddEmail &&
           <Fragment>
-            <TextField  label="Email" variant="outlined"
+            <TextField
+              required
+              label="Email"
+              variant="outlined"
+              error={!newEmailValid}
               onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
                 handleNewEmailChange(event.target.value);
               }}
             /><br />
-            <TextField  label="Password" type="password" variant="outlined"
+            <TextField
+              label="Password"
+              type="password"
+              variant="outlined"
+              error={!password1Valid}
+                helperText={!password1Valid && password1.length > 0 ? "Too short" : null}
               onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
                 handlePassword1Change(event.target.value);
               }}
             />
-            <TextField  label="Confirm Password" type="password" variant="outlined"
+            <TextField
+              label="Confirm Password"
+              type="password"
+              variant="outlined"
+              error={!password2Valid}
+              helperText={!password2Valid && password2.length > 0 ? "Passwords don't match" : null}
               onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
                 handlePassword2Change(event.target.value);
               }}
