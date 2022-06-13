@@ -60,27 +60,29 @@ export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
   }
 
   const handleGoogleLoginClick = () => {
-    firebaseService.signInWithGoogle()
-      .then((result: any) => {
-        console.log('Result', result)
-        if (result.hasUsername === true) {
-          router.push('/dashboard');
-        }
+    const signInResult: Promise<any> = firebaseService.signInWithGoogle();
+    signInResult.then((result: any) => {
+      console.log('Google Sign in result', result.hasUsername)
+      if (result.hasUsername === true) {
+        router.push('/dashboard');
+      } else {
         router.push('/signup');
-      })
-      .catch((error: Error) => {
-        console.log(error.message);
-      });
+      }
+    })
+    .catch((error: Error) => {
+      console.log(error.message);
+    });
   }
 
   const handleFacebookLoginClick = () => {
     const signInResult: Promise<any> = firebaseService.signInWithFacebook();
     signInResult.then((result: any) => {
-      console.log('Result', result)
+      console.log('Facebook Result', result.hasUsername)
       if (result.hasUsername === true) {
         router.push('/dashboard');
+      } else {
+        router.push('/signup');
       }
-      router.push('/signup');
     })
       .catch((error: Error) => {
         console.log(error.message);

@@ -192,7 +192,7 @@ const SignupPage: NextPage = () => {
           {
             showEmailOps &&
             <div>
-              <TextField id="outlined-basic"
+              <TextField
                 required
                 label="Email"
                 variant="outlined"
@@ -206,7 +206,7 @@ const SignupPage: NextPage = () => {
                 type="password"
                 variant="outlined"
                 error={!password1Valid}
-                helperText={!password1Valid && password1.length > 0 ? "Too shot" : null}
+                helperText={!password1Valid && password1.length > 0 ? "Too short" : null}
                 onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
                   handlePassword1Change(event.target.value);
                 }}
