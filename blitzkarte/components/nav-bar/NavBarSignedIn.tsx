@@ -9,26 +9,28 @@ interface AppBarProps {
 
 export const NavBarSignedIn: FC<AppBarProps> = ({title}: AppBarProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const [gameSelectionMenuOpen, setGameSelectionMenuOpen] = useState(false);
   const router = useRouter();
-
-  const isMenuOpen = Boolean(anchorEl);
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
-    console.log('url', router.pathname);
+    setProfileMenuOpen(true);
   }
 
   const handleProfileMenuClose = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(null);
+    setProfileMenuOpen(false);
   }
 
   const handleGameSelectionMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
-    console.log('url', router.pathname);
+    setGameSelectionMenuOpen(true);
   }
 
   const handleGameSelectionMenuClose = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(null);
+    setGameSelectionMenuOpen(false);
   }
 
   const handleSignOutClick = () => {
@@ -41,6 +43,10 @@ export const NavBarSignedIn: FC<AppBarProps> = ({title}: AppBarProps) => {
     router.push('/dashboard');
   }
 
+  const handleNewGameClick = () => {
+    router.push('/create-game');
+  }
+
   const profileMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -48,7 +54,7 @@ export const NavBarSignedIn: FC<AppBarProps> = ({title}: AppBarProps) => {
         vertical: 'top',
         horizontal: 'right'
       }}
-      open={isMenuOpen}
+      open={profileMenuOpen}
     >
       {router.pathname !== '/dashboard' &&
         <MenuItem>
@@ -67,15 +73,13 @@ export const NavBarSignedIn: FC<AppBarProps> = ({title}: AppBarProps) => {
       anchorEl={anchorEl}
       anchorOrigin={{
         vertical: 'top',
-        horizontal: 'right'
+        horizontal: 'left'
       }}
-      open={isMenuOpen}
+      open={gameSelectionMenuOpen}
     >
-      {/* {router.pathname !== '/dashboard' &&
-        <MenuItem>
-          <Button onClick={handleDashboardClick}>Dashboard</Button>
-        </MenuItem>
-      } */}
+      <MenuItem>
+        <Button onClick={handleNewGameClick}>New Game</Button>
+      </MenuItem>
       <MenuItem>
         {/* <Button onClick={handleSignOutClick}>Log Out</Button> */}
         <Button onClick={handleGameSelectionMenuClose}>X</Button>
@@ -88,11 +92,13 @@ export const NavBarSignedIn: FC<AppBarProps> = ({title}: AppBarProps) => {
       <AppBar position="static">
         <Toolbar>
           <Container>
-            <Typography align="left" variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Next Deadline
-            </Typography>
+            <Button color="inherit"
+              onClick={handleGameSelectionMenuOpen}
+            >
+              (Current Game): (Turn) - (Timer)
+            </Button>
           </Container>
-            {gameSelectionMenu}
+
           <Container>
 
           <Typography align="center" variant="h6" component="div" sx={{ flexGrow: 1 }}>
@@ -123,39 +129,8 @@ export const NavBarSignedIn: FC<AppBarProps> = ({title}: AppBarProps) => {
 
           </Container>
         </Toolbar>
-        {/* <Toolbar>
-          <Typography variant="h6"
-            noWrap
-            component="div"
-          >
-            Blitzkarte
-          </Typography>
-          <Typography variant="h6"
-            noWrap
-            component="div"
-          >
-            {title}
-          </Typography>
-          <Button
-            disabled
-            color="inherit"
-          >
-            Alerts
-          </Button>
-          <Button
-            disabled
-            color="inherit"
-          >
-            Messages
-          </Button>
-          <Button
-            onClick={handleProfileMenuOpen}
-            color="inherit"
-          >
-            Person Icon
-          </Button>
-        </Toolbar> */}
       </AppBar>
+      {gameSelectionMenu}
       {profileMenu}
     </Box>
   )
