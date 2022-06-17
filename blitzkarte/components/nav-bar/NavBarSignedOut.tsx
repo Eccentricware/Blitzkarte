@@ -113,7 +113,6 @@ export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
           label="Password"
           type="password"
           variant="outlined"
-          fullWidth
           error={loginFailure ? true : false}
           helperText={loginFailure ? 'Incorrect Login Credentials' : ''}
           onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
