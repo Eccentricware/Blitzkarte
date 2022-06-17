@@ -4,6 +4,7 @@ import { OmniBoxData } from "../../models/OmniBoxData";
 import { InputTab } from "./InputTab";
 import { DebugTab } from "./DebugTab";
 import { StatsTable } from "./StatsTable";
+import { HelperTab } from './HelperTab';
 
 interface OmniProps {
   omniBoxData: OmniBoxData;
@@ -38,9 +39,10 @@ export const OmniBox: FC<OmniProps> = ({omniBoxData}: OmniProps) => {
     <div className="omni-box">
       <Box>
         <Tabs value={panel} onChange={handleChange} centered>
-          <Tab label="Input"/>
-          <Tab label="Debug"/>
+          <Tab label="Settings"/>
           <Tab label="Stats"/>
+          <Tab label="Debug"/>
+          <Tab label="Helper"/>
         </Tabs>
       </Box>
       <TabPanel value={panel} index={0}>
@@ -51,6 +53,9 @@ export const OmniBox: FC<OmniProps> = ({omniBoxData}: OmniProps) => {
       </TabPanel>
       <TabPanel value={panel} index={2}>
         <StatsTable stats={omniBoxData.stats} />
+      </TabPanel>
+      <TabPanel value={panel} index={3}>
+        <HelperTab />
       </TabPanel>
     </div>
   )
