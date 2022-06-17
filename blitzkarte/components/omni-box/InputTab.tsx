@@ -2,6 +2,7 @@ import { InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from '@mui
 import React, { FC, useState } from 'react';
 import { WeeklyDeadlines } from './WeeklyDeadlines';
 import { IntervalDeadlines } from './IntervalDeadlines';
+import { DateTimePicker } from '@mui/x-date-pickers';
 
 interface InputProps {
   input: any;
@@ -10,18 +11,18 @@ interface InputProps {
 export const InputTab: FC<InputProps> = ({input}: InputProps) => {
   const [gameName, setGameName] = useState('');
   const [deadlineType, setDeadlineType] = useState('weekly');
-  const [ordersDeadline, setOrdersDeadline] = useState(null);
-  const [ordersDay, setOrdersDay] = useState('sunday');
-  const [ordersTime, setOrdersTime] = useState(null);
-  const [retreatsDay, setRetreatsDay] = useState(null);
-  const [retreatsTime, setRetreatsTime] = useState(null);
-  const [adjustmentsDay, setAdjustmentsDay] = useState('sunday');
-  const [adjustmentTime, setAdjustmentTime] = useState(null);
-  const [nominationDay, setNominationDay] = useState(null);
-  const [nominationTime, setNominationTime] = useState(null);
-  const [voteDay, setVoteDay] = useState(null);
-  const [voteTime, setVoteTime] = useState(null);
-  const [nominateDuringAdjustments, setNominateDuringAdjustments] = useState(false);
+  const [gameStart, setGameStart] = useState(new Date());
+  const [ordersDay, setOrdersDay] = useState('monday');
+  const [ordersTime, setOrdersTime] = useState(new Date('2000-01-01 12:00:00'));
+  const [retreatsDay, setRetreatsDay] = useState('tuesday');
+  const [retreatsTime, setRetreatsTime] = useState(new Date('2000-01-01 12:00:00'));
+  const [adjustmentsDay, setAdjustmentsDay] = useState('wednesday');
+  const [adjustmentsTime, setAdjustmentsTime] = useState(new Date('2000-01-01 12:00:00'));
+  const [nominationsDay, setNominationsDay] = useState('thursday');
+  const [nominationsTime, setNominationsTime] = useState(new Date('2000-01-01 12:00:00'));
+  const [votesDay, setVotesDay] = useState('friday');
+  const [votesTime, setVotesTime] = useState(new Date('2000-01-01 12:00:00'));
+  const [nominateDuringAdjustments, setNominateDuringAdjustments] = useState(true);
   const [voteDuringOrders, setVoteDuringOrders] = useState(false);
 
   const weeklyDeadlineOps: any = {
@@ -35,16 +36,16 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
     setRetreatsTime: setRetreatsTime,
     adjustmentsDay: adjustmentsDay,
     setAdjustmentsDay: setAdjustmentsDay,
-    adjustmentTime: adjustmentTime,
-    setAdjustmentTime: setAdjustmentTime,
-    nominationDay: nominationDay,
-    setNominationDay: setNominationDay,
-    nominationTime: nominationTime,
-    setNominationTime: setNominationTime,
-    voteDay: voteDay,
-    setVoteDay: setVoteDay,
-    voteTime: voteTime,
-    setVoteTime: setVoteTime,
+    adjustmentsTime: adjustmentsTime,
+    setAdjustmentsTime: setAdjustmentsTime,
+    nominationsDay: nominationsDay,
+    setNominationsDay: setNominationsDay,
+    nominationsTime: nominationsTime,
+    setNominationTime: setNominationsTime,
+    votesDay: votesDay,
+    setVotesDay: setVotesDay,
+    votesTime: votesTime,
+    setVotesTime: setVotesTime,
     nominateDuringAdjustments: nominateDuringAdjustments,
     setNominateDuringAdjustments: setNominateDuringAdjustments,
     voteDuringOrders: voteDuringOrders,
@@ -64,8 +65,8 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
     setDeadlineType(type);
   }
 
-  const handleSpringDeadlineChange = (date: string) => {
-    // setSpringDeadline(date);
+  const handleFistDeadlineChange = (date: string) => {
+    setGameStart(date);
   }
 
   return (
@@ -88,7 +89,22 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
             }}
           />
         </div>
-        {/* <InputLabel id="deadline-type-label">Deadline Type</InputLabel> */}
+        <div>
+          <DateTimePicker
+            label="Game Start"
+            value={gameStart}
+            disablePast
+            onChange={(newTime) => {
+              handleFistDeadlineChange(newTime);
+            }}
+            renderInput={(params) =>
+              <TextField {...params}
+                required
+                variant="outlined"
+              />
+            }
+          />
+        </div>
         <Select
           id='deadline-type-select'
           value={deadlineType}
@@ -99,6 +115,7 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
           }}
         >
           <MenuItem value={"weekly"}>Weekly Deadlines</MenuItem>
+          <MenuItem value={"daily"}>Daily Deadlines</MenuItem>
           <MenuItem value={"interval"}>Interval Deadlines</MenuItem>
         </Select>
         {
