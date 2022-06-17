@@ -26,17 +26,17 @@ function MyApp({ Component, pageProps }: AppProps) {
   });
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
+    <Blitzkontext.Provider value={{
+      map: mapView,
+      setMapView: setMapView,
+      user: { auth: auth }
+    }}>
       <QueryClientProvider client={queryClient}>
-        <Blitzkontext.Provider value={{
-          map: mapView,
-          setMapView: setMapView,
-          user: { auth: auth }
-        }}>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
           <Component {...pageProps} />
-        </Blitzkontext.Provider>
+        </LocalizationProvider>
       </QueryClientProvider>
-    </LocalizationProvider>
+    </Blitzkontext.Provider>
   )
 }
 
