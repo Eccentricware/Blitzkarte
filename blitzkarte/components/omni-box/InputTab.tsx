@@ -25,6 +25,18 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
   const [nominationsTime, setNominationsTime] = useState(new Date('2000-01-01 12:00:00'));
   const [votesDay, setVotesDay] = useState('friday');
   const [votesTime, setVotesTime] = useState(new Date('2000-01-01 12:00:00'));
+  const [firstOrdersTimeSpan, setFirstOrdersTimeSpan] = useState(3);
+  const [firstOrdersTimeType, setFirstOrdersTimeType] = useState('days');
+  const [ordersTimeSpan, setOrdersTimeSpan] = useState(2);
+  const [ordersTimeType, setOrdersTimeType] = useState('days');
+  const [retreatsTimeSpan, setRetreatsTimeSpan] = useState(3);
+  const [retreatsTimeType, setRetreatsTimeType] = useState('hours');
+  const [adjustmentsTimeSpan, setAdjustmentsTimeSpan] = useState(1);
+  const [adjustmentsTimeType, setAdjustmentsTimeType] = useState('days');
+  const [nominationsTimeSpan, setNominationsTimeSpan] = useState(1);
+  const [nominationsTimeType, setNominationsTimeType] = useState('days');
+  const [votesTimeSpan, setVotesTimeSpan] = useState(1);
+  const [votesTimeType, setVotesTimeType] = useState('days');
   const [nominateDuringAdjustments, setNominateDuringAdjustments] = useState(true);
   const [voteDuringOrders, setVoteDuringOrders] = useState(true);
 
@@ -52,8 +64,31 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
     nominateDuringAdjustments: nominateDuringAdjustments,
     setNominateDuringAdjustments: setNominateDuringAdjustments,
     voteDuringOrders: voteDuringOrders,
-    setVoteDuringOrders: setVoteDuringOrders
-
+    setVoteDuringOrders: setVoteDuringOrders,
+    firstOrdersTimeSpan: firstOrdersTimeSpan,
+    setFirstOrdersTimeSpan: setFirstOrdersTimeSpan,
+    firstOrdersTimeType: firstOrdersTimeType,
+    setFirstOrdersTimeType: setFirstOrdersTimeType,
+    ordersTimeSpan: ordersTimeSpan,
+    setOrdersTimeSpan: setOrdersTimeSpan,
+    ordersTimeType: ordersTimeType,
+    setOrdersTimeType: setOrdersTimeType,
+    retreatsTimeSpan: retreatsTimeSpan,
+    setRetreatsTimeSpan: setRetreatsTimeSpan,
+    retreatsTimeType: retreatsTimeType,
+    setRetreatsTimeType: setRetreatsTimeType,
+    adjustmentsTimeSpan: adjustmentsTimeSpan,
+    setAdjustmentsTimeSpan: setAdjustmentsTimeSpan,
+    adjustmentsTimeType: adjustmentsTimeType,
+    setAdjustmentsTimeType: setAdjustmentsTimeType,
+    nominationsTimeSpan: nominationsTimeSpan,
+    setNominationsTimeSpan: setNominationsTimeSpan,
+    nominationsTimeType: nominationsTimeType,
+    setNominationsTimeType: setNominationsTimeType,
+    votesTimeSpan: votesTimeSpan,
+    setVotesTimeSpan: setVotesTimeSpan,
+    votesTimeType: votesTimeType,
+    setVotesTimeType: setVotesTimeType
   }
 
   const handleDataInput = (fileString: string) => {
@@ -74,7 +109,7 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
 
 
   return (
-    <div style={{width: '100%'}}>
+    <div style={{width: 400}}>
       <div>
         <label>SVG Input</label>
         <textarea placeholder="Paste SVG Formatted File"
@@ -121,16 +156,19 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
           >
             <MenuItem value={"weekly"}>Automatic Weekly Deadlines</MenuItem>
             <MenuItem value={"daily"}>Automatic Daily Deadlines</MenuItem>
-            <MenuItem value={"interval"} disabled>Automatic Interval Deadlines</MenuItem>
+            <MenuItem value={"interval"}>Automatic Interval Deadlines</MenuItem>
             <MenuItem value={"manual"} disabled>Manually Set Deadlines</MenuItem>
           </Select>
         </div>
-        <div style={{width: '100%'}}>
+        <div>
           <Accordion defaultExpanded>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
+              style={{width: 350, textAlign: "center"}}
             >
-              <Typography>Schedule</Typography>
+              <Typography
+                style={{width: 350, alignContent: 'center'}}
+              >Schedule</Typography>
             </AccordionSummary>
             <AccordionDetails>
               {
@@ -140,6 +178,10 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
               {
                 (deadlineType === 'daily') &&
                 <DailyDeadlines deadlineOps={deadlineOps}/>
+              }
+              {
+                (deadlineType === 'interval') &&
+                <IntervalDeadlines deadlineOps={deadlineOps}/>
               }
             </AccordionDetails>
           </Accordion>
