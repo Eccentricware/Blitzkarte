@@ -1,8 +1,10 @@
-import { InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material';
 import React, { FC, useState } from 'react';
+import { Accordion, AccordionDetails, AccordionSummary, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, Typography } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { WeeklyDeadlines } from './WeeklyDeadlines';
 import { IntervalDeadlines } from './IntervalDeadlines';
 import { DateTimePicker } from '@mui/x-date-pickers';
+import { DailyDeadlines } from './DailyDeadlines';
 
 interface InputProps {
   input: any;
@@ -11,7 +13,8 @@ interface InputProps {
 export const InputTab: FC<InputProps> = ({input}: InputProps) => {
   const [gameName, setGameName] = useState('');
   const [deadlineType, setDeadlineType] = useState('weekly');
-  const [gameStart, setGameStart] = useState(new Date());
+  const [gameStart, setGameStart] = useState<Date | null>(new Date());
+  const [showScheduler, setShowScheduler] = useState(true);
   const [ordersDay, setOrdersDay] = useState('monday');
   const [ordersTime, setOrdersTime] = useState(new Date('2000-01-01 12:00:00'));
   const [retreatsDay, setRetreatsDay] = useState('tuesday');
@@ -23,9 +26,9 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
   const [votesDay, setVotesDay] = useState('friday');
   const [votesTime, setVotesTime] = useState(new Date('2000-01-01 12:00:00'));
   const [nominateDuringAdjustments, setNominateDuringAdjustments] = useState(true);
-  const [voteDuringOrders, setVoteDuringOrders] = useState(false);
+  const [voteDuringOrders, setVoteDuringOrders] = useState(true);
 
-  const weeklyDeadlineOps: any = {
+  const deadlineOps: any = {
     ordersDay: ordersDay,
     setOrdersDay: setOrdersDay,
     ordersTime: ordersTime,
@@ -61,16 +64,17 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
     setGameName(name);
   }
 
+  const handleGameStartChange = (date: Date | null) => {
+    setGameStart(date);
+  }
+
   const handleDeadlineTypeChange = (type: string) => {
     setDeadlineType(type);
   }
 
-  const handleFistDeadlineChange = (date: string) => {
-    setGameStart(date);
-  }
 
   return (
-    <div>
+    <div style={{width: '100%'}}>
       <div>
         <label>SVG Input</label>
         <textarea placeholder="Paste SVG Formatted File"
@@ -95,7 +99,7 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
             value={gameStart}
             disablePast
             onChange={(newTime) => {
-              handleFistDeadlineChange(newTime);
+              handleGameStartChange(newTime);
             }}
             renderInput={(params) =>
               <TextField {...params}
@@ -105,24 +109,41 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
             }
           />
         </div>
-        <Select
-          id='deadline-type-select'
-          value={deadlineType}
-          label="Deadline Type"
-          fullWidth
-          onChange={(event: SelectChangeEvent<string>): void => {
-            handleDeadlineTypeChange(event.target.value);
-          }}
-        >
-          <MenuItem value={"weekly"}>Weekly Deadlines</MenuItem>
-          <MenuItem value={"daily"}>Daily Deadlines</MenuItem>
-          <MenuItem value={"interval"}>Interval Deadlines</MenuItem>
-        </Select>
-        {
-          deadlineType === 'weekly' ?
-          <WeeklyDeadlines weeklyDeadlineOps={weeklyDeadlineOps}/>
-          : <IntervalDeadlines/>
-        }
+        <div>
+          <Select
+            id='deadline-type-select'
+            value={deadlineType}
+            label="Deadline Type"
+            fullWidth
+            onChange={(event: SelectChangeEvent<string>): void => {
+              handleDeadlineTypeChange(event.target.value);
+            }}
+          >
+            <MenuItem value={"weekly"}>Automatic Weekly Deadlines</MenuItem>
+            <MenuItem value={"daily"}>Automatic Daily Deadlines</MenuItem>
+            <MenuItem value={"interval"} disabled>Automatic Interval Deadlines</MenuItem>
+            <MenuItem value={"manual"} disabled>Manually Set Deadlines</MenuItem>
+          </Select>
+        </div>
+        <div style={{width: '100%'}}>
+          <Accordion defaultExpanded>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+            >
+              <Typography>Schedule</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              {
+                (deadlineType === 'weekly') &&
+                <WeeklyDeadlines deadlineOps={deadlineOps}/>
+              }
+              {
+                (deadlineType === 'daily') &&
+                <DailyDeadlines deadlineOps={deadlineOps}/>
+              }
+            </AccordionDetails>
+          </Accordion>
+        </div>
       </div>
     </div>
   )
