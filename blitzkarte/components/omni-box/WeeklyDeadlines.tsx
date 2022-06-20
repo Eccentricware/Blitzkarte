@@ -194,14 +194,14 @@ export const WeeklyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProp
       }
       <FormGroup>
         <FormControlLabel
+          label="Vote During Orders"
+          labelPlacement="start"
           control={
             <Switch
               checked={deadlineOps.voteDuringOrders}
               onChange={handleVoteDuringOrders}
             />
           }
-          label="Vote During Orders"
-          labelPlacement="start"
         />
       </FormGroup>
       {
@@ -211,7 +211,7 @@ export const WeeklyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProp
           <Select id='votes-deadline-day'
             value={deadlineOps.votesDay}
             onChange={(event: SelectChangeEvent<string>): void => {
-              handleVotesDayChange(event?.target.value);
+              handleVotesDayChange(event.target.value);
             }}
           >
             <MenuItem value='sunday'>Sundays</MenuItem>

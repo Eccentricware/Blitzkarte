@@ -5,6 +5,7 @@ import { WeeklyDeadlines } from './WeeklyDeadlines';
 import { IntervalDeadlines } from './IntervalDeadlines';
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { DailyDeadlines } from './DailyDeadlines';
+import { NewGameSettings } from './NewGameSettings';
 
 interface InputProps {
   input: any;
@@ -39,6 +40,16 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
   const [votesTimeType, setVotesTimeType] = useState('days');
   const [nominateDuringAdjustments, setNominateDuringAdjustments] = useState(true);
   const [voteDuringOrders, setVoteDuringOrders] = useState(true);
+
+  const [turn1Timing, setTurn1Timing] = useState('standard');
+  const [nominationTiming, setNominationTiming] = useState('set');
+  const [nominationTurn, setNominationTurn] = useState(8);
+  const [concurrentGameLimit, setConcurrentGameLimit] = useState(0);
+  const [automaticAssignments, setAutomaticAssignments] = useState(false);
+  const [ratingLimits, setRatingLimits] = useState(false);
+  const [minFunRating, setMinFunRating] = useState(2.5);
+  const [minSkillRating, setMinSkillRating] = useState(1);
+  const [maxSkillRating, setMaxSkillRating] = useState(10);
 
   const deadlineOps: any = {
     ordersDay: ordersDay,
@@ -91,6 +102,27 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
     setVotesTimeType: setVotesTimeType
   }
 
+  const settings: any = {
+    turn1Timing: turn1Timing,
+    setTurn1Timing: setTurn1Timing,
+    nominationTiming: nominationTiming,
+    setNominationTiming: setNominationTiming,
+    nominationTurn: nominationTurn,
+    setNominationTurn: setNominationTurn,
+    concurrentGameLimit: concurrentGameLimit,
+    setConcurrentGameLimit: setConcurrentGameLimit,
+    automaticAssignments: automaticAssignments,
+    setAutomaticAssignments: setAutomaticAssignments,
+    ratingLimits: ratingLimits,
+    setRatingLimits: setRatingLimits,
+    minFunRating: minFunRating,
+    setMinFunRating: setMinFunRating,
+    minSkillRating: minSkillRating,
+    setMinSkillRating: setMinSkillRating,
+    maxSkillRating: maxSkillRating,
+    setMaxSkillRating: setMaxSkillRating
+  };
+
   const handleDataInput = (fileString: string) => {
     input.functions.triggerParse(fileString);
   }
@@ -110,82 +142,83 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
 
   return (
     <div style={{width: 400}}>
+      <label>SVG Input</label>
+      <textarea placeholder="Paste SVG Formatted File"
+        value={input.data.fileString}
+        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>): void => {
+          handleDataInput(e.target.value);
+        }}
+      />
       <div>
-        <label>SVG Input</label>
-        <textarea placeholder="Paste SVG Formatted File"
-          value={input.data.fileString}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>): void => {
-            handleDataInput(e.target.value);
+        <TextField id="outlined-basic"
+          label="Game Name"
+          variant="outlined"
+          fullWidth
+          onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
+            handleGameNameChange(event.target.value);
           }}
         />
-        <div>
-          <TextField id="outlined-basic"
-            label="Game Name"
-            variant="outlined"
-            fullWidth
-            onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
-              handleGameNameChange(event.target.value);
-            }}
-          />
-        </div>
-        <div>
-          <DateTimePicker
-            label="Game Start"
-            value={gameStart}
-            disablePast
-            onChange={(newTime) => {
-              handleGameStartChange(newTime);
-            }}
-            renderInput={(params) =>
-              <TextField {...params}
-                required
-                variant="outlined"
-              />
-            }
-          />
-        </div>
-        <div>
-          <Select
-            id='deadline-type-select'
-            value={deadlineType}
-            label="Deadline Type"
-            fullWidth
-            onChange={(event: SelectChangeEvent<string>): void => {
-              handleDeadlineTypeChange(event.target.value);
-            }}
+      </div>
+      <div>
+        <DateTimePicker
+          label="Game Start"
+          value={gameStart}
+          disablePast
+          onChange={(newTime) => {
+            handleGameStartChange(newTime);
+          }}
+          renderInput={(params) =>
+            <TextField {...params}
+              required
+              variant="outlined"
+            />
+          }
+        />
+      </div>
+      <div>
+        <Select
+          id='deadline-type-select'
+          value={deadlineType}
+          label="Deadline Type"
+          fullWidth
+          onChange={(event: SelectChangeEvent<string>): void => {
+            handleDeadlineTypeChange(event.target.value);
+          }}
+        >
+          <MenuItem value={"weekly"}>Automatic Weekly Deadlines</MenuItem>
+          <MenuItem value={"daily"}>Automatic Daily Deadlines</MenuItem>
+          <MenuItem value={"interval"}>Automatic Interval Deadlines</MenuItem>
+          <MenuItem value={"manual"} disabled>Manually Set Deadlines</MenuItem>
+        </Select>
+      </div>
+      <div>
+        <Accordion defaultExpanded>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            style={{width: 350, textAlign: "center"}}
           >
-            <MenuItem value={"weekly"}>Automatic Weekly Deadlines</MenuItem>
-            <MenuItem value={"daily"}>Automatic Daily Deadlines</MenuItem>
-            <MenuItem value={"interval"}>Automatic Interval Deadlines</MenuItem>
-            <MenuItem value={"manual"} disabled>Manually Set Deadlines</MenuItem>
-          </Select>
-        </div>
-        <div>
-          <Accordion defaultExpanded>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              style={{width: 350, textAlign: "center"}}
-            >
-              <Typography
-                style={{width: 350, alignContent: 'center'}}
-              >Schedule</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              {
-                (deadlineType === 'weekly') &&
-                <WeeklyDeadlines deadlineOps={deadlineOps}/>
-              }
-              {
-                (deadlineType === 'daily') &&
-                <DailyDeadlines deadlineOps={deadlineOps}/>
-              }
-              {
-                (deadlineType === 'interval') &&
-                <IntervalDeadlines deadlineOps={deadlineOps}/>
-              }
-            </AccordionDetails>
-          </Accordion>
-        </div>
+            <Typography
+              style={{width: 350, alignContent: 'center'}}
+            >Schedule</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            {
+              (deadlineType === 'weekly') &&
+              <WeeklyDeadlines deadlineOps={deadlineOps}/>
+            }
+            {
+              (deadlineType === 'daily') &&
+              <DailyDeadlines deadlineOps={deadlineOps}/>
+            }
+            {
+              (deadlineType === 'interval') &&
+              <IntervalDeadlines deadlineOps={deadlineOps}/>
+            }
+          </AccordionDetails>
+        </Accordion>
+      </div>
+      <div>
+        <NewGameSettings settings={settings}/>
       </div>
     </div>
   )
