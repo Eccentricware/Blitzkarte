@@ -1,4 +1,4 @@
-import { FormGroup, FormControlLabel, Switch, Select, SelectChangeEvent, MenuItem, TextField } from '@mui/material';
+import { FormGroup, FormControlLabel, Switch, Select, SelectChangeEvent, MenuItem, TextField, Slider } from '@mui/material';
 import { FC } from 'react';
 
 interface NewGameSettingsProps {
@@ -24,6 +24,34 @@ export const NewGameSettings: FC<NewGameSettingsProps> = ({settings}: NewGameSet
 
   const handleRatingLimitsChange = () => {
     settings.setRatingLimits(!settings.ratingLimits);
+  }
+
+  const handleFunRangeChange = (event: Event, updatedRange: number | number[]) => {
+    settings.setFunRange(updatedRange as number[]);
+  }
+
+  const handleSkillRangeChange = (event: Event, updatedRange: number | number[]) => {
+    settings.setSkillRange(updatedRange as number[]);
+  }
+
+  const handleNmrToleranceChange = (nmrTolerance: string) => {
+    settings.setNmrTolerance(Number(nmrTolerance));
+  }
+
+  const handleBlindCreatorChange = () => {
+    settings.setBlindCreator(!settings.blindCreator);
+  }
+
+  const handleUntfRuleChange = () => {
+    settings.setUntfRule(!settings.untfRule);
+  }
+
+  const handleMadOrdersRuleChange = () => {
+    settings.setMadOrdersRule(!settings.madOrdersRule)
+  }
+
+  const handleVoteDeadlineExtensionChange = () => {
+    settings.setVoteDeadlineExtension(!settings.voteDeadlineExtension);
   }
 
   return (
@@ -101,6 +129,88 @@ export const NewGameSettings: FC<NewGameSettingsProps> = ({settings}: NewGameSet
           />
         </FormGroup>
       </div>
+      {
+        settings.ratingLimits &&
+        <Slider id="fun-range-slider"
+          value={settings.funRange}
+          onChange={handleFunRangeChange}
+          marks={[
+            {value: 0, label: 0},
+            {value: 50, label: 5},
+            {value: 100, label: 10},
+          ]}
+        />
+      }
+      {
+        settings.ratingLimits &&
+        <Slider id="skill-range-slider"
+          value={settings.skillRange}
+          onChange={handleSkillRangeChange}
+          marks={[
+            {value: 0, label: 0},
+            {value: 50, label: 5},
+            {value: 100, label: 10},
+          ]}
+        />
+      }
+      <TextField type="number"
+        label="NMR Tolerance"
+        value={settings.nmrTolerance}
+        onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
+          handleNmrToleranceChange(event.target.value);
+        }}
+      />
+      <FormGroup>
+        <FormControlLabel
+          label="Blind Creator"
+          labelPlacement="start"
+          control={
+            <Switch
+              checked={settings.blindCreator}
+              onChange={handleBlindCreatorChange}
+            />
+          }
+        />
+      </FormGroup>
+      <FormGroup>
+        <FormControlLabel
+          label="United Nations Task Force"
+          labelPlacement="start"
+          control={
+            <Switch
+              checked={settings.untfRule}
+              disabled
+              onChange={handleUntfRuleChange}
+            />
+          }
+        />
+      </FormGroup>
+      <FormGroup>
+        <FormControlLabel
+          label="Mutually Assured Destruction"
+          labelPlacement="start"
+          control={
+            <Switch
+              checked={settings.madOrdersRule}
+              disabled
+              onChange={handleMadOrdersRuleChange}
+            />
+          }
+        />
+      </FormGroup>
+      <FormGroup>
+        <FormControlLabel
+          label="Votable Deadline Extensions"
+          labelPlacement="start"
+          control={
+            <Switch
+              checked={settings.voteDeadlineExtension}
+              disabled
+              onChange={handleVoteDeadlineExtensionChange}
+            />
+          }
+        />
+      </FormGroup>
     </div>
   )
 }

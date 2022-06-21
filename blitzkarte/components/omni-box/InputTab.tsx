@@ -46,10 +46,14 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
   const [nominationTurn, setNominationTurn] = useState(8);
   const [concurrentGameLimit, setConcurrentGameLimit] = useState(0);
   const [automaticAssignments, setAutomaticAssignments] = useState(false);
-  const [ratingLimits, setRatingLimits] = useState(false);
-  const [minFunRating, setMinFunRating] = useState(2.5);
-  const [minSkillRating, setMinSkillRating] = useState(1);
-  const [maxSkillRating, setMaxSkillRating] = useState(10);
+  const [ratingLimits, setRatingLimits] = useState(true);
+  const [funRange, setFunRange] = useState([0, 90]);
+  const [skillRange, setSkillRange] = useState([0, 90]);
+  const [nmrTolerance, setNmrTolerance] = useState(3);
+  const [blindCreator, setBlindCreator] = useState(false);
+  const [untfRule, setUntfRule] = useState(false);
+  const [madOrdersRule, setMadOrdersRule] = useState(false);
+  const [voteDeadlineExtension, setVoteDeadlineExtension] = useState(false);
 
   const deadlineOps: any = {
     ordersDay: ordersDay,
@@ -115,12 +119,20 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
     setAutomaticAssignments: setAutomaticAssignments,
     ratingLimits: ratingLimits,
     setRatingLimits: setRatingLimits,
-    minFunRating: minFunRating,
-    setMinFunRating: setMinFunRating,
-    minSkillRating: minSkillRating,
-    setMinSkillRating: setMinSkillRating,
-    maxSkillRating: maxSkillRating,
-    setMaxSkillRating: setMaxSkillRating
+    funRange: funRange,
+    setFunRange: setFunRange,
+    skillRange: skillRange,
+    setSkillRange: setSkillRange,
+    nmrTolerance: nmrTolerance,
+    setNmrTolerance: setNmrTolerance,
+    blindCreator: blindCreator,
+    setBlindCreator: setBlindCreator,
+    untfRule: untfRule,
+    setUntfRule: setUntfRule,
+    madOrdersRule: madOrdersRule,
+    setMadOrdersRule: setMadOrdersRule,
+    voteDeadlineExtension: voteDeadlineExtension,
+    setVoteDeadlineExtension: setVoteDeadlineExtension
   };
 
   const handleDataInput = (fileString: string) => {
