@@ -1,12 +1,53 @@
+import { FC, useState } from "react";
 import { Select, MenuItem, InputLabel, SelectChangeEvent, TextField, FormGroup, FormControlLabel, Switch } from "@mui/material";
 import { TimePicker } from "@mui/x-date-pickers";
-import { FC } from "react";
+import Timeline from '@mui/lab/Timeline';
+import TimelineItem from '@mui/lab/TimelineItem';
+import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
+import TimelineSeparator from '@mui/lab/TimelineSeparator';
+import TimelineDot from '@mui/lab/TimelineDot';
+import TimelineConnector from '@mui/lab/TimelineConnector';
+import TimelineContent from '@mui/lab/TimelineContent';
+import CheckIcon from '@mui/icons-material/Check';
+import EditIcon from '@mui/icons-material/Edit';
+
 
 interface DeadlinesProps {
   deadlineOps: any
 }
 
 export const WeeklyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProps) => {
+  const [editingStart, setEditingStart] = useState(false);
+  const [editingOrders, setEditingOrders] = useState(false);
+  const [editingRetreats, setEditingRetreats] = useState(false);
+  const [editingAdjustments, setEditingAdjustments] = useState(false);
+  const [editingNominations, setEditingNominations] = useState(false);
+  const [editingVotes, setEditingVotes] = useState(false);
+
+  const handleEditStartToggle = () => {
+    setEditingStart(!editingStart);
+  }
+
+  const handleEditOrdersToggle = () => {
+    setEditingOrders(!editingOrders);
+  }
+
+  const handleEditRetreatsToggle = () => {
+    setEditingRetreats(!editingRetreats);
+  }
+
+  const handleEditAdjustmentsToggle = () => {
+    setEditingAdjustments(!editingAdjustments);
+  }
+
+  const handleEditNominationsToggle = () => {
+    setEditingNominations(!editingNominations);
+  }
+
+  const handleEditVotesToggle = () => {
+    setEditingVotes(!editingVotes);
+  }
+
   const handleOrdersDayChange = (day: string) => {
     deadlineOps.setOrdersDay(day);
   }
@@ -57,96 +98,270 @@ export const WeeklyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProp
 
   return (
     <div>
-      <div>
-        <InputLabel id="orders-deadline-label">Orders Deadline</InputLabel>
-        <Select id='orders-deadline-day'
-          value={deadlineOps.ordersDay}
-          onChange={(event: SelectChangeEvent<string>): void => {
-            handleOrdersDayChange(event?.target.value);
-          }}
-        >
-          <MenuItem value='sunday'>Sundays</MenuItem>
-          <MenuItem value='monday'>Mondays</MenuItem>
-          <MenuItem value='tuesday'>Tuesdays</MenuItem>
-          <MenuItem value='wednesday'>Wednesdays</MenuItem>
-          <MenuItem value='thursday'>Thursdays</MenuItem>
-          <MenuItem value='friday'>Fridays</MenuItem>
-          <MenuItem value='saturday'>Saturdays</MenuItem>
-        </Select>
-          <TimePicker
-            label="Time"
-            value={deadlineOps.ordersTime}
-            onChange={(newTime) => {
-              handleOrdersTimeChange(newTime);
-            }}
-            renderInput={(params) =>
-              <TextField {...params}
-              required
-              variant="outlined"
-              />
+      <Timeline>
+        <TimelineItem>
+          <TimelineOppositeContent>
+            Game Start
+          </TimelineOppositeContent>
+          <TimelineSeparator>
+            <TimelineDot />
+            <TimelineConnector />
+          </TimelineSeparator>
+          <TimelineContent>
+            Day
+          </TimelineContent>
+        </TimelineItem>
+
+
+        <TimelineItem>
+          <TimelineOppositeContent>
+            Orders
+          </TimelineOppositeContent>
+          <TimelineSeparator>
+            <TimelineDot />
+            <TimelineConnector />
+          </TimelineSeparator>
+          <TimelineContent>
+            {
+              editingOrders
+                ?
+              <div>
+                <Select id='orders-deadline-day'
+                  value={deadlineOps.ordersDay}
+                  onChange={(event: SelectChangeEvent<string>): void => {
+                    handleOrdersDayChange(event.target.value);
+                  }}
+                >
+                  <MenuItem value='Sunday'>Sundays</MenuItem>
+                  <MenuItem value='Monday'>Mondays</MenuItem>
+                  <MenuItem value='Tuesday'>Tuesdays</MenuItem>
+                  <MenuItem value='Wednesday'>Wednesdays</MenuItem>
+                  <MenuItem value='Thursday'>Thursdays</MenuItem>
+                  <MenuItem value='Friday'>Fridays</MenuItem>
+                  <MenuItem value='Saturday'>Saturdays</MenuItem>
+                </Select>
+                <TimePicker
+                  label="Time"
+                  value={deadlineOps.ordersTime}
+                  onChange={(newTime) => {
+                    handleOrdersTimeChange(newTime);
+                  }}
+                  renderInput={(params) =>
+                    <TextField {...params}
+                      required
+                      variant="outlined"
+                    />
+                  }
+                />
+                  <CheckIcon fontSize="small" onClick={handleEditOrdersToggle} />
+              </div>
+                :
+                <div>{deadlineOps.ordersDay.slice(0, 3)} {String(deadlineOps.ordersTime.getHours()).padStart(2, '0')}:{String(deadlineOps.ordersTime.getMinutes()).padStart(2, '0')}  <EditIcon fontSize="small" onClick={handleEditOrdersToggle} />
+              </div>
             }
-          />
-      </div>
-      <div>
-        <InputLabel id="retreats-deadline-label">Retreats Deadline</InputLabel>
-        <Select id='retreats-deadline-day'
-          value={deadlineOps.retreatsDay}
-          onChange={(event: SelectChangeEvent<string>): void => {
-            handleRetreatsDayChange(event?.target.value);
-          }}
-        >
-          <MenuItem value='sunday'>Sundays</MenuItem>
-          <MenuItem value='monday'>Mondays</MenuItem>
-          <MenuItem value='tuesday'>Tuesdays</MenuItem>
-          <MenuItem value='wednesday'>Wednesdays</MenuItem>
-          <MenuItem value='thursday'>Thursdays</MenuItem>
-          <MenuItem value='friday'>Fridays</MenuItem>
-          <MenuItem value='saturday'>Saturdays</MenuItem>
-        </Select>
-          <TimePicker
-            label="Time"
-            value={deadlineOps.retreatsTime}
-            onChange={(newTime) => {
-              handleRetreatsTimeChange(newTime);
-            }}
-            renderInput={(params) =>
-              <TextField {...params}
-              required
-              variant="outlined"
-              />
+          </TimelineContent>
+        </TimelineItem>
+
+
+        <TimelineItem>
+          <TimelineOppositeContent>
+            Retreats
+          </TimelineOppositeContent>
+          <TimelineSeparator>
+            <TimelineDot />
+            <TimelineConnector />
+          </TimelineSeparator>
+          <TimelineContent>
+            {
+              editingRetreats
+                ?
+                <div>
+                  <Select id='retreats-deadline-day'
+                    value={deadlineOps.retreatsDay}
+                    onChange={(event: SelectChangeEvent<string>): void => {
+                      handleRetreatsDayChange(event.target.value);
+                    }}
+                  >
+                    <MenuItem value='Sunday'>Sundays</MenuItem>
+                    <MenuItem value='Monday'>Mondays</MenuItem>
+                    <MenuItem value='Tuesday'>Tuesdays</MenuItem>
+                    <MenuItem value='Wednesday'>Wednesdays</MenuItem>
+                    <MenuItem value='Thursday'>Thursdays</MenuItem>
+                    <MenuItem value='Friday'>Fridays</MenuItem>
+                    <MenuItem value='Saturday'>Saturdays</MenuItem>
+                  </Select>
+                  <TimePicker
+                    label="Time"
+                    value={deadlineOps.retreatsTime}
+                    onChange={(newTime) => {
+                      handleRetreatsTimeChange(newTime);
+                    }}
+                    renderInput={(params) =>
+                      <TextField {...params}
+                        required
+                        variant="outlined"
+                      />
+                    }
+                  />
+                  <CheckIcon fontSize="small" onClick={handleEditRetreatsToggle} />
+                </div>
+                :
+                <div>{deadlineOps.retreatsDay.slice(0, 3)} {String(deadlineOps.retreatsTime.getHours()).padStart(2, '0')}:{String(deadlineOps.retreatsTime.getMinutes()).padStart(2, '0')}  <EditIcon fontSize="small" onClick={handleEditRetreatsToggle} />
+                </div>
             }
-          />
-      </div>
-      <div>
-        <InputLabel id="adjustments-deadline-label">Adjustments Deadline</InputLabel>
-        <Select id='adjustments-deadline-day'
-          value={deadlineOps.adjustmentsDay}
-          onChange={(event: SelectChangeEvent<string>): void => {
-            handleAdjustmentsDayChange(event?.target.value);
-          }}
-        >
-          <MenuItem value='sunday'>Sundays</MenuItem>
-          <MenuItem value='monday'>Mondays</MenuItem>
-          <MenuItem value='tuesday'>Tuesdays</MenuItem>
-          <MenuItem value='wednesday'>Wednesdays</MenuItem>
-          <MenuItem value='thursday'>Thursdays</MenuItem>
-          <MenuItem value='friday'>Fridays</MenuItem>
-          <MenuItem value='saturday'>Saturdays</MenuItem>
-        </Select>
-          <TimePicker
-            label="Time"
-            value={deadlineOps.adjustmentsTime}
-            onChange={(newTime) => {
-              handleAdjustmentsTimeChange(newTime);
-            }}
-            renderInput={(params) =>
-              <TextField {...params}
-              required
-              variant="outlined"
-              />
+          </TimelineContent>
+        </TimelineItem>
+
+
+        <TimelineItem>
+          <TimelineOppositeContent>
+            Adjustments
+          </TimelineOppositeContent>
+          <TimelineSeparator>
+            <TimelineDot />
+            <TimelineConnector />
+          </TimelineSeparator>
+          <TimelineContent>
+            {
+              editingAdjustments
+                ?
+                <div>
+                  <Select id='adjustments-deadline-day'
+                    value={deadlineOps.adjustmentsDay}
+                    onChange={(event: SelectChangeEvent<string>): void => {
+                      handleAdjustmentsDayChange(event.target.value);
+                    }}
+                  >
+                    <MenuItem value='Sunday'>Sundays</MenuItem>
+                    <MenuItem value='Monday'>Mondays</MenuItem>
+                    <MenuItem value='Tuesday'>Tuesdays</MenuItem>
+                    <MenuItem value='Wednesday'>Wednesdays</MenuItem>
+                    <MenuItem value='Thursday'>Thursdays</MenuItem>
+                    <MenuItem value='Friday'>Fridays</MenuItem>
+                    <MenuItem value='Saturday'>Saturdays</MenuItem>
+                  </Select>
+                  <TimePicker
+                    label="Time"
+                    value={deadlineOps.adjustmentsTime}
+                    onChange={(newTime) => {
+                      handleAdjustmentsTimeChange(newTime);
+                    }}
+                    renderInput={(params) =>
+                      <TextField {...params}
+                        required
+                        variant="outlined"
+                      />
+                    }
+                  />
+                  <CheckIcon fontSize="small" onClick={handleEditAdjustmentsToggle} />
+                </div>
+                :
+                <div>{deadlineOps.adjustmentsDay.slice(0, 3)} {String(deadlineOps.adjustmentsTime.getHours()).padStart(2, '0')}:{String(deadlineOps.adjustmentsTime.getMinutes()).padStart(2, '0')}  <EditIcon fontSize="small" onClick={handleEditAdjustmentsToggle} />
+                </div>
             }
-          />
-      </div>
+          </TimelineContent>
+        </TimelineItem>
+
+
+        <TimelineItem>
+          <TimelineOppositeContent>
+            Nominations
+          </TimelineOppositeContent>
+          <TimelineSeparator>
+            <TimelineDot />
+            <TimelineConnector />
+          </TimelineSeparator>
+          <TimelineContent>
+            {
+              editingNominations
+                ?
+                <div>
+                  <Select id='nominations-deadline-day'
+                    value={deadlineOps.nominationsDay}
+                    onChange={(event: SelectChangeEvent<string>): void => {
+                      handleNominationsDayChange(event.target.value);
+                    }}
+                  >
+                    <MenuItem value='Sunday'>Sundays</MenuItem>
+                    <MenuItem value='Monday'>Mondays</MenuItem>
+                    <MenuItem value='Tuesday'>Tuesdays</MenuItem>
+                    <MenuItem value='Wednesday'>Wednesdays</MenuItem>
+                    <MenuItem value='Thursday'>Thursdays</MenuItem>
+                    <MenuItem value='Friday'>Fridays</MenuItem>
+                    <MenuItem value='Saturday'>Saturdays</MenuItem>
+                  </Select>
+                  <TimePicker
+                    label="Time"
+                    value={deadlineOps.nominationsTime}
+                    onChange={(newTime) => {
+                      handleNominationsTimeChange(newTime);
+                    }}
+                    renderInput={(params) =>
+                      <TextField {...params}
+                        required
+                        variant="outlined"
+                      />
+                    }
+                  />
+                  <CheckIcon fontSize="small" onClick={handleEditNominationsToggle} />
+                </div>
+                :
+                <div>{deadlineOps.nominationsDay.slice(0, 3)} {String(deadlineOps.nominationsTime.getHours()).padStart(2, '0')}:{String(deadlineOps.nominationsTime.getMinutes()).padStart(2, '0')}  <EditIcon fontSize="small" onClick={handleEditNominationsToggle} />
+                </div>
+            }
+          </TimelineContent>
+        </TimelineItem>
+
+
+        <TimelineItem>
+          <TimelineOppositeContent>
+            Votes
+          </TimelineOppositeContent>
+          <TimelineSeparator>
+            <TimelineDot />
+          </TimelineSeparator>
+          <TimelineContent>
+            {
+              editingVotes
+                ?
+                <div>
+                  <Select id='votes-deadline-day'
+                    value={deadlineOps.votesDay}
+                    onChange={(event: SelectChangeEvent<string>): void => {
+                      handleVotesDayChange(event.target.value);
+                    }}
+                  >
+                    <MenuItem value='Sunday'>Sundays</MenuItem>
+                    <MenuItem value='Monday'>Mondays</MenuItem>
+                    <MenuItem value='Tuesday'>Tuesdays</MenuItem>
+                    <MenuItem value='Wednesday'>Wednesdays</MenuItem>
+                    <MenuItem value='Thursday'>Thursdays</MenuItem>
+                    <MenuItem value='Friday'>Fridays</MenuItem>
+                    <MenuItem value='Saturday'>Saturdays</MenuItem>
+                  </Select>
+                  <TimePicker
+                    label="Time"
+                    value={deadlineOps.votesTime}
+                    onChange={(newTime) => {
+                      handleVotesTimeChange(newTime);
+                    }}
+                    renderInput={(params) =>
+                      <TextField {...params}
+                        required
+                        variant="outlined"
+                      />
+                    }
+                  />
+                  <CheckIcon fontSize="small" onClick={handleEditVotesToggle} />
+                </div>
+                :
+                <div>{deadlineOps.votesDay.slice(0, 3)} {String(deadlineOps.votesTime.getHours()).padStart(2, '0')}:{String(deadlineOps.votesTime.getMinutes()).padStart(2, '0')}  <EditIcon fontSize="small" onClick={handleEditVotesToggle} />
+                </div>
+            }
+          </TimelineContent>
+        </TimelineItem>
+      </Timeline>
+
       <FormGroup>
         <FormControlLabel
           control={
@@ -159,39 +374,6 @@ export const WeeklyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProp
           labelPlacement="start"
         />
       </FormGroup>
-     {
-      !deadlineOps.nominateDuringAdjustments &&
-      <div>
-        <InputLabel id="nominations-deadline-label">Nominations Deadline</InputLabel>
-        <Select id='nominations-deadline-day'
-          value={deadlineOps.nominationsDay}
-          onChange={(event: SelectChangeEvent<string>): void => {
-            handleNominationsDayChange(event?.target.value);
-          }}
-        >
-          <MenuItem value='sunday'>Sundays</MenuItem>
-          <MenuItem value='monday'>Mondays</MenuItem>
-          <MenuItem value='tuesday'>Tuesdays</MenuItem>
-          <MenuItem value='wednesday'>Wednesdays</MenuItem>
-          <MenuItem value='thursday'>Thursdays</MenuItem>
-          <MenuItem value='friday'>Fridays</MenuItem>
-          <MenuItem value='saturday'>Saturdays</MenuItem>
-        </Select>
-          <TimePicker
-            label="Time"
-            value={deadlineOps.nominationsTime}
-            onChange={(newTime) => {
-              handleNominationsTimeChange(newTime);
-            }}
-            renderInput={(params) =>
-              <TextField {...params}
-              required
-              variant="outlined"
-              />
-            }
-          />
-        </div>
-      }
       <FormGroup>
         <FormControlLabel
           label="Vote During Orders"
@@ -204,39 +386,6 @@ export const WeeklyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProp
           }
         />
       </FormGroup>
-      {
-        !deadlineOps.voteDuringOrders &&
-        <div>
-          <InputLabel id="votes-deadline-label">Votes Deadline</InputLabel>
-          <Select id='votes-deadline-day'
-            value={deadlineOps.votesDay}
-            onChange={(event: SelectChangeEvent<string>): void => {
-              handleVotesDayChange(event.target.value);
-            }}
-          >
-            <MenuItem value='sunday'>Sundays</MenuItem>
-            <MenuItem value='monday'>Mondays</MenuItem>
-            <MenuItem value='tuesday'>Tuesdays</MenuItem>
-            <MenuItem value='wednesday'>Wednesdays</MenuItem>
-            <MenuItem value='thursday'>Thursdays</MenuItem>
-            <MenuItem value='friday'>Fridays</MenuItem>
-            <MenuItem value='saturday'>Saturdays</MenuItem>
-          </Select>
-          <TimePicker
-            label="Time"
-            value={deadlineOps.votesTime}
-            onChange={(newTime) => {
-              handleVotesTimeChange(newTime);
-            }}
-            renderInput={(params) =>
-              <TextField {...params}
-                required
-                variant="outlined"
-              />
-            }
-          />
-        </div>
-      }
     </div>
   )
 }

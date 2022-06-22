@@ -6,6 +6,7 @@ import { IntervalDeadlines } from './IntervalDeadlines';
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { DailyDeadlines } from './DailyDeadlines';
 import { NewGameSettings } from './NewGameSettings';
+import { OrderSummaryTimeline } from './OrderSummaryTimeline';
 
 interface InputProps {
   input: any;
@@ -16,15 +17,15 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
   const [deadlineType, setDeadlineType] = useState('weekly');
   const [gameStart, setGameStart] = useState<Date | null>(new Date());
   const [showScheduler, setShowScheduler] = useState(true);
-  const [ordersDay, setOrdersDay] = useState('monday');
+  const [ordersDay, setOrdersDay] = useState('Monday');
   const [ordersTime, setOrdersTime] = useState(new Date('2000-01-01 12:00:00'));
-  const [retreatsDay, setRetreatsDay] = useState('tuesday');
+  const [retreatsDay, setRetreatsDay] = useState('Tuesday');
   const [retreatsTime, setRetreatsTime] = useState(new Date('2000-01-01 12:00:00'));
-  const [adjustmentsDay, setAdjustmentsDay] = useState('wednesday');
+  const [adjustmentsDay, setAdjustmentsDay] = useState('Wednesday');
   const [adjustmentsTime, setAdjustmentsTime] = useState(new Date('2000-01-01 12:00:00'));
-  const [nominationsDay, setNominationsDay] = useState('thursday');
+  const [nominationsDay, setNominationsDay] = useState('Thursday');
   const [nominationsTime, setNominationsTime] = useState(new Date('2000-01-01 12:00:00'));
-  const [votesDay, setVotesDay] = useState('friday');
+  const [votesDay, setVotesDay] = useState('Friday');
   const [votesTime, setVotesTime] = useState(new Date('2000-01-01 12:00:00'));
   const [firstOrdersTimeSpan, setFirstOrdersTimeSpan] = useState(3);
   const [firstOrdersTimeType, setFirstOrdersTimeType] = useState('days');
@@ -47,8 +48,8 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
   const [concurrentGameLimit, setConcurrentGameLimit] = useState(0);
   const [automaticAssignments, setAutomaticAssignments] = useState(false);
   const [ratingLimits, setRatingLimits] = useState(true);
-  const [funRange, setFunRange] = useState([0, 90]);
-  const [skillRange, setSkillRange] = useState([0, 90]);
+  const [funRange, setFunRange] = useState([0, 100]);
+  const [skillRange, setSkillRange] = useState([0, 100]);
   const [nmrTolerance, setNmrTolerance] = useState(3);
   const [blindCreator, setBlindCreator] = useState(false);
   const [untfRule, setUntfRule] = useState(false);
@@ -135,6 +136,8 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
     setVoteDeadlineExtension: setVoteDeadlineExtension
   };
 
+  const scheduleSummary: any = {};
+
   const handleDataInput = (fileString: string) => {
     input.functions.triggerParse(fileString);
   }
@@ -203,7 +206,20 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
           <MenuItem value={"manual"} disabled>Manually Set Deadlines</MenuItem>
         </Select>
       </div>
+      {/* <OrderSummaryTimeline deadlineOps={deadlineOps} /> */}
       <div>
+        {
+          (deadlineType === 'weekly') &&
+          <WeeklyDeadlines deadlineOps={deadlineOps} />
+        }
+        {
+          (deadlineType === 'daily') &&
+          <DailyDeadlines deadlineOps={deadlineOps} />
+        }
+        {
+          (deadlineType === 'interval') &&
+          <IntervalDeadlines deadlineOps={deadlineOps} />
+        }
         <Accordion defaultExpanded>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
@@ -214,18 +230,7 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
             >Schedule</Typography>
           </AccordionSummary>
           <AccordionDetails>
-            {
-              (deadlineType === 'weekly') &&
-              <WeeklyDeadlines deadlineOps={deadlineOps}/>
-            }
-            {
-              (deadlineType === 'daily') &&
-              <DailyDeadlines deadlineOps={deadlineOps}/>
-            }
-            {
-              (deadlineType === 'interval') &&
-              <IntervalDeadlines deadlineOps={deadlineOps}/>
-            }
+
           </AccordionDetails>
         </Accordion>
       </div>
