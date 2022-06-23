@@ -220,19 +220,6 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
           (deadlineType === 'interval') &&
           <IntervalDeadlines deadlineOps={deadlineOps} />
         }
-        <Accordion defaultExpanded>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            style={{width: 350, textAlign: "center"}}
-          >
-            <Typography
-              style={{width: 350, alignContent: 'center'}}
-            >Schedule</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-
-          </AccordionDetails>
-        </Accordion>
       </div>
       <div>
         <NewGameSettings settings={settings}/>
