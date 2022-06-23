@@ -8,8 +8,10 @@ import TimelineSeparator from '@mui/lab/TimelineSeparator';
 import TimelineDot from '@mui/lab/TimelineDot';
 import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
+import CallSplitIcon from '@mui/icons-material/CallSplit'
 import CheckIcon from '@mui/icons-material/Check';
 import EditIcon from '@mui/icons-material/Edit';
+import MergeTypeIcon from '@mui/icons-material/MergeType';
 
 
 interface DeadlinesProps {
@@ -88,11 +90,11 @@ export const WeeklyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProp
     deadlineOps.setVotesTime(time);
   }
 
-  const handleNominateDuringAdjustments = () => {
+  const handleNominateDuringAdjustmentsChange = () => {
     deadlineOps.setNominateDuringAdjustments(!deadlineOps.nominateDuringAdjustments);
   }
 
-  const handleVoteDuringOrders = () => {
+  const handleVoteDuringOrdersChange = () => {
     deadlineOps.setVoteDuringOrders(!deadlineOps.voteDuringOrders);
   }
 
@@ -101,21 +103,14 @@ export const WeeklyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProp
       <Timeline>
         <TimelineItem>
           <TimelineOppositeContent>
-            Game Start
-          </TimelineOppositeContent>
-          <TimelineSeparator>
-            <TimelineDot />
-            <TimelineConnector />
-          </TimelineSeparator>
-          <TimelineContent>
-            Day
-          </TimelineContent>
-        </TimelineItem>
-
-
-        <TimelineItem>
-          <TimelineOppositeContent>
-            Orders
+            {
+              deadlineOps.voteDuringOrders
+              ? <div>
+                  <CallSplitIcon fontSize="small" onClick={handleVoteDuringOrdersChange} />
+                  Orders / Votes
+                </div>
+              : <div>Orders</div>
+            }
           </TimelineOppositeContent>
           <TimelineSeparator>
             <TimelineDot />
@@ -215,11 +210,26 @@ export const WeeklyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProp
 
         <TimelineItem>
           <TimelineOppositeContent>
-            Adjustments
+            {
+              deadlineOps.nominateDuringAdjustments
+              ? <div>
+                  <CallSplitIcon fontSize="small" onClick={
+                    handleNominateDuringAdjustmentsChange
+                  }/>
+                  Adjust/Nominate
+                </div>
+              : <div>Adjustments</div>
+            }
           </TimelineOppositeContent>
           <TimelineSeparator>
             <TimelineDot />
-            <TimelineConnector />
+            {
+              !(
+                deadlineOps.nominateDuringAdjustments &&
+                deadlineOps.voteDuringOrders
+              )
+              && <TimelineConnector />
+            }
           </TimelineSeparator>
           <TimelineContent>
             {
@@ -263,67 +273,84 @@ export const WeeklyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProp
         </TimelineItem>
 
 
-        <TimelineItem>
-          <TimelineOppositeContent>
-            Nominations
-          </TimelineOppositeContent>
-          <TimelineSeparator>
-            <TimelineDot />
-            <TimelineConnector />
-          </TimelineSeparator>
-          <TimelineContent>
-            {
-              editingNominations
-                ?
-                <div>
-                  <Select id='nominations-deadline-day'
-                    value={deadlineOps.nominationsDay}
-                    onChange={(event: SelectChangeEvent<string>): void => {
-                      handleNominationsDayChange(event.target.value);
-                    }}
-                  >
-                    <MenuItem value='Sunday'>Sundays</MenuItem>
-                    <MenuItem value='Monday'>Mondays</MenuItem>
-                    <MenuItem value='Tuesday'>Tuesdays</MenuItem>
-                    <MenuItem value='Wednesday'>Wednesdays</MenuItem>
-                    <MenuItem value='Thursday'>Thursdays</MenuItem>
-                    <MenuItem value='Friday'>Fridays</MenuItem>
-                    <MenuItem value='Saturday'>Saturdays</MenuItem>
-                  </Select>
-                  <TimePicker
-                    label="Time"
-                    value={deadlineOps.nominationsTime}
-                    onChange={(newTime) => {
-                      handleNominationsTimeChange(newTime);
-                    }}
-                    renderInput={(params) =>
-                      <TextField {...params}
-                        required
-                        variant="outlined"
-                      />
-                    }
-                  />
-                  <CheckIcon fontSize="small" onClick={handleEditNominationsToggle} />
-                </div>
-                :
-                <div>{deadlineOps.nominationsDay.slice(0, 3)} {String(deadlineOps.nominationsTime.getHours()).padStart(2, '0')}:{String(deadlineOps.nominationsTime.getMinutes()).padStart(2, '0')}  <EditIcon fontSize="small" onClick={handleEditNominationsToggle} />
-                </div>
-            }
-          </TimelineContent>
-        </TimelineItem>
+        {
+          !deadlineOps.nominateDuringAdjustments &&
+          <TimelineItem>
+            <TimelineOppositeContent>
+              <div>
+                <MergeTypeIcon fontSize="small"
+                  onClick={handleNominateDuringAdjustmentsChange}
+                />
+                Nominations
+              </div>
+            </TimelineOppositeContent>
+            <TimelineSeparator>
+              <TimelineDot />
+              {
+                !deadlineOps.voteDuringOrders &&
+                <TimelineConnector />
+              }
+            </TimelineSeparator>
+            <TimelineContent>
+              {
+                editingNominations
+                  ?
+                  <div>
+                    <Select id='nominations-deadline-day'
+                      value={deadlineOps.nominationsDay}
+                      onChange={(event: SelectChangeEvent<string>): void => {
+                        handleNominationsDayChange(event.target.value);
+                      }}
+                    >
+                      <MenuItem value='Sunday'>Sundays</MenuItem>
+                      <MenuItem value='Monday'>Mondays</MenuItem>
+                      <MenuItem value='Tuesday'>Tuesdays</MenuItem>
+                      <MenuItem value='Wednesday'>Wednesdays</MenuItem>
+                      <MenuItem value='Thursday'>Thursdays</MenuItem>
+                      <MenuItem value='Friday'>Fridays</MenuItem>
+                      <MenuItem value='Saturday'>Saturdays</MenuItem>
+                    </Select>
+                    <TimePicker
+                      label="Time"
+                      value={deadlineOps.nominationsTime}
+                      onChange={(newTime) => {
+                        handleNominationsTimeChange(newTime);
+                      }}
+                      renderInput={(params) =>
+                        <TextField {...params}
+                          required
+                          variant="outlined"
+                        />
+                      }
+                    />
+                    <CheckIcon fontSize="small" onClick={handleEditNominationsToggle} />
+                  </div>
+                  :
+                  <div>{deadlineOps.nominationsDay.slice(0, 3)} {String(deadlineOps.nominationsTime.getHours()).padStart(2, '0')}:{String(deadlineOps.nominationsTime.getMinutes()).padStart(2, '0')}  <EditIcon fontSize="small" onClick={handleEditNominationsToggle} />
+                  </div>
+              }
+            </TimelineContent>
+          </TimelineItem>
+        }
 
-
-        <TimelineItem>
-          <TimelineOppositeContent>
-            Votes
-          </TimelineOppositeContent>
-          <TimelineSeparator>
-            <TimelineDot />
-          </TimelineSeparator>
-          <TimelineContent>
-            {
-              editingVotes
-                ?
+        {
+          !deadlineOps.voteDuringOrders &&
+          <TimelineItem>
+            <TimelineOppositeContent>
+              <div>
+                <MergeTypeIcon fontSize="small"
+                  onClick={handleVoteDuringOrdersChange}
+                />
+                Votes
+              </div>
+            </TimelineOppositeContent>
+            <TimelineSeparator>
+              <TimelineDot />
+            </TimelineSeparator>
+            <TimelineContent>
+              {
+                editingVotes
+                  ?
                 <div>
                   <Select id='votes-deadline-day'
                     value={deadlineOps.votesDay}
@@ -357,35 +384,11 @@ export const WeeklyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProp
                 :
                 <div>{deadlineOps.votesDay.slice(0, 3)} {String(deadlineOps.votesTime.getHours()).padStart(2, '0')}:{String(deadlineOps.votesTime.getMinutes()).padStart(2, '0')}  <EditIcon fontSize="small" onClick={handleEditVotesToggle} />
                 </div>
-            }
-          </TimelineContent>
-        </TimelineItem>
+              }
+            </TimelineContent>
+          </TimelineItem>
+        }
       </Timeline>
-
-      <FormGroup>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={deadlineOps.nominateDuringAdjustments}
-              onChange={handleNominateDuringAdjustments}
-            />
-          }
-          label="Nominate During Adjustments"
-          labelPlacement="start"
-        />
-      </FormGroup>
-      <FormGroup>
-        <FormControlLabel
-          label="Vote During Orders"
-          labelPlacement="start"
-          control={
-            <Switch
-              checked={deadlineOps.voteDuringOrders}
-              onChange={handleVoteDuringOrders}
-            />
-          }
-        />
-      </FormGroup>
     </div>
   )
 }
