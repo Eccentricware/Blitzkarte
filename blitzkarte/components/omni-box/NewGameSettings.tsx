@@ -6,10 +6,6 @@ interface NewGameSettingsProps {
 }
 
 export const NewGameSettings: FC<NewGameSettingsProps> = ({settings}: NewGameSettingsProps) => {
-  const handleTurnOneTimingChange = (rule: string) => {
-    settings.setTurn1Timing(rule);
-  }
-
   const handleNominationTimingChange = (timing: string) => {
     settings.setNominationTiming(timing);
   }
@@ -56,21 +52,6 @@ export const NewGameSettings: FC<NewGameSettingsProps> = ({settings}: NewGameSet
 
   return (
     <div>
-      <div>
-        <Select id="first-turn-timing"
-          value={settings.turn1Timing}
-          onChange={(event: SelectChangeEvent<string>) => {
-            handleTurnOneTimingChange(event.target.value)
-          }}
-        >
-          <MenuItem value="immediate">Start Immediately, Partial Turn</MenuItem>
-          <MenuItem value="standard">Delay Start, Precisely 1 Full Turn </MenuItem>
-          <MenuItem value="remainder">Start Immediately, Full Turn With Remainder</MenuItem>
-          <MenuItem value="double">Delay Start, Precisely 2 Full Turns</MenuItem>
-          <MenuItem value="extended">Start Immedialy, 2 full turns and remainder</MenuItem>
-          <MenuItem value="scheduled">Manually Set Start and First Deadline</MenuItem>
-        </Select>
-      </div>
       <div>
         <Select id="nomination-timing"
           value={settings.nominationTiming}
