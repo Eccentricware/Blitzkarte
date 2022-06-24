@@ -14,7 +14,7 @@ interface InputProps {
 
 export const InputTab: FC<InputProps> = ({input}: InputProps) => {
   const [gameName, setGameName] = useState('');
-  const [deadlineType, setDeadlineType] = useState('weekly');
+  const [deadlineType, setDeadlineType] = useState('daily');
   const [gameStart, setGameStart] = useState<Date | null>(new Date());
   const [showScheduler, setShowScheduler] = useState(true);
   const [ordersDay, setOrdersDay] = useState('Monday');
@@ -154,6 +154,10 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
     setDeadlineType(type);
   }
 
+  const handleTurnOneTimingChange = (rule: string) => {
+    setTurn1Timing(rule);
+  }
+
 
   return (
     <div style={{width: 400}}>
@@ -206,7 +210,21 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
           <MenuItem value={"manual"} disabled>Manually Set Deadlines</MenuItem>
         </Select>
       </div>
-      {/* <OrderSummaryTimeline deadlineOps={deadlineOps} /> */}
+      <div>
+        <Select id="first-turn-timing"
+          value={turn1Timing}
+          onChange={(event: SelectChangeEvent<string>) => {
+            handleTurnOneTimingChange(event.target.value)
+          }}
+        >
+          <MenuItem value="immediate">Start Immediately, Partial Turn</MenuItem>
+          <MenuItem value="standard">Delay Start, Precisely 1 Full Turn </MenuItem>
+          <MenuItem value="remainder">Start Immediately, Full Turn With Remainder</MenuItem>
+          <MenuItem value="double">Delay Start, Precisely 2 Full Turns</MenuItem>
+          <MenuItem value="extended">Start Immedialy, 2 full turns and remainder</MenuItem>
+          <MenuItem value="scheduled">Manually Set Start and First Deadline</MenuItem>
+        </Select>
+      </div>
       <div>
         {
           (deadlineType === 'weekly') &&
