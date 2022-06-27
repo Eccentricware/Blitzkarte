@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Accordion, AccordionDetails, AccordionSummary, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, Button } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { WeeklyDeadlines } from './WeeklyDeadlines';
 import { IntervalDeadlines } from './IntervalDeadlines';
@@ -7,6 +7,7 @@ import { DateTimePicker } from '@mui/x-date-pickers';
 import { DailyDeadlines } from './DailyDeadlines';
 import { NewGameSettings } from './NewGameSettings';
 import { OrderSummaryTimeline } from './OrderSummaryTimeline';
+import { useRouter } from 'next/router';
 
 interface InputProps {
   input: any;
@@ -55,6 +56,8 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
   const [untfRule, setUntfRule] = useState(false);
   const [madOrdersRule, setMadOrdersRule] = useState(false);
   const [voteDeadlineExtension, setVoteDeadlineExtension] = useState(false);
+
+  const router = new useRouter();
 
   const deadlineOps: any = {
     ordersDay: ordersDay,
@@ -158,6 +161,13 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
     setTurn1Timing(rule);
   }
 
+  const handleCreateGameClick = () => {
+    console.log('Game creation here');
+  }
+
+  const handleCancelCreateGameClick = () => {
+    router.push('/');
+  }
 
   return (
     <div style={{width: 400}}>
@@ -241,6 +251,22 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
       </div>
       <div>
         <NewGameSettings settings={settings}/>
+      </div>
+      <div>
+        <Button
+          color="inherit"
+          variant="contained"
+          onClick={handleCreateGameClick}
+        >
+          Create Game
+        </Button>
+        <Button
+          color="inherit"
+          variant="contained"
+          onClick={handleCancelCreateGameClick}
+        >
+          Cancel
+        </Button>
       </div>
     </div>
   )
