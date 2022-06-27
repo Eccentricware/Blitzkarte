@@ -14,7 +14,7 @@ interface InputProps {
 
 export const InputTab: FC<InputProps> = ({input}: InputProps) => {
   const [gameName, setGameName] = useState('');
-  const [deadlineType, setDeadlineType] = useState('daily');
+  const [deadlineType, setDeadlineType] = useState('interval');
   const [gameStart, setGameStart] = useState<Date | null>(new Date());
   const [showScheduler, setShowScheduler] = useState(true);
   const [ordersDay, setOrdersDay] = useState('Monday');
@@ -29,7 +29,7 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
   const [votesTime, setVotesTime] = useState(new Date('2000-01-01 12:00:00'));
   const [firstOrdersTimeSpan, setFirstOrdersTimeSpan] = useState(3);
   const [firstOrdersTimeType, setFirstOrdersTimeType] = useState('days');
-  const [ordersTimeSpan, setOrdersTimeSpan] = useState(2);
+  const [ordersTimeSpan, setOrdersTimeSpan] = useState(3);
   const [ordersTimeType, setOrdersTimeType] = useState('days');
   const [retreatsTimeSpan, setRetreatsTimeSpan] = useState(3);
   const [retreatsTimeType, setRetreatsTimeType] = useState('hours');
