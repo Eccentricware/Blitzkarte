@@ -122,7 +122,6 @@ export const DailyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProps
           </TimelineContent>
         </TimelineItem>
 
-
         <TimelineItem>
           <TimelineOppositeContent>
             Retreats
@@ -157,7 +156,6 @@ export const DailyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProps
             }
           </TimelineContent>
         </TimelineItem>
-
 
         <TimelineItem>
           <TimelineOppositeContent>
@@ -298,54 +296,6 @@ export const DailyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProps
           </TimelineItem>
         }
       </Timeline>
-      <div>
-        <InputLabel id="orders-deadline-label">Orders Deadline</InputLabel>
-        <TimePicker
-          label="Time"
-          value={deadlineOps.ordersTime}
-          onChange={(newTime) => {
-            handleOrdersTimeChange(newTime);
-          }}
-          renderInput={(params) =>
-            <TextField {...params}
-              required
-              variant="outlined"
-            />
-          }
-        />
-      </div>
-      <div>
-        <InputLabel id="retreats-deadline-label">Retreats Deadline</InputLabel>
-        <TimePicker
-          label="Time"
-          value={deadlineOps.retreatsTime}
-          onChange={(newTime) => {
-            handleRetreatsTimeChange(newTime);
-          }}
-          renderInput={(params) =>
-            <TextField {...params}
-              required
-              variant="outlined"
-            />
-          }
-        />
-      </div>
-      <div>
-        <InputLabel id="adjustments-deadline-label">Adjustments Deadline</InputLabel>
-        <TimePicker
-          label="Time"
-          value={deadlineOps.adjustmentsTime}
-          onChange={(newTime) => {
-            handleAdjustmentsTimeChange(newTime);
-          }}
-          renderInput={(params) =>
-            <TextField {...params}
-              required
-              variant="outlined"
-            />
-          }
-        />
-      </div>
     </div>
   )
 }
