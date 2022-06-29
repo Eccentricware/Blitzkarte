@@ -29,7 +29,11 @@ function MyApp({ Component, pageProps }: AppProps) {
     <Blitzkontext.Provider value={{
       map: mapView,
       setMapView: setMapView,
-      user: { auth: auth }
+      user: { auth: auth },
+      newGame: {
+        map: {},
+        settings: {}
+      }
     }}>
       <QueryClientProvider client={queryClient}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>

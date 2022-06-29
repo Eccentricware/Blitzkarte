@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Parser } from '../utils/parsing/services/parse-orchestrator';
 import { RenderData, initialRenderData } from '../models/RenderData';
 import { OmniBox } from '../components/omni-box/OmniBox';
@@ -8,6 +8,7 @@ import { NavBarSignedIn } from '../components/nav-bar/NavBarSignedIn';
 import Head from 'next/head';
 import { Grid } from '@mui/material';
 import { MapContainer } from '../components/map-elements/map/MapContainer';
+import Blitzkontext from '../utils/Blitzkontext';
 
 const CreateGamePage: NextPage = () => {
   const [gameName, setGameName] = useState('');
@@ -19,6 +20,8 @@ const CreateGamePage: NextPage = () => {
   const [showAirNetwork, setShowAirNetwork] = useState(true);
   const [showEventNodes, setShowEventNodes] = useState(true);
   const [fileString, setFileString] = useState('');
+
+  const bkCtx = useContext(Blitzkontext);
 
   const displayChecks: any = {
     fileString: fileString,
@@ -57,6 +60,7 @@ const CreateGamePage: NextPage = () => {
     setFileString(fileString);
     parser.parse(fileString);
     setRenderData(parser.renderElements);
+    bkCtx.newGame.map = parser.renderElements;
     setFileString('Thank you. For now, you must reload the page to update the map');
   }
 
