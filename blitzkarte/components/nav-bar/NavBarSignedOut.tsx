@@ -1,5 +1,5 @@
 import React, { FC, Fragment, useState } from 'react';
-import { AppBar, Button, Menu, MenuItem, TextField, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Button, Container, Menu, MenuItem, TextField, Toolbar, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import { FirebaseService } from '../../utils/firebase/firebaseService';
 
@@ -144,36 +144,46 @@ export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
   )
 
   return (
-    <Fragment>
+    <Box sx={{ flexGrow: 1 }}>
       <AppBar position="sticky">
         <Toolbar>
-          <Typography variant="h6"
-            noWrap
-            component="div"
-          >
-            Blitzkarte
-          </Typography>
-          <Typography variant="h6"
-            noWrap
-            component="div"
-          >
-            {title}
-          </Typography>
-          <Button
-            onClick={handleSignInMenuOpen}
-            color="inherit"
-          >
-            Sign In
-          </Button>
-          <Button
-            color="inherit"
-            onClick={handleSignupClick}
-          >
-            Sign Up
-          </Button>
+          <Container>
+            <Button color="inherit"
+              disabled
+            >
+              Spectate Game
+            </Button>
+          </Container>
+
+          <Container>
+            <Typography variant="h6"
+              noWrap
+              component="div"
+              align="center"
+            >
+              Blitzkarte
+            </Typography>
+          </Container>
+
+          <Container>
+            <Typography align="right" variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              <Button
+                onClick={handleSignInMenuOpen}
+                color="inherit"
+              >
+                Sign In
+              </Button>
+              <Button
+                color="inherit"
+                onClick={handleSignupClick}
+              >
+                Sign Up
+              </Button>
+            </Typography>
+          </Container>
         </Toolbar>
       </AppBar>
       {loginMenu}
-    </Fragment>
+    </Box>
   )
 }
