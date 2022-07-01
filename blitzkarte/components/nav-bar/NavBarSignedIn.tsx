@@ -1,5 +1,8 @@
 import React, { FC, Fragment, useState } from 'react';
-import { AppBar, Box, Button, Container, IconButton, Menu, MenuItem, Toolbar, Typography } from '@mui/material';
+import { AppBar, Badge, Box, Button, Container, IconButton, Menu, MenuItem, Toolbar, Typography } from '@mui/material';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import MailIcon from '@mui/icons-material/Mail';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useRouter } from 'next/router';
 import { getAuth, signOut } from 'firebase/auth';
 
@@ -107,24 +110,23 @@ export const NavBarSignedIn: FC<AppBarProps> = ({title}: AppBarProps) => {
           </Container>
           <Container>
             <Typography align="right" variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              <Button
-                disabled
-                color="inherit"
-              >
-                Alerts
-              </Button>
-              <Button
-                disabled
-                color="inherit"
-              >
-                Messages
-              </Button>
-              <Button
+              <IconButton color="inherit" disabled>
+                <Badge badgeContent={0} color="error">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+              <IconButton color="inherit" disabled>
+                <Badge badgeContent={0} color="error">
+                  <MailIcon />
+                </Badge>
+              </IconButton>
+              <IconButton color="inherit"
                 onClick={handleProfileMenuOpen}
-                color="inherit"
               >
-                Person Icon
-              </Button>
+                <Badge badgeContent={0} color="error">
+                  <AccountCircle />
+                </Badge>
+              </IconButton>
             </Typography>
 
           </Container>
