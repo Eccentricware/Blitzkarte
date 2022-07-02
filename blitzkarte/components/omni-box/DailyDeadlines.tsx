@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { InputLabel, Select, SelectChangeEvent, MenuItem, TextField, FormGroup, FormControlLabel, Switch } from "@mui/material";
+import { TextField } from "@mui/material";
 import { TimePicker } from "@mui/x-date-pickers";
 import Timeline from '@mui/lab/Timeline';
 import TimelineItem from '@mui/lab/TimelineItem';
@@ -18,13 +18,18 @@ interface DeadlinesProps {
 }
 
 export const DailyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProps) => {
-  const [editingStart, setEditingStart] = useState(false);
   const [editingOrders, setEditingOrders] = useState(false);
+  const [currentOrdersTime, setCurrentOrdersTime] = useState(deadlineOps.ordersTime);
   const [editingRetreats, setEditingRetreats] = useState(false);
+  const [currentRetreatsTime, setCurrentRetreatsTime] = useState(deadlineOps.retreatsTime);
   const [editingAdjustments, setEditingAdjustments] = useState(false);
+  const [currentAdjustmentsTime, setCurrentAdjustmentsTime] = useState(deadlineOps.adjustmentsTime);
   const [editingNominations, setEditingNominations] = useState(false);
+  const [currentNominationsTime, setCurrentNominationsTime] = useState(deadlineOps.nominationsTime);
   const [editingVotes, setEditingVotes] = useState(false);
+  const [currentVotesTime, setCurrentVotesTime] = useState(deadlineOps.votesTime);
 
+  // Edits on/off triggers validation of ordering
   const handleEditOrdersToggle = () => {
     setEditingOrders(!editingOrders);
   }
@@ -45,35 +50,33 @@ export const DailyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProps
     setEditingVotes(!editingVotes);
   }
 
-  const handleNominateDuringAdjustmentsChange = () => {
-    deadlineOps.setNominateDuringAdjustments(!deadlineOps.nominateDuringAdjustments);
-  }
-
+  // Individual deadlines change
   const handleOrdersTimeChange = (time: Date | null) => {
-    deadlineOps.setOrdersTime(time);
+    setCurrentOrdersTime(time);
   }
 
   const handleRetreatsTimeChange = (time: Date | null) => {
-    deadlineOps.setRetreatsTime(time);
+    setCurrentRetreatsTime(time);
   }
 
   const handleAdjustmentsTimeChange = (time: Date | null) => {
-    deadlineOps.setAdjustmentsTime(time);
+    setCurrentAdjustmentsTime(time);
   }
 
   const handleNominationsTimeChange = (time: Date | null) => {
-    deadlineOps.setNominationsTime(time);
+    setCurrentNominationsTime(time);
   }
 
   const handleVotesTimeChange = (time: Date | null) => {
-    deadlineOps.setVotesTime(time);
+    setCurrentVotesTime(time);
   }
 
-  const handleNominateDuringAdjustments = () => {
+  // Deadline groupings
+  const handleNominationsDuringAdjustmentsChange = () => {
     deadlineOps.setNominateDuringAdjustments(!deadlineOps.nominateDuringAdjustments);
   }
 
-  const handleVoteDuringOrdersChange = () => {
+  const handleVotesDuringOrdersChange = () => {
     deadlineOps.setVoteDuringOrders(!deadlineOps.voteDuringOrders);
   }
 
@@ -85,7 +88,7 @@ export const DailyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProps
             {
               deadlineOps.voteDuringOrders
                 ? <div>
-                  <CallSplitIcon fontSize="small" onClick={handleVoteDuringOrdersChange} />
+                  <CallSplitIcon fontSize="small" onClick={handleVotesDuringOrdersChange} />
                   Orders / Votes
                 </div>
                 : <div>Orders</div>
@@ -102,7 +105,7 @@ export const DailyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProps
                 <div>
                   <TimePicker
                     label="Time"
-                    value={deadlineOps.ordersTime}
+                    value={currentOrdersTime}
                     onChange={(newTime) => {
                       handleOrdersTimeChange(newTime);
                     }}
@@ -137,7 +140,7 @@ export const DailyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProps
                 <div>
                   <TimePicker
                     label="Time"
-                    value={deadlineOps.retreatsTime}
+                    value={currentRetreatsTime}
                     onChange={(newTime) => {
                       handleRetreatsTimeChange(newTime);
                     }}
@@ -163,7 +166,7 @@ export const DailyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProps
               deadlineOps.nominateDuringAdjustments
                 ? <div>
                   <CallSplitIcon fontSize="small" onClick={
-                    handleNominateDuringAdjustmentsChange
+                    handleNominationsDuringAdjustmentsChange
                   } />
                   Adjust/Nominate
                 </div>
@@ -187,7 +190,7 @@ export const DailyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProps
                 <div>
                   <TimePicker
                     label="Time"
-                    value={deadlineOps.adjustmentsTime}
+                    value={currentAdjustmentsTime}
                     onChange={(newTime) => {
                       handleAdjustmentsTimeChange(newTime);
                     }}
@@ -214,7 +217,7 @@ export const DailyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProps
             <TimelineOppositeContent>
               <div>
                 <MergeTypeIcon fontSize="small"
-                  onClick={handleNominateDuringAdjustmentsChange}
+                  onClick={handleNominationsDuringAdjustmentsChange}
                 />
                 Nominations
               </div>
@@ -233,7 +236,7 @@ export const DailyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProps
                   <div>
                     <TimePicker
                       label="Time"
-                      value={deadlineOps.nominationsTime}
+                      value={currentNominationsTime}
                       onChange={(newTime) => {
                         handleNominationsTimeChange(newTime);
                       }}
@@ -260,7 +263,7 @@ export const DailyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProps
             <TimelineOppositeContent>
               <div>
                 <MergeTypeIcon fontSize="small"
-                  onClick={handleVoteDuringOrdersChange}
+                  onClick={handleVotesDuringOrdersChange}
                 />
                 Votes
               </div>
@@ -275,7 +278,7 @@ export const DailyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProps
                   <div>
                     <TimePicker
                       label="Time"
-                      value={deadlineOps.votesTime}
+                      value={currentVotesTime}
                       onChange={(newTime) => {
                         handleVotesTimeChange(newTime);
                       }}

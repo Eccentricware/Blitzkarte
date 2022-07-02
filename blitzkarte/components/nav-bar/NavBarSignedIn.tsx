@@ -103,11 +103,11 @@ export const NavBarSignedIn: FC<AppBarProps> = ({title}: AppBarProps) => {
           </Container>
 
           <Container>
-
-          <Typography align="center" variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Blitzkarte
-          </Typography>
+            <Typography align="center" variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              Blitzkarte
+            </Typography>
           </Container>
+
           <Container>
             <Typography align="right" variant="h6" component="div" sx={{ flexGrow: 1 }}>
               <IconButton color="inherit" disabled>
@@ -128,7 +128,6 @@ export const NavBarSignedIn: FC<AppBarProps> = ({title}: AppBarProps) => {
                 </Badge>
               </IconButton>
             </Typography>
-
           </Container>
         </Toolbar>
       </AppBar>
