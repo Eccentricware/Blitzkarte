@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { Select, MenuItem, InputLabel, SelectChangeEvent, TextField, FormGroup, FormControlLabel, Switch } from "@mui/material";
+import { Select, MenuItem, SelectChangeEvent, TextField, } from "@mui/material";
 import { TimePicker } from "@mui/x-date-pickers";
 import Timeline from '@mui/lab/Timeline';
 import TimelineItem from '@mui/lab/TimelineItem';
@@ -19,17 +19,23 @@ interface DeadlinesProps {
 }
 
 export const WeeklyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProps) => {
-  const [editingStart, setEditingStart] = useState(false);
   const [editingOrders, setEditingOrders] = useState(false);
+  const [currentOrdersDay, setCurrentOrdersDay] = useState(deadlineOps.ordersDay);
+  const [currentOrdersTime, setCurrentOrdersTime] = useState(deadlineOps.ordersTime);
   const [editingRetreats, setEditingRetreats] = useState(false);
+  const [currentRetreatsDay, setCurrentRetreatsDay] = useState(deadlineOps.retreatsDay);
+  const [currentRetreatsTime, setCurrentRetreatsTime] = useState(deadlineOps.retreatsTime);
   const [editingAdjustments, setEditingAdjustments] = useState(false);
+  const [currentAdjustmentsDay, setCurrentAdjustmentsDay] = useState(deadlineOps.adjustmentsDay);
+  const [currentAdjustmentsTime, setCurrentAdjustmentsTime] = useState(deadlineOps.adjustmentsTime);
   const [editingNominations, setEditingNominations] = useState(false);
+  const [currentNominationsDay, setCurrentNominationsDay] = useState(deadlineOps.nominationsDay);
+  const [currentNominationsTime, setCurrentNominationsTime] = useState(deadlineOps.nominationsTime);
   const [editingVotes, setEditingVotes] = useState(false);
+  const [currentVotesDay, setCurrentVotesDay] = useState(deadlineOps.votesDay);
+  const [currentVotesTime, setCurrentVotesTime] = useState(deadlineOps.votesTime);
 
-  const handleEditStartToggle = () => {
-    setEditingStart(!editingStart);
-  }
-
+  // Edits on/off also triggers validation of ordering
   const handleEditOrdersToggle = () => {
     setEditingOrders(!editingOrders);
   }
@@ -50,46 +56,48 @@ export const WeeklyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProp
     setEditingVotes(!editingVotes);
   }
 
+  // Individual Settings change
   const handleOrdersDayChange = (day: string) => {
-    deadlineOps.setOrdersDay(day);
+   setCurrentOrdersDay(day);
   }
 
   const handleOrdersTimeChange = (time: Date | null) => {
-    deadlineOps.setOrdersTime(time);
+   setCurrentOrdersTime(time);
   }
 
   const handleRetreatsDayChange = (day: string) => {
-    deadlineOps.setRetreatsDay(day);
+   setCurrentRetreatsDay(day);
   }
 
   const handleRetreatsTimeChange = (time: Date | null) => {
-    deadlineOps.setRetreatsTime(time);
+    setCurrentRetreatsTime(time);
   }
 
   const handleAdjustmentsDayChange = (day: string) => {
-    deadlineOps.setAdjustmentsDay(day);
+    setCurrentAdjustmentsDay(day);
   }
 
   const handleAdjustmentsTimeChange = (time: Date | null) => {
-    deadlineOps.setAdjustmentsTime(time);
+    setCurrentAdjustmentsTime(time);
   }
 
   const handleNominationsDayChange = (day: string) => {
-    deadlineOps.setNominationsDay(day);
+    setCurrentNominationsDay(day);
   }
 
   const handleNominationsTimeChange = (time: Date | null) => {
-    deadlineOps.setNominationsTime(time);
+    setCurrentNominationsTime(time);
   }
 
   const handleVotesDayChange = (day: string) => {
-    deadlineOps.setVotesDay(day);
+    setCurrentVotesDay(day);
   }
 
   const handleVotesTimeChange = (time: Date | null) => {
-    deadlineOps.setVotesTime(time);
+    setCurrentVotesTime(time);
   }
 
+  // Deadline Grouping
   const handleNominateDuringAdjustmentsChange = () => {
     deadlineOps.setNominateDuringAdjustments(!deadlineOps.nominateDuringAdjustments);
   }
@@ -122,7 +130,7 @@ export const WeeklyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProp
                 ?
               <div>
                 <Select id='orders-deadline-day'
-                  value={deadlineOps.ordersDay}
+                  value={currentOrdersDay}
                   onChange={(event: SelectChangeEvent<string>): void => {
                     handleOrdersDayChange(event.target.value);
                   }}
@@ -137,7 +145,7 @@ export const WeeklyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProp
                 </Select>
                 <TimePicker
                   label="Time"
-                  value={deadlineOps.ordersTime}
+                  value={currentOrdersTime}
                   onChange={(newTime) => {
                     handleOrdersTimeChange(newTime);
                   }}
@@ -172,7 +180,7 @@ export const WeeklyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProp
                 ?
                 <div>
                   <Select id='retreats-deadline-day'
-                    value={deadlineOps.retreatsDay}
+                    value={currentRetreatsDay}
                     onChange={(event: SelectChangeEvent<string>): void => {
                       handleRetreatsDayChange(event.target.value);
                     }}
@@ -187,7 +195,7 @@ export const WeeklyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProp
                   </Select>
                   <TimePicker
                     label="Time"
-                    value={deadlineOps.retreatsTime}
+                    value={currentRetreatsTime}
                     onChange={(newTime) => {
                       handleRetreatsTimeChange(newTime);
                     }}
@@ -237,7 +245,7 @@ export const WeeklyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProp
                 ?
                 <div>
                   <Select id='adjustments-deadline-day'
-                    value={deadlineOps.adjustmentsDay}
+                    value={currentAdjustmentsDay}
                     onChange={(event: SelectChangeEvent<string>): void => {
                       handleAdjustmentsDayChange(event.target.value);
                     }}
@@ -252,7 +260,7 @@ export const WeeklyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProp
                   </Select>
                   <TimePicker
                     label="Time"
-                    value={deadlineOps.adjustmentsTime}
+                    value={currentAdjustmentsTime}
                     onChange={(newTime) => {
                       handleAdjustmentsTimeChange(newTime);
                     }}
@@ -297,7 +305,7 @@ export const WeeklyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProp
                   ?
                   <div>
                     <Select id='nominations-deadline-day'
-                      value={deadlineOps.nominationsDay}
+                      value={currentNominationsDay}
                       onChange={(event: SelectChangeEvent<string>): void => {
                         handleNominationsDayChange(event.target.value);
                       }}
@@ -312,7 +320,7 @@ export const WeeklyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProp
                     </Select>
                     <TimePicker
                       label="Time"
-                      value={deadlineOps.nominationsTime}
+                      value={currentNominationsTime}
                       onChange={(newTime) => {
                         handleNominationsTimeChange(newTime);
                       }}
@@ -353,7 +361,7 @@ export const WeeklyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProp
                   ?
                 <div>
                   <Select id='votes-deadline-day'
-                    value={deadlineOps.votesDay}
+                    value={currentVotesDay}
                     onChange={(event: SelectChangeEvent<string>): void => {
                       handleVotesDayChange(event.target.value);
                     }}
@@ -368,7 +376,7 @@ export const WeeklyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProp
                   </Select>
                   <TimePicker
                     label="Time"
-                    value={deadlineOps.votesTime}
+                    value={currentVotesTime}
                     onChange={(newTime) => {
                       handleVotesTimeChange(newTime);
                     }}
