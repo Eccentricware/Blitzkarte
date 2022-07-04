@@ -40,7 +40,7 @@ export const WeeklyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProp
 
   // Edits on/off also triggers validation of ordering
   const handleEditOrdersToggle = () => {
-    if (schedulerService.validateDeadlineChange(deadlineOps)) {
+    if (schedulerService.validateWeeklyDeadlineChange(deadlineOps)) {
       setCurrentOrdersDay(deadlineOps.ordersDay);
       setCurrentOrdersTime(deadlineOps.ordersTime);
     } else {
@@ -51,7 +51,7 @@ export const WeeklyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProp
   }
 
   const handleEditRetreatsToggle = () => {
-    if (schedulerService.validateDeadlineChange(deadlineOps)) {
+    if (schedulerService.validateWeeklyDeadlineChange(deadlineOps)) {
       setCurrentRetreatsDay(deadlineOps.retreatsDay);
       setCurrentRetreatsTime(deadlineOps.retreatsTime);
     } else {
@@ -62,7 +62,7 @@ export const WeeklyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProp
   }
 
   const handleEditAdjustmentsToggle = () => {
-    if (schedulerService.validateDeadlineChange(deadlineOps)) {
+    if (schedulerService.validateWeeklyDeadlineChange(deadlineOps)) {
       setCurrentAdjustmentsDay(deadlineOps.adjustmentsDay);
       setCurrentAdjustmentsTime(deadlineOps.adjustmentsTime);
     } else {
@@ -73,7 +73,7 @@ export const WeeklyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProp
   }
 
   const handleEditNominationsToggle = () => {
-    if (schedulerService.validateDeadlineChange(deadlineOps)) {
+    if (schedulerService.validateWeeklyDeadlineChange(deadlineOps)) {
       setCurrentNominationsDay(deadlineOps.nominationsDay);
       setCurrentNominationsTime(deadlineOps.nominationsTime);
     } else {
@@ -84,7 +84,7 @@ export const WeeklyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProp
   }
 
   const handleEditVotesToggle = () => {
-    if (schedulerService.validateDeadlineChange(deadlineOps)) {
+    if (schedulerService.validateWeeklyDeadlineChange(deadlineOps)) {
       setCurrentVotesDay(deadlineOps.votesDay);
       setCurrentVotesTime(deadlineOps.votesTime);
     } else {
@@ -96,7 +96,7 @@ export const WeeklyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProp
 
   // Individual Settings change
   const handleOrdersDayChange = (day: string) => {
-   setCurrentOrdersDay(day);
+   deadlineOps.setOrdersDay(day);
   }
 
   const handleOrdersTimeChange = (time: string | null) => {
@@ -104,35 +104,35 @@ export const WeeklyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProp
   }
 
   const handleRetreatsDayChange = (day: string) => {
-   setCurrentRetreatsDay(day);
+   deadlineOps.setRetreatsDay(day);
   }
 
   const handleRetreatsTimeChange = (time: Date | null) => {
-    setCurrentRetreatsTime(time);
+    deadlineOps.setRetreatsTime(time);
   }
 
   const handleAdjustmentsDayChange = (day: string) => {
-    setCurrentAdjustmentsDay(day);
+    deadlineOps.setAdjustmentsDay(day);
   }
 
   const handleAdjustmentsTimeChange = (time: Date | null) => {
-    setCurrentAdjustmentsTime(time);
+    deadlineOps.setAdjustmentsTime(time);
   }
 
   const handleNominationsDayChange = (day: string) => {
-    setCurrentNominationsDay(day);
+    deadlineOps.setNominationsDay(day);
   }
 
   const handleNominationsTimeChange = (time: Date | null) => {
-    setCurrentNominationsTime(time);
+    deadlineOps.setNominationsTime(time);
   }
 
   const handleVotesDayChange = (day: string) => {
-    setCurrentVotesDay(day);
+    deadlineOps.setVotesDay(day);
   }
 
   const handleVotesTimeChange = (time: Date | null) => {
-    setCurrentVotesTime(time);
+    deadlineOps.setVotesTime(time);
   }
 
   // Deadline Grouping
