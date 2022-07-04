@@ -11,7 +11,22 @@ export class SchedulerService {
   };
 
   deadlines: any = {};
-  constructor(deadlines: any) {
-    this.deadlines = deadlines;
+  constructor() {}
+
+  validateDeadlineChange(deadlineOps: any): boolean {
+    console.log('deadlineOps', deadlineOps);
+    let weeklyOrderIndex: number = this.setWeeklyIndex(deadlineOps.ordersDay, deadlineOps.ordersTime);
+    console.log('weeklyOrderIndex', weeklyOrderIndex);
+    return true;
+  }
+
+  setWeeklyIndex(day: string, time: Date): number {
+    return this.dayValues[day] + this.getTimeValue(time);
+  }
+
+  getTimeValue(time: Date): number {
+    const hourValue: number = time.getHours() / 24;
+    const minuteValue: number = time.getMinutes() / 1440;
+    return hourValue + minuteValue;
   }
 }
