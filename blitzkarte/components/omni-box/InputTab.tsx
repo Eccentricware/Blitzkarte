@@ -74,7 +74,7 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
     nominationsDay: nominationsDay,
     setNominationsDay: setNominationsDay,
     nominationsTime: nominationsTime,
-    setNominationTime: setNominationsTime,
+    setNominationsTime: setNominationsTime,
     votesDay: votesDay,
     setVotesDay: setVotesDay,
     votesTime: votesTime,
