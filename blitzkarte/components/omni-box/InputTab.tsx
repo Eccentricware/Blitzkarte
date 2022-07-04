@@ -13,9 +13,10 @@ interface InputProps {
 
 export const InputTab: FC<InputProps> = ({input}: InputProps) => {
   const [gameName, setGameName] = useState('');
-  const [deadlineType, setDeadlineType] = useState('interval');
+  const [deadlineType, setDeadlineType] = useState('weekly');
   const [gameStart, setGameStart] = useState<Date | null>(new Date());
   const [showScheduler, setShowScheduler] = useState(true);
+
   const [ordersDay, setOrdersDay] = useState('Monday');
   const [ordersTime, setOrdersTime] = useState(new Date('2000-01-01 12:00:00'));
   const [retreatsDay, setRetreatsDay] = useState('Tuesday');
