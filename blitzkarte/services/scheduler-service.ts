@@ -17,8 +17,6 @@ export class SchedulerService {
     let weeklyOrdersValue: number = this.setWeeklyIndex(deadlineOps.ordersDay, deadlineOps.ordersTime);
     let weeklyRetreatsValue: number = this.setWeeklyIndex(deadlineOps.retreatsDay, deadlineOps.retreatsTime);
     let weeklyAdjustmentsValue: number = this.setWeeklyIndex(deadlineOps.adjustmentsDay, deadlineOps.adjustmentsTime);
-    let weeklyNominationsValue: number = this.setWeeklyIndex(deadlineOps.nominationsDay, deadlineOps.nominationsTime);
-    let weeklyVotesValue: number = this.setWeeklyIndex(deadlineOps.votesDay, deadlineOps.votesTime);
 
     const week: number[] = [
       weeklyOrdersValue,
@@ -27,10 +25,12 @@ export class SchedulerService {
     ];
 
     if (!deadlineOps.nominateDuringAdjustments) {
+      let weeklyNominationsValue: number = this.setWeeklyIndex(deadlineOps.nominationsDay, deadlineOps.nominationsTime);
       week.push(weeklyNominationsValue);
     }
 
     if (!deadlineOps.voteDuringOrders) {
+      let weeklyVotesValue: number = this.setWeeklyIndex(deadlineOps.votesDay, deadlineOps.votesTime);
       week.push(weeklyVotesValue);
     }
 
@@ -49,8 +49,48 @@ export class SchedulerService {
     return scheduleValid;
   }
 
+  validateDailyDeadlineChange(deadlineOps: any): boolean {
+    let dailyOrdersValue: number = this.setDailyIndex(deadlineOps.ordersTime);
+    let dailyRetreatsValue: number = this.setDailyIndex(deadlineOps.retreatsTime);
+    let dailyAdjustmentsValue: number = this.setDailyIndex(deadlineOps.adjustmentsTime);
+
+    const day: number[] = [
+      dailyOrdersValue,
+      dailyRetreatsValue,
+      dailyAdjustmentsValue
+    ];
+
+    if (!deadlineOps.nominateDuringAdjustments) {
+      let dailyNominationsValue: number = this.setDailyIndex(deadlineOps.nominationsTime);
+      day.push(dailyNominationsValue)
+    }
+
+    if (!deadlineOps.voteDuringOrders) {
+      let dailyVotesValue: number = this.setDailyIndex(deadlineOps.votesTime);
+      day.push(dailyVotesValue);
+    }
+
+    let scheduleValid: boolean = true;
+
+    day.forEach((turn: number, index: number) => {
+      day[index] = this.getRelativeValue(turn, dailyOrdersValue);
+      if (index > 0 && day[index] <= day[index - 1]) {
+        scheduleValid = false;
+      }
+    });
+
+    console.log(day);
+    console.log(scheduleValid);
+
+    return scheduleValid;
+  }
+
   setWeeklyIndex(day: string, time: Date): number {
     return this.dayValues[day] + this.getTimeValue(time);
+  }
+
+  setDailyIndex(time: Date): number {
+    return this.getTimeValue(time);
   }
 
   getTimeValue(time: Date): number {
