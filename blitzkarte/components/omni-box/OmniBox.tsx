@@ -40,13 +40,13 @@ export const OmniBox: FC<OmniProps> = ({omniBoxData}: OmniProps) => {
       <Box>
         <Tabs value={panel} onChange={handleChange} centered>
           <Tab label="Settings"/>
-          <Tab label="Stats"/>
           <Tab label="Debug"/>
+          <Tab label="Stats"/>
           <Tab label="Helper"/>
         </Tabs>
       </Box>
       <TabPanel value={panel} index={0}>
-        <InputTab input={omniBoxData.input} />
+        <InputTab input={omniBoxData.input} debug={omniBoxData.debug}/>
       </TabPanel>
       <TabPanel value={panel} index={1}>
         <DebugTab debug={omniBoxData.debug} />
