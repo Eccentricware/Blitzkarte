@@ -1,21 +1,22 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import {  MenuItem, Select, SelectChangeEvent, TextField, Button } from '@mui/material';
 import { WeeklyDeadlines } from './WeeklyDeadlines';
 import { IntervalDeadlines } from './IntervalDeadlines';
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { DailyDeadlines } from './DailyDeadlines';
 import { NewGameSettings } from './NewGameSettings';
-import { Router, useRouter } from 'next/router';
+import { useRouter } from 'next/router';
+import Blitzkontext from '../../utils/Blitzkontext';
 
 interface InputProps {
   input: any;
+  debug: any;
 }
 
-export const InputTab: FC<InputProps> = ({input}: InputProps) => {
+export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
   const [gameName, setGameName] = useState('');
   const [deadlineType, setDeadlineType] = useState('weekly');
   const [gameStart, setGameStart] = useState<Date | null>(new Date());
-  const [showScheduler, setShowScheduler] = useState(true);
 
   const [ordersDay, setOrdersDay] = useState('Monday');
   const [ordersTime, setOrdersTime] = useState(new Date('2000-01-01 12:00:00'));
@@ -57,6 +58,7 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
   const [voteDeadlineExtension, setVoteDeadlineExtension] = useState(false);
 
   const router = useRouter();
+  let bkCtx = useContext(Blitzkontext).newGame;
 
   const deadlineOps: any = {
     ordersDay: ordersDay,
@@ -161,7 +163,54 @@ export const InputTab: FC<InputProps> = ({input}: InputProps) => {
   }
 
   const handleCreateGameClick = () => {
-    console.log('Game creation here');
+    bkCtx.settings = {
+      gameName: gameName,
+      deadlineType: deadlineType,
+      gameStart: gameStart,
+      ordersDay: ordersDay,
+      ordersTime: ordersTime,
+      retreatsDay: retreatsDay,
+      retreatsTime: retreatsTime,
+      adjustmentsDay: adjustmentsDay,
+      adjustmentsTime: adjustmentsTime,
+      nominationsDay: nominationsDay,
+      nominationsTime: nominationsTime,
+      votesDay: votesDay,
+      votesTime: votesTime,
+      firstOrdersTimeSpan: firstOrdersTimeSpan,
+      firstOrdersTimeType: firstOrdersTimeType,
+      ordersTimeSpan: ordersTimeSpan,
+      ordersTimeType: ordersTimeType,
+      retreatsTimeSpan: retreatsTimeSpan,
+      retreatsTimeType: retreatsTimeType,
+      adjustmentsTimeSpan: adjustmentsTimeSpan,
+      adjustmentsTimeType: adjustmentsTimeType,
+      nominationsTimeSpan: nominationsTimeSpan,
+      nominationsTimeType: nominationsTimeType,
+      votesTimeSpan: votesTimeSpan,
+      votesTimeType: votesTimeType,
+      nominateDuringAdjustments: nominateDuringAdjustments,
+      voteDuringOrders: voteDuringOrders,
+      turn1Timing: turn1Timing,
+      nominationTiming: nominationTiming,
+      nominationTurn: nominationTurn,
+      concurrentGameLimit: concurrentGameLimit,
+      automaticAssignments: automaticAssignments,
+      ratingLimits: ratingLimits,
+      funRange: funRange,
+      skillRange: skillRange,
+      nmrTolerance: nmrTolerance,
+      blindCreator: blindCreator,
+      untfRule: untfRule,
+      madOrdersRule: madOrdersRule,
+      voteDeadlineExtension: voteDeadlineExtension
+    }
+    if (bkCtx.map.terrain && gameName.length > 0
+        && debug.errors.length === 0 && debug.critical.length === 0) {
+      console.log('Map Identified');
+    } else {
+      console.log('Yay I can tell there is no map');
+    }
   }
 
   const handleCancelCreateGameClick = () => {

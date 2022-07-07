@@ -13,8 +13,6 @@ interface Props {
 }
 
 export const GameMap: FC<Props> = ({renderData, mapRef, refs}: Props) => {
-  const context = useContext(Blitzkontext);
-
   return (
     <Blitzkontext.Consumer>
       {({map}) => {
