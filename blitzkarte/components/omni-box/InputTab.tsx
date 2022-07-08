@@ -7,6 +7,7 @@ import { DailyDeadlines } from './DailyDeadlines';
 import { NewGameSettings } from './NewGameSettings';
 import { useRouter } from 'next/router';
 import Blitzkontext from '../../utils/Blitzkontext';
+import { erzahler } from '../../utils/general/erzahler';
 
 interface InputProps {
   input: any;
@@ -206,8 +207,25 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
       voteDeadlineExtension: voteDeadlineExtension
     }
     if (bkCtx.map.terrain && gameName.length > 0
-        && debug.errors.length === 0 && debug.critical.length === 0) {
-      console.log('Map Identified');
+        && debug.errors.length === 0 && debug.criticals.length === 0) {
+      fetch(`${erzahler.url}:${erzahler.port}/new-game`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(bkCtx)
+      })
+      .then((response: any) => {
+        console.log('response', response);
+        return response.json();
+      })
+      .then((data: any) => {
+        console.log('data', data);
+        return data;
+      })
+      .catch((error: Error) => {
+        console.log(error.message);
+      });
     } else {
       console.log('Yay I can tell there is no map');
     }
