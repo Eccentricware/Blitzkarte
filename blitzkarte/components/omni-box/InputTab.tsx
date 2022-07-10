@@ -1,4 +1,4 @@
-import React, { FC, useContext, useState } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import {  MenuItem, Select, SelectChangeEvent, TextField, Button } from '@mui/material';
 import { WeeklyDeadlines } from './WeeklyDeadlines';
 import { IntervalDeadlines } from './IntervalDeadlines';
@@ -8,6 +8,7 @@ import { NewGameSettings } from './NewGameSettings';
 import { useRouter } from 'next/router';
 import Blitzkontext from '../../utils/Blitzkontext';
 import { erzahler } from '../../utils/general/erzahler';
+import { SchedulerService } from '../../services/scheduler-service';
 
 interface InputProps {
   input: any;
@@ -18,6 +19,7 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
   const [gameName, setGameName] = useState('');
   const [deadlineType, setDeadlineType] = useState('weekly');
   const [gameStart, setGameStart] = useState<Date | null>(new Date());
+  const [firstTurnDeadline, setFirstTurnDeadline] = useState<Date | null>(new Date());
 
   const [ordersDay, setOrdersDay] = useState('Monday');
   const [ordersTime, setOrdersTime] = useState(new Date('2000-01-01 12:00:00'));
@@ -44,7 +46,7 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
   const [nominateDuringAdjustments, setNominateDuringAdjustments] = useState(true);
   const [voteDuringOrders, setVoteDuringOrders] = useState(true);
 
-  const [turn1Timing, setTurn1Timing] = useState('standard');
+  const [turn1Timing, setTurn1Timing] = useState('immediate');
   const [nominationTiming, setNominationTiming] = useState('set');
   const [nominationTurn, setNominationTurn] = useState(8);
   const [concurrentGameLimit, setConcurrentGameLimit] = useState(0);
@@ -60,8 +62,26 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
 
   const router = useRouter();
   let bkCtx = useContext(Blitzkontext).newGame;
+  const schedulerService = new SchedulerService();
+
+  useEffect(() => {
+    schedulerService.setStartScheduling(deadlineOps);
+  }, [
+    turn1Timing,
+    deadlineType,
+    ordersDay,
+    ordersTime,
+    firstOrdersTimeSpan,
+    firstOrdersTimeType
+  ]);
 
   const deadlineOps: any = {
+    gameStart: gameStart,
+    setGameStart: setGameStart,
+    deadlineType: deadlineType,
+    turn1Timing: turn1Timing,
+    firstTurnDeadline: firstTurnDeadline,
+    setFirstTurnDeadline: setFirstTurnDeadline,
     ordersDay: ordersDay,
     setOrdersDay: setOrdersDay,
     ordersTime: ordersTime,
@@ -140,8 +160,6 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
     voteDeadlineExtension: voteDeadlineExtension,
     setVoteDeadlineExtension: setVoteDeadlineExtension
   };
-
-  const scheduleSummary: any = {};
 
   const handleDataInput = (fileString: string) => {
     input.functions.triggerParse(fileString);
@@ -255,21 +273,23 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
         />
       </div>
       <div>
-        <DateTimePicker
-          label="Game Start"
-          value={gameStart}
-          disablePast
-          onChange={(newTime) => {
-            handleGameStartChange(newTime);
+        <Select id="first-turn-timing"
+          value={turn1Timing}
+          label="When players are ready:"
+          onChange={(event: SelectChangeEvent<string>) => {
+            handleTurnOneTimingChange(event.target.value)
           }}
-          renderInput={(params) =>
-            <TextField {...params}
-              required
-              variant="outlined"
-            />
-          }
-        />
+        >
+          <MenuItem value="immediate">Start Immediately, Partial Turn</MenuItem>
+          <MenuItem value="standard">Delay Start, Precisely 1 Full Turn </MenuItem>
+          <MenuItem value="remainder">Start Immediately, Full Turn With Remainder</MenuItem>
+          <MenuItem value="double">Delay Start, Precisely 2 Full Turns</MenuItem>
+          <MenuItem value="extended">Start Immedialy, 2 full turns and remainder</MenuItem>
+          <MenuItem value="scheduled" disabled>Manually Set Start and First Deadline</MenuItem>
+        </Select>
       </div>
+      <div>Game Start: {gameStart !== null && `${gameStart?.toDateString()} | ${gameStart?.toLocaleTimeString()}`}</div>
+      <div>First Turn: {firstTurnDeadline !== null && `${firstTurnDeadline.toDateString()} | ${firstTurnDeadline.toLocaleTimeString()}`}</div>
       <div>
         <Select
           id='deadline-type-select'
@@ -286,21 +306,7 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
           <MenuItem value={"manual"} disabled>Manually Set Deadlines</MenuItem>
         </Select>
       </div>
-      <div>
-        <Select id="first-turn-timing"
-          value={turn1Timing}
-          onChange={(event: SelectChangeEvent<string>) => {
-            handleTurnOneTimingChange(event.target.value)
-          }}
-        >
-          <MenuItem value="immediate">Start Immediately, Partial Turn</MenuItem>
-          <MenuItem value="standard">Delay Start, Precisely 1 Full Turn </MenuItem>
-          <MenuItem value="remainder">Start Immediately, Full Turn With Remainder</MenuItem>
-          <MenuItem value="double">Delay Start, Precisely 2 Full Turns</MenuItem>
-          <MenuItem value="extended">Start Immedialy, 2 full turns and remainder</MenuItem>
-          <MenuItem value="scheduled">Manually Set Start and First Deadline</MenuItem>
-        </Select>
-      </div>
+
       <div>
         {
           (deadlineType === 'weekly') &&

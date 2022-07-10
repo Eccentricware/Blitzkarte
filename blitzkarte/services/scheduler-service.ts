@@ -108,4 +108,23 @@ export class SchedulerService {
     }
     return relativeTime;
   }
+
+  setStartScheduling(deadlineOps: any): void {
+    if (deadlineOps.deadlineType === 'weekly') {
+      if (deadlineOps.turn1Timing === 'immediate') {
+        deadlineOps.setGameStart(new Date());
+        deadlineOps.setFirstTurnDeadline(this.findNextWeeklyDeadline(deadlineOps));
+      }
+    }
+  }
+
+  findNextWeeklyDeadline(deadlineOps: any): Date {
+    let now = new Date();
+    let absoluteNow = now.getDay() + this.getTimeValue(now);
+    let absoluteFirstTurn = this.setWeeklyIndex(deadlineOps.ordersDay, deadlineOps.ordersTime);
+    let relativeTimeValue = this.getRelativeValue(absoluteFirstTurn, absoluteNow);
+    let nextDeadline: Date = new Date(Date.now() + (relativeTimeValue * 86400000) - now.getSeconds() * 1000);
+
+    return nextDeadline;
+  }
 }
