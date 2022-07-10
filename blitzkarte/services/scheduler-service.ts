@@ -10,8 +10,7 @@ export class SchedulerService {
     'Saturday': 6
   };
 
-  deadlines: any = {};
-  constructor() {}
+  constructor() {};
 
   validateWeeklyDeadlineChange(deadlineOps: any): boolean {
     let weeklyOrdersValue: number = this.setWeeklyIndex(deadlineOps.ordersDay, deadlineOps.ordersTime);
@@ -114,6 +113,18 @@ export class SchedulerService {
       if (deadlineOps.turn1Timing === 'immediate') {
         deadlineOps.setGameStart(new Date());
         deadlineOps.setFirstTurnDeadline(this.findNextWeeklyDeadline(deadlineOps));
+      } else if (deadlineOps.turn1Timing === 'standard') {
+        deadlineOps.setGameStart(this.findNextWeeklyDeadline(deadlineOps));
+        deadlineOps.setFirstTurnDeadline(this.addWeek(this.findNextWeeklyDeadline(deadlineOps)));
+      } else if (deadlineOps.turn1Timing === 'remainder') {
+        deadlineOps.setGameStart(new Date());
+        deadlineOps.setFirstTurnDeadline(this.addWeek(this.findNextWeeklyDeadline(deadlineOps)));
+      } else if (deadlineOps.turn1Timing === 'double') {
+        deadlineOps.setGameStart(this.findNextWeeklyDeadline(deadlineOps));
+        deadlineOps.setFirstTurnDeadline(this.add2Weeks(this.findNextWeeklyDeadline(deadlineOps)));
+      } else if (deadlineOps.turn1Timing === 'extended') {
+        deadlineOps.setGameStart(new Date());
+        deadlineOps.setFirstTurnDeadline(this.add2Weeks(this.findNextWeeklyDeadline(deadlineOps)));
       }
     }
   }
@@ -126,5 +137,13 @@ export class SchedulerService {
     let nextDeadline: Date = new Date(Date.now() + (relativeTimeValue * 86400000) - now.getSeconds() * 1000);
 
     return nextDeadline;
+  }
+
+  addWeek(date: Date): Date {
+    return new Date(Date.parse(date.toISOString()) + 604800000);
+  }
+
+  add2Weeks(date: Date): Date {
+    return new Date(Date.parse(date.toISOString()) + 604800000 * 2);
   }
 }
