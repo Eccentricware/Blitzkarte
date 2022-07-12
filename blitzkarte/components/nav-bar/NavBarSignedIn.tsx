@@ -98,7 +98,7 @@ export const NavBarSignedIn: FC<AppBarProps> = ({title}: AppBarProps) => {
             <Button color="inherit"
               onClick={handleGameSelectionMenuOpen}
             >
-              (Current Game): (Turn) - (Timer)
+              Create New Game
             </Button>
           </Container>
 
