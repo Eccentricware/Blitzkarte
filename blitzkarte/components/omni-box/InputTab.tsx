@@ -46,7 +46,7 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
   const [nominateDuringAdjustments, setNominateDuringAdjustments] = useState(true);
   const [voteDuringOrders, setVoteDuringOrders] = useState(true);
 
-  const [turn1Timing, setTurn1Timing] = useState('immediate');
+  const [turn1Timing, setTurn1Timing] = useState('standard');
   const [nominationTiming, setNominationTiming] = useState('set');
   const [nominationTurn, setNominationTurn] = useState(8);
   const [concurrentGameLimit, setConcurrentGameLimit] = useState(0);
