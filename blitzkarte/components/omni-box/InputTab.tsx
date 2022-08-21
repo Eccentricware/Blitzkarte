@@ -186,8 +186,9 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
     && debug.errors.length === 0 && debug.criticals.length === 0) {
       const idToken: Promise<string> | undefined = bkCtx.user.user?.getIdToken();
       idToken?.then((token: any) => {
-        bkCtx.newGame.settings = {
+        const gameData = {
           gameName: gameName,
+          assignmentMethod: 'manual',
           deadlineType: deadlineType,
           gameStart: gameStart,
           ordersDay: ordersDay,
@@ -236,7 +237,7 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
             idToken: token
           },
           body: JSON.stringify({
-            gameData: bkCtx.newGame.settings,
+            gameData: gameData,
             idToken: token
           })
         })
