@@ -9,6 +9,7 @@ interface ContextStructure {
   setMapView: any,
   user: {
     auth: Auth;
+    user: User | null;
   },
   newGame: {
     map: any;
@@ -23,7 +24,8 @@ export default React.createContext<ContextStructure>({
   map: mapViewDefault,
   setMapView: undefined,
   user: {
-    auth: auth
+    auth: auth,
+    user: null
   },
   newGame: {
     map: {},

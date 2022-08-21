@@ -9,10 +9,10 @@ import { NavBarSignedOut } from "../components/nav-bar/NavBarSignedOut";
 import StallGlobe from "../components/icons/StallGlobe";
 
 const DashboardPage: NextPage = () => {
-  const router = useRouter();
-
   const auth = getAuth();
   const [user, loading, error] = useAuthState(auth);
+
+  const router = useRouter();
 
   if (loading) {
     return (
@@ -50,7 +50,8 @@ const DashboardPage: NextPage = () => {
         <div>
           There was an error loading the page. Please report it to the administrator at zeldark@gmail.com
         </div>
-      </div>)
+      </div>
+    )
   }
 
   router.push('/');

@@ -163,7 +163,7 @@ export class FirebaseService {
         const idToken: string = await userCredential.user.getIdToken();
         return await this.addUserToDatabase(idToken, username);
       }).catch((error: Error) => {
-        return error.message
+        return error.message;
       });
   }
 
