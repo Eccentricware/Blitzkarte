@@ -9,8 +9,16 @@ import Head from 'next/head';
 import { Grid } from '@mui/material';
 import { MapContainer } from '../components/map-elements/map/MapContainer';
 import Blitzkontext from '../utils/Blitzkontext';
+import { useRouter } from 'next/router';
+import { getAuth } from 'firebase/auth';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { NavBarSignedOut } from '../components/nav-bar/NavBarSignedOut';
+import StallGlobe from '../components/icons/StallGlobe';
 
 const CreateGamePage: NextPage = () => {
+  const auth = getAuth();
+  const [user, loading, error] = useAuthState(auth);
+
   const [gameName, setGameName] = useState('');
   const [renderData, setRenderData] = useState<RenderData>(initialRenderData);
   const [omniBoxData, setOmniBoxData] = useState<OmniBoxData>(initialOmniBoxData);
@@ -22,6 +30,8 @@ const CreateGamePage: NextPage = () => {
   const [fileString, setFileString] = useState('');
 
   const bkCtx = useContext(Blitzkontext);
+
+  const router = useRouter();
 
   const displayChecks: any = {
     fileString: fileString,
@@ -102,25 +112,57 @@ const CreateGamePage: NextPage = () => {
     setRenderData(updateRenderData);
   }
 
-  return (
-    <div>
-      <Head>
-        <title>Blitzkarte</title>
-        <meta name="description" content="Fully automated game of global domination" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <NavBarSignedIn title={`New Game ${gameName}`}/>
+  if (loading) {
+    return (
+      <div>
+        <Head>
+          <title>Loading...</title>
+          <meta name="description" content="User dashboard and profile"/>
+          <meta name="viewport" content="width=device-width, initial-scale=1"/>
+          <link rel="icon" href="/favicon.ico"/>
+        </Head>
+        <NavBarSignedOut title={`User Dashboard`}/>
+        <StallGlobe mode="authenticating" message={"Dashboad Page: Loading"}/>
+      </div>
+    )
+  }
 
-      <Grid container columns={2}>
-        <Grid item>
-          <div className="column"><MapContainer renderData={renderData}/></div>
+  if (user) {
+    bkCtx.user.user = user;
+    return (
+      <div>
+        <Head>
+          <title>Blitzkarte</title>
+          <meta name="description" content="Fully automated game of global domination" />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <NavBarSignedIn title={`New Game ${gameName}`}/>
+
+        <Grid container columns={2}>
+          <Grid item>
+            <div className="column"><MapContainer renderData={renderData}/></div>
+          </Grid>
+          <Grid item>
+            <div className="column"><OmniBox omniBoxData={omniBoxData}/></div>
+          </Grid>
         </Grid>
-        <Grid item>
-          <div className="column"><OmniBox omniBoxData={omniBoxData}/></div>
-        </Grid>
-      </Grid>
-    </div>
-  );
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div>
+        <StallGlobe mode="error" message={"DashBoard Page: Error"}/>
+        <div>
+          There was an error loading the page. Please report it to the administrator at zeldark@gmail.com
+        </div>
+      </div>
+    )
+  }
+
+  router.push('/');
+  return <div>YOU SHOULD NOT BE HERE!!</div>
 }
 
 export default CreateGamePage;

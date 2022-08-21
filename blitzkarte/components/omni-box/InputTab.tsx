@@ -61,7 +61,7 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
   const [voteDeadlineExtension, setVoteDeadlineExtension] = useState(false);
 
   const router = useRouter();
-  let bkCtx = useContext(Blitzkontext).newGame;
+  let bkCtx = useContext(Blitzkontext);
   const schedulerService = new SchedulerService();
 
   useEffect(() => {
@@ -181,68 +181,76 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
     setTurn1Timing(rule);
   }
 
-  const handleCreateGameClick = () => {
-    bkCtx.settings = {
-      gameName: gameName,
-      deadlineType: deadlineType,
-      gameStart: gameStart,
-      ordersDay: ordersDay,
-      ordersTime: ordersTime,
-      retreatsDay: retreatsDay,
-      retreatsTime: retreatsTime,
-      adjustmentsDay: adjustmentsDay,
-      adjustmentsTime: adjustmentsTime,
-      nominationsDay: nominationsDay,
-      nominationsTime: nominationsTime,
-      votesDay: votesDay,
-      votesTime: votesTime,
-      firstOrdersTimeSpan: firstOrdersTimeSpan,
-      firstOrdersTimeType: firstOrdersTimeType,
-      ordersTimeSpan: ordersTimeSpan,
-      ordersTimeType: ordersTimeType,
-      retreatsTimeSpan: retreatsTimeSpan,
-      retreatsTimeType: retreatsTimeType,
-      adjustmentsTimeSpan: adjustmentsTimeSpan,
-      adjustmentsTimeType: adjustmentsTimeType,
-      nominationsTimeSpan: nominationsTimeSpan,
-      nominationsTimeType: nominationsTimeType,
-      votesTimeSpan: votesTimeSpan,
-      votesTimeType: votesTimeType,
-      nominateDuringAdjustments: nominateDuringAdjustments,
-      voteDuringOrders: voteDuringOrders,
-      turn1Timing: turn1Timing,
-      nominationTiming: nominationTiming,
-      nominationTurn: nominationTurn,
-      concurrentGameLimit: concurrentGameLimit,
-      automaticAssignments: automaticAssignments,
-      ratingLimits: ratingLimits,
-      funRange: funRange,
-      skillRange: skillRange,
-      nmrTolerance: nmrTolerance,
-      blindCreator: blindCreator,
-      untfRule: untfRule,
-      madOrdersRule: madOrdersRule,
-      voteDeadlineExtension: voteDeadlineExtension
-    }
-    if (bkCtx.map.terrain && gameName.length > 0
-        && debug.errors.length === 0 && debug.criticals.length === 0) {
-      fetch(`${erzahler.url}:${erzahler.port}/new-game`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(bkCtx)
-      })
-      .then((response: any) => {
-        console.log('response', response);
-        return response.json();
-      })
-      .then((data: any) => {
-        console.log('data', data);
-        return data;
-      })
-      .catch((error: Error) => {
-        console.log(error.message);
+  const handleCreateGameClick = (): void => {
+    if (bkCtx.newGame.map.terrain && gameName.length > 0
+    && debug.errors.length === 0 && debug.criticals.length === 0) {
+      const idToken: Promise<string> | undefined = bkCtx.user.user?.getIdToken();
+      idToken?.then((token: any) => {
+        bkCtx.newGame.settings = {
+          gameName: gameName,
+          deadlineType: deadlineType,
+          gameStart: gameStart,
+          ordersDay: ordersDay,
+          ordersTime: ordersTime,
+          retreatsDay: retreatsDay,
+          retreatsTime: retreatsTime,
+          adjustmentsDay: adjustmentsDay,
+          adjustmentsTime: adjustmentsTime,
+          nominationsDay: nominationsDay,
+          nominationsTime: nominationsTime,
+          votesDay: votesDay,
+          votesTime: votesTime,
+          firstOrdersTimeSpan: firstOrdersTimeSpan,
+          firstOrdersTimeType: firstOrdersTimeType,
+          ordersTimeSpan: ordersTimeSpan,
+          ordersTimeType: ordersTimeType,
+          retreatsTimeSpan: retreatsTimeSpan,
+          retreatsTimeType: retreatsTimeType,
+          adjustmentsTimeSpan: adjustmentsTimeSpan,
+          adjustmentsTimeType: adjustmentsTimeType,
+          nominationsTimeSpan: nominationsTimeSpan,
+          nominationsTimeType: nominationsTimeType,
+          votesTimeSpan: votesTimeSpan,
+          votesTimeType: votesTimeType,
+          nominateDuringAdjustments: nominateDuringAdjustments,
+          voteDuringOrders: voteDuringOrders,
+          turn1Timing: turn1Timing,
+          nominationTiming: nominationTiming,
+          nominationTurn: nominationTurn,
+          concurrentGameLimit: concurrentGameLimit,
+          automaticAssignments: automaticAssignments,
+          ratingLimits: ratingLimits,
+          funRange: funRange,
+          skillRange: skillRange,
+          nmrTolerance: nmrTolerance,
+          blindCreator: blindCreator,
+          untfRule: untfRule,
+          madOrdersRule: madOrdersRule,
+          voteDeadlineExtension: voteDeadlineExtension
+        };
+
+        fetch(`${erzahler.url}:${erzahler.port}/new-game`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            idToken: token
+          },
+          body: JSON.stringify({
+            gameData: bkCtx.newGame.settings,
+            idToken: token
+          })
+        })
+        .then((response: any) => {
+          console.log('response', response);
+          return response.json();
+        })
+        .then((data: any) => {
+          console.log('data', data);
+          return data;
+        })
+        .catch((error: Error) => {
+          console.log(error.message);
+        });
       });
     } else {
       console.log('Yay I can tell there is no map');
