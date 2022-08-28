@@ -18,6 +18,8 @@ interface InputProps {
 export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
   const [gameName, setGameName] = useState('');
   const [deadlineType, setDeadlineType] = useState('daily');
+  const [timeZone, setTimeZone] = useState(0);
+  const [observeDst, setObserveDst] = useState(true);
   const [gameStart, setGameStart] = useState<Date | null>(new Date());
   const [firstTurnDeadline, setFirstTurnDeadline] = useState<Date | null>(new Date());
 
@@ -133,6 +135,10 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
   }
 
   const settings: any = {
+    timeZone: timeZone,
+    setTimeZone: setTimeZone,
+    observeDst: observeDst,
+    setObserveDst: setObserveDst,
     turn1Timing: turn1Timing,
     setTurn1Timing: setTurn1Timing,
     nominationTiming: nominationTiming,
@@ -190,6 +196,8 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
           gameName: gameName,
           assignmentMethod: 'manual',
           deadlineType: deadlineType,
+          timeZone: timeZone,
+          observeDst: observeDst,
           gameStart: gameStart,
           ordersDay: ordersDay,
           ordersTime: ordersTime,
