@@ -1,4 +1,4 @@
-import { FormGroup, FormControlLabel, Switch, Select, SelectChangeEvent, MenuItem, TextField, Slider } from '@mui/material';
+import { FormGroup, FormControlLabel, Switch, Select, SelectChangeEvent, MenuItem, TextField, Slider, Menu } from '@mui/material';
 import { FC } from 'react';
 
 interface NewGameSettingsProps {
@@ -6,6 +6,14 @@ interface NewGameSettingsProps {
 }
 
 export const NewGameSettings: FC<NewGameSettingsProps> = ({settings}: NewGameSettingsProps) => {
+  const handleTimeZoneChange = (timeZone: string) => {
+    settings.setTimeZone(timeZone);
+  }
+
+  const handleObserveDstChange = () => {
+    settings.setObserveDst(!settings.observeDst);
+  }
+
   const handleNominationTimingChange = (timing: string) => {
     settings.setNominationTiming(timing);
   }
@@ -50,15 +58,67 @@ export const NewGameSettings: FC<NewGameSettingsProps> = ({settings}: NewGameSet
     settings.setVoteDeadlineExtension(!settings.voteDeadlineExtension);
   }
 
+
+
   return (
     <div>
+      <div>
+        Time Zone:
+        <Select id="time-zone-select"
+          value={settings.timeZone}
+          label="Time Zone"
+          onChange={(event: SelectChangeEvent<string>) => {
+            handleTimeZoneChange(event.target.value);
+          }}
+        >
+          <MenuItem value={12}>Auckland (+12)</MenuItem>
+          <MenuItem value={11}>Norfolk (+11)</MenuItem>
+          <MenuItem value={10}>Brisbane/Guam (+10)</MenuItem>
+          <MenuItem value={9}>Pyongyang/Seoul (+9)</MenuItem>
+          <MenuItem value={8}>Beijing/Perth/Taipei (+8)</MenuItem>
+          <MenuItem value={7}>Bangkok/Hanoi (+7)</MenuItem>
+          <MenuItem value={6}>Dhaka (+6)</MenuItem>
+          <MenuItem value={5}>Islamabad/Karachi (+5)</MenuItem>
+          <MenuItem value={4}>Volgograd (+4)</MenuItem>
+          <MenuItem value={3}>Moscow/Nairobi/Istanbul (+3)</MenuItem>
+          <MenuItem value={2}>Cairo/Tel Aviv (+2)</MenuItem>
+          <MenuItem value={1}>Casablanca/Serajevo (+1)</MenuItem>
+          <MenuItem value={0}>London (0)</MenuItem>
+          <MenuItem value={-1}>Azores (-1)</MenuItem>
+          <MenuItem value={-2}>NOTHING?! (-2)</MenuItem>
+          <MenuItem value={-3}>Buenos Aires/Greenland (-3)</MenuItem>
+          <MenuItem value={-4}>Caracas (-4)</MenuItem>
+          <MenuItem value={-5}>Havana/DC (-5)</MenuItem>
+          <MenuItem value={-6}>Mexico City (-6)</MenuItem>
+          <MenuItem value={-7}>Denver (-7)</MenuItem>
+          <MenuItem value={-8}>Los Angeles (-8)</MenuItem>
+          <MenuItem value={-9}>Alaska (-9)</MenuItem>
+          <MenuItem value={-10}>Hawaii (-10)</MenuItem>
+          <MenuItem value={-11}>Nothing?! (-11)</MenuItem>
+        </Select>
+      </div>
+      <div>
+        <FormGroup>
+          <FormControlLabel
+            label="Observe Daylight Savings"
+            labelPlacement="start"
+            disabled
+            control={
+              <Switch
+                checked={settings.observeDst}
+                onChange={handleObserveDstChange}
+              />
+            }
+          />
+        </FormGroup>
+      </div>
       <div>
         <Select id="nomination-timing"
           value={settings.nominationTiming}
           onChange={(event: SelectChangeEvent<string>) => {
             handleNominationTimingChange(event.target.value);
           }}
-          >
+        >
           <MenuItem value="set">Nominations Start Winter of Turn:</MenuItem>
           <MenuItem value="any">Automatically When ABB Can Win</MenuItem>
           <MenuItem value="all">Automatically When All Votes Are Owned</MenuItem>
