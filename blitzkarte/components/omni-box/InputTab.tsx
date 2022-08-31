@@ -2,7 +2,6 @@ import React, { FC, useContext, useEffect, useState } from 'react';
 import {  MenuItem, Select, SelectChangeEvent, TextField, Button } from '@mui/material';
 import { WeeklyDeadlines } from './WeeklyDeadlines';
 import { IntervalDeadlines } from './IntervalDeadlines';
-import { DateTimePicker } from '@mui/x-date-pickers';
 import { DailyDeadlines } from './DailyDeadlines';
 import { NewGameSettings } from './NewGameSettings';
 import { useRouter } from 'next/router';
@@ -48,10 +47,11 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
   const [nominateDuringAdjustments, setNominateDuringAdjustments] = useState(true);
   const [voteDuringOrders, setVoteDuringOrders] = useState(true);
 
+  const [stylizedStartYear, setStylizedStartYear] = useState(2000);
   const [turn1Timing, setTurn1Timing] = useState('standard');
   const [nominationTiming, setNominationTiming] = useState('set');
   const [nominationTurn, setNominationTurn] = useState(8);
-  const [concurrentGameLimit, setConcurrentGameLimit] = useState(0);
+  const [concurrentGamesLimit, setConcurrentGamesLimit] = useState(0);
   const [automaticAssignments, setAutomaticAssignments] = useState(false);
   const [ratingLimits, setRatingLimits] = useState(true);
   const [funRange, setFunRange] = useState([0, 100]);
@@ -61,6 +61,7 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
   const [untfRule, setUntfRule] = useState(false);
   const [madOrdersRule, setMadOrdersRule] = useState(false);
   const [voteDeadlineExtension, setVoteDeadlineExtension] = useState(false);
+  const [finalReadinessCheck, setFinalReadinessCheck] = useState(true);
 
   const router = useRouter();
   let bkCtx = useContext(Blitzkontext);
@@ -135,6 +136,8 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
   }
 
   const settings: any = {
+    stylizedStartYear: stylizedStartYear,
+    setStylizedStartYear: setStylizedStartYear,
     timeZone: timeZone,
     setTimeZone: setTimeZone,
     observeDst: observeDst,
@@ -145,8 +148,8 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
     setNominationTiming: setNominationTiming,
     nominationTurn: nominationTurn,
     setNominationTurn: setNominationTurn,
-    concurrentGameLimit: concurrentGameLimit,
-    setConcurrentGameLimit: setConcurrentGameLimit,
+    concurrentGamesLimit: concurrentGamesLimit,
+    setConcurrentGamesLimit: setConcurrentGamesLimit,
     automaticAssignments: automaticAssignments,
     setAutomaticAssignments: setAutomaticAssignments,
     ratingLimits: ratingLimits,
@@ -164,7 +167,9 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
     madOrdersRule: madOrdersRule,
     setMadOrdersRule: setMadOrdersRule,
     voteDeadlineExtension: voteDeadlineExtension,
-    setVoteDeadlineExtension: setVoteDeadlineExtension
+    setVoteDeadlineExtension: setVoteDeadlineExtension,
+    finalReadinessCheck: finalReadinessCheck,
+    setFinalReadinessCheck: setFinalReadinessCheck
   };
 
   const handleDataInput = (fileString: string) => {
@@ -195,10 +200,12 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
         const gameData = {
           gameName: gameName,
           assignmentMethod: 'manual',
+          stylizedStartYear: stylizedStartYear,
           deadlineType: deadlineType,
           timeZone: timeZone,
           observeDst: observeDst,
           gameStart: gameStart,
+          firstTurnDeadline: firstTurnDeadline,
           ordersDay: ordersDay,
           ordersTime: ordersTime,
           retreatsDay: retreatsDay,
@@ -226,7 +233,7 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
           turn1Timing: turn1Timing,
           nominationTiming: nominationTiming,
           nominationTurn: nominationTurn,
-          concurrentGameLimit: concurrentGameLimit,
+          concurrentGamesLimit: concurrentGamesLimit,
           automaticAssignments: automaticAssignments,
           ratingLimits: ratingLimits,
           funRange: funRange,
@@ -235,7 +242,8 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
           blindCreator: blindCreator,
           untfRule: untfRule,
           madOrdersRule: madOrdersRule,
-          voteDeadlineExtension: voteDeadlineExtension
+          voteDeadlineExtension: voteDeadlineExtension,
+          finalReadinessCheck: finalReadinessCheck
         };
 
         fetch(`${erzahler.url}:${erzahler.port}/new-game`, {
