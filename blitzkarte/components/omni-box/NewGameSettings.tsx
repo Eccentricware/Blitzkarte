@@ -22,8 +22,8 @@ export const NewGameSettings: FC<NewGameSettingsProps> = ({settings}: NewGameSet
     settings.setNominationTurn(Number(turnNumber));
   }
 
-  const handleConcurrentGameLimitChange = (gameLimit: string) => {
-    settings.setConcurrentGameLimit(Number(gameLimit));
+  const handleConcurrentGamesLimitChange = (gameLimit: string) => {
+    settings.setConcurrentGamesLimit(Number(gameLimit));
   }
 
   const handleRatingLimitsChange = () => {
@@ -36,6 +36,10 @@ export const NewGameSettings: FC<NewGameSettingsProps> = ({settings}: NewGameSet
 
   const handleSkillRangeChange = (event: Event, updatedRange: number | number[]) => {
     settings.setSkillRange(updatedRange as number[]);
+  }
+
+  const handleStylizedStartYearChange = (nmrTolerance: string) => {
+    settings.setStylizedStartYear(Number(nmrTolerance));
   }
 
   const handleNmrToleranceChange = (nmrTolerance: string) => {
@@ -58,7 +62,9 @@ export const NewGameSettings: FC<NewGameSettingsProps> = ({settings}: NewGameSet
     settings.setVoteDeadlineExtension(!settings.voteDeadlineExtension);
   }
 
-
+  const handleFinalReadinessCheckChange = () => {
+    settings.setFinalReadinessCheck(!settings.finalReadinessCheck);
+  }
 
   return (
     <div>
@@ -113,6 +119,15 @@ export const NewGameSettings: FC<NewGameSettingsProps> = ({settings}: NewGameSet
         </FormGroup>
       </div>
       <div>
+        <TextField type="number"
+          label="Stylized Start Year"
+          value={settings.stylizedStartYear}
+          onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
+            handleStylizedStartYearChange(event.target.value);
+          }}
+        />
+      </div>
+      <div>
         <Select id="nomination-timing"
           value={settings.nominationTiming}
           onChange={(event: SelectChangeEvent<string>) => {
@@ -121,7 +136,7 @@ export const NewGameSettings: FC<NewGameSettingsProps> = ({settings}: NewGameSet
         >
           <MenuItem value="set">Nominations Start Winter of Turn:</MenuItem>
           <MenuItem value="any">Automatically When ABB Can Win</MenuItem>
-          <MenuItem value="all">Automatically When All Votes Are Owned</MenuItem>
+          <MenuItem value="all">Automatically When All Votes Are Claimed</MenuItem>
         </Select>
       {
         settings.nominationTiming === 'set' &&
@@ -136,9 +151,9 @@ export const NewGameSettings: FC<NewGameSettingsProps> = ({settings}: NewGameSet
       <div>
         <TextField type="number"
           label="Concurrent Game Limit"
-          value={settings.concurrentGameLimit}
+          value={settings.concurrentGamesLimit}
           onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
-            handleConcurrentGameLimitChange(event.target.value);
+            handleConcurrentGamesLimitChange(event.target.value);
           }}
         />
       </div>
@@ -248,6 +263,18 @@ export const NewGameSettings: FC<NewGameSettingsProps> = ({settings}: NewGameSet
               checked={settings.voteDeadlineExtension}
               disabled
               onChange={handleVoteDeadlineExtensionChange}
+            />
+          }
+        />
+      </FormGroup>
+      <FormGroup>
+        <FormControlLabel
+          label="Final Readiness Check"
+          labelPlacement="start"
+          control={
+            <Switch
+              checked={settings.finalReadinessCheck}
+              onChange={handleFinalReadinessCheckChange}
             />
           }
         />
