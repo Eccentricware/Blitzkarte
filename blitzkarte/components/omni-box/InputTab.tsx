@@ -63,6 +63,25 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
   const [voteDeadlineExtension, setVoteDeadlineExtension] = useState(false);
   const [finalReadinessCheck, setFinalReadinessCheck] = useState(true);
 
+  const gameRules: any[] = [
+    {
+      key: 'blindAdmins',
+      value: blindCreator
+    },
+    {
+      key: 'unft',
+      value: untfRule
+    },
+    {
+      key: 'madOrders',
+      value: madOrdersRule
+    },
+    {
+      key: 'voteDeadlineExtension',
+      value: voteDeadlineExtension
+    }
+  ]
+
   const router = useRouter();
   let bkCtx = useContext(Blitzkontext);
   const schedulerService = new SchedulerService();
@@ -239,11 +258,8 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
           funRange: funRange,
           skillRange: skillRange,
           nmrTolerance: nmrTolerance,
-          blindCreator: blindCreator,
-          untfRule: untfRule,
-          madOrdersRule: madOrdersRule,
-          voteDeadlineExtension: voteDeadlineExtension,
-          finalReadinessCheck: finalReadinessCheck
+          finalReadinessCheck: finalReadinessCheck,
+          rules: gameRules
         };
 
         fetch(`${erzahler.url}:${erzahler.port}/new-game`, {
