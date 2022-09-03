@@ -62,6 +62,10 @@ export const NewGameSettings: FC<NewGameSettingsProps> = ({settings}: NewGameSet
     settings.setVoteDeadlineExtension(!settings.voteDeadlineExtension);
   }
 
+  const handlePartialRosterStartChange = () => {
+    settings.setPartialRosterStart(!settings.partialRosterStart);
+  }
+
   const handleFinalReadinessCheckChange = () => {
     settings.setFinalReadinessCheck(!settings.finalReadinessCheck);
   }
@@ -263,6 +267,18 @@ export const NewGameSettings: FC<NewGameSettingsProps> = ({settings}: NewGameSet
               checked={settings.voteDeadlineExtension}
               disabled
               onChange={handleVoteDeadlineExtensionChange}
+            />
+          }
+        />
+      </FormGroup>
+      <FormGroup>
+        <FormControlLabel
+          label="Partial Roster Start"
+          labelPlacement="start"
+          control={
+            <Switch
+              checked={settings.partialRosterStart}
+              onChange={handlePartialRosterStartChange}
             />
           }
         />

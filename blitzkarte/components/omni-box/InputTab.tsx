@@ -58,27 +58,20 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
   const [skillRange, setSkillRange] = useState([0, 100]);
   const [nmrTolerance, setNmrTolerance] = useState(3);
   const [blindCreator, setBlindCreator] = useState(false);
-  const [untfRule, setUntfRule] = useState(false);
+  const [untfRuleEnabled, setUntfRuleEnabled] = useState(false);
   const [madOrdersRule, setMadOrdersRule] = useState(false);
   const [voteDeadlineExtension, setVoteDeadlineExtension] = useState(false);
   const [finalReadinessCheck, setFinalReadinessCheck] = useState(true);
+  const [partialRosterStart, setPartialRosterStart] = useState(false);
 
   const gameRules: any[] = [
     {
-      key: 'blindAdmins',
-      value: blindCreator
-    },
-    {
-      key: 'unft',
-      value: untfRule
+      key: 'untf',
+      enabled: untfRuleEnabled
     },
     {
       key: 'madOrders',
-      value: madOrdersRule
-    },
-    {
-      key: 'voteDeadlineExtension',
-      value: voteDeadlineExtension
+      enabled: madOrdersRule
     }
   ]
 
@@ -181,14 +174,16 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
     setNmrTolerance: setNmrTolerance,
     blindCreator: blindCreator,
     setBlindCreator: setBlindCreator,
-    untfRule: untfRule,
-    setUntfRule: setUntfRule,
+    untfRuleEnabled: untfRuleEnabled,
+    setUntfRuleEnabled: setUntfRuleEnabled,
     madOrdersRule: madOrdersRule,
     setMadOrdersRule: setMadOrdersRule,
     voteDeadlineExtension: voteDeadlineExtension,
     setVoteDeadlineExtension: setVoteDeadlineExtension,
     finalReadinessCheck: finalReadinessCheck,
-    setFinalReadinessCheck: setFinalReadinessCheck
+    setFinalReadinessCheck: setFinalReadinessCheck,
+    partialRosterStart: partialRosterStart,
+    setPartialRosterStart: setPartialRosterStart
   };
 
   const handleDataInput = (fileString: string) => {
@@ -259,7 +254,10 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
           skillRange: skillRange,
           nmrTolerance: nmrTolerance,
           finalReadinessCheck: finalReadinessCheck,
-          rules: gameRules
+          rules: gameRules,
+          voteDeadlineExtension: voteDeadlineExtension,
+          blindCreator: blindCreator,
+          partialRosterStart: partialRosterStart
         };
 
         fetch(`${erzahler.url}:${erzahler.port}/new-game`, {
