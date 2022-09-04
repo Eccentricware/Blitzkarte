@@ -9,6 +9,7 @@ import { firebaseConfig } from '../utils/firebase/firebaseService';
 import firebase, { initializeApp } from 'firebase/app';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { LocalizationProvider } from '@mui/x-date-pickers';
+import { initialOmniBoxData } from '../models/OmniBoxData';
 
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -32,7 +33,8 @@ function MyApp({ Component, pageProps }: AppProps) {
       user: { auth: auth },
       newGame: {
         map: {},
-        settings: {}
+        settings: {},
+        omniBoxData: initialOmniBoxData
       }
     }}>
       <QueryClientProvider client={queryClient}>

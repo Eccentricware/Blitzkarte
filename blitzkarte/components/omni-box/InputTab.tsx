@@ -257,8 +257,10 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
           rules: gameRules,
           voteDeadlineExtension: voteDeadlineExtension,
           blindCreator: blindCreator,
-          partialRosterStart: partialRosterStart
+          partialRosterStart: partialRosterStart,
+          map: bkCtx.newGame.map
         };
+        // console.log('trying to pass countries', bkCtx.newGame.omniBoxData.stats.countries);
 
         fetch(`${erzahler.url}:${erzahler.port}/new-game`, {
           method: 'POST',
@@ -275,10 +277,10 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
           console.log('response', response);
           return response.json();
         })
-        .then((data: any) => {
-          console.log('data', data);
-          return data;
-        })
+        // .then((data: any) => {
+        //   console.log('data', data);
+        //   return data;
+        // })
         .catch((error: Error) => {
           console.log(error.message);
         });
