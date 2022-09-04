@@ -71,6 +71,8 @@ const CreateGamePage: NextPage = () => {
     parser.parse(fileString);
     setRenderData(parser.renderElements);
     bkCtx.newGame.map = parser.renderElements;
+    bkCtx.newGame.map.countries = parser.countries;
+    bkCtx.newGame.map.provinces = parser.provinces;
     setFileString('Thank you. For now, you must reload the page to update the map');
   }
 

@@ -46,6 +46,7 @@ export class Province {
   };
   labelApproval: string[] = [];
   cities: string[] = [];
+  voteType: string | undefined = undefined;
   unit: UnitApproval[] = [];
   valid: boolean;
   approved: boolean = true;

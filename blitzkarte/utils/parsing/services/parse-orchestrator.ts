@@ -340,6 +340,13 @@ export class Parser {
     this.cities.forEach(city => {
       let province: Province = this.referenceElement('provinces', city.province);
       province.cities.push(city.name);
+      if (city.type === 'c') {
+        province.voteType = 'capital';
+      }
+
+      if (city.type === 'v') {
+        province.voteType = 'vote';
+      }
     });
   }
 
@@ -406,6 +413,8 @@ export class Parser {
       if (!province.approved) {
         this.collectWarnings(province.warnings);
         this.collectErrors(province.errors);
+      } else {
+
       }
     });
   }
