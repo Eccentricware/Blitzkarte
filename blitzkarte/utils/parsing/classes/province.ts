@@ -28,6 +28,11 @@ export class Province {
   city: string | undefined;
   fullName: string | undefined;
   country: string | undefined;
+  owner: string | undefined;
+  status: string = 'inert';
+  statusColor: string | undefined = 'black';
+  voteColor: string | undefined = undefined;
+  strokeColor: string | undefined = undefined;
   isTracemap: boolean = false;
   terrainApproval: TerrainApproval = {
     land: [],

@@ -340,12 +340,29 @@ export class Parser {
     this.cities.forEach(city => {
       let province: Province = this.referenceElement('provinces', city.province);
       province.cities.push(city.name);
-      if (city.type === 'c') {
-        province.voteType = 'capital';
-      }
-
-      if (city.type === 'v') {
-        province.voteType = 'vote';
+      switch (city.type) {
+        case 'c':
+          province.voteType = 'capital';
+          province.owner = province.country;
+          province.voteColor = 'gold';
+          province.statusColor = 'gold';
+          province.status = 'active';
+          break;
+        case 'v':
+          province.voteType = 'vote';
+          province.voteColor = 'gray';
+          province.statusColor = 'gray';
+          province.strokeColor = 'red';
+          province.status = 'dormant';
+          break;
+        case 's':
+          province.statusColor = 'white';
+          province.status = 'active';
+          break;
+        case 'd':
+          province.statusColor = 'gray';
+          province.status = 'dormant';
+          break;
       }
     });
   }

@@ -4,7 +4,7 @@ export class City {
   type: string;
   name: string;
   province!: string;
-  //status!: string;
+  // status!: string;
   loc!: number[];
   voteColor: string | undefined;
   statusColor: string | undefined;
