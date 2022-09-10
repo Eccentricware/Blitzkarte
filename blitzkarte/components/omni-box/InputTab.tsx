@@ -207,7 +207,7 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
   }
 
   const handleCreateGameClick = (): void => {
-    if (bkCtx.newGame.map.terrain && gameName.length > 0
+    if (bkCtx.newGame.dbRows.terrain.length > 0 && gameName.length > 0
     && debug.errors.length === 0 && debug.criticals.length === 0) {
       const idToken: Promise<string> | undefined = bkCtx.user.user?.getIdToken();
       idToken?.then((token: any) => {
@@ -258,7 +258,7 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
           voteDeadlineExtension: voteDeadlineExtension,
           blindCreator: blindCreator,
           partialRosterStart: partialRosterStart,
-          map: bkCtx.newGame.map
+          dbRows: bkCtx.newGame.dbRows
         };
         // console.log('trying to pass countries', bkCtx.newGame.omniBoxData.stats.countries);
 

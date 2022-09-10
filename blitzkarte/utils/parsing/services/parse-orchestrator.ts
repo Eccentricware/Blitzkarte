@@ -340,6 +340,7 @@ export class Parser {
     this.cities.forEach(city => {
       let province: Province = this.referenceElement('provinces', city.province);
       province.cities.push(city.name);
+      province.cityLoc = city.loc;
       switch (city.type) {
         case 'c':
           province.voteType = 'capital';
