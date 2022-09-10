@@ -4,6 +4,14 @@ import React from 'react';
 import { MapView, mapViewDefault } from '../models/MapView';
 import { initialOmniBoxData } from '../models/OmniBoxData';
 import { firebaseConfig } from './firebase/firebaseService';
+import { Country } from './parsing/classes/country';
+import { LabelPin } from './parsing/classes/label';
+import { LabelLine } from './parsing/classes/labelLine';
+import { NodePin } from './parsing/classes/node';
+import { NodeLink } from './parsing/classes/nodeLink';
+import { Province } from './parsing/classes/province';
+import { Terrain } from './parsing/classes/terrain';
+import { Unit } from './parsing/classes/unit';
 
 interface ContextStructure {
   map: MapView
@@ -13,7 +21,16 @@ interface ContextStructure {
     user: User | null;
   },
   newGame: {
-    map: any;
+    dbRows: {
+      countries: Country[],
+      provinces: Province[],
+      terrain: Terrain[],
+      labels: LabelPin[],
+      labelLines: LabelLine[],
+      nodes: NodePin[],
+      links: NodeLink[],
+      units: Unit[]
+    },
     settings: any;
     omniBoxData: any;
   }
@@ -30,7 +47,16 @@ export default React.createContext<ContextStructure>({
     user: null
   },
   newGame: {
-    map: {},
+    dbRows: {
+      countries: [],
+      provinces: [],
+      terrain: [],
+      labels: [],
+      labelLines: [],
+      nodes: [],
+      links: [],
+      units: []
+    },
     settings: {},
     omniBoxData: initialOmniBoxData
   }

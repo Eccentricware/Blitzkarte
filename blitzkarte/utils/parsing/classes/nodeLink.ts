@@ -5,11 +5,13 @@ export class NodeLink {
   type: string;
   alpha: {
     x: number,
-    y: number
+    y: number,
+    name: string
   };
   omega: {
     x: number,
-    y: number
+    y: number,
+    name: string
   };
   stroke: string | undefined;
 
@@ -17,6 +19,8 @@ export class NodeLink {
     this.name = [node.name, adjNode.name].sort().join('-');
     this.type = node.type;
 
+    let alphaName: string;
+    let omegaName: string;
 
     let mainPoint: number[];
     let adjPoint: number[];
@@ -29,6 +33,9 @@ export class NodeLink {
         adjNode.loc[0],
         adjNode.loc[1]
       ];
+
+      alphaName = node.name;
+      omegaName = adjNode.name;
     } else {
       mainPoint = [
         adjNode.loc[0],
@@ -38,6 +45,9 @@ export class NodeLink {
         node.loc[0],
         node.loc[1]
       ];
+
+      alphaName = adjNode.name;
+      omegaName = node.name;
     }
 
     if (Math.abs(mainPoint[0] - adjPoint[0]) > 8000) {
@@ -52,11 +62,13 @@ export class NodeLink {
 
     this.alpha = {
       x: mainPoint[0],
-      y: mainPoint[1]
+      y: mainPoint[1],
+      name: alphaName
     };
     this.omega = {
       x: adjPoint[0],
-      y: adjPoint[1]
+      y: adjPoint[1],
+      name: omegaName
     };
 
     this.stroke = this.initializeStroke();

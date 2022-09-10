@@ -26,6 +26,7 @@ export class Province {
   name!: string;
   type: string | undefined;
   city: string | undefined;
+  cityLoc: number[] | undefined = undefined;
   fullName: string | undefined;
   country: string | undefined;
   owner: string | undefined;
