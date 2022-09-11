@@ -12,6 +12,7 @@ import { initialRenderData, RenderData } from '../../../models/RenderData';
 import { FinalStatusCheck, initialFinalStatusCheck } from '../../../models/FinalStatusCheck';
 import { NodeLink } from '../classes/nodeLink';
 import { initialOmniBoxData, OmniBoxData } from '../../../models/OmniBoxData';
+import { convertSnakeToTitleCase } from '../../general/formatters';
 
 export class Parser {
   // Logic
@@ -396,6 +397,8 @@ export class Parser {
         let country: Country = this.referenceElement('countries', province.country);
         if (country) {
           country.units.push(unit.name);
+          country.unitCounts[unit.type]++;
+          unit.fullName = `${unit.country} ${convertSnakeToTitleCase(unit.type)} ${country.unitCounts[unit.type]}`;
         } else {
           this.errors.push(`Unit ${province.name} country does not exist: ${province.country}`);
         }
