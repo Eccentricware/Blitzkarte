@@ -15,6 +15,17 @@ export class Country {
   votes: number = 1;
   cities: string[] = [];
   units: string[] = [];
+  unitCounts: {
+    army: number,
+    fleet: number,
+    wing: number,
+    nuke: number
+  } = {
+    army: 0,
+    fleet: 0,
+    wing: 0,
+    nuke: 0
+  };
   adjustments: number = 0;
   valid: boolean;
   approved: boolean = true;

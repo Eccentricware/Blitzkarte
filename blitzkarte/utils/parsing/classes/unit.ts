@@ -3,9 +3,11 @@ import { convertSpaceToCamelCase } from "../../general/formatters";
 
 export class Unit {
   name: string;
+  fullName: string | undefined;
   type: string;
   node: string;
   loc: number[];
+  country: string;
   countryKey!: string;
   valid: boolean;
   errors: string[] = [];
@@ -14,6 +16,7 @@ export class Unit {
     this.name = `${country}_${node.unit}_${node.name}`;
     this.name = this.name.replace(' ', '_');
     this.type = `${node.unit}`;
+    this.country = country;
     this.countryKey = convertSpaceToCamelCase(country);
     this.node = node.name;
     this.loc = node.loc;
