@@ -201,7 +201,6 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
   }
 
   const validateGameName = (gameName: string, gameNameAvailable: boolean) => {
-    console.log(`Game name ${gameName} | Available: ${gameNameAvailable}`);
     if (!gameNameAvailable && gameName.length > 0) {
       setGameNameAvailable(false);
     } else {
@@ -297,7 +296,6 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
           partialRosterStart: partialRosterStart,
           dbRows: bkCtx.newGame.dbRows
         };
-        // console.log('trying to pass countries', bkCtx.newGame.omniBoxData.stats.countries);
 
         fetch(`${erzahler.url}:${erzahler.port}/new-game`, {
           method: 'POST',
@@ -311,13 +309,16 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
           })
         })
         .then((response: any) => {
-          console.log('response', response);
           return response.json();
         })
-        // .then((data: any) => {
-        //   console.log('data', data);
-        //   return data;
-        // })
+        .then((result: any) => {
+          if (result.success) {
+            bkCtx.currentGame.id = result.gameId;
+            router.push('/game-settings');
+          } else {
+            result.errors.forEach((error: string) => console.log(error));
+          }
+        })
         .catch((error: Error) => {
           console.log(error.message);
         });
