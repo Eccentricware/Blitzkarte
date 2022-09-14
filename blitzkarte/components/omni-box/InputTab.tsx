@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import Blitzkontext from '../../utils/Blitzkontext';
 import { erzahler } from '../../utils/general/erzahler';
 import { SchedulerService } from '../../services/scheduler-service';
+import { error } from 'console';
 
 interface InputProps {
   input: any;
@@ -16,6 +17,7 @@ interface InputProps {
 
 export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
   const [gameName, setGameName] = useState('');
+  const [gameNameAvailable, setGameNameAvailable] = useState(true);
   const [deadlineType, setDeadlineType] = useState('daily');
   const [timeZone, setTimeZone] = useState(0);
   const [observeDst, setObserveDst] = useState(true);
@@ -192,6 +194,41 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
 
   const handleGameNameChange = (name: string) => {
     setGameName(name);
+    checkGameNameAvailable(name)
+      .then((gameNameAvailable: boolean) => {
+        validateGameName(name, gameNameAvailable);
+      });
+  }
+
+  const validateGameName = (gameName: string, gameNameAvailable: boolean) => {
+    console.log(`Game name ${gameName} | Available: ${gameNameAvailable}`);
+    if (!gameNameAvailable && gameName.length > 0) {
+      setGameNameAvailable(false);
+    } else {
+      setGameNameAvailable(true);
+    }
+  }
+
+  const checkGameNameAvailable = (gameName: string): any => {
+    if (gameName.length === 0) {
+      gameName = '-';
+    }
+
+    return fetch(`${erzahler.url}:${erzahler.port}/check-game-name/${gameName}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then((result: any) => {
+      return result.json();
+    })
+    .then((available: any) => {
+      return available;
+    })
+    .catch((error: Error) => {
+      console.log('Error checking game name availability:', error.message);
+    });
   }
 
   const handleGameStartChange = (date: Date | null) => {
@@ -207,7 +244,7 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
   }
 
   const handleCreateGameClick = (): void => {
-    if (bkCtx.newGame.dbRows.terrain.length > 0 && gameName.length > 0
+    if (bkCtx.newGame.dbRows.terrain.length > 0 && gameNameAvailable
     && debug.errors.length === 0 && debug.criticals.length === 0) {
       const idToken: Promise<string> | undefined = bkCtx.user.user?.getIdToken();
       idToken?.then((token: any) => {
@@ -306,8 +343,12 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
       <div>
         <TextField id="outlined-basic"
           label="Game Name"
+          required
           variant="outlined"
+          value={gameName}
           fullWidth
+          error={!gameNameAvailable}
+          helperText={!gameNameAvailable ? 'Game Name Unavailable' : ''}
           onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
             handleGameNameChange(event.target.value);
           }}
