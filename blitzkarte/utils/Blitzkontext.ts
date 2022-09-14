@@ -20,6 +20,9 @@ interface ContextStructure {
     auth: Auth;
     user: User | null;
   },
+  currentGame: {
+    id: number
+  },
   newGame: {
     dbRows: {
       countries: Country[],
@@ -45,6 +48,9 @@ export default React.createContext<ContextStructure>({
   user: {
     auth: auth,
     user: null
+  },
+  currentGame: {
+    id: 0
   },
   newGame: {
     dbRows: {

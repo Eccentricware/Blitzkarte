@@ -28,11 +28,26 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <Blitzkontext.Provider value={{
-      map: mapView,
-      setMapView: setMapView,
-      user: { auth: auth },
+      map: mapViewDefault,
+      setMapView: undefined,
+      user: {
+        auth: auth,
+        user: null
+      },
+      currentGame: {
+        id: 0
+      },
       newGame: {
-        map: {},
+        dbRows: {
+          countries: [],
+          provinces: [],
+          terrain: [],
+          labels: [],
+          labelLines: [],
+          nodes: [],
+          links: [],
+          units: []
+        },
         settings: {},
         omniBoxData: initialOmniBoxData
       }
