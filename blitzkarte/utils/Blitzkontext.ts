@@ -15,7 +15,6 @@ import { Unit } from './parsing/classes/unit';
 
 interface ContextStructure {
   map: MapView
-  setMapView: any,
   user: {
     auth: Auth;
     user: User | null;
@@ -44,13 +43,12 @@ const auth = getAuth(firebaseApp);
 
 export default React.createContext<ContextStructure>({
   map: mapViewDefault,
-  setMapView: undefined,
   user: {
     auth: auth,
     user: null
   },
   currentGame: {
-    id: 0
+    id: 84
   },
   newGame: {
     dbRows: {

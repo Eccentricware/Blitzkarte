@@ -1,7 +1,7 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import Blitzkontext from '../utils/Blitzkontext';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { MapView, mapViewDefault } from '../models/MapView'
 import { FacebookAuthProvider, getAuth, GoogleAuthProvider, onAuthStateChanged, User } from 'firebase/auth';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -17,6 +17,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const auth = getAuth(firebaseApp);
 
   const [mapView, setMapView] = useState<MapView>(mapViewDefault);
+  const blitzkontext = useContext(Blitzkontext);
 
   const queryClient: QueryClient = new QueryClient({
     defaultOptions: {
@@ -27,31 +28,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   });
 
   return (
-    <Blitzkontext.Provider value={{
-      map: mapViewDefault,
-      setMapView: undefined,
-      user: {
-        auth: auth,
-        user: null
-      },
-      currentGame: {
-        id: 0
-      },
-      newGame: {
-        dbRows: {
-          countries: [],
-          provinces: [],
-          terrain: [],
-          labels: [],
-          labelLines: [],
-          nodes: [],
-          links: [],
-          units: []
-        },
-        settings: {},
-        omniBoxData: initialOmniBoxData
-      }
-    }}>
+    <Blitzkontext.Provider value={blitzkontext}>
       <QueryClientProvider client={queryClient}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <Component {...pageProps} />

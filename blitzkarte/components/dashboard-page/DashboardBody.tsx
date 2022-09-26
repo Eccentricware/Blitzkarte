@@ -45,14 +45,14 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
     return user?.getIdToken().then((idToken: string) => {
       return fetch(`${erzahler.url}:${erzahler.port}/get-user-profile/${idToken}`)
         .then((response) => {
-          console.log('Dashboard body response', response);
+          console.log('Dashboard body response:', response);
           return response.json();
         }).then((result) => {
-          console.log('Dashboard Body Result', result);
+          console.log('Dashboard Body Result:', result);
           return result;
         })
         .catch((error: Error) => {
-          console.log('idToken Error', error.message);
+          console.log('Dashboard Body Error:', error.message);
           router.push('/');
         });
       });

@@ -18,8 +18,8 @@ export const NewGameSettings: FC<NewGameSettingsProps> = ({settings}: NewGameSet
     settings.setNominationTiming(timing);
   }
 
-  const handleNominationTurnChange = (turnNumber: string) => {
-    settings.setNominationTurn(Number(turnNumber));
+  const handleNominationYearChange = (turnNumber: string) => {
+    settings.setNominationYear(Number(turnNumber));
   }
 
   const handleConcurrentGamesLimitChange = (gameLimit: string) => {
@@ -145,9 +145,9 @@ export const NewGameSettings: FC<NewGameSettingsProps> = ({settings}: NewGameSet
       {
         settings.nominationTiming === 'set' &&
         <TextField type="number"
-          value={settings.nominationTurn}
+          value={settings.nominationYear}
           onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
-            handleNominationTurnChange(event.target.value);
+            handleNominationYearChange(event.target.value);
           }}
         />
       }

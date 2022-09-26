@@ -1,39 +1,39 @@
-import React, { FC, useContext, useEffect, useState } from 'react';
-import {  MenuItem, Select, SelectChangeEvent, TextField, Button } from '@mui/material';
-import { WeeklyDeadlines } from './WeeklyDeadlines';
-import { IntervalDeadlines } from './IntervalDeadlines';
-import { DailyDeadlines } from './DailyDeadlines';
-import { NewGameSettings } from './NewGameSettings';
-import { useRouter } from 'next/router';
-import Blitzkontext from '../../utils/Blitzkontext';
-import { erzahler } from '../../utils/general/erzahler';
-import { SchedulerService } from '../../services/scheduler-service';
-import { error } from 'console';
+import { TextField, Select, SelectChangeEvent, MenuItem, Button } from "@mui/material";
+import { debug } from "console";
+import { useRouter } from "next/router";
+import { FC, useState, useContext, useEffect } from "react";
+import { GameData } from "../../models/GameData";
+import { SchedulerService } from "../../services/scheduler-service";
+import Blitzkontext from "../../utils/Blitzkontext";
+import { erzahler } from "../../utils/general/erzahler";
+import { DailyDeadlines } from "../omni-box/DailyDeadlines";
+import { IntervalDeadlines } from "../omni-box/IntervalDeadlines";
+import { NewGameSettings } from "../omni-box/NewGameSettings";
+import { WeeklyDeadlines } from "../omni-box/WeeklyDeadlines";
 
-interface InputProps {
-  input: any;
-  debug: any;
+interface GameDetailsSettingsProps {
+  gameData: GameData;
 }
 
-export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
-  const [gameName, setGameName] = useState('');
+export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: GameDetailsSettingsProps) => {
+  const [gameName, setGameName] = useState(gameData.game_name);
   const [gameNameAvailable, setGameNameAvailable] = useState(true);
-  const [deadlineType, setDeadlineType] = useState('weekly');
-  const [timeZone, setTimeZone] = useState(0);
-  const [observeDst, setObserveDst] = useState(true);
+  const [deadlineType, setDeadlineType] = useState(gameData.deadline_type);
+  const [timeZone, setTimeZone] = useState(gameData.game_time_zone);
+  const [observeDst, setObserveDst] = useState(gameData.observe_dst);
   const [gameStart, setGameStart] = useState<Date | null>(new Date());
   const [firstTurnDeadline, setFirstTurnDeadline] = useState<Date | null>(new Date());
 
-  const [ordersDay, setOrdersDay] = useState('Monday');
-  const [ordersTime, setOrdersTime] = useState(new Date('2000-01-01 12:00:00'));
-  const [retreatsDay, setRetreatsDay] = useState('Tuesday');
-  const [retreatsTime, setRetreatsTime] = useState(new Date('2000-01-01 12:00:00'));
-  const [adjustmentsDay, setAdjustmentsDay] = useState('Wednesday');
-  const [adjustmentsTime, setAdjustmentsTime] = useState(new Date('2000-01-01 12:00:00'));
-  const [nominationsDay, setNominationsDay] = useState('Thursday');
-  const [nominationsTime, setNominationsTime] = useState(new Date('2000-01-01 12:00:00'));
-  const [votesDay, setVotesDay] = useState('Friday');
-  const [votesTime, setVotesTime] = useState(new Date('2000-01-01 12:00:00'));
+  const [ordersDay, setOrdersDay] = useState(gameData.orders_day);
+  const [ordersTime, setOrdersTime] = useState(new Date(gameData.orders_time));
+  const [retreatsDay, setRetreatsDay] = useState(gameData.retreats_day);
+  const [retreatsTime, setRetreatsTime] = useState(new Date(gameData.retreats_time));
+  const [adjustmentsDay, setAdjustmentsDay] = useState(gameData.adjustments_day);
+  const [adjustmentsTime, setAdjustmentsTime] = useState(new Date(gameData.adjustments_time));
+  const [nominationsDay, setNominationsDay] = useState(gameData.nominations_day);
+  const [nominationsTime, setNominationsTime] = useState(new Date(gameData.nominations_time));
+  const [votesDay, setVotesDay] = useState(gameData.votes_day);
+  const [votesTime, setVotesTime] = useState(new Date(gameData.votes_time));
   const [firstOrdersTimeSpan, setFirstOrdersTimeSpan] = useState(3);
   const [firstOrdersTimeType, setFirstOrdersTimeType] = useState('days');
   const [ordersTimeSpan, setOrdersTimeSpan] = useState(3);
@@ -46,25 +46,31 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
   const [nominationsTimeType, setNominationsTimeType] = useState('days');
   const [votesTimeSpan, setVotesTimeSpan] = useState(1);
   const [votesTimeType, setVotesTimeType] = useState('days');
-  const [nominateDuringAdjustments, setNominateDuringAdjustments] = useState(true);
-  const [voteDuringOrders, setVoteDuringOrders] = useState(true);
+  const [nominateDuringAdjustments, setNominateDuringAdjustments] = useState(
+    gameData.adjustments_day === gameData.nominations_day &&
+    gameData.adjustments_time === gameData.nominations_time
+  );
+  const [voteDuringOrders, setVoteDuringOrders] = useState(
+    gameData.orders_day === gameData.votes_day &&
+    gameData.orders_time === gameData.votes_time
+  );
 
-  const [stylizedStartYear, setStylizedStartYear] = useState(2000);
-  const [turn1Timing, setTurn1Timing] = useState('standard');
-  const [nominationTiming, setNominationTiming] = useState('set');
-  const [nominationYear, setNominationYear] = useState(8);
-  const [concurrentGamesLimit, setConcurrentGamesLimit] = useState(0);
-  const [automaticAssignments, setAutomaticAssignments] = useState(false);
-  const [ratingLimits, setRatingLimits] = useState(true);
-  const [funRange, setFunRange] = useState([0, 100]);
-  const [skillRange, setSkillRange] = useState([0, 100]);
-  const [nmrTolerance, setNmrTolerance] = useState(3);
-  const [blindCreator, setBlindCreator] = useState(false);
+  const [stylizedStartYear, setStylizedStartYear] = useState(gameData.stylized_start_year);
+  const [turn1Timing, setTurn1Timing] = useState(gameData.turn_1_timing);
+  const [nominationTiming, setNominationTiming] = useState(gameData.nomination_timing);
+  const [nominationYear, setNominationYear] = useState(gameData.nomination_year);
+  const [concurrentGamesLimit, setConcurrentGamesLimit] = useState(gameData.concurrent_games_limit);
+  const [automaticAssignments, setAutomaticAssignments] = useState(gameData.automatic_assignments);
+  const [ratingLimits, setRatingLimits] = useState(gameData.rating_limits_enabled);
+  const [funRange, setFunRange] = useState([gameData.fun_min, gameData.fun_max]);
+  const [skillRange, setSkillRange] = useState([gameData.skill_min, gameData.skill_max]);
+  const [nmrTolerance, setNmrTolerance] = useState(gameData.nmr_tolerance_total);
+  const [blindCreator, setBlindCreator] = useState(gameData.blind_administrators);
   const [untfRuleEnabled, setUntfRuleEnabled] = useState(false);
   const [madOrdersRule, setMadOrdersRule] = useState(false);
-  const [voteDeadlineExtension, setVoteDeadlineExtension] = useState(false);
-  const [finalReadinessCheck, setFinalReadinessCheck] = useState(true);
-  const [partialRosterStart, setPartialRosterStart] = useState(false);
+  const [voteDeadlineExtension, setVoteDeadlineExtension] = useState(gameData.vote_delay_enabled);
+  const [finalReadinessCheck, setFinalReadinessCheck] = useState(gameData.final_readiness_check);
+  const [partialRosterStart, setPartialRosterStart] = useState(gameData.partial_roster_start);
 
   const gameRules: any[] = [
     {
@@ -188,10 +194,6 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
     setPartialRosterStart: setPartialRosterStart
   };
 
-  const handleDataInput = (fileString: string) => {
-    input.functions.triggerParse(fileString);
-  }
-
   const handleGameNameChange = (name: string) => {
     setGameName(name);
     checkGameNameAvailable(name)
@@ -201,7 +203,7 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
   }
 
   const validateGameName = (gameName: string, gameNameAvailable: boolean) => {
-    if (!gameNameAvailable && gameName.length > 0) {
+    if (!gameNameAvailable && gameName.length > 0 && gameName !== gameData.game_name) {
       setGameNameAvailable(false);
     } else {
       setGameNameAvailable(true);
@@ -242,106 +244,12 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
     setTurn1Timing(rule);
   }
 
-  const handleCreateGameClick = (): void => {
-    if (bkCtx.newGame.dbRows.terrain.length > 0 && gameNameAvailable
-    && debug.errors.length === 0 && debug.criticals.length === 0) {
-      const idToken: Promise<string> | undefined = bkCtx.user.user?.getIdToken();
-      idToken?.then((token: any) => {
-        const gameData = {
-          gameName: gameName,
-          assignmentMethod: 'manual',
-          stylizedStartYear: stylizedStartYear,
-          deadlineType: deadlineType,
-          timeZone: timeZone,
-          observeDst: observeDst,
-          gameStart: gameStart,
-          firstTurnDeadline: firstTurnDeadline,
-          ordersDay: ordersDay,
-          ordersTime: ordersTime,
-          retreatsDay: retreatsDay,
-          retreatsTime: retreatsTime,
-          adjustmentsDay: adjustmentsDay,
-          adjustmentsTime: adjustmentsTime,
-          nominationsDay: nominationsDay,
-          nominationsTime: nominationsTime,
-          votesDay: votesDay,
-          votesTime: votesTime,
-          firstOrdersTimeSpan: firstOrdersTimeSpan,
-          firstOrdersTimeType: firstOrdersTimeType,
-          ordersTimeSpan: ordersTimeSpan,
-          ordersTimeType: ordersTimeType,
-          retreatsTimeSpan: retreatsTimeSpan,
-          retreatsTimeType: retreatsTimeType,
-          adjustmentsTimeSpan: adjustmentsTimeSpan,
-          adjustmentsTimeType: adjustmentsTimeType,
-          nominationsTimeSpan: nominationsTimeSpan,
-          nominationsTimeType: nominationsTimeType,
-          votesTimeSpan: votesTimeSpan,
-          votesTimeType: votesTimeType,
-          nominateDuringAdjustments: nominateDuringAdjustments,
-          voteDuringOrders: voteDuringOrders,
-          turn1Timing: turn1Timing,
-          nominationTiming: nominationTiming,
-          nominationYear: nominationYear,
-          concurrentGamesLimit: concurrentGamesLimit,
-          automaticAssignments: automaticAssignments,
-          ratingLimits: ratingLimits,
-          funRange: funRange,
-          skillRange: skillRange,
-          nmrTolerance: nmrTolerance,
-          finalReadinessCheck: finalReadinessCheck,
-          rules: gameRules,
-          voteDeadlineExtension: voteDeadlineExtension,
-          blindCreator: blindCreator,
-          partialRosterStart: partialRosterStart,
-          dbRows: bkCtx.newGame.dbRows
-        };
-
-        fetch(`${erzahler.url}:${erzahler.port}/new-game`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            idToken: token
-          },
-          body: JSON.stringify({
-            gameData: gameData,
-            idToken: token
-          })
-        })
-        .then((response: any) => {
-          return response.json();
-        })
-        .then((result: any) => {
-          if (result.success) {
-            console.log('New Game Result:', result);
-            bkCtx.currentGame.id = result.gameId;
-            router.push('/game-details');
-          } else {
-            result.errors.forEach((error: string) => console.log(error));
-          }
-        })
-        .catch((error: Error) => {
-          console.log(error.message);
-        });
-      });
-    } else {
-      console.log('Yay I can tell there is no map');
-    }
-  }
-
   const handleCancelCreateGameClick = () => {
     router.push('/');
   }
 
   return (
     <div style={{width: 400}}>
-      <label>SVG Input</label>
-      <textarea placeholder="Paste SVG Formatted File"
-        value={input.data.fileString}
-        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>): void => {
-          handleDataInput(e.target.value);
-        }}
-      />
       <div>
         <TextField id="outlined-basic"
           label="Game Name"
@@ -412,7 +320,6 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
         <Button
           color="inherit"
           variant="contained"
-          onClick={handleCreateGameClick}
         >
           Create Game
         </Button>

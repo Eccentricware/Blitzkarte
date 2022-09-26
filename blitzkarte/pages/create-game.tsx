@@ -126,18 +126,19 @@ const CreateGamePage: NextPage = () => {
       <div>
         <Head>
           <title>Loading...</title>
-          <meta name="description" content="User dashboard and profile"/>
+          <meta name="description" content="Create a new game!"/>
           <meta name="viewport" content="width=device-width, initial-scale=1"/>
           <link rel="icon" href="/favicon.ico"/>
         </Head>
-        <NavBarSignedOut title={`User Dashboard`}/>
-        <StallGlobe mode="authenticating" message={"Dashboad Page: Loading"}/>
+        <NavBarSignedOut title={`Create Game`}/>
+        <StallGlobe mode="authenticating" message={"Create Game Page: Loading"}/>
       </div>
     )
   }
 
   if (user) {
     bkCtx.user.user = user;
+    console.log(user);
     return (
       <div>
         <Head>
@@ -162,7 +163,7 @@ const CreateGamePage: NextPage = () => {
   if (error) {
     return (
       <div>
-        <StallGlobe mode="error" message={"DashBoard Page: Error"}/>
+        <StallGlobe mode="error" message={"Create Game Page: Error"}/>
         <div>
           There was an error loading the page. Please report it to the administrator at zeldark@gmail.com
         </div>
