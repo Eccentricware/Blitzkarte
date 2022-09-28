@@ -10,6 +10,7 @@ import { DailyDeadlines } from "../omni-box/DailyDeadlines";
 import { IntervalDeadlines } from "../omni-box/IntervalDeadlines";
 import { NewGameSettings } from "../omni-box/NewGameSettings";
 import { WeeklyDeadlines } from "../omni-box/WeeklyDeadlines";
+import { GameSettings } from "./GameSettings";
 
 interface GameDetailsSettingsProps {
   gameData: GameData;
@@ -71,6 +72,7 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
   const [voteDeadlineExtension, setVoteDeadlineExtension] = useState(gameData.vote_delay_enabled);
   const [finalReadinessCheck, setFinalReadinessCheck] = useState(gameData.final_readiness_check);
   const [partialRosterStart, setPartialRosterStart] = useState(gameData.partial_roster_start);
+  const [displayAsAdmin, setDisplayAsAdmin] = useState(gameData.display_as_admin);
 
   const gameRules: any[] = [
     {
@@ -152,7 +154,8 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
     votesTimeSpan: votesTimeSpan,
     setVotesTimeSpan: setVotesTimeSpan,
     votesTimeType: votesTimeType,
-    setVotesTimeType: setVotesTimeType
+    setVotesTimeType: setVotesTimeType,
+    displayAsAdmin: displayAsAdmin
   }
 
   const settings: any = {
@@ -191,7 +194,8 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
     finalReadinessCheck: finalReadinessCheck,
     setFinalReadinessCheck: setFinalReadinessCheck,
     partialRosterStart: partialRosterStart,
-    setPartialRosterStart: setPartialRosterStart
+    setPartialRosterStart: setPartialRosterStart,
+    displayAsAdmin: displayAsAdmin
   };
 
   const handleGameNameChange = (name: string) => {
@@ -259,6 +263,7 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
           fullWidth
           error={!gameNameAvailable}
           helperText={!gameNameAvailable ? 'Game Name Unavailable' : ''}
+          disabled={!gameData.display_as_admin || gameData.game_status !== 'registration'}
           onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
             handleGameNameChange(event.target.value);
           }}
@@ -268,6 +273,7 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
         <Select id="first-turn-timing"
           value={turn1Timing}
           label="When players are ready:"
+          disabled={!gameData.display_as_admin || gameData.game_status !== 'registration'}
           onChange={(event: SelectChangeEvent<string>) => {
             handleTurnOneTimingChange(event.target.value)
           }}
@@ -288,6 +294,7 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
           value={deadlineType}
           label="Deadline Type"
           fullWidth
+          disabled={!gameData.display_as_admin || gameData.game_status !== 'registration'}
           onChange={(event: SelectChangeEvent<string>): void => {
             handleDeadlineTypeChange(event.target.value);
           }}
@@ -298,7 +305,6 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
           <MenuItem value={"manual"} disabled>Manually Set Deadlines</MenuItem>
         </Select>
       </div>
-
       <div>
         {
           (deadlineType === 'weekly') &&
@@ -314,7 +320,7 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
         }
       </div>
       <div>
-        <NewGameSettings settings={settings}/>
+        <GameSettings settings={settings}/>
       </div>
       <div>
         <Button

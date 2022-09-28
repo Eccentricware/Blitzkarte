@@ -23,6 +23,7 @@ export const IntervalDeadlines: FC<IntervalDeadlinesProps> = ({deadlineOps}: Int
   const [editingAdjustments, setEditingAdjustments] = useState(false);
   const [editingNominations, setEditingNominations] = useState(false);
   const [editingVotes, setEditingVotes] = useState(false);
+  const [displayAsAdmin, setDisplayAsAdmin] = useState(deadlineOps.displayAsAdmin === false ? deadlineOps.displayAsAdmin : true);
 
   const handleEditAdjustmentsToggle = () => {
     setEditingAdjustments(!editingAdjustments);
@@ -108,7 +109,7 @@ export const IntervalDeadlines: FC<IntervalDeadlinesProps> = ({deadlineOps}: Int
         <TimelineItem>
           <TimelineOppositeContent>
             {
-              deadlineOps.voteDuringOrders
+              deadlineOps.voteDuringOrders && displayAsAdmin
                 ? <div>
                   <CallSplitIcon fontSize="small" onClick={handleVoteDuringOrdersChange} />
                   Orders / Votes
@@ -154,7 +155,7 @@ export const IntervalDeadlines: FC<IntervalDeadlinesProps> = ({deadlineOps}: Int
                 </div>
                 :
                 <div>{deadlineOps.ordersTimeSpan} {deadlineOps.ordersTimeType} After
-                  <br/>Adjustments <EditIcon fontSize="small" onClick={handleEditOrdersToggle} />
+                  <br/>Adjustments {displayAsAdmin &&<EditIcon fontSize="small" onClick={handleEditOrdersToggle} />}
                 </div>
             }
           </TimelineContent>
@@ -203,7 +204,7 @@ export const IntervalDeadlines: FC<IntervalDeadlinesProps> = ({deadlineOps}: Int
                 </div>
                 :
                 <div>{deadlineOps.retreatsTimeSpan} {deadlineOps.retreatsTimeType} After<br/>
-                  Orders<EditIcon fontSize="small" onClick={handleEditRetreatsToggle} />
+                  Orders {displayAsAdmin && <EditIcon fontSize="small" onClick={handleEditRetreatsToggle} />}
                 </div>
             }
           </TimelineContent>
@@ -213,7 +214,7 @@ export const IntervalDeadlines: FC<IntervalDeadlinesProps> = ({deadlineOps}: Int
         <TimelineItem>
           <TimelineOppositeContent>
             {
-              deadlineOps.nominateDuringAdjustments
+              deadlineOps.nominateDuringAdjustments && displayAsAdmin
                 ? <div>
                   <CallSplitIcon fontSize="small" onClick={
                     handleNominateDuringAdjustmentsChange
@@ -267,7 +268,7 @@ export const IntervalDeadlines: FC<IntervalDeadlinesProps> = ({deadlineOps}: Int
                 </div>
                 :
                 <div>{deadlineOps.adjustmentsTimeSpan} {deadlineOps.adjustmentsTimeType} After<br/>
-                 Orders<EditIcon fontSize="small" onClick={handleEditAdjustmentsToggle} />
+                 Orders {displayAsAdmin && <EditIcon fontSize="small" onClick={handleEditAdjustmentsToggle} />}
                 </div>
             }
           </TimelineContent>
@@ -279,9 +280,12 @@ export const IntervalDeadlines: FC<IntervalDeadlinesProps> = ({deadlineOps}: Int
           <TimelineItem>
             <TimelineOppositeContent>
               <div>
-                <MergeTypeIcon fontSize="small"
-                  onClick={handleNominateDuringAdjustmentsChange}
-                />
+                {
+                  displayAsAdmin &&
+                  <MergeTypeIcon fontSize="small"
+                    onClick={handleNominateDuringAdjustmentsChange}
+                  />
+                }
                 Nominations
               </div>
             </TimelineOppositeContent>
@@ -326,7 +330,7 @@ export const IntervalDeadlines: FC<IntervalDeadlinesProps> = ({deadlineOps}: Int
                     </div>
                   :
                     <div>{deadlineOps.nominationsTimeSpan} {deadlineOps.nominationsTimeType} After<br/>
-                      Adjustments<EditIcon fontSize="small" onClick={handleEditNominationsToggle} />
+                      Adjustments {displayAsAdmin && <EditIcon fontSize="small" onClick={handleEditNominationsToggle} />}
                   </div>
               }
             </TimelineContent>
@@ -338,9 +342,12 @@ export const IntervalDeadlines: FC<IntervalDeadlinesProps> = ({deadlineOps}: Int
           <TimelineItem>
             <TimelineOppositeContent>
               <div>
-                <MergeTypeIcon fontSize="small"
-                  onClick={handleVoteDuringOrdersChange}
-                />
+                {
+                  displayAsAdmin &&
+                  <MergeTypeIcon fontSize="small"
+                    onClick={handleVoteDuringOrdersChange}
+                  />
+                }
                 Votes
               </div>
             </TimelineOppositeContent>
@@ -381,7 +388,7 @@ export const IntervalDeadlines: FC<IntervalDeadlinesProps> = ({deadlineOps}: Int
                     </div>
                   :
                   <div>{deadlineOps.votesTimeSpan} {deadlineOps.votesTimeType} After<br/>
-                    Nominations<EditIcon fontSize="small" onClick={handleEditVotesToggle} />
+                    Nominations {displayAsAdmin && <EditIcon fontSize="small" onClick={handleEditVotesToggle} />}
                   </div>
               }
             </TimelineContent>
