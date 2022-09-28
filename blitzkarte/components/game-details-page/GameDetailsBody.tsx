@@ -23,10 +23,29 @@ const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBo
   const queryClient: QueryClient = useQueryClient();
 
   const { isLoading, error, data, isFetching } = useQuery('getGameData', () => {
-    return user?.getIdToken().then((idToken: string) => {
+    if (user) {
+      return user.getIdToken().then((idToken: string) => {
+        return fetch(`${erzahler.url}:${erzahler.port}/game-details/${gameId}`, {
+          headers: {
+            idtoken: idToken
+          }
+        })
+        .then((response: any) => {
+          console.log('Game Details Body Response:', response);
+          return response.json();
+        })
+        .then((gameData: any) => {
+          console.log('gameData:', gameData);
+          return gameData;
+        })
+        .catch((error: Error) => {
+          console.log('Game Details Body Error: ' + error.message);
+        });
+      });
+    } else {
       return fetch(`${erzahler.url}:${erzahler.port}/game-details/${gameId}`, {
         headers: {
-          idtoken: idToken
+          idtoken: ''
         }
       })
       .then((response: any) => {
@@ -39,8 +58,8 @@ const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBo
       })
       .catch((error: Error) => {
         console.log('Game Details Body Error: ' + error.message);
-      })
-    })
+      });
+    }
   });
 
   useEffect(() => {
@@ -115,7 +134,16 @@ const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBo
   }
 
   return (
-    <StallGlobe mode="error" message="GameDetailsBody: Return"/>
+    <Grid container spacing={1}>
+      <Grid item xs={12}>
+        Banner?
+      </Grid>
+      <Grid item xs={12} sm={5}>
+        <GameDetailsSettings gameData={data}/>
+      </Grid>
+      <Grid item xs={12} sm={3}>Assignments</Grid>
+      <Grid item xs={12} sm={4}>Chat</Grid>
+    </Grid>
   )
 }
 
