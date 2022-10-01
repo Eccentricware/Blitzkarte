@@ -1,14 +1,11 @@
-import { Button, Grid, MenuItem, Select, SelectChangeEvent, TextField } from "@mui/material";
+import { Grid } from "@mui/material";
 import { User } from "firebase/auth";
 import { FC, useEffect, useState } from "react";
-import { QueryClient, useQuery, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
 import { erzahler } from "../../utils/general/erzahler";
 import StallGlobe from "../icons/StallGlobe";
-import { DailyDeadlines } from "../omni-box/DailyDeadlines";
-import { InputTab } from "../omni-box/InputTab";
-import { IntervalDeadlines } from "../omni-box/IntervalDeadlines";
-import { NewGameSettings } from "../omni-box/NewGameSettings";
-import { WeeklyDeadlines } from "../omni-box/WeeklyDeadlines";
+import { AssignmentsAdm } from "./AssignmentsAdm";
+import { AssignmentsStd } from "./AssignmentsStd";
 import { GameDetailsSettings } from "./GameDetailsSettings";
 
 interface GameDetailsBodyProps {
@@ -19,8 +16,6 @@ interface GameDetailsBodyProps {
 const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBodyProps) => {
   const [gameName, setGameName] = useState('');
   const [gameNameAvailable, setGameNameAvailable] = useState(true);
-
-  const queryClient: QueryClient = useQueryClient();
 
   const { isLoading, error, data, isFetching } = useQuery('getGameData', () => {
     if (user) {
@@ -124,11 +119,17 @@ const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBo
         <Grid item xs={12}>
           Banner?
         </Grid>
-        <Grid item xs={12} sm={5}>
+        <Grid item xs={12} sm={8}>
           <GameDetailsSettings gameData={data}/>
         </Grid>
-        <Grid item xs={12} sm={3}>Assignments</Grid>
-        <Grid item xs={12} sm={4}>Chat</Grid>
+        <Grid item xs={12} sm={4}>
+          {
+            data.display_as_admin ?
+            <AssignmentsAdm assignmentData={data}/> :
+            <AssignmentsStd assignmentData={data}/>
+          }
+        </Grid>
+        {/* <Grid item xs={12} sm={4}>Chat</Grid> */}
       </Grid>
     )
   }

@@ -8,7 +8,6 @@ import { useRouter } from 'next/router';
 import Blitzkontext from '../../utils/Blitzkontext';
 import { erzahler } from '../../utils/general/erzahler';
 import { SchedulerService } from '../../services/scheduler-service';
-import { error } from 'console';
 
 interface InputProps {
   input: any;

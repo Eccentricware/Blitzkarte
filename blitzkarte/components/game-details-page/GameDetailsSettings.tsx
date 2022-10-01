@@ -1,5 +1,4 @@
 import { TextField, Select, SelectChangeEvent, MenuItem, Button } from "@mui/material";
-import { debug } from "console";
 import { useRouter } from "next/router";
 import { FC, useState, useContext, useEffect } from "react";
 import { GameData } from "../../models/GameData";
@@ -8,7 +7,6 @@ import Blitzkontext from "../../utils/Blitzkontext";
 import { erzahler } from "../../utils/general/erzahler";
 import { DailyDeadlines } from "../omni-box/DailyDeadlines";
 import { IntervalDeadlines } from "../omni-box/IntervalDeadlines";
-import { NewGameSettings } from "../omni-box/NewGameSettings";
 import { WeeklyDeadlines } from "../omni-box/WeeklyDeadlines";
 import { GameSettings } from "./GameSettings";
 
@@ -72,7 +70,6 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
   const [voteDeadlineExtension, setVoteDeadlineExtension] = useState(gameData.vote_delay_enabled);
   const [finalReadinessCheck, setFinalReadinessCheck] = useState(gameData.final_readiness_check);
   const [partialRosterStart, setPartialRosterStart] = useState(gameData.partial_roster_start);
-  const [displayAsAdmin, setDisplayAsAdmin] = useState(gameData.display_as_admin);
 
   const gameRules: any[] = [
     {
@@ -155,7 +152,8 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
     setVotesTimeSpan: setVotesTimeSpan,
     votesTimeType: votesTimeType,
     setVotesTimeType: setVotesTimeType,
-    displayAsAdmin: displayAsAdmin
+    displayAsAdmin: gameData.display_as_admin,
+    gameStatus: gameData.game_status
   }
 
   const settings: any = {
@@ -195,7 +193,8 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
     setFinalReadinessCheck: setFinalReadinessCheck,
     partialRosterStart: partialRosterStart,
     setPartialRosterStart: setPartialRosterStart,
-    displayAsAdmin: displayAsAdmin
+    displayAsAdmin: gameData.display_as_admin,
+    gameStatus: gameData.game_status
   };
 
   const handleGameNameChange = (name: string) => {
@@ -246,6 +245,87 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
 
   const handleTurnOneTimingChange = (rule: string) => {
     setTurn1Timing(rule);
+  }
+
+  const handleUpdateGameClick = (): void => {
+    const idToken: Promise<string> | undefined = bkCtx.user.user?.getIdToken();
+    idToken?.then((token: any) => {
+      const gameData = {
+        gameId: bkCtx.currentGame.id,
+        gameName: gameName,
+        assignmentMethod: 'manual',
+        stylizedStartYear: stylizedStartYear,
+        deadlineType: deadlineType,
+        timeZone: timeZone,
+        observeDst: observeDst,
+        gameStart: gameStart,
+        firstTurnDeadline: firstTurnDeadline,
+        ordersDay: ordersDay,
+        ordersTime: ordersTime,
+        retreatsDay: retreatsDay,
+        retreatsTime: retreatsTime,
+        adjustmentsDay: adjustmentsDay,
+        adjustmentsTime: adjustmentsTime,
+        nominationsDay: nominationsDay,
+        nominationsTime: nominationsTime,
+        votesDay: votesDay,
+        votesTime: votesTime,
+        firstOrdersTimeSpan: firstOrdersTimeSpan,
+        firstOrdersTimeType: firstOrdersTimeType,
+        ordersTimeSpan: ordersTimeSpan,
+        ordersTimeType: ordersTimeType,
+        retreatsTimeSpan: retreatsTimeSpan,
+        retreatsTimeType: retreatsTimeType,
+        adjustmentsTimeSpan: adjustmentsTimeSpan,
+        adjustmentsTimeType: adjustmentsTimeType,
+        nominationsTimeSpan: nominationsTimeSpan,
+        nominationsTimeType: nominationsTimeType,
+        votesTimeSpan: votesTimeSpan,
+        votesTimeType: votesTimeType,
+        nominateDuringAdjustments: nominateDuringAdjustments,
+        voteDuringOrders: voteDuringOrders,
+        turn1Timing: turn1Timing,
+        nominationTiming: nominationTiming,
+        nominationYear: nominationYear,
+        concurrentGamesLimit: concurrentGamesLimit,
+        automaticAssignments: automaticAssignments,
+        ratingLimits: ratingLimits,
+        funRange: funRange,
+        skillRange: skillRange,
+        nmrTolerance: nmrTolerance,
+        finalReadinessCheck: finalReadinessCheck,
+        rules: gameRules,
+        voteDeadlineExtension: voteDeadlineExtension,
+        blindCreator: blindCreator,
+        partialRosterStart: partialRosterStart,
+        dbRows: bkCtx.newGame.dbRows
+      };
+
+      fetch(`${erzahler.url}:${erzahler.port}/update-game`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          idToken: token
+        },
+        body: JSON.stringify({
+          gameData: gameData,
+          idToken: token
+        })
+      })
+      .then((response: any) => {
+        return response.json();
+      })
+      .then((result: any) => {
+        if (result.success) {
+          router.reload();
+        } else {
+          result.errors.forEach((error: string) => console.log(error));
+        }
+      })
+      .catch((error: Error) => {
+        console.log('Update Game Error: ' + error.message);
+      });
+    });
   }
 
   const handleCancelCreateGameClick = () => {
@@ -322,21 +402,25 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
       <div>
         <GameSettings settings={settings}/>
       </div>
-      <div>
-        <Button
-          color="inherit"
-          variant="contained"
-        >
-          Create Game
-        </Button>
-        <Button
-          color="inherit"
-          variant="contained"
-          onClick={handleCancelCreateGameClick}
-        >
-          Cancel
-        </Button>
-      </div>
+      {
+        gameData.display_as_admin &&
+        <div>
+          <Button
+            color="inherit"
+            variant="contained"
+            onClick={handleUpdateGameClick}
+          >
+            Save Game
+          </Button>
+          <Button
+            color="inherit"
+            variant="contained"
+            onClick={handleCancelCreateGameClick}
+          >
+            Cancel
+          </Button>
+        </div>
+      }
     </div>
   )
 }
