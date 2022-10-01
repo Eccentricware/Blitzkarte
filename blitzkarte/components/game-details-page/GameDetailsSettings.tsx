@@ -86,16 +86,16 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
   let bkCtx = useContext(Blitzkontext);
   const schedulerService = new SchedulerService();
 
-  useEffect(() => {
-    schedulerService.setStartScheduling(deadlineOps);
-  }, [
-    turn1Timing,
-    deadlineType,
-    ordersDay,
-    ordersTime,
-    firstOrdersTimeSpan,
-    firstOrdersTimeType
-  ]);
+  // useEffect(() => {
+  //   schedulerService.setStartScheduling(deadlineOps);
+  // }, [
+  //   turn1Timing,
+  //   deadlineType,
+  //   ordersDay,
+  //   ordersTime,
+  //   firstOrdersTimeSpan,
+  //   firstOrdersTimeType
+  // ]);
 
   const deadlineOps: any = {
     gameStart: gameStart,

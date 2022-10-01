@@ -48,7 +48,7 @@ export default React.createContext<ContextStructure>({
     user: null
   },
   currentGame: {
-    id: 84
+    id: 1
   },
   newGame: {
     dbRows: {
