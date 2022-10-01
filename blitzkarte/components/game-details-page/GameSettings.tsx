@@ -77,7 +77,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
         <Select id="time-zone-select"
           value={settings.timeZone}
           label="Time Zone"
-          disabled={!settings.display_as_admin}
+          disabled={!settings.displayAsAdmin || settings.gameStatus !== 'registration'}
           onChange={(event: SelectChangeEvent<string>) => {
             handleTimeZoneChange(event.target.value);
           }}
@@ -114,7 +114,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
             label="Observe Daylight Savings"
             labelPlacement="start"
             disabled
-            // disabled={!settings.display_as_admin || settings.game_status !== 'registration'}
+            // disabled={!settings.displayAsAdmin || settings.gameStatus !== 'registration'}
             control={
               <Switch
                 checked={settings.observeDst}
@@ -128,7 +128,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
         <TextField type="number"
           label="Stylized Start Year"
           value={settings.stylizedStartYear}
-          disabled={!settings.display_as_admin || settings.game_status !== 'registration'}
+          disabled={!settings.displayAsAdmin || settings.gameStatus !== 'registration'}
           onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
             handleStylizedStartYearChange(event.target.value);
           }}
@@ -137,7 +137,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
       <div>
         <Select id="nomination-timing"
           value={settings.nominationTiming}
-          disabled={!settings.display_as_admin || settings.game_status !== 'registration'}
+          disabled={!settings.displayAsAdmin || settings.gameStatus !== 'registration'}
           onChange={(event: SelectChangeEvent<string>) => {
             handleNominationTimingChange(event.target.value);
           }}
@@ -150,7 +150,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
         settings.nominationTiming === 'set' &&
         <TextField type="number"
           value={settings.nominationYear}
-          disabled={!settings.display_as_admin || settings.game_status !== 'registration'}
+          disabled={!settings.displayAsAdmin || settings.gameStatus !== 'registration'}
           onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
             handleNominationYearChange(event.target.value);
           }}
@@ -161,7 +161,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
         <TextField type="number"
           label="Concurrent Game Limit"
           value={settings.concurrentGamesLimit}
-          disabled={!settings.display_as_admin}
+          disabled={!settings.displayAsAdmin}
           onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
             handleConcurrentGamesLimitChange(event.target.value);
           }}
@@ -176,7 +176,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
               <Switch
                 checked={settings.automaticAssignments}
                 disabled
-                // disabled={!settings.display_as_admin || settings.game_status !== 'registration'}
+                // disabled={!settings.displayAsAdmin || settings.gameStatus !== 'registration'}
               />
             }
           />
@@ -191,7 +191,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
               <Switch
                 checked={settings.ratingLimits}
                 onChange={handleRatingLimitsChange}
-                disabled={!settings.display_as_admin || settings.game_status !== 'registration'}
+                disabled={!settings.displayAsAdmin || settings.gameStatus !== 'registration'}
               />
             }
           />
@@ -201,7 +201,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
         settings.ratingLimits &&
         <Slider id="fun-range-slider"
           value={settings.funRange}
-          disabled={!settings.display_as_admin || settings.game_status !== 'registration'}
+          disabled={!settings.displayAsAdmin || settings.gameStatus !== 'registration'}
           onChange={handleFunRangeChange}
           marks={[
             {value: 0, label: 0},
@@ -214,7 +214,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
         settings.ratingLimits &&
         <Slider id="skill-range-slider"
           value={settings.skillRange}
-          disabled={!settings.display_as_admin || settings.game_status !== 'registration'}
+          disabled={!settings.displayAsAdmin || settings.gameStatus !== 'registration'}
           onChange={handleSkillRangeChange}
           marks={[
             {value: 0, label: 0},
@@ -226,7 +226,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
       <TextField type="number"
         label="NMR Tolerance"
         value={settings.nmrTolerance}
-        disabled={!settings.display_as_admin || settings.game_status !== 'registration'}
+        disabled={!settings.displayAsAdmin || settings.gameStatus !== 'registration'}
         onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
           handleNmrToleranceChange(event.target.value);
         }}
@@ -238,7 +238,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
           control={
             <Switch
               checked={settings.blindCreator}
-              disabled={!settings.display_as_admin || settings.game_status !== 'registration'}
+              disabled={!settings.displayAsAdmin || settings.gameStatus !== 'registration'}
               onChange={handleBlindCreatorChange}
             />
           }
@@ -252,7 +252,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
             <Switch
               checked={settings.untfRule}
               disabled
-              // disabled={!settings.display_as_admin || settings.game_status !== 'registration'}
+              // disabled={!settings.displayAsAdmin || settings.gameStatus !== 'registration'}
               onChange={handleUntfRuleChange}
             />
           }
@@ -266,7 +266,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
             <Switch
               checked={settings.madOrdersRule}
               disabled
-              // disabled={!settings.display_as_admin || settings.game_status !== 'registration'}
+              // disabled={!settings.displayAsAdmin || settings.gameStatus !== 'registration'}
               onChange={handleMadOrdersRuleChange}
             />
           }
@@ -280,7 +280,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
             <Switch
               checked={settings.voteDeadlineExtension}
               disabled
-              // disabled={!settings.display_as_admin || settings.game_status !== 'registration'}
+              // disabled={!settings.displayAsAdmin || settings.gameStatus !== 'registration'}
               onChange={handleVoteDeadlineExtensionChange}
             />
           }
@@ -293,7 +293,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
           control={
             <Switch
               checked={settings.partialRosterStart}
-              disabled={!settings.display_as_admin || settings.game_status !== 'registration'}
+              disabled={!settings.displayAsAdmin || settings.gameStatus !== 'registration'}
               onChange={handlePartialRosterStartChange}
             />
           }
@@ -306,7 +306,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
           control={
             <Switch
               checked={settings.finalReadinessCheck}
-              disabled={!settings.display_as_admin || settings.game_status !== 'registration'}
+              disabled={!settings.displayAsAdmin || settings.gameStatus !== 'registration'}
               onChange={handleFinalReadinessCheckChange}
             />
           }
