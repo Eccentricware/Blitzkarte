@@ -1,14 +1,16 @@
 import { FormGroup, FormControlLabel, Switch, Select, SelectChangeEvent, MenuItem, TextField, Slider, Menu } from '@mui/material';
 import { FC } from 'react';
+import { TimeZoneSelector } from './TimeZoneSelector';
 
 interface GameSettingsProps {
   settings: any;
 }
 
 export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProps) => {
-  const handleTimeZoneChange = (timeZone: string) => {
-    settings.setTimeZone(timeZone);
-  }
+  const timeZoneOps = {
+    getTimeZone: settings.timeZone,
+    setTimeZone: settings.setTimeZone
+  };
 
   const handleObserveDstChange = () => {
     settings.setObserveDst(!settings.observeDst);
@@ -72,19 +74,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
 
   return (
     <div>
-      <div>
-        Time Zone:
-        <Select id="time-zone-select"
-          value={settings.timeZone}
-          label="Time Zone"
-          disabled={!settings.displayAsAdmin || settings.gameStatus !== 'registration'}
-          onChange={(event: SelectChangeEvent<string>) => {
-            handleTimeZoneChange(event.target.value);
-          }}
-        >
-          <MenuItem value={0}>London (0)</MenuItem>
-        </Select>
-      </div>
+      <TimeZoneSelector timeZoneOps={timeZoneOps}/>
       <div>
         <FormGroup>
           <FormControlLabel

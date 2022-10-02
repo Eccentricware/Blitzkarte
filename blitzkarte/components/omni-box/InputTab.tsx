@@ -18,7 +18,7 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
   const [gameName, setGameName] = useState('');
   const [gameNameAvailable, setGameNameAvailable] = useState(true);
   const [deadlineType, setDeadlineType] = useState('weekly');
-  const [timeZone, setTimeZone] = useState(0);
+  const [timeZone, setTimeZone] = useState('America/Los_Angeles');
   const [observeDst, setObserveDst] = useState(true);
   const [gameStart, setGameStart] = useState<Date | null>(new Date());
   const [firstTurnDeadline, setFirstTurnDeadline] = useState<Date | null>(new Date());

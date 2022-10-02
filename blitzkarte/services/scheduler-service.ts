@@ -1,3 +1,4 @@
+import { getTimeZones, TimeZone } from '@vvo/tzdb';
 export class SchedulerService {
   turnOrder: string[] = ['orders', 'retreats', 'adjustments', 'nominations', 'votes'];
   dayValues: any = {
@@ -117,6 +118,8 @@ export class SchedulerService {
   }
 
   setStartScheduling(deadlineOps: any): void {
+    console.log('deadlineOps', deadlineOps);
+
     if (deadlineOps.deadlineType === 'weekly') {
       if (deadlineOps.turn1Timing === 'immediate') {
         deadlineOps.setGameStart(new Date());
@@ -187,5 +190,16 @@ export class SchedulerService {
 
   add2DaysToDate(date: Date): Date {
     return new Date(Date.parse(date.toISOString()) + 86400000 * 2);
+  }
+
+  chooseTimeZones(): TimeZone[] {
+    const timeZonesToInclude = [
+      'America/Los_Angeles'
+    ];
+
+    const timeZones: TimeZone[] = getTimeZones().filter((timeZone: TimeZone) => {
+      return timeZonesToInclude.includes(timeZone.name);
+    });
+    return timeZones;
   }
 }

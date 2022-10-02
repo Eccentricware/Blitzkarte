@@ -1,11 +1,18 @@
 import { FormGroup, FormControlLabel, Switch, Select, SelectChangeEvent, MenuItem, TextField, Slider, Menu } from '@mui/material';
+import { Settings } from 'http2';
 import { FC } from 'react';
+import { TimeZoneSelector } from '../game-details-page/TimeZoneSelector';
 
 interface NewGameSettingsProps {
   settings: any;
 }
 
 export const NewGameSettings: FC<NewGameSettingsProps> = ({settings}: NewGameSettingsProps) => {
+  const timeZoneOps = {
+    getTimeZone: settings.timeZone,
+    setTimeZone: settings.setTimeZone
+  };
+
   const handleTimeZoneChange = (timeZone: string) => {
     settings.setTimeZone(timeZone);
   }
@@ -72,18 +79,7 @@ export const NewGameSettings: FC<NewGameSettingsProps> = ({settings}: NewGameSet
 
   return (
     <div>
-      <div>
-        Time Zone:
-        <Select id="time-zone-select"
-          value={settings.timeZone}
-          label="Time Zone"
-          onChange={(event: SelectChangeEvent<string>) => {
-            handleTimeZoneChange(event.target.value);
-          }}
-        >
-          <MenuItem value={'0'}>London (0)</MenuItem>
-        </Select>
-      </div>
+      <TimeZoneSelector timeZoneOps={timeZoneOps}/>
       <div>
         <FormGroup>
           <FormControlLabel
