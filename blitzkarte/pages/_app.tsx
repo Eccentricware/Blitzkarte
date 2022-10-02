@@ -2,21 +2,21 @@ import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import Blitzkontext from '../utils/Blitzkontext';
 import { useContext, useEffect, useState } from 'react';
-import { MapView, mapViewDefault } from '../models/MapView'
+import { MapViewObject, mapViewDefault } from '../models/MapViewObject'
 import { FacebookAuthProvider, getAuth, GoogleAuthProvider, onAuthStateChanged, User } from 'firebase/auth';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { firebaseConfig } from '../utils/firebase/firebaseService';
 import firebase, { initializeApp } from 'firebase/app';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import { initialOmniBoxData } from '../models/OmniBoxData';
+import { initialOmniBoxData } from '../models/OmniBoxDataObject';
 
 
 function MyApp({ Component, pageProps }: AppProps) {
   const firebaseApp = initializeApp(firebaseConfig);
   const auth = getAuth(firebaseApp);
 
-  const [mapView, setMapView] = useState<MapView>(mapViewDefault);
+  const [mapView, setMapView] = useState<MapViewObject>(mapViewDefault);
   const blitzkontext = useContext(Blitzkontext);
 
   const queryClient: QueryClient = new QueryClient({

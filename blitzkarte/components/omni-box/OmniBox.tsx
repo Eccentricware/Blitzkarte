@@ -1,6 +1,6 @@
 import { Box, Tab, Tabs } from "@mui/material";
 import React, { FC } from "react";
-import { OmniBoxData } from "../../models/OmniBoxData";
+import { OmniBoxData } from "../../models/OmniBoxDataObject";
 import { InputTab } from "./InputTab";
 import { DebugTab } from "./DebugTab";
 import { StatsTable } from "./StatsTable";

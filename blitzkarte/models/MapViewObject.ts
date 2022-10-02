@@ -1,4 +1,4 @@
-export interface MapView {
+export interface MapViewObject {
   view: {
     panRate: number,
     zoomRate: number,
@@ -126,7 +126,7 @@ export interface MapView {
   }
 }
 
-export const mapViewDefault: MapView = {
+export const mapViewDefault: MapViewObject = {
   view: {
     zoomRate: 0.8,
     panRate: 0.25,
