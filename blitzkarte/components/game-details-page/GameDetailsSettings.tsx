@@ -1,7 +1,7 @@
 import { TextField, Select, SelectChangeEvent, MenuItem, Button } from "@mui/material";
 import { useRouter } from "next/router";
 import { FC, useState, useContext, useEffect } from "react";
-import { GameData } from "../../models/GameData";
+import { GameData } from "../../models/GameDataObject";
 import { SchedulerService } from "../../services/scheduler-service";
 import Blitzkontext from "../../utils/Blitzkontext";
 import { erzahler } from "../../utils/general/erzahler";
@@ -15,24 +15,24 @@ interface GameDetailsSettingsProps {
 }
 
 export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: GameDetailsSettingsProps) => {
-  const [gameName, setGameName] = useState(gameData.game_name);
+  const [gameName, setGameName] = useState(gameData.gameName);
   const [gameNameAvailable, setGameNameAvailable] = useState(true);
-  const [deadlineType, setDeadlineType] = useState(gameData.deadline_type);
-  const [timeZone, setTimeZone] = useState(gameData.game_time_zone);
-  const [observeDst, setObserveDst] = useState(gameData.observe_dst);
+  const [deadlineType, setDeadlineType] = useState(gameData.deadlineType);
+  const [timeZone, setTimeZone] = useState(gameData.gameTimeZone);
+  const [observeDst, setObserveDst] = useState(gameData.observeDst);
   const [gameStart, setGameStart] = useState<Date | null>(new Date());
   const [firstTurnDeadline, setFirstTurnDeadline] = useState<Date | null>(new Date());
 
-  const [ordersDay, setOrdersDay] = useState(gameData.orders_day);
-  const [ordersTime, setOrdersTime] = useState(new Date(gameData.orders_time));
-  const [retreatsDay, setRetreatsDay] = useState(gameData.retreats_day);
-  const [retreatsTime, setRetreatsTime] = useState(new Date(gameData.retreats_time));
-  const [adjustmentsDay, setAdjustmentsDay] = useState(gameData.adjustments_day);
-  const [adjustmentsTime, setAdjustmentsTime] = useState(new Date(gameData.adjustments_time));
-  const [nominationsDay, setNominationsDay] = useState(gameData.nominations_day);
-  const [nominationsTime, setNominationsTime] = useState(new Date(gameData.nominations_time));
-  const [votesDay, setVotesDay] = useState(gameData.votes_day);
-  const [votesTime, setVotesTime] = useState(new Date(gameData.votes_time));
+  const [ordersDay, setOrdersDay] = useState(gameData.ordersDay);
+  const [ordersTime, setOrdersTime] = useState(new Date(gameData.ordersTime));
+  const [retreatsDay, setRetreatsDay] = useState(gameData.retreatsDay);
+  const [retreatsTime, setRetreatsTime] = useState(new Date(gameData.retreatsTime));
+  const [adjustmentsDay, setAdjustmentsDay] = useState(gameData.adjustmentsDay);
+  const [adjustmentsTime, setAdjustmentsTime] = useState(new Date(gameData.adjustmentsTime));
+  const [nominationsDay, setNominationsDay] = useState(gameData.nominationsDay);
+  const [nominationsTime, setNominationsTime] = useState(new Date(gameData.nominationsTime));
+  const [votesDay, setVotesDay] = useState(gameData.votesDay);
+  const [votesTime, setVotesTime] = useState(new Date(gameData.votesTime));
   const [firstOrdersTimeSpan, setFirstOrdersTimeSpan] = useState(3);
   const [firstOrdersTimeType, setFirstOrdersTimeType] = useState('days');
   const [ordersTimeSpan, setOrdersTimeSpan] = useState(3);
@@ -46,30 +46,30 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
   const [votesTimeSpan, setVotesTimeSpan] = useState(1);
   const [votesTimeType, setVotesTimeType] = useState('days');
   const [nominateDuringAdjustments, setNominateDuringAdjustments] = useState(
-    gameData.adjustments_day === gameData.nominations_day &&
-    gameData.adjustments_time === gameData.nominations_time
+    gameData.adjustmentsDay === gameData.nominationsDay &&
+    gameData.adjustmentsTime === gameData.nominationsTime
   );
   const [voteDuringOrders, setVoteDuringOrders] = useState(
-    gameData.orders_day === gameData.votes_day &&
-    gameData.orders_time === gameData.votes_time
+    gameData.ordersDay === gameData.votesDay &&
+    gameData.ordersTime === gameData.votesTime
   );
 
-  const [stylizedStartYear, setStylizedStartYear] = useState(gameData.stylized_start_year);
-  const [turn1Timing, setTurn1Timing] = useState(gameData.turn_1_timing);
-  const [nominationTiming, setNominationTiming] = useState(gameData.nomination_timing);
-  const [nominationYear, setNominationYear] = useState(gameData.nomination_year);
-  const [concurrentGamesLimit, setConcurrentGamesLimit] = useState(gameData.concurrent_games_limit);
-  const [automaticAssignments, setAutomaticAssignments] = useState(gameData.automatic_assignments);
-  const [ratingLimits, setRatingLimits] = useState(gameData.rating_limits_enabled);
-  const [funRange, setFunRange] = useState([gameData.fun_min, gameData.fun_max]);
-  const [skillRange, setSkillRange] = useState([gameData.skill_min, gameData.skill_max]);
-  const [nmrTolerance, setNmrTolerance] = useState(gameData.nmr_tolerance_total);
-  const [blindCreator, setBlindCreator] = useState(gameData.blind_administrators);
+  const [stylizedStartYear, setStylizedStartYear] = useState(gameData.stylizedStartYear);
+  const [turn1Timing, setTurn1Timing] = useState(gameData.turn1Timing);
+  const [nominationTiming, setNominationTiming] = useState(gameData.nominationTiming);
+  const [nominationYear, setNominationYear] = useState(gameData.nominationYear);
+  const [concurrentGamesLimit, setConcurrentGamesLimit] = useState(gameData.concurrentGamesLimit);
+  const [automaticAssignments, setAutomaticAssignments] = useState(gameData.automaticAssignments);
+  const [ratingLimits, setRatingLimits] = useState(gameData.ratingLimitsEnabled);
+  const [funRange, setFunRange] = useState([gameData.funMin, gameData.funMax]);
+  const [skillRange, setSkillRange] = useState([gameData.skillMin, gameData.skillMax]);
+  const [nmrTolerance, setNmrTolerance] = useState(gameData.nmrToleranceTotal);
+  const [blindCreator, setBlindCreator] = useState(gameData.blindAdministrators);
   const [untfRuleEnabled, setUntfRuleEnabled] = useState(false);
   const [madOrdersRule, setMadOrdersRule] = useState(false);
-  const [voteDeadlineExtension, setVoteDeadlineExtension] = useState(gameData.vote_delay_enabled);
-  const [finalReadinessCheck, setFinalReadinessCheck] = useState(gameData.final_readiness_check);
-  const [partialRosterStart, setPartialRosterStart] = useState(gameData.partial_roster_start);
+  const [voteDeadlineExtension, setVoteDeadlineExtension] = useState(gameData.voteDelayEnabled);
+  const [finalReadinessCheck, setFinalReadinessCheck] = useState(gameData.finalReadinessCheck);
+  const [partialRosterStart, setPartialRosterStart] = useState(gameData.partialRosterStart);
 
   const gameRules: any[] = [
     {
@@ -152,8 +152,8 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
     setVotesTimeSpan: setVotesTimeSpan,
     votesTimeType: votesTimeType,
     setVotesTimeType: setVotesTimeType,
-    displayAsAdmin: gameData.display_as_admin,
-    gameStatus: gameData.game_status
+    displayAsAdmin: gameData.displayAsAdmin,
+    gameStatus: gameData.gameStatus
   }
 
   const settings: any = {
@@ -193,8 +193,8 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
     setFinalReadinessCheck: setFinalReadinessCheck,
     partialRosterStart: partialRosterStart,
     setPartialRosterStart: setPartialRosterStart,
-    displayAsAdmin: gameData.display_as_admin,
-    gameStatus: gameData.game_status
+    displayAsAdmin: gameData.displayAsAdmin,
+    gameStatus: gameData.gameStatus
   };
 
   const handleGameNameChange = (name: string) => {
@@ -206,7 +206,7 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
   }
 
   const validateGameName = (gameName: string, gameNameAvailable: boolean) => {
-    if (!gameNameAvailable && gameName.length > 0 && gameName !== gameData.game_name) {
+    if (!gameNameAvailable && gameName.length > 0 && gameName !== gameData.gameName) {
       setGameNameAvailable(false);
     } else {
       setGameNameAvailable(true);
@@ -343,7 +343,7 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
           fullWidth
           error={!gameNameAvailable}
           helperText={!gameNameAvailable ? 'Game Name Unavailable' : ''}
-          disabled={!gameData.display_as_admin || gameData.game_status !== 'registration'}
+          disabled={!gameData.displayAsAdmin || gameData.gameStatus !== 'registration'}
           onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
             handleGameNameChange(event.target.value);
           }}
@@ -353,7 +353,7 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
         <Select id="first-turn-timing"
           value={turn1Timing}
           label="When players are ready:"
-          disabled={!gameData.display_as_admin || gameData.game_status !== 'registration'}
+          disabled={!gameData.displayAsAdmin || gameData.gameStatus !== 'registration'}
           onChange={(event: SelectChangeEvent<string>) => {
             handleTurnOneTimingChange(event.target.value)
           }}
@@ -374,7 +374,7 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
           value={deadlineType}
           label="Deadline Type"
           fullWidth
-          disabled={!gameData.display_as_admin || gameData.game_status !== 'registration'}
+          disabled={!gameData.displayAsAdmin || gameData.gameStatus !== 'registration'}
           onChange={(event: SelectChangeEvent<string>): void => {
             handleDeadlineTypeChange(event.target.value);
           }}
@@ -403,7 +403,7 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
         <GameSettings settings={settings}/>
       </div>
       {
-        gameData.display_as_admin &&
+        gameData.displayAsAdmin &&
         <div>
           <Button
             color="inherit"

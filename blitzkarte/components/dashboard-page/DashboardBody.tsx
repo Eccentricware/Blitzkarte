@@ -59,9 +59,9 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
   });
 
   useEffect(() => {
-    if (data && data.email && !data.email_verified) {
+    if (data && data.email && !data.emailVerified) {
       setInterval(() => {
-        setVerificationTimer(deadlineTimer(data.verification_deadline, 'minutes'));
+        setVerificationTimer(deadlineTimer(data.verificationDeadline, 'minutes'));
       }, 1000);
     }
   }, [data, user])
@@ -184,7 +184,7 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
           <div>
             Email: {data.email}<br />
             {
-              (!changeEmailSubmitted && data.email_verified === true) ?
+              (!changeEmailSubmitted && data.emailVerified === true) ?
               <React.Fragment>
                 <Button
                   color="inherit"
@@ -243,7 +243,7 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
             }
             <br/>
             {
-              (!data.email_verified) &&
+              (!data.emailVerified) &&
               <div>
                 {
                   verificationSent ?
@@ -258,7 +258,7 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
                   </Button>
                 }
                 <br />
-                {data.verification_deadline && `Verification time left: ${verificationTimer}`}
+                {data.verificationDeadline && `Verification time left: ${verificationTimer}`}
                 <br />
                 <br />
               </div>

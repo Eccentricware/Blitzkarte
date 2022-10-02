@@ -1,8 +1,8 @@
 import { initializeApp } from 'firebase/app';
 import { Auth, getAuth, User } from 'firebase/auth';
 import React from 'react';
-import { MapView, mapViewDefault } from '../models/MapView';
-import { initialOmniBoxData } from '../models/OmniBoxData';
+import { MapViewObject, mapViewDefault } from '../models/MapViewObject';
+import { initialOmniBoxData } from '../models/OmniBoxDataObject';
 import { firebaseConfig } from './firebase/firebaseService';
 import { Country } from './parsing/classes/country';
 import { LabelPin } from './parsing/classes/label';
@@ -14,7 +14,7 @@ import { Terrain } from './parsing/classes/terrain';
 import { Unit } from './parsing/classes/unit';
 
 interface ContextStructure {
-  map: MapView
+  map: MapViewObject
   user: {
     auth: Auth;
     user: User | null;
@@ -48,7 +48,7 @@ export default React.createContext<ContextStructure>({
     user: null
   },
   currentGame: {
-    id: 1
+    id: 2
   },
   newGame: {
     dbRows: {

@@ -124,7 +124,7 @@ const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBo
         </Grid>
         <Grid item xs={12} sm={4}>
           {
-            data.display_as_admin ?
+            data.displayAsAdmin ?
             <AssignmentsAdm assignmentData={data}/> :
             <AssignmentsStd assignmentData={data}/>
           }

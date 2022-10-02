@@ -1,9 +1,9 @@
 import type { NextPage } from 'next';
 import React, { useContext, useEffect, useState } from 'react';
 import { Parser } from '../utils/parsing/services/parse-orchestrator';
-import { RenderData, initialRenderData } from '../models/RenderData';
+import { RenderData, initialRenderData } from '../models/RenderDataObject';
 import { OmniBox } from '../components/omni-box/OmniBox';
-import { initialOmniBoxData, OmniBoxData } from '../models/OmniBoxData';
+import { initialOmniBoxData, OmniBoxData } from '../models/OmniBoxDataObject';
 import { NavBarSignedIn } from '../components/nav-bar/NavBarSignedIn';
 import Head from 'next/head';
 import { Grid } from '@mui/material';
