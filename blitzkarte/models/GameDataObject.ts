@@ -1,7 +1,7 @@
 export interface GameData {
   adjustmentsDay: string;
   adjustmentsSpan: number;
-  adjustmentsTime: Date;
+  adjustmentsTime: string;
   administrators: any[];
   assignmentMethod: string;
   assignments: any[];
@@ -21,16 +21,16 @@ export interface GameData {
   nmrToleranceTotal: number;
   nominationsDay: string;
   nominationsSpan: number;
-  nominationsTime: Date;
+  nominationsTime: string;
   observeDst: boolean;
   ordersDay: string;
   ordersSpan: number;
-  ordersTime: Date;
+  ordersTime: string;
   partialRosterStart: boolean;
   privateGame: boolean;
   retreatsDay: string;
   retreatsSpan: number;
-  retreatsTime: Date;
+  retreatsTime: string;
   rules: any[];
   startTime: Date;
   stylizedStartYear: number;
@@ -44,7 +44,7 @@ export interface GameData {
   voteDelayPercent: number | null;
   votesDay: string;
   votesSpan: number;
-  votesTime: Date;
+  votesTime: string;
   nominationTiming: string;
   nominationYear: number;
   automaticAssignments: boolean;

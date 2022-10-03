@@ -24,15 +24,15 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
   const [firstTurnDeadline, setFirstTurnDeadline] = useState<Date | null>(new Date());
 
   const [ordersDay, setOrdersDay] = useState(gameData.ordersDay);
-  const [ordersTime, setOrdersTime] = useState(new Date(gameData.ordersTime));
+  const [ordersTime, setOrdersTime] = useState(new Date(`2000 01 01 ${gameData.ordersTime.split('-')[0]}`));
   const [retreatsDay, setRetreatsDay] = useState(gameData.retreatsDay);
-  const [retreatsTime, setRetreatsTime] = useState(new Date(gameData.retreatsTime));
+  const [retreatsTime, setRetreatsTime] = useState(new Date(`2000 01 01 ${gameData.retreatsTime.split('-')[0]}`));
   const [adjustmentsDay, setAdjustmentsDay] = useState(gameData.adjustmentsDay);
-  const [adjustmentsTime, setAdjustmentsTime] = useState(new Date(gameData.adjustmentsTime));
+  const [adjustmentsTime, setAdjustmentsTime] = useState(new Date(`2000 01 01 ${gameData.adjustmentsTime.split('-')[0]}`));
   const [nominationsDay, setNominationsDay] = useState(gameData.nominationsDay);
-  const [nominationsTime, setNominationsTime] = useState(new Date(gameData.nominationsTime));
+  const [nominationsTime, setNominationsTime] = useState(new Date(`2000 01 01 ${gameData.nominationsTime.split('-')[0]}`));
   const [votesDay, setVotesDay] = useState(gameData.votesDay);
-  const [votesTime, setVotesTime] = useState(new Date(gameData.votesTime));
+  const [votesTime, setVotesTime] = useState(new Date(`2000 01 01 ${gameData.votesTime.split('-')[0]}`));
   const [firstOrdersTimeSpan, setFirstOrdersTimeSpan] = useState(3);
   const [firstOrdersTimeType, setFirstOrdersTimeType] = useState('days');
   const [ordersTimeSpan, setOrdersTimeSpan] = useState(3);
@@ -86,16 +86,16 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
   let bkCtx = useContext(Blitzkontext);
   const schedulerService = new SchedulerService();
 
-  // useEffect(() => {
-  //   schedulerService.setStartScheduling(deadlineOps);
-  // }, [
-  //   turn1Timing,
-  //   deadlineType,
-  //   ordersDay,
-  //   ordersTime,
-  //   firstOrdersTimeSpan,
-  //   firstOrdersTimeType
-  // ]);
+  useEffect(() => {
+    schedulerService.setStartScheduling(deadlineOps);
+  }, [
+    turn1Timing,
+    deadlineType,
+    ordersDay,
+    ordersTime,
+    firstOrdersTimeSpan,
+    firstOrdersTimeType
+  ]);
 
   const deadlineOps: any = {
     gameStart: gameStart,
