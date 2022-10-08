@@ -314,7 +314,7 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
           if (result.success) {
             console.log('New Game Result:', result);
             bkCtx.currentGame.id = result.gameId;
-            //router.push('/game-details');
+            router.push('/game-details');
           } else {
             result.errors.forEach((error: string) => console.log(error));
           }
