@@ -2,7 +2,7 @@ import { FC } from "react";
 import { Select, SelectChangeEvent, MenuItem } from "@mui/material";
 
 import { SchedulerService } from "../../services/scheduler-service";
-import { TimeZone } from "@vvo/tzdb";
+import { getTimeZones, TimeZone } from "@vvo/tzdb";
 
 interface TimeZoneSelectorProps {
   timeZoneOps: {
@@ -13,6 +13,7 @@ interface TimeZoneSelectorProps {
 
 export const TimeZoneSelector: FC<TimeZoneSelectorProps> = ({timeZoneOps}: TimeZoneSelectorProps) => {
   const schedulerService = new SchedulerService();
+  console.log(getTimeZones());
   const handleTimeZoneChange = (timeZone: string) => {
     timeZoneOps.setTimeZone(timeZone);
   }

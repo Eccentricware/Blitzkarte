@@ -194,7 +194,9 @@ export class SchedulerService {
 
   chooseTimeZones(): TimeZone[] {
     const timeZonesToInclude = [
-      'America/Los_Angeles'
+      'Africa/Monrovia', // 0
+      'America/Denver', // -7
+      'America/Los_Angeles', //-8
     ];
 
     const timeZones: TimeZone[] = getTimeZones().filter((timeZone: TimeZone) => {

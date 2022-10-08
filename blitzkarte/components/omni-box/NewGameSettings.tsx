@@ -13,10 +13,6 @@ export const NewGameSettings: FC<NewGameSettingsProps> = ({settings}: NewGameSet
     setTimeZone: settings.setTimeZone
   };
 
-  const handleTimeZoneChange = (timeZone: string) => {
-    settings.setTimeZone(timeZone);
-  }
-
   const handleObserveDstChange = () => {
     settings.setObserveDst(!settings.observeDst);
   }
@@ -85,7 +81,6 @@ export const NewGameSettings: FC<NewGameSettingsProps> = ({settings}: NewGameSet
           <FormControlLabel
             label="Observe Daylight Savings"
             labelPlacement="start"
-            disabled
             control={
               <Switch
                 checked={settings.observeDst}

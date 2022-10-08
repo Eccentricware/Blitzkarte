@@ -20,7 +20,7 @@ interface ContextStructure {
     user: User | null;
   },
   currentGame: {
-    id: number
+    id?: number;
   },
   newGame: {
     dbRows: {

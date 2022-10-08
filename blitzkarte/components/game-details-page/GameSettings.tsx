@@ -80,8 +80,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
           <FormControlLabel
             label="Observe Daylight Savings"
             labelPlacement="start"
-            disabled
-            // disabled={!settings.displayAsAdmin || settings.gameStatus !== 'registration'}
+            disabled={!settings.displayAsAdmin || settings.gameStatus !== 'registration'}
             control={
               <Switch
                 checked={settings.observeDst}
