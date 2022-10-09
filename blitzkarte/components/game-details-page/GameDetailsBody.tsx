@@ -10,7 +10,7 @@ import { GameDetailsSettings } from "./GameDetailsSettings";
 
 interface GameDetailsBodyProps {
   user: User | null;
-  gameId: number;
+  gameId: number | undefined;
 }
 
 const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBodyProps) => {

@@ -50,6 +50,10 @@ export const NavBarSignedIn: FC<AppBarProps> = ({title}: AppBarProps) => {
     router.push('/create-game');
   }
 
+  const handleFindGameClick = () => {
+    router.push('/game-finder');
+  }
+
   const profileMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -80,9 +84,18 @@ export const NavBarSignedIn: FC<AppBarProps> = ({title}: AppBarProps) => {
       }}
       open={gameSelectionMenuOpen}
     >
-      <MenuItem>
-        <Button onClick={handleNewGameClick}>New Game</Button>
-      </MenuItem>
+      {
+        router.pathname !== '/create-game' &&
+        <MenuItem>
+          <Button onClick={handleNewGameClick}>New Game</Button>
+        </MenuItem>
+      }
+      {
+        router.pathname !== '/game-finder' &&
+        <MenuItem>
+          <Button onClick={handleFindGameClick}>Find Game</Button>
+        </MenuItem>
+      }
       <MenuItem>
         {/* <Button onClick={handleSignOutClick}>Log Out</Button> */}
         <Button onClick={handleGameSelectionMenuClose}>X</Button>
@@ -98,7 +111,7 @@ export const NavBarSignedIn: FC<AppBarProps> = ({title}: AppBarProps) => {
             <Button color="inherit"
               onClick={handleGameSelectionMenuOpen}
             >
-              Create New Game
+              Click here for cool stuff!
             </Button>
           </Container>
 
