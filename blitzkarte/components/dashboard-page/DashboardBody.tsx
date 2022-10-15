@@ -1,4 +1,4 @@
-import { Button, TextField } from '@mui/material';
+import { Button, FormControlLabel, FormGroup, Switch, TextField } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { User } from 'firebase/auth';
@@ -11,6 +11,8 @@ import { deadlineTimer } from '../../utils/general/time-time-charm';
 import StallGlobe from '../icons/StallGlobe';
 import { NavBarSignedIn } from '../nav-bar/NavBarSignedIn';
 import { CredentialValidator } from '../../utils/general/credentialValidator';
+import { TimeZoneSelector } from '../game-details-page/TimeZoneSelector';
+import { GameStatus } from '../../models/enumeration/game-status-enum';
 
 interface DashboardBodyProps {
   user: User | null;
@@ -20,6 +22,7 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
   const firebaseCtx = useContext(Blitzkontext).user;
   const firebaseService = new FirebaseService();
 
+  const [showLoginCredentials, setShowLoginCredentials] = useState(true);
   const [presentAddEmail, setPresentAddEmail] = useState(false);
   const [changingEmail, setChangingEmail] = useState(false);
   const [changeEmailSubmitted, setChangeEmailSubmitted] = useState(false);
@@ -37,9 +40,9 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
   const [emailValidated, setEmailValidated] = useState(true);
   const [verificationTimer, setVerificationTimer] = useState('');
   const [verificationSent, setVerificationSent] = useState(false);
+  const [timeZone, setTimeZone] = useState('America/Los_Angeles');
+  const [meridiemTime, setMeridiemTime] = useState(true);
   const router = useRouter();
-
-  const queryClient: QueryClient = useQueryClient();
 
   const { isLoading, error, data, isFetching } = useQuery('userProfile', () => {
     return user?.getIdToken().then((idToken: string) => {
@@ -58,13 +61,43 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
       });
   });
 
+  const timeZoneOps = {
+    getTimeZone: timeZone,
+    setTimeZone: setTimeZone
+  };
+
+  const queryClient: QueryClient = useQueryClient();
+
+  const updateTimeZone = (timeZoneName: string) => {
+    setTimeZone(timeZoneName);
+  }
+
   useEffect(() => {
-    if (data && data.email && !data.emailVerified) {
-      setInterval(() => {
-        setVerificationTimer(deadlineTimer(data.verificationDeadline, 'minutes'));
-      }, 1000);
+    if (data) {
+      if (data.email && !data.emailVerified) {
+        setInterval(() => {
+          setVerificationTimer(deadlineTimer(data.verificationDeadline, 'minutes'));
+        }, 1000);
+      }
+
+      setTimeZone(data.timeZone);
+      setMeridiemTime(data.meridiemTime);
     }
-  }, [data, user])
+  }, [data, user]);
+
+  const saveProfileChanges = () => {
+    console.log(`Time Zone: ${timeZone} | meridiem time: ${meridiemTime}`);
+    fetch(`${erzahler.url}:${erzahler.port}/update-user-profile`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        timeZone: timeZone,
+        meridiemTime: meridiemTime
+      })
+    });
+  }
 
   const handleChangingEmailClick = () => {
     setChangingEmail(!changingEmail);
@@ -157,6 +190,10 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
   const handleAddFacebookProviderClick = () => {
     const result = firebaseService.addFacebookProvider(data.username);
     console.log(result);
+  };
+
+  const handleMeridiemTimeChange = () => {
+    setMeridiemTime(!meridiemTime);
   };
 
   if (isFetching) {
@@ -362,6 +399,25 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
             </Button>
           </Fragment>
         }
+        <FormGroup>
+          <FormControlLabel
+            label="AM/PM Time"
+            labelPlacement="start"
+            control={
+              <Switch
+                checked={meridiemTime}
+                onChange={handleMeridiemTimeChange}
+              />
+            }
+          />
+        </FormGroup>
+        <TimeZoneSelector timeZoneOps={timeZoneOps}/>
+        <Button color="success"
+          variant="contained"
+          onClick={() => { saveProfileChanges(); }}
+        >
+          <span>Save</span>
+        </Button>
       </div>
     )
   }
