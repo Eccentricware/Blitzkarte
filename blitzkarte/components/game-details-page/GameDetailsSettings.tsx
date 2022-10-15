@@ -1,7 +1,9 @@
 import { TextField, Select, SelectChangeEvent, MenuItem, Button } from "@mui/material";
+import assert from "assert";
 import { useRouter } from "next/router";
 import { FC, useState, useContext, useEffect } from "react";
-import { GameData } from "../../models/GameDataObject";
+import { GameStatus } from "../../models/enumeration/game-status-enum";
+import { GameDataObject } from "../../models/GameDataObject";
 import { SchedulerService } from "../../services/scheduler-service";
 import Blitzkontext from "../../utils/Blitzkontext";
 import { erzahler } from "../../utils/general/erzahler";
@@ -11,10 +13,11 @@ import { WeeklyDeadlines } from "../omni-box/WeeklyDeadlines";
 import { GameSettings } from "./GameSettings";
 
 interface GameDetailsSettingsProps {
-  gameData: GameData;
+  gameData: GameDataObject;
 }
 
 export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: GameDetailsSettingsProps) => {
+  const router = useRouter();
   const [gameName, setGameName] = useState(gameData.gameName);
   const [gameNameAvailable, setGameNameAvailable] = useState(true);
   const [deadlineType, setDeadlineType] = useState(gameData.deadlineType);
@@ -82,7 +85,7 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
     }
   ]
 
-  const router = useRouter();
+
   let bkCtx = useContext(Blitzkontext);
   const schedulerService = new SchedulerService();
 
@@ -343,7 +346,7 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
           fullWidth
           error={!gameNameAvailable}
           helperText={!gameNameAvailable ? 'Game Name Unavailable' : ''}
-          disabled={!gameData.displayAsAdmin || gameData.gameStatus !== 'registration'}
+          disabled={!gameData.displayAsAdmin || gameData.gameStatus !== GameStatus.REGISTRATION}
           onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
             handleGameNameChange(event.target.value);
           }}
@@ -353,7 +356,7 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
         <Select id="first-turn-timing"
           value={turn1Timing}
           label="When players are ready:"
-          disabled={!gameData.displayAsAdmin || gameData.gameStatus !== 'registration'}
+          disabled={!gameData.displayAsAdmin || gameData.gameStatus !== GameStatus.REGISTRATION}
           onChange={(event: SelectChangeEvent<string>) => {
             handleTurnOneTimingChange(event.target.value)
           }}
@@ -374,7 +377,7 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
           value={deadlineType}
           label="Deadline Type"
           fullWidth
-          disabled={!gameData.displayAsAdmin || gameData.gameStatus !== 'registration'}
+          disabled={!gameData.displayAsAdmin || gameData.gameStatus !== GameStatus.REGISTRATION}
           onChange={(event: SelectChangeEvent<string>): void => {
             handleDeadlineTypeChange(event.target.value);
           }}

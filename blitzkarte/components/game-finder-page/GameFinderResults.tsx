@@ -1,13 +1,18 @@
 import { FC } from "react";
+import { GameSummaryObject } from "../../models/GameSummaryDataObject";
+import { convertKeysSnakeToCamel } from "../../utils/general/formatters";
+import { GameSummaryRow } from "./GameSummaryRow";
 
 interface FindGameResultsContainerProps {
-  games: any[];
+  games: GameSummaryObject[];
 }
 
 export const FindGameResultsContainer: FC<FindGameResultsContainerProps> = ({games}: FindGameResultsContainerProps) => {
   return (
-    <div>
-      Found Games Will Go here
+    <div className="game-finder-container">
+      {
+        games.map((game: GameSummaryObject) => <GameSummaryRow game={game} />)
+      }
     </div>
   )
 }

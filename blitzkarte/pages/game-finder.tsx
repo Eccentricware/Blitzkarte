@@ -13,6 +13,7 @@ const GameFinder: NextPage = () => {
   const auth = getAuth();
   const [user, loading, error] = useAuthState(auth);
   const bkCtx = useContext(Blitzkontext);
+  console.log('user', user);
 
   if (loading) {
     return(
@@ -30,7 +31,7 @@ const GameFinder: NextPage = () => {
   }
 
   if (user) {
-    bkCtx.user.user = user;
+    // bkCtx.user.user = user;
     return (
       <div>
         <Head>
