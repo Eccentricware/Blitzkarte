@@ -13,7 +13,6 @@ interface TimeZoneSelectorProps {
 
 export const TimeZoneSelector: FC<TimeZoneSelectorProps> = ({timeZoneOps}: TimeZoneSelectorProps) => {
   const schedulerService = new SchedulerService();
-  console.log(getTimeZones());
   const handleTimeZoneChange = (timeZone: string) => {
     timeZoneOps.setTimeZone(timeZone);
   }
@@ -31,8 +30,8 @@ export const TimeZoneSelector: FC<TimeZoneSelectorProps> = ({timeZoneOps}: TimeZ
           }}
         >
           {
-            timeZoneOptions.map((timeZone: TimeZone) =>
-              <MenuItem value={timeZone.name}>{timeZone.currentTimeFormat.split(' - ')[0]}</MenuItem>
+            timeZoneOptions.map((timeZone: TimeZone, index: number) =>
+              <MenuItem key={index} value={timeZone.name}>{timeZone.currentTimeFormat.split(' - ')[0]}</MenuItem>
             )
           }
         </Select>
