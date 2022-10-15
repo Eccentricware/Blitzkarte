@@ -1,8 +1,8 @@
-export interface GameDataObject {
+export interface GameSummaryObject {
   adjustmentsDay: string;
   adjustmentsSpan: number;
   adjustmentsTime: string;
-  administrators: any[];
+  creator: string;
   assignmentMethod: string;
   assignments: any[];
   blindAdministrators: boolean;
@@ -28,6 +28,8 @@ export interface GameDataObject {
   ordersSpan: number;
   ordersTime: string;
   partialRosterStart: boolean;
+  playerCount: number;
+  countryCount: number;
   privateGame: boolean;
   retreatsDay: string;
   retreatsSpan: number;

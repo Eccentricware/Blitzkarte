@@ -67,3 +67,13 @@ export const formatCountdown = (msLeft: number, paddingUntil: string): string =>
 
   return timer;
 }
+
+export const convertKeysSnakeToCamel = (snakeCaseObject: any): any => {
+  const camelCaseObject: any = {};
+
+  for (let snakeCaseKey in snakeCaseObject) {
+    camelCaseObject[convertSnakeToCamelCase(snakeCaseKey)] = snakeCaseObject[snakeCaseKey];
+  }
+
+  return camelCaseObject;
+}

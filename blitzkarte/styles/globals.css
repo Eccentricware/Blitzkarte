@@ -76,3 +76,14 @@ p {
 text {
   alignment-baseline: middle;
 }
+
+.game-finder-container {
+  padding: 5px;
+}
+
+.game-summary-row {
+  border: 1px darkgray solid;
+  padding: 3px;
+  margin: 2px;
+  border-radius: 8px;
+}
