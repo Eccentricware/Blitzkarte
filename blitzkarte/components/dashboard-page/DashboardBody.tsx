@@ -52,6 +52,7 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
           return response.json();
         }).then((result) => {
           console.log('Dashboard Body Result:', result);
+          result.idToken = idToken;
           return result;
         })
         .catch((error: Error) => {
@@ -86,11 +87,11 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
   }, [data, user]);
 
   const saveProfileChanges = () => {
-    console.log(`Time Zone: ${timeZone} | meridiem time: ${meridiemTime}`);
-    fetch(`${erzahler.url}:${erzahler.port}/update-user-profile`, {
+    fetch(`${erzahler.url}:${erzahler.port}/update-user-settings`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        idToken: data.idToken
       },
       body: JSON.stringify({
         timeZone: timeZone,
@@ -184,12 +185,12 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
 
   const handleAddGoogleProviderClick = () => {
     const result = firebaseService.addGoogleProvider(data.username);
-    console.log(result);
+    console.log('Add Google Provider result', result);
   };
 
   const handleAddFacebookProviderClick = () => {
     const result = firebaseService.addFacebookProvider(data.username);
-    console.log(result);
+    console.log('Add FacebookProvider Result', result);
   };
 
   const handleMeridiemTimeChange = () => {
