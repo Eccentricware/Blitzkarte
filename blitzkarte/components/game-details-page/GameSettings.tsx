@@ -253,7 +253,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
           }
         />
       </FormGroup>
-      <FormGroup>
+      <FormGroup> 
         <FormControlLabel
           label="Partial Roster Start"
           labelPlacement="start"
