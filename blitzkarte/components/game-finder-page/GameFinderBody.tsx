@@ -35,6 +35,23 @@ export const GameFinderBody: FC<GameFinderBodyProps> = ({user}: GameFinderBodyPr
           console.log('Find Games Body Error: ' + error.message);
         });
       });
+    } else {
+        return fetch(`${erzahler.url}:${erzahler.port}/find-games`, {
+          headers: {
+            idToken: ''
+          }
+        })
+        .then((response: any) => {
+          console.log('Found games response:', response);
+          return response.json();
+        })
+        .then((games: any) => {
+          console.log('games', games);
+          return games;
+        })
+        .catch((error: Error) => {
+          console.log('Find Games Body Error: ' + error.message);
+        });
     }
   });
 
