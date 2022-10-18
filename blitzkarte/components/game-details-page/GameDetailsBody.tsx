@@ -18,6 +18,10 @@ const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBo
   const [gameNameAvailable, setGameNameAvailable] = useState(true);
 
   const { isLoading, error, data, isFetching } = useQuery('getGameData', () => {
+    if (!gameId) {
+      gameId = 1;
+    }
+
     if (user) {
       return user.getIdToken().then((idToken: string) => {
         return fetch(`${erzahler.url}:${erzahler.port}/game-details/${gameId}`, {
@@ -114,6 +118,7 @@ const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBo
   }
 
   if (data) {
+    console.log('User in data:', user);
     return (
       <Grid container spacing={1}>
         <Grid item xs={12}>
