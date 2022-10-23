@@ -15,49 +15,12 @@ interface GameFinderBodyProps {
   user: User | null;
 }
 
-export const GameFinderBody: FC<GameFinderBodyProps> = ({user}: GameFinderBodyProps) => {
+export const GameFinderBody: FC<GameFinderBodyProps> = ({}: GameFinderBodyProps) => {
   const [games, setGames] = useState([]);
   const gameRequestService = new GameRequestService();
 
   const { isLoading, error, data, isFetching } = useQuery('getGames', () => {
     return gameRequestService.getGames();
-    // if (user) {
-    //   return user.getIdToken().then((idToken: string) => {
-    //     return fetch(`${erzahler.url}:${erzahler.port}/find-games`, {
-    //       headers: {
-    //         idToken: idToken
-    //       }
-    //     })
-    //     .then((response: any) => {
-    //       console.log('Found games response:', response);
-    //       return response.json();
-    //     })
-    //     .then((games: any) => {
-    //       console.log('games', games);
-    //       return games;
-    //     })
-    //     .catch((error: Error) => {
-    //       console.log('Find Games Body Error: ' + error.message);
-    //     });
-    //   });
-    // } else {
-    //     return fetch(`${erzahler.url}:${erzahler.port}/find-games`, {
-    //       headers: {
-    //         idToken: ''
-    //       }
-    //     })
-    //     .then((response: any) => {
-    //       console.log('Found games response:', response);
-    //       return response.json();
-    //     })
-    //     .then((games: any) => {
-    //       console.log('games', games);
-    //       return games;
-    //     })
-    //     .catch((error: Error) => {
-    //       console.log('Find Games Body Error: ' + error.message);
-    //     });
-    // }
   });
 
   useEffect(() => {

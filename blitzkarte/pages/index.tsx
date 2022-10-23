@@ -1,17 +1,20 @@
 import { getAuth } from 'firebase/auth'
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import { useContext } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import StallGlobe from '../components/icons/StallGlobe'
 import IndexBody from '../components/index-page/IndexBody'
 import { NavBarSignedIn } from '../components/nav-bar/NavBarSignedIn'
 import { NavBarSignedOut } from '../components/nav-bar/NavBarSignedOut'
 import styles from '../styles/Home.module.css'
+import Blitzkontext from '../utils/Blitzkontext'
 
 const Home: NextPage = () => {
   // className={styles.container}
   const auth = getAuth();
   const [user, loading, error] = useAuthState(auth);
+  const bkCtx = useContext(Blitzkontext);
 
   if (loading) {
     return (
@@ -30,6 +33,7 @@ const Home: NextPage = () => {
 
   // Signed in
   if (user) {
+    bkCtx.user.user = user;
     return (
       <div>
         <Head>

@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import Blitzkontext from '../../utils/Blitzkontext';
 import { erzahler } from '../../utils/general/erzahler';
 import { SchedulerService } from '../../services/scheduler-service';
+import { GameRequestService } from '../../services/request-services/game-request-service';
 
 interface InputProps {
   input: any;
@@ -15,6 +16,7 @@ interface InputProps {
 }
 
 export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
+  const gameRequestService = new GameRequestService();
   const [gameName, setGameName] = useState('');
   const [gameNameAvailable, setGameNameAvailable] = useState(true);
   const [deadlineType, setDeadlineType] = useState('weekly');
@@ -212,21 +214,7 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
       gameName = '-';
     }
 
-    return fetch(`${erzahler.url}:${erzahler.port}/check-game-name/${gameName}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    .then((result: any) => {
-      return result.json();
-    })
-    .then((available: any) => {
-      return available;
-    })
-    .catch((error: Error) => {
-      console.log('Error checking game name availability:', error.message);
-    });
+    return gameRequestService.checkAvailability(gameName);
   }
 
   const handleGameStartChange = (date: Date | null) => {

@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useContext } from "react";
 import { erzahler } from "../../utils/general/erzahler";
 import { User } from "firebase/auth";
 import { useQuery } from "react-query";
@@ -7,28 +7,20 @@ import { NavBarSignedIn } from "../nav-bar/NavBarSignedIn";
 import { useRouter } from "next/router";
 import styles from '../../styles/Home.module.css'
 import { NavBarSignedOut } from "../nav-bar/NavBarSignedOut";
+import Blitzkontext from "../../utils/Blitzkontext";
+import { UserRequestService } from "../../services/request-services/user-request-service";
 
 interface IndexBodyProps {
   user: User | null;
 }
 
 const IndexBody: FC<IndexBodyProps> = ({user}: IndexBodyProps) => {
+  const userCtx = useContext(Blitzkontext).user.user;
+  const userRequestService = new UserRequestService();
   const router = useRouter();
 
   const { isLoading, error, data, isFetching } = useQuery('userProfile', () => {
-    return user?.getIdToken().then((idToken: string) => {
-      return fetch(`${erzahler.url}:${erzahler.port}/get-user-profile/${idToken}`)
-        .then((response) => {
-          return response.json();
-        }).then((data) => {
-          console.log('User:', user);
-          console.log(`Data:`, data);
-          return data;
-        })
-        .catch((error: Error) => {
-          router.push('/');
-        });
-    });
+    return userRequestService.getUserProfile();
   });
 
   if (isFetching) {

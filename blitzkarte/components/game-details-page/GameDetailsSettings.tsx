@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { FC, useState, useContext, useEffect } from "react";
 import { GameStatus } from "../../models/enumeration/game-status-enum";
 import { GameDataObject } from "../../models/GameDataObject";
+import { GameRequestService } from "../../services/request-services/game-request-service";
 import { SchedulerService } from "../../services/scheduler-service";
 import Blitzkontext from "../../utils/Blitzkontext";
 import { erzahler } from "../../utils/general/erzahler";
@@ -17,6 +18,7 @@ interface GameDetailsSettingsProps {
 }
 
 export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: GameDetailsSettingsProps) => {
+  const gameRequestService = new GameRequestService();
   const router = useRouter();
   const [gameName, setGameName] = useState(gameData.gameName);
   const [gameNameAvailable, setGameNameAvailable] = useState(true);
@@ -221,21 +223,7 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
       gameName = '-';
     }
 
-    return fetch(`${erzahler.url}:${erzahler.port}/check-game-name/${gameName}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    .then((result: any) => {
-      return result.json();
-    })
-    .then((available: any) => {
-      return available;
-    })
-    .catch((error: Error) => {
-      console.log('Error checking game name availability:', error.message);
-    });
+    return gameRequestService.checkAvailability(gameName);
   }
 
   const handleGameStartChange = (date: Date | null) => {
@@ -253,8 +241,8 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
   const handleUpdateGameClick = (): void => {
     const idToken: Promise<string> | undefined = bkCtx.user.user?.getIdToken();
     idToken?.then((token: any) => {
-      const gameData = {
-        gameId: bkCtx.currentGame.id,
+      const updateData = {
+        gameId: gameData.gameId,
         gameName: gameName,
         assignmentMethod: 'manual',
         stylizedStartYear: stylizedStartYear,
@@ -304,30 +292,44 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
         dbRows: bkCtx.newGame.dbRows
       };
 
-      fetch(`${erzahler.url}:${erzahler.port}/update-game`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          idToken: token
-        },
-        body: JSON.stringify({
-          gameData: gameData,
-          idToken: token
+      gameRequestService.update(updateData)
+        .then((result: any) => {
+          console.log('Chained .then result:', result);
+          if (result.success) {
+            router.reload();
+          } else {
+            // result.errors.forEach((error: string) => console.log(error));
+          }
         })
-      })
-      .then((response: any) => {
-        return response.json();
-      })
-      .then((result: any) => {
-        if (result.success) {
-          router.reload();
-        } else {
-          result.errors.forEach((error: string) => console.log(error));
-        }
-      })
-      .catch((error: Error) => {
-        console.log('Update Game Error: ' + error.message);
-      });
+        .catch((error: Error) => {
+          console.log('Update Game Error: ' + error.message);
+        });
+
+
+      // fetch(`${erzahler.url}:${erzahler.port}/update-game`, {
+      //   method: 'PUT',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     idToken: token
+      //   },
+      //   body: JSON.stringify({
+      //     gameData: gameData,
+      //     idToken: token
+      //   })
+      // })
+      // .then((response: any) => {
+      //   return response.json();
+      // })
+      // .then((result: any) => {
+      //   if (result.success) {
+      //     router.reload();
+      //   } else {
+      //     result.errors.forEach((error: string) => console.log(error));
+      //   }
+      // })
+      // .catch((error: Error) => {
+      //   console.log('Update Game Error: ' + error.message);
+      // });
     });
   }
 

@@ -118,7 +118,7 @@ const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBo
   }
 
   if (data) {
-    console.log('User in data:', user);
+    // console.log('User in data:', user);
     return (
       <Grid container spacing={1}>
         <Grid item xs={12}>
