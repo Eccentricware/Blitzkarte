@@ -9,10 +9,10 @@ export class UserRequestService extends AbstractRequestService {
   }
 
   async getUserProfile() {
-    return this.get('get-user-profile');
+    return this.get('user/profile');
   }
 
   async saveProfileChange(payload: any) {
-    this.put('update-user-settings', payload);
+    this.put('user/update-settings', payload);
   }
 }

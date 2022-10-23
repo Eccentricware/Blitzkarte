@@ -51,7 +51,7 @@ export class FirebaseService {
   }
 
   async addUserToDatabase(idToken: string, username: string): Promise<any> {
-    return fetch(`${erzahler.url}:${erzahler.port}/register-user`, {
+    return fetch(`${erzahler.url}:${erzahler.port}/user/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -256,7 +256,7 @@ export class FirebaseService {
   }
 
   async postProvider(idToken: string, username: string) {
-    return fetch(`${erzahler.url}:${erzahler.port}/add-provider`, {
+    return fetch(`${erzahler.url}:${erzahler.port}/user/add-provider`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -273,7 +273,7 @@ export class FirebaseService {
 
   // Guest function. It's not "really" firebase
   checkUsername = (username: string): any => {
-    return fetch(`${erzahler.url}:${erzahler.port}/check-username/${username}`, {
+    return fetch(`${erzahler.url}:${erzahler.port}/user/check-username/${username}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -302,29 +302,6 @@ export class FirebaseService {
           error: error.message
         };
       });
-
-    return fetch(`${erzahler.url}:${erzahler.port}/get-user-profile/${idToken}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    .then((result: any) => {
-      return result.json();
-    })
-    .then((profile: any) => {
-      console.log('profile', profile);
-      if (profile.username) {
-        return { hasUsername: true };
-      }
-      return { hasUsername: false };
-    })
-    .catch((error: Error) => {
-      return {
-        hasUsername: false,
-        error: error.message
-      };
-    });
   }
 
   resendEmailVerification = () => {

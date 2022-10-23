@@ -284,7 +284,7 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
           dbRows: bkCtx.newGame.dbRows
         };
 
-        fetch(`${erzahler.url}:${erzahler.port}/new-game`, {
+        fetch(`${erzahler.url}:${erzahler.port}/games/create`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Select, SelectChangeEvent, MenuItem } from "@mui/material";
 
-import { SchedulerService } from "../../services/scheduler-service";
+import { SchedulerService } from "../services/scheduler-service";
 import { getTimeZones, TimeZone } from "@vvo/tzdb";
 
 interface TimeZoneSelectorProps {
