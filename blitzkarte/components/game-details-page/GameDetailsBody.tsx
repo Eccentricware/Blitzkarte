@@ -24,7 +24,7 @@ const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBo
 
     if (user) {
       return user.getIdToken().then((idToken: string) => {
-        return fetch(`${erzahler.url}:${erzahler.port}/game-details/${gameId}`, {
+        return fetch(`${erzahler.url}:${erzahler.port}/games/details/${gameId}`, {
           headers: {
             idtoken: idToken
           }
@@ -42,7 +42,7 @@ const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBo
         });
       });
     } else {
-      return fetch(`${erzahler.url}:${erzahler.port}/game-details/${gameId}`, {
+      return fetch(`${erzahler.url}:${erzahler.port}/games/details/${gameId}`, {
         headers: {
           idtoken: ''
         }

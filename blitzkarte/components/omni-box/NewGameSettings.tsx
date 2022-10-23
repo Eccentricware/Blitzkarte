@@ -1,7 +1,7 @@
 import { FormGroup, FormControlLabel, Switch, Select, SelectChangeEvent, MenuItem, TextField, Slider, Menu } from '@mui/material';
 import { Settings } from 'http2';
 import { FC } from 'react';
-import { TimeZoneSelector } from '../game-details-page/TimeZoneSelector';
+import { TimeZoneSelector } from '../TimeZoneSelector';
 
 interface NewGameSettingsProps {
   settings: any;

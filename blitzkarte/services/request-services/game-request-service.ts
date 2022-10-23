@@ -7,16 +7,15 @@ export class GameRequestService extends AbstractRequestService {
   }
 
   async getGames(): Promise<any> {
-    return this.get('find-games');
+    return this.get('games/search');
   }
 
   async checkAvailability(gameName: string): Promise<any> {
-    return this.get(`check-game-name/${gameName}`);
+    return this.get(`games/check-game-name/${gameName}`);
   }
 
   async update(gameData: any): Promise<any> {
-    console.log('gameRequest gameData:', gameData);
-    return this.put('update-game', {
+    return this.put('games/update', {
       gameData: gameData
     });
   }

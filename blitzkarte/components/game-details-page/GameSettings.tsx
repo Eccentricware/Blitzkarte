@@ -1,7 +1,7 @@
 import { FormGroup, FormControlLabel, Switch, Select, SelectChangeEvent, MenuItem, TextField, Slider, Menu } from '@mui/material';
 import { FC } from 'react';
 import { GameStatus } from '../../models/enumeration/game-status-enum';
-import { TimeZoneSelector } from './TimeZoneSelector';
+import { TimeZoneSelector } from '../TimeZoneSelector';
 
 interface GameSettingsProps {
   settings: any;
@@ -253,7 +253,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
           }
         />
       </FormGroup>
-      <FormGroup> 
+      <FormGroup>
         <FormControlLabel
           label="Partial Roster Start"
           labelPlacement="start"

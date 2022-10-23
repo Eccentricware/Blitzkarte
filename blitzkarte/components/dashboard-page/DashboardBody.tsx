@@ -11,7 +11,7 @@ import { deadlineTimer } from '../../utils/general/time-time-charm';
 import StallGlobe from '../icons/StallGlobe';
 import { NavBarSignedIn } from '../nav-bar/NavBarSignedIn';
 import { CredentialValidator } from '../../utils/general/credentialValidator';
-import { TimeZoneSelector } from '../game-details-page/TimeZoneSelector';
+import { TimeZoneSelector } from '../TimeZoneSelector';
 import { GameStatus } from '../../models/enumeration/game-status-enum';
 import { UserRequestService } from '../../services/request-services/user-request-service';
 
