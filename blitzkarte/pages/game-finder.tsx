@@ -13,7 +13,6 @@ const GameFinder: NextPage = () => {
   const auth = getAuth();
   const [user, loading, error] = useAuthState(auth);
   const bkCtx = useContext(Blitzkontext);
-  console.log('user', user);
 
   if (loading) {
     return(

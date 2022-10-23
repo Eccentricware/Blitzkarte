@@ -18,6 +18,7 @@ import {
   updateEmail
 } from "firebase/auth";
 import router from "next/router";
+import { UserRequestService } from "../../services/request-services/user-request-service";
 import { erzahler } from "../general/erzahler";
 
 export const firebaseConfig = {
@@ -37,6 +38,7 @@ export class FirebaseService {
 
   firebaseApp = initializeApp(firebaseConfig);
   auth = getAuth(this.firebaseApp);
+  userRequestService = new UserRequestService();
 
   verifyUser() {
     onAuthStateChanged(this.auth, (user: User | null) => {
@@ -61,7 +63,6 @@ export class FirebaseService {
     }).then((response: any) => {
       return response.json();
     }).then((addResult: any) => {
-      console.log('User Added to database!', addResult);
       return addResult;
     }).catch((error: Error) => {
       console.log('Add user confirmation failure', error.message);
@@ -287,6 +288,21 @@ export class FirebaseService {
   }
 
   hasUsername = (idToken: string): any => {
+    return this.userRequestService.getUserProfile()
+      .then((profile: any) => {
+        console.log('profile', profile);
+        if (profile.username) {
+          return { hasUsername: true };
+        }
+        return { hasUsername: false };
+      })
+      .catch((error: Error) => {
+        return {
+          hasUsername: false,
+          error: error.message
+        };
+      });
+
     return fetch(`${erzahler.url}:${erzahler.port}/get-user-profile/${idToken}`, {
       method: 'GET',
       headers: {

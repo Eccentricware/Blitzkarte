@@ -7,10 +7,13 @@ import DashboardBody from "../components/dashboard-page/DashboardBody";
 import { getAuth } from "firebase/auth";
 import { NavBarSignedOut } from "../components/nav-bar/NavBarSignedOut";
 import StallGlobe from "../components/icons/StallGlobe";
+import { useContext } from "react";
+import Blitzkontext from "../utils/Blitzkontext";
 
 const DashboardPage: NextPage = () => {
   const auth = getAuth();
   const [user, loading, error] = useAuthState(auth);
+  const bkCtx = useContext(Blitzkontext);
 
   const router = useRouter();
 
@@ -30,6 +33,7 @@ const DashboardPage: NextPage = () => {
   }
 
   if (user) {
+    bkCtx.user.user = user;
     return (
       <div>
         <Head>

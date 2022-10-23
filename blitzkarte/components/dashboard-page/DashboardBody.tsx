@@ -13,14 +13,16 @@ import { NavBarSignedIn } from '../nav-bar/NavBarSignedIn';
 import { CredentialValidator } from '../../utils/general/credentialValidator';
 import { TimeZoneSelector } from '../game-details-page/TimeZoneSelector';
 import { GameStatus } from '../../models/enumeration/game-status-enum';
+import { UserRequestService } from '../../services/request-services/user-request-service';
 
 interface DashboardBodyProps {
   user: User | null;
 }
 
 const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
-  const firebaseCtx = useContext(Blitzkontext).user;
+  const userCtx = useContext(Blitzkontext).user;
   const firebaseService = new FirebaseService();
+  const userRequestService = new UserRequestService();
 
   const [showLoginCredentials, setShowLoginCredentials] = useState(true);
   const [presentAddEmail, setPresentAddEmail] = useState(false);
@@ -45,21 +47,7 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
   const router = useRouter();
 
   const { isLoading, error, data, isFetching } = useQuery('userProfile', () => {
-    return user?.getIdToken().then((idToken: string) => {
-      return fetch(`${erzahler.url}:${erzahler.port}/get-user-profile/${idToken}`)
-        .then((response) => {
-          console.log('Dashboard body response:', response);
-          return response.json();
-        }).then((result) => {
-          console.log('Dashboard Body Result:', result);
-          result.idToken = idToken;
-          return result;
-        })
-        .catch((error: Error) => {
-          console.log('Dashboard Body Error:', error.message);
-          router.push('/');
-        });
-      });
+    return userRequestService.getUserProfile();
   });
 
   const timeZoneOps = {
@@ -87,16 +75,9 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
   }, [data, user]);
 
   const saveProfileChanges = () => {
-    fetch(`${erzahler.url}:${erzahler.port}/update-user-settings`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        idToken: data.idToken
-      },
-      body: JSON.stringify({
-        timeZone: timeZone,
-        meridiemTime: meridiemTime
-      })
+    userRequestService.saveProfileChange({
+      timeZone: timeZone,
+      meridiemTime: meridiemTime
     });
   }
 
@@ -167,7 +148,7 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
   };
 
   const handleAddEmailProviderSubmitClick = () => {
-    if (firebaseCtx.auth && newEmailValid && password1Valid && password2Valid) {
+    if (userCtx.auth && newEmailValid && password1Valid && password2Valid) {
       firebaseService.addEmailProvider(newEmail, password1, data.username)
         .then((result: any) => {
           console.log('Add email provider result:', result);
@@ -210,8 +191,8 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
   }
 
   if (data) {
-    console.log('user', user);
-    console.log('data', data);
+    // console.log('user', user);
+    // console.log('data', data);
     return (
       <div>
         <NavBarSignedIn title={`User Dashboard`} />
