@@ -31,7 +31,7 @@ const GameFinder: NextPage = () => {
   }
 
   if (user) {
-    // bkCtx.user.user = user;
+    bkCtx.user.user = user;
     return (
       <div>
         <Head>

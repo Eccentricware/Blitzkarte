@@ -1,8 +1,11 @@
 import { Grid } from "@mui/material";
 import { User } from "firebase/auth"
-import { FC, useEffect, useState } from "react"
+import { FC, useContext, useEffect, useState } from "react"
 import { useQuery } from "react-query";
 import { FindGameParametersObject } from "../../models/FindGameParametersObject";
+import { AbstractRequestService } from "../../services/request-services/abstract-request-service";
+import { GameRequestService } from "../../services/request-services/game-request-service";
+import Blitzkontext from "../../utils/Blitzkontext";
 import { erzahler } from "../../utils/general/erzahler";
 import StallGlobe from "../icons/StallGlobe";
 import { GameFinderControls } from "./GameFinderControls";
@@ -14,45 +17,47 @@ interface GameFinderBodyProps {
 
 export const GameFinderBody: FC<GameFinderBodyProps> = ({user}: GameFinderBodyProps) => {
   const [games, setGames] = useState([]);
+  const gameRequestService = new GameRequestService();
 
   const { isLoading, error, data, isFetching } = useQuery('getGames', () => {
-    if (user) {
-      return user.getIdToken().then((idToken: string) => {
-        return fetch(`${erzahler.url}:${erzahler.port}/find-games`, {
-          headers: {
-            idToken: idToken
-          }
-        })
-        .then((response: any) => {
-          console.log('Found games response:', response);
-          return response.json();
-        })
-        .then((games: any) => {
-          console.log('games', games);
-          return games;
-        })
-        .catch((error: Error) => {
-          console.log('Find Games Body Error: ' + error.message);
-        });
-      });
-    } else {
-        return fetch(`${erzahler.url}:${erzahler.port}/find-games`, {
-          headers: {
-            idToken: ''
-          }
-        })
-        .then((response: any) => {
-          console.log('Found games response:', response);
-          return response.json();
-        })
-        .then((games: any) => {
-          console.log('games', games);
-          return games;
-        })
-        .catch((error: Error) => {
-          console.log('Find Games Body Error: ' + error.message);
-        });
-    }
+    return gameRequestService.getGames();
+    // if (user) {
+    //   return user.getIdToken().then((idToken: string) => {
+    //     return fetch(`${erzahler.url}:${erzahler.port}/find-games`, {
+    //       headers: {
+    //         idToken: idToken
+    //       }
+    //     })
+    //     .then((response: any) => {
+    //       console.log('Found games response:', response);
+    //       return response.json();
+    //     })
+    //     .then((games: any) => {
+    //       console.log('games', games);
+    //       return games;
+    //     })
+    //     .catch((error: Error) => {
+    //       console.log('Find Games Body Error: ' + error.message);
+    //     });
+    //   });
+    // } else {
+    //     return fetch(`${erzahler.url}:${erzahler.port}/find-games`, {
+    //       headers: {
+    //         idToken: ''
+    //       }
+    //     })
+    //     .then((response: any) => {
+    //       console.log('Found games response:', response);
+    //       return response.json();
+    //     })
+    //     .then((games: any) => {
+    //       console.log('games', games);
+    //       return games;
+    //     })
+    //     .catch((error: Error) => {
+    //       console.log('Find Games Body Error: ' + error.message);
+    //     });
+    // }
   });
 
   useEffect(() => {
