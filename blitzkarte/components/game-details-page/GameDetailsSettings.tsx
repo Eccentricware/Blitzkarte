@@ -24,6 +24,7 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
   const [gameNameAvailable, setGameNameAvailable] = useState(true);
   const [deadlineType, setDeadlineType] = useState(gameData.deadlineType);
   const [timeZone, setTimeZone] = useState(gameData.gameTimeZone);
+  const [meridiemTime, setMeridiemTime] = useState(gameData.meridiemTime);
   const [observeDst, setObserveDst] = useState(gameData.observeDst);
   const [gameStart, setGameStart] = useState<Date | null>(new Date());
   const [firstTurnDeadline, setFirstTurnDeadline] = useState<Date | null>(new Date());
