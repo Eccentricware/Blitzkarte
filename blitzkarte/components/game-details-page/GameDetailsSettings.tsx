@@ -23,7 +23,6 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
   const [gameName, setGameName] = useState(gameData.gameName);
   const [gameNameAvailable, setGameNameAvailable] = useState(true);
   const [deadlineType, setDeadlineType] = useState(gameData.deadlineType);
-  const [timeZone, setTimeZone] = useState(gameData.gameTimeZone);
   const [meridiemTime, setMeridiemTime] = useState(gameData.meridiemTime);
   const [observeDst, setObserveDst] = useState(gameData.observeDst);
   const [gameStart, setGameStart] = useState<Date | null>(new Date());
@@ -165,8 +164,6 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
   const settings: any = {
     stylizedStartYear: stylizedStartYear,
     setStylizedStartYear: setStylizedStartYear,
-    timeZone: timeZone,
-    setTimeZone: setTimeZone,
     observeDst: observeDst,
     setObserveDst: setObserveDst,
     turn1Timing: turn1Timing,
@@ -248,7 +245,6 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameData}: Ga
         assignmentMethod: 'manual',
         stylizedStartYear: stylizedStartYear,
         deadlineType: deadlineType,
-        timeZone: timeZone,
         observeDst: observeDst,
         gameStart: gameStart,
         firstTurnDeadline: firstTurnDeadline,
