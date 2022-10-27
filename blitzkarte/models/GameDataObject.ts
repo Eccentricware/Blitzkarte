@@ -14,8 +14,6 @@ export interface GameDataObject {
   gameId: number;
   gameName: string;
   gameStatus: string;
-  gameTimeZone: string;
-  userTimeZone: string;
   meridiemTime: boolean;
   hiddenGame: boolean;
   nmrToleranceAdjustments: boolean | null;

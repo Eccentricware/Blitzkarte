@@ -20,7 +20,6 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
   const [gameName, setGameName] = useState('');
   const [gameNameAvailable, setGameNameAvailable] = useState(true);
   const [deadlineType, setDeadlineType] = useState('weekly');
-  const [timeZone, setTimeZone] = useState('America/Los_Angeles');
   const [observeDst, setObserveDst] = useState(true);
   const [gameStart, setGameStart] = useState<Date | null>(new Date());
   const [firstTurnDeadline, setFirstTurnDeadline] = useState<Date | null>(new Date());
@@ -153,8 +152,6 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
   const settings: any = {
     stylizedStartYear: stylizedStartYear,
     setStylizedStartYear: setStylizedStartYear,
-    timeZone: timeZone,
-    setTimeZone: setTimeZone,
     observeDst: observeDst,
     setObserveDst: setObserveDst,
     turn1Timing: turn1Timing,
@@ -239,7 +236,6 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
           assignmentMethod: 'manual',
           stylizedStartYear: stylizedStartYear,
           deadlineType: deadlineType,
-          timeZone: timeZone,
           observeDst: observeDst,
           gameStart: gameStart,
           firstTurnDeadline: firstTurnDeadline,

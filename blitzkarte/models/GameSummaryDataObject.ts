@@ -14,7 +14,6 @@ export interface GameSummaryObject {
   gameId: number;
   gameName: string;
   gameStatus: string;
-  gameTimeZone: number;
   hiddenGame: boolean;
   nmrToleranceAdjustments: boolean | null;
   nmrToleranceOrders: boolean | null;
