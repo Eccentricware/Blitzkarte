@@ -1,4 +1,3 @@
-import { User } from "firebase/auth";
 import { AbstractRequestService } from "./abstract-request-service";
 
 export class GameRequestService extends AbstractRequestService {
