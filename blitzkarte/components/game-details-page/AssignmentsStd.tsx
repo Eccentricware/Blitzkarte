@@ -1,11 +1,15 @@
 import { Button } from "@mui/material";
-import { FC, useState } from "react";
+import { FC, useContext, useState } from "react";
+import { AssignmentService } from "../../services/assignment-service";
+import Blitzkontext from "../../utils/Blitzkontext";
 
 interface AssignmentsStdProps {
   registrationTypes: any;
 }
 
 export const AssignmentsStd: FC<AssignmentsStdProps> = ({registrationTypes}: AssignmentsStdProps) => {
+  const assignmentService = new AssignmentService();
+  const gameId = Number(useContext(Blitzkontext).currentGame.id);
   const checkRegistrationType = (targetType: string): boolean => {
     const filtered = registrationTypes.filter((registrationType: string) => {
       targetType === registrationType
@@ -18,10 +22,16 @@ export const AssignmentsStd: FC<AssignmentsStdProps> = ({registrationTypes}: Ass
   const [registeredAsSpectator, setRegisteredAsSpectator] = useState(checkRegistrationType('Spectator'));
   const [registeredAsAdministrator, setRegisteredAsAdministrator] = useState(checkRegistrationType('Administrator'));
 
+  const handleRegisterAsPlayerClick = () => {
+    assignmentService.registerAsPlayer(gameId);
+  }
+
   return (
     <div>
-      Harry! You're registered as a<br/>
-      Player: {
+      This game is hasn't started. Registration is open to all players!
+      <br/>
+      Enter the Fray: <br/>
+      {
         registeredAsPlayer
         ? <Button
             color="inherit"
@@ -32,11 +42,13 @@ export const AssignmentsStd: FC<AssignmentsStdProps> = ({registrationTypes}: Ass
         : <Button
             color="inherit"
             variant="contained"
+            onClick={handleRegisterAsPlayerClick}
           >
-            Sign Up
+            Register As Player
           </Button>
       } <br/>
-      Reserve: {
+
+      {
         registeredAsReserve
         ? <Button
             color="inherit"
@@ -48,10 +60,11 @@ export const AssignmentsStd: FC<AssignmentsStdProps> = ({registrationTypes}: Ass
             color="inherit"
             variant="contained"
           >
-            Join Reserve
+            Join Reserve Pool
           </Button>
       } <br/>
-      Spectator: {
+      Spectator:
+      {
         registeredAsSpectator
         ? <Button
             color="inherit"
@@ -64,21 +77,6 @@ export const AssignmentsStd: FC<AssignmentsStdProps> = ({registrationTypes}: Ass
             variant="contained"
           >
             Spectate
-          </Button>
-      } <br/>
-      Admin: {
-        registeredAsAdministrator
-        ? <Button
-            color="inherit"
-            variant="contained"
-          >
-            Stop Administration
-          </Button>
-        : <Button
-            color="inherit"
-            variant="contained"
-          >
-            Request Admin
           </Button>
       } <br/>
     </div>
