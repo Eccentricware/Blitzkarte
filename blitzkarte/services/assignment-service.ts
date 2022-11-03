@@ -6,4 +6,8 @@ export class AssignmentService {
   registerUser(gameId: number, assignmentType: string) {
     this.assignmentRequestService.registerUser(gameId, assignmentType);
   }
+
+  unregisterUser(gameId: number, assignmentType: string) {
+    this.assignmentRequestService.unregisterUser(gameId, assignmentType);
+  }
 }
