@@ -10,9 +10,10 @@ interface AssignmentsStdProps {
 export const AssignmentsStd: FC<AssignmentsStdProps> = ({registrationTypes}: AssignmentsStdProps) => {
   const assignmentService = new AssignmentService();
   const gameId = Number(useContext(Blitzkontext).currentGame.id);
+
   const checkRegistrationType = (targetType: string): boolean => {
-    const filtered = registrationTypes.filter((registrationType: string) => {
-      targetType === registrationType
+    const filtered = registrationTypes.filter((registrationType: any) => {
+      return targetType === registrationType.assignmentType
     });
     return filtered.length > 0;
   }
@@ -21,8 +22,28 @@ export const AssignmentsStd: FC<AssignmentsStdProps> = ({registrationTypes}: Ass
   const [registeredAsReserve, setRegisteredAsReserve] = useState(checkRegistrationType('Reserve'));
   const [registeredAsSpectator, setRegisteredAsSpectator] = useState(checkRegistrationType('Spectator'));
 
+  const registrationStates = {
+    player: registeredAsPlayer,
+    reserve: registeredAsReserve,
+    spectator: registeredAsSpectator
+  };
+
+  const registrationToggleFunctions = {
+    player: setRegisteredAsPlayer,
+    reserve: setRegisteredAsReserve,
+    spectator: setRegisteredAsSpectator
+  }
+
   const handleRegisterUserClick = (assignmentType: string) => {
     assignmentService.registerUser(gameId, assignmentType);
+    const toggleFunction = registrationToggleFunctions[assignmentType.toLowerCase()];
+    toggleFunction(!registrationStates[assignmentType.toLowerCase()]);
+  }
+
+  const handleUnregisterUserClick = (assignmentType: string) => {
+    assignmentService.unregisterUser(gameId, assignmentType);
+    const toggleFunction = registrationToggleFunctions[assignmentType.toLowerCase()];
+    toggleFunction(!registrationStates[assignmentType.toLowerCase()]);
   }
 
   return (
@@ -35,13 +56,14 @@ export const AssignmentsStd: FC<AssignmentsStdProps> = ({registrationTypes}: Ass
         ? <Button
             color="inherit"
             variant="contained"
+            onClick={() => { handleUnregisterUserClick('Player'); }}
           >
             Leave Game
           </Button>
         : <Button
             color="inherit"
             variant="contained"
-            onClick={() => {handleRegisterUserClick('Player')}}
+            onClick={() => {handleRegisterUserClick('Player'); }}
           >
             Register As Player
           </Button>
@@ -52,13 +74,14 @@ export const AssignmentsStd: FC<AssignmentsStdProps> = ({registrationTypes}: Ass
         ? <Button
             color="inherit"
             variant="contained"
+            onClick={() => { handleUnregisterUserClick('Reserve'); }}
           >
             Leave Reserve
           </Button>
         : <Button
             color="inherit"
             variant="contained"
-            onClick={() => {handleRegisterUserClick('Reserve')}}
+            onClick={() => {handleRegisterUserClick('Reserve'); }}
           >
             Join Reserve Pool
           </Button>
@@ -69,13 +92,14 @@ export const AssignmentsStd: FC<AssignmentsStdProps> = ({registrationTypes}: Ass
         ? <Button
             color="inherit"
             variant="contained"
+            onClick={() => { handleUnregisterUserClick('Spectator'); }}
           >
             Stop Watching
           </Button>
         : <Button
             color="inherit"
             variant="contained"
-            onClick={() => {handleRegisterUserClick('Spectator')}}
+            onClick={() => {handleRegisterUserClick('Spectator'); }}
           >
             Spectate
           </Button>

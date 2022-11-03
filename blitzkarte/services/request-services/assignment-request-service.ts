@@ -11,4 +11,11 @@ export class AssignmentRequestService extends AbstractRequestService {
       assignmentType: assignmentType
     });
   };
+
+  async unregisterUser(gameId: number, assignmentType: string) {
+    return this.post(`assignments/unregister/`, {
+      gameId: gameId,
+      assignmentType: assignmentType
+    });
+  };
 }
