@@ -5,10 +5,10 @@ export class AssignmentRequestService extends AbstractRequestService {
     super();
   }
 
-  async registerAsPlayer(gameId: number) {
+  async registerUser(gameId: number, assignmentType: string) {
     return this.post(`assignments/register/`, {
       gameId: gameId,
-      assignmentType: 'Player'
+      assignmentType: assignmentType
     });
   };
 }

@@ -3,7 +3,7 @@ import { AssignmentRequestService } from "./request-services/assignment-request-
 export class AssignmentService {
   assignmentRequestService: AssignmentRequestService = new AssignmentRequestService();
 
-  registerAsPlayer(gameId: number) {
-    this.assignmentRequestService.registerAsPlayer(gameId);
+  registerUser(gameId: number, assignmentType: string) {
+    this.assignmentRequestService.registerUser(gameId, assignmentType);
   }
 }

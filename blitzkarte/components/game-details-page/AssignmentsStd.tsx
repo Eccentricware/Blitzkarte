@@ -20,10 +20,9 @@ export const AssignmentsStd: FC<AssignmentsStdProps> = ({registrationTypes}: Ass
   const [registeredAsPlayer, setRegisteredAsPlayer] = useState(checkRegistrationType('Player'));
   const [registeredAsReserve, setRegisteredAsReserve] = useState(checkRegistrationType('Reserve'));
   const [registeredAsSpectator, setRegisteredAsSpectator] = useState(checkRegistrationType('Spectator'));
-  const [registeredAsAdministrator, setRegisteredAsAdministrator] = useState(checkRegistrationType('Administrator'));
 
-  const handleRegisterAsPlayerClick = () => {
-    assignmentService.registerAsPlayer(gameId);
+  const handleRegisterUserClick = (assignmentType: string) => {
+    assignmentService.registerUser(gameId, assignmentType);
   }
 
   return (
@@ -42,7 +41,7 @@ export const AssignmentsStd: FC<AssignmentsStdProps> = ({registrationTypes}: Ass
         : <Button
             color="inherit"
             variant="contained"
-            onClick={handleRegisterAsPlayerClick}
+            onClick={() => {handleRegisterUserClick('Player')}}
           >
             Register As Player
           </Button>
@@ -59,6 +58,7 @@ export const AssignmentsStd: FC<AssignmentsStdProps> = ({registrationTypes}: Ass
         : <Button
             color="inherit"
             variant="contained"
+            onClick={() => {handleRegisterUserClick('Reserve')}}
           >
             Join Reserve Pool
           </Button>
@@ -75,6 +75,7 @@ export const AssignmentsStd: FC<AssignmentsStdProps> = ({registrationTypes}: Ass
         : <Button
             color="inherit"
             variant="contained"
+            onClick={() => {handleRegisterUserClick('Spectator')}}
           >
             Spectate
           </Button>
