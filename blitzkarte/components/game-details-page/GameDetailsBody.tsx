@@ -2,6 +2,7 @@ import { Grid } from "@mui/material";
 import { User } from "firebase/auth";
 import { FC, useEffect, useState } from "react";
 import { useQuery } from "react-query";
+import { GameRequestService } from "../../services/request-services/game-request-service";
 import { erzahler } from "../../utils/general/erzahler";
 import StallGlobe from "../icons/StallGlobe";
 import { AssignmentsAdm } from "./AssignmentsAdm";
@@ -13,52 +14,17 @@ interface GameDetailsBodyProps {
   gameId: number | undefined;
 }
 
-const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBodyProps) => {
+const GameDetailsBody: FC<GameDetailsBodyProps> = ({gameId}: GameDetailsBodyProps) => {
+  const gameRequestService = new GameRequestService();
   const [gameName, setGameName] = useState('');
   const [gameNameAvailable, setGameNameAvailable] = useState(true);
 
   const { isLoading, error, data, isFetching } = useQuery('getGameData', () => {
     if (!gameId) {
-      gameId = 1;
+      gameId = 7;
     }
 
-    if (user) {
-      return user.getIdToken().then((idToken: string) => {
-        return fetch(`${erzahler.url}:${erzahler.port}/games/details/${gameId}`, {
-          headers: {
-            idtoken: idToken
-          }
-        })
-        .then((response: any) => {
-          console.log('Game Details Body Response:', response);
-          return response.json();
-        })
-        .then((gameData: any) => {
-          console.log('gameData:', gameData);
-          return gameData;
-        })
-        .catch((error: Error) => {
-          console.log('Game Details Body Error: ' + error.message);
-        });
-      });
-    } else {
-      return fetch(`${erzahler.url}:${erzahler.port}/games/details/${gameId}`, {
-        headers: {
-          idtoken: ''
-        }
-      })
-      .then((response: any) => {
-        console.log('Game Details Body Response:', response);
-        return response.json();
-      })
-      .then((gameData: any) => {
-        console.log('gameData:', gameData);
-        return gameData;
-      })
-      .catch((error: Error) => {
-        console.log('Game Details Body Error: ' + error.message);
-      });
-    }
+    return gameRequestService.getGameDetails(gameId);
   });
 
   useEffect(() => {
@@ -124,14 +90,14 @@ const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBo
         <Grid item xs={12}>
           Banner?
         </Grid>
-        <Grid item xs={12} sm={8}>
+        <Grid item xs={12} sm={5}>
           <GameDetailsSettings gameData={data}/>
         </Grid>
-        <Grid item xs={12} sm={4}>
+        <Grid item xs={12} sm={7}>
           {
-            data.displayAsAdmin ?
-            <AssignmentsAdm assignmentData={data}/> :
-            <AssignmentsStd registrationTypes={data.playerRegistration}/>
+            data.displayAsAdmin
+            ? <AssignmentsAdm assignmentData={data}/>
+            : <AssignmentsStd registrationTypes={data.playerRegistration}/>
           }
         </Grid>
         {/* <Grid item xs={12} sm={4}>Chat</Grid> */}

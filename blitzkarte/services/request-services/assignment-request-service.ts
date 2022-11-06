@@ -5,6 +5,10 @@ export class AssignmentRequestService extends AbstractRequestService {
     super();
   }
 
+  async getAssignmentData(gameId: number): Promise<any> {
+    return this.get(`assignments/${gameId}`);
+  }
+
   async registerUser(gameId: number, assignmentType: string) {
     return this.post(`assignments/register/`, {
       gameId: gameId,
