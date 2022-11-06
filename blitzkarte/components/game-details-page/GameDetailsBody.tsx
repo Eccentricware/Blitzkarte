@@ -14,7 +14,7 @@ interface GameDetailsBodyProps {
   gameId: number | undefined;
 }
 
-const GameDetailsBody: FC<GameDetailsBodyProps> = ({gameId}: GameDetailsBodyProps) => {
+const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBodyProps) => {
   const gameRequestService = new GameRequestService();
   const [gameName, setGameName] = useState('');
   const [gameNameAvailable, setGameNameAvailable] = useState(true);

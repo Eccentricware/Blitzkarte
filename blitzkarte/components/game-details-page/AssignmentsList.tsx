@@ -1,8 +1,13 @@
-import { Paper, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, TablePagination } from "@mui/material";
-import { FC, useState } from "react";
+import { Paper, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, TablePagination, SelectChangeEvent } from "@mui/material";
+import { ChangeEvent, FC, useContext, useEffect, useState } from "react";
+import { AssignmentDataObject } from "../../models/AssignmentsDataObject";
+import { AssignmentStatus } from "../../models/enumeration/assignment-status-enum";
+import { AssignmentRequestService } from "../../services/request-services/assignment-request-service";
+import Blitzkontext from "../../utils/Blitzkontext";
 
 interface AssignmentsListProps {
-  assignments: any;
+  assignmentData: AssignmentDataObject;
+  assignmentRequestService: AssignmentRequestService;
   refetch: any;
 }
 
@@ -20,10 +25,28 @@ const columns: readonly Column[] = [
   { id: 'assignmentStatus', label: 'Status', minWidth: 50 }
 ];
 
-export const AssignmentsList: FC<AssignmentsListProps> = ({assignments, refetch}: AssignmentsListProps) => {
-  const handleChoosePlayerClick = (country: string) => {
-    console.log(`Soon we will be able to assign a player to ${country}`);
+export const AssignmentsList: FC<AssignmentsListProps> = ({
+  assignmentData,
+  assignmentRequestService,
+  refetch
+}: AssignmentsListProps) => {
+  let gameId = 7;
+  const handleChoosePlayerChange = (userId: number, countryId: number) => {
+    if (gameId) {
+      assignmentRequestService.assignUser(gameId, userId, countryId);
+      refetch();
+    }
   }
+
+  const nonlockedPlayers = assignmentData.registrants.filter((registrant: any) =>
+    registrant.assignmentStatus !== AssignmentStatus.LOCKED && registrant.assignmentType === 'Player'
+  );
+  nonlockedPlayers.unshift({
+    userId: 0,
+    username: '',
+    assignmentType: '',
+    assignmentStatus: ''
+  });
 
   return (
     <TableContainer>
@@ -43,15 +66,29 @@ export const AssignmentsList: FC<AssignmentsListProps> = ({assignments, refetch}
         </TableHead>
         <TableBody>
           {
-            assignments.map((assignment:any) => {
+            assignmentData.assignments.map((assignment:any) => {
               return (
                 <TableRow hover role="checkbox" tabIndex={-1} key={assignment.countryId}>
                   <TableCell>
                     {assignment.countryName}
                   </TableCell>
-                  <TableCell onClick={() => refetch()}>
-                  {/* <TableCell onClick={() => handleChoosePlayerClick(assignment.countryName)}> */}
-                    {assignment.username}
+                  <TableCell>
+                    {
+                      assignment.assignmentStatus === AssignmentStatus.LOCKED
+                      ? assignment.username
+                      : <select value={assignment.id ? assignment.id : 0}
+                          onChange={(event: ChangeEvent<HTMLSelectElement>) => {
+                            handleChoosePlayerChange(
+                              Number(event.target.value),
+                              assignment.countryId
+                            );
+                          }}
+                        >
+                          {
+                            nonlockedPlayers.map((player: any) => <option key={player.userId} value={player.userId}>{player.username}</option>)
+                          }
+                        </select>
+                    }
                   </TableCell>
                   <TableCell>
                     {assignment.assignmentStatus}

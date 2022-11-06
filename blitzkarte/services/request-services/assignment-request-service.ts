@@ -22,4 +22,13 @@ export class AssignmentRequestService extends AbstractRequestService {
       assignmentType: assignmentType
     });
   };
+
+  async assignUser(gameId: number, userId: number, countryId: number) {
+    console.log(`gameId: ${gameId}, userId: ${userId}, countryId: ${countryId}`);
+    return this.post(`assignments/assign-player/`, {
+      gameId: gameId,
+      userId: userId,
+      countryId: countryId
+    });
+  }
 }
