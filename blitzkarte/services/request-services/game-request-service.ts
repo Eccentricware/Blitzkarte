@@ -9,6 +9,10 @@ export class GameRequestService extends AbstractRequestService {
     return this.get('games/search');
   }
 
+  async getGameDetails(gameId: number): Promise<any> {
+    return this.get(`games/details/${gameId}`);
+  }
+
   async checkAvailability(gameName: string): Promise<any> {
     return this.get(`games/check-name/${gameName}`);
   }
