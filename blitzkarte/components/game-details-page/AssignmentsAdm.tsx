@@ -39,7 +39,11 @@ export const AssignmentsAdm: FC<AssignmentsAdmProps> = ({assignmentData}: Assign
     return (
       <Grid container spacing={1}>
         <Grid item xs={6}>
-          <AssignmentsList assignments={data.assignments} refetch={refetch}/>
+          <AssignmentsList
+            assignmentData={data}
+            assignmentRequestService={assignmentRequestService}
+            refetch={refetch}
+          />
         </Grid>
         <Grid item xs={6}>
           Players Here
