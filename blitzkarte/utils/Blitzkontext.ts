@@ -17,7 +17,7 @@ interface ContextStructure {
   map: MapViewObject
   user: {
     auth: Auth;
-    user: User | undefined;
+    user?: User | undefined;
   },
   currentGame: {
     id?: number;
@@ -44,8 +44,7 @@ const auth = getAuth(firebaseApp);
 export default React.createContext<ContextStructure>({
   map: mapViewDefault,
   user: {
-    auth: auth,
-    user: undefined
+    auth: auth
   },
   currentGame: {},
   newGame: {
@@ -63,3 +62,5 @@ export default React.createContext<ContextStructure>({
     omniBoxData: initialOmniBoxData
   }
 });
+
+export const globalDefaultGameId = 7;

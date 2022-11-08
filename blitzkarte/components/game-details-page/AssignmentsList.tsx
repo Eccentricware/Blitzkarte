@@ -1,5 +1,7 @@
 import { Paper, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, TablePagination, SelectChangeEvent } from "@mui/material";
+import { getAuth, User } from "firebase/auth";
 import { ChangeEvent, FC, useContext, useEffect, useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { AssignmentDataObject } from "../../models/AssignmentsDataObject";
 import { AssignmentStatus } from "../../models/enumeration/assignment-status-enum";
 import { AssignmentRequestService } from "../../services/request-services/assignment-request-service";
@@ -33,8 +35,8 @@ export const AssignmentsList: FC<AssignmentsListProps> = ({
   let gameId = 7;
   const handleChoosePlayerChange = (userId: number, countryId: number) => {
     if (gameId) {
-      assignmentRequestService.assignUser(gameId, userId, countryId);
-      refetch();
+      assignmentRequestService.assignUser(gameId, userId, countryId).then(() => { refetch(); });
+
     }
   }
 
@@ -76,7 +78,7 @@ export const AssignmentsList: FC<AssignmentsListProps> = ({
                     {
                       assignment.assignmentStatus === AssignmentStatus.LOCKED
                       ? assignment.username
-                      : <select value={assignment.id ? assignment.id : 0}
+                      : <select value={assignment.playerId ? assignment.playerId : 0}
                           onChange={(event: ChangeEvent<HTMLSelectElement>) => {
                             handleChoosePlayerChange(
                               Number(event.target.value),

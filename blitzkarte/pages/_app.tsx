@@ -10,6 +10,7 @@ import firebase, { initializeApp } from 'firebase/app';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { initialOmniBoxData } from '../models/OmniBoxDataObject';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 
 function MyApp({ Component, pageProps }: AppProps) {
