@@ -69,7 +69,6 @@ const GameDetailsPage: NextPage = () => {
         <link rel="icon" href="/favicon.ico"/>
       </Head>
       <NavBarSignedOut title="Game Settings"/>
-      <GameDetailsBody user={null} gameId={gameId}/>
     </div>
   )
 }

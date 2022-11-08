@@ -6,6 +6,7 @@ export class AssignmentRequestService extends AbstractRequestService {
   }
 
   async getAssignmentData(gameId: number): Promise<any> {
+    console.log('user', this.user);
     return this.get(`assignments/${gameId}`);
   }
 

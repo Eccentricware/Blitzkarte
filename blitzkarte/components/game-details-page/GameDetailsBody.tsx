@@ -1,37 +1,50 @@
 import { Grid } from "@mui/material";
 import { User } from "firebase/auth";
 import { FC, useEffect, useState } from "react";
-import { useQuery } from "react-query";
+import { useQuery, UseQueryResult } from "react-query";
+import { AssignmentRequestService } from "../../services/request-services/assignment-request-service";
 import { GameRequestService } from "../../services/request-services/game-request-service";
+import { globalDefaultGameId } from "../../utils/Blitzkontext";
 import { erzahler } from "../../utils/general/erzahler";
 import StallGlobe from "../icons/StallGlobe";
 import { AssignmentsAdm } from "./AssignmentsAdm";
+import { AssignmentsPanel } from "./AssignmentsPanel";
 import { AssignmentsStd } from "./AssignmentsStd";
 import { GameDetailsSettings } from "./GameDetailsSettings";
 
 interface GameDetailsBodyProps {
-  user: User | null;
+  user: User | undefined;
   gameId: number | undefined;
 }
 
 const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBodyProps) => {
   const gameRequestService = new GameRequestService();
+  const assignmentRequestService = new AssignmentRequestService();
+
   const [gameName, setGameName] = useState('');
   const [gameNameAvailable, setGameNameAvailable] = useState(true);
 
-  const { isLoading, error, data, isFetching } = useQuery('getGameData', () => {
+  const gameDetailsQueryResult: UseQueryResult<any> = useQuery('gameDetailsQuery', () => {
     if (!gameId) {
-      gameId = 7;
+      gameId = globalDefaultGameId;
     }
 
     return gameRequestService.getGameDetails(gameId);
   });
 
-  useEffect(() => {
-    if (data) {
-      setGameName(data.gameName);
+  const assignmentsQueryResult: UseQueryResult<any> = useQuery('getAssignmentData', () => {
+    if (!gameId) {
+      gameId = globalDefaultGameId;
     }
-  }, [data]);
+
+    return assignmentRequestService.getAssignmentData(gameId);
+  });
+
+  useEffect(() => {
+    if (gameDetailsQueryResult.data) {
+      setGameName(gameDetailsQueryResult.data.gameName);
+    }
+  }, [gameDetailsQueryResult.data]);
 
   const handleGameNameChange = (name: string) => {
     setGameName(name);
@@ -71,39 +84,18 @@ const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBo
     }
   }
 
-  if (isFetching) {
-    return <StallGlobe mode="querying" message={'GameDetailsBody: Fetching'}/>
-  }
+  // if (isFetching) {
+  //   return <StallGlobe mode="querying" message={'GameDetailsBody: Fetching'}/>
+  // }
 
-  if (isLoading) {
-    return <StallGlobe mode="querying" message={'GameDetailsBody: Loading'}/>
-  }
+  // if (isLoading) {
+  //   return <StallGlobe mode="querying" message={'GameDetailsBody: Loading'}/>
+  // }
 
-  if (error) {
-    return <StallGlobe mode="error" message={'GameDetailsBody: Error'}/>
-  }
+  // if (error) {
+  //   return <StallGlobe mode="error" message={'GameDetailsBody: Error'}/>
+  // }
 
-  if (data) {
-    // console.log('User in data:', user);
-    return (
-      <Grid container spacing={1}>
-        <Grid item xs={12}>
-          Banner?
-        </Grid>
-        <Grid item xs={12} sm={5}>
-          <GameDetailsSettings gameData={data}/>
-        </Grid>
-        <Grid item xs={12} sm={7}>
-          {
-            data.displayAsAdmin
-            ? <AssignmentsAdm assignmentData={data}/>
-            : <AssignmentsStd registrationTypes={data.playerRegistration}/>
-          }
-        </Grid>
-        {/* <Grid item xs={12} sm={4}>Chat</Grid> */}
-      </Grid>
-    )
-  }
 
   return (
     <Grid container spacing={1}>
@@ -111,10 +103,12 @@ const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBo
         Banner?
       </Grid>
       <Grid item xs={12} sm={5}>
-        <GameDetailsSettings gameData={data}/>
+        <GameDetailsSettings queryResult={gameDetailsQueryResult}/>
       </Grid>
-      <Grid item xs={12} sm={3}>Assignments</Grid>
-      <Grid item xs={12} sm={4}>Chat</Grid>
+      <Grid item xs={12} sm={7}>
+        <AssignmentsPanel queryResult={assignmentsQueryResult} />
+      </Grid>
+      {/* <Grid item xs={12} sm={4}>Chat</Grid> */}
     </Grid>
   )
 }
