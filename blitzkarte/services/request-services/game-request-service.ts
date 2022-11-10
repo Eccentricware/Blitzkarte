@@ -22,4 +22,10 @@ export class GameRequestService extends AbstractRequestService {
       gameData: gameData
     });
   }
+
+  async startGame(gameId: number): Promise<any> {
+    return this.post('games/start', {
+      gameId: gameId
+    });
+  }
 }
