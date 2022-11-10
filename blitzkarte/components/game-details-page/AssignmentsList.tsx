@@ -10,6 +10,7 @@ import Blitzkontext from "../../utils/Blitzkontext";
 interface AssignmentsListProps {
   assignmentData: AssignmentDataObject;
   assignmentRequestService: AssignmentRequestService;
+  nonLockedPlayers: any[];
   refetch: any;
 }
 
@@ -30,6 +31,7 @@ const columns: readonly Column[] = [
 export const AssignmentsList: FC<AssignmentsListProps> = ({
   assignmentData,
   assignmentRequestService,
+  nonLockedPlayers,
   refetch
 }: AssignmentsListProps) => {
   let gameId = 7;
@@ -39,16 +41,6 @@ export const AssignmentsList: FC<AssignmentsListProps> = ({
 
     }
   }
-
-  const nonlockedPlayers = assignmentData.registrants.filter((registrant: any) =>
-    registrant.assignmentStatus !== AssignmentStatus.LOCKED && registrant.assignmentType === 'Player'
-  );
-  nonlockedPlayers.unshift({
-    userId: 0,
-    username: '',
-    assignmentType: '',
-    assignmentStatus: ''
-  });
 
   return (
     <TableContainer>
@@ -87,7 +79,7 @@ export const AssignmentsList: FC<AssignmentsListProps> = ({
                           }}
                         >
                           {
-                            nonlockedPlayers.map((player: any) => <option key={player.userId} value={player.userId}>{player.username}</option>)
+                            nonLockedPlayers.map((player: any) => <option key={player.userId} value={player.userId}>{player.username}</option>)
                           }
                         </select>
                     }

@@ -16,9 +16,10 @@ import { GameSettings } from "./GameSettings";
 
 interface GameDetailsSettingsProps {
   queryResult: UseQueryResult<any>;
+  assignmentRefetch: Function;
 }
 
-export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({queryResult}: GameDetailsSettingsProps) => {
+export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({queryResult, assignmentRefetch}: GameDetailsSettingsProps) => {
   if (queryResult.data) {
     const gameData = queryResult.data
 
@@ -294,43 +295,16 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({queryResult}:
         };
 
         gameRequestService.update(updateData)
+          .then((response: Response) => response.json())
           .then((result: any) => {
             console.log('Chained .then result:', result);
             if (result.success) {
               router.reload();
-            } else {
-              // result.errors.forEach((error: string) => console.log(error));
             }
           })
           .catch((error: Error) => {
             console.log('Update Game Error: ' + error.message);
           });
-
-
-        // fetch(`${erzahler.url}:${erzahler.port}/update-game`, {
-        //   method: 'PUT',
-        //   headers: {
-        //     'Content-Type': 'application/json',
-        //     idToken: token
-        //   },
-        //   body: JSON.stringify({
-        //     gameData: gameData,
-        //     idToken: token
-        //   })
-        // })
-        // .then((response: any) => {
-        //   return response.json();
-        // })
-        // .then((result: any) => {
-        //   if (result.success) {
-        //     router.reload();
-        //   } else {
-        //     result.errors.forEach((error: string) => console.log(error));
-        //   }
-        // })
-        // .catch((error: Error) => {
-        //   console.log('Update Game Error: ' + error.message);
-        // });
       });
     }
 
@@ -416,14 +390,14 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({queryResult}:
               variant="contained"
               onClick={handleUpdateGameClick}
             >
-              Save Game
+              Save Changes
             </Button>
             <Button
               color="inherit"
               variant="contained"
               onClick={handleCancelCreateGameClick}
             >
-              Cancel
+              Cancel Changes
             </Button>
           </div>
         }
