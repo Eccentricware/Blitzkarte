@@ -110,41 +110,41 @@ export class AbstractRequestService {
 
 
   async put(route: string, payload: any): Promise<any> {
-    console.log('abstractRequestService.put payload', payload);
-    return await this.basePutRequest(
-      route,
-      // this.idToken,
-      payload
-    );
+    return this.user?.getIdToken()
+      .then(async (idToken: string) => {
+        return await this.basePutRequest(
+          route,
+          idToken,
+          payload
+        );
+      });
   }
 
   async basePutRequest(
     route: string,
-    // idToken: string | undefined,
+    idToken: string | undefined,
     payload: any
   ): Promise<any> {
-    console.log('basePutRequest idToken', this.idToken);
-    console.log('basePutRequest route', route);
-    console.log('basePutRequest payload', payload);
+    idToken = idToken ? idToken : '';
 
     return fetch(`${this.host}:${this.port}/${route}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        idToken: this.idToken
+        idToken: idToken
       },
       body: JSON.stringify(payload)
     })
-    // .then((response: any) => {
-    //   console.log('Response:', response)
-    //   return response;
-    // })
-    // .then((data: any) => {
-    //   console.log('Data', data);
-    //   return data;
-    // })
-    // .catch((error: Error) => {
-    //   console.log('Base Fetch Put Request Error: ' + error.message);
-    // });
+    .then((response: any) => {
+      console.log('Response:', response)
+      return response.json();
+    })
+    .then((data: any) => {
+      console.log('Data', data);
+      return data;
+    })
+    .catch((error: Error) => {
+      console.log('Base Fetch Post Request Error: ' + error.message);
+    });
   }
 }

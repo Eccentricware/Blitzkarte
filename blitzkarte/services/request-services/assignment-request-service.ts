@@ -25,23 +25,22 @@ export class AssignmentRequestService extends AbstractRequestService {
   };
 
   async assignUser(gameId: number, userId: number, countryId: number) {
-    console.log('Assigning');
-    return this.post(`assignments/assign-player/`, {
+    await this.post(`assignments/assign-player/`, {
       gameId: gameId,
       userId: userId,
       countryId: countryId
     });
   }
 
-  async lockUser(gameId: number, userId: number) {
-    return this.put('assignments/lock-user', {
+  async lockAssignment(gameId: number, userId: number) {
+    return await this.put('assignments/lock-assignment', {
       gameId: gameId,
       userId: userId
     });
   }
 
-  async unlockUser(gameId: number, userId: number) {
-    return this.put('assignments/unlock-user', {
+  async unlockAssignment(gameId: number, userId: number) {
+    return await this.put('assignments/unlock-assignment', {
       gameId: gameId,
       userId: userId
     });

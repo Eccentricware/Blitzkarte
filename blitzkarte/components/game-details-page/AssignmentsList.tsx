@@ -45,11 +45,11 @@ export const AssignmentsList: FC<AssignmentsListProps> = ({
   }
 
   const handleLockPlayerClick = (userId: number) => {
-    assignmentRequestService.lockUser(gameId, userId).then(() => refetch );
+    assignmentRequestService.lockAssignment(gameId, userId).then(() => { refetch(); });
   }
 
   const handleUnlockPlayerClick = (userId: number) => {
-    assignmentRequestService.unlockUser(gameId, userId).then(() => refetch );
+    assignmentRequestService.unlockAssignment(gameId, userId).then(() => { refetch(); });
   }
 
   return (
@@ -96,7 +96,6 @@ export const AssignmentsList: FC<AssignmentsListProps> = ({
                   </TableCell>
                   <TableCell>
                     {assignment.assignmentStatus}
-                    {assignment.assignmentStatus === AssignmentStatus.LOCKED && <Lock/>}
                   </TableCell>
                   <TableCell>
                     {
