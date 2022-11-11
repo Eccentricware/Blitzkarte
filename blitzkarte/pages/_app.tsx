@@ -2,14 +2,14 @@ import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import Blitzkontext from '../utils/Blitzkontext';
 import { useContext, useEffect, useState } from 'react';
-import { MapViewObject, mapViewDefault } from '../models/MapViewObject'
+import { MapViewObject, mapViewDefault } from '../models/objects/MapViewObject'
 import { FacebookAuthProvider, getAuth, GoogleAuthProvider, onAuthStateChanged, User } from 'firebase/auth';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { firebaseConfig } from '../utils/firebase/firebaseService';
 import firebase, { initializeApp } from 'firebase/app';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import { initialOmniBoxData } from '../models/OmniBoxDataObject';
+import { initialOmniBoxData } from '../models/objects/OmniBoxDataObject';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 
