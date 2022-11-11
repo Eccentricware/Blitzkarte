@@ -1,8 +1,8 @@
 import { initializeApp } from 'firebase/app';
 import { Auth, getAuth, User } from 'firebase/auth';
 import React from 'react';
-import { MapViewObject, mapViewDefault } from '../models/MapViewObject';
-import { initialOmniBoxData } from '../models/OmniBoxDataObject';
+import { MapViewObject, mapViewDefault } from '../models/objects/MapViewObject';
+import { initialOmniBoxData } from '../models/objects/OmniBoxDataObject';
 import { firebaseConfig } from './firebase/firebaseService';
 import { Country } from './parsing/classes/country';
 import { LabelPin } from './parsing/classes/label';

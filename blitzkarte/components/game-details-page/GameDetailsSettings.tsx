@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { FC, useState, useContext, useEffect } from "react";
 import { UseQueryResult } from "react-query";
 import { GameStatus } from "../../models/enumeration/game-status-enum";
-import { GameDataObject } from "../../models/GameDataObject";
+import { GameDataObject } from "../../models/objects/GameDataObject";
 import { GameRequestService } from "../../services/request-services/game-request-service";
 import { SchedulerService } from "../../services/scheduler-service";
 import Blitzkontext from "../../utils/Blitzkontext";

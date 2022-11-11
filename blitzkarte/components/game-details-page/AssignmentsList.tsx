@@ -1,11 +1,13 @@
-import { Paper, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, TablePagination, SelectChangeEvent } from "@mui/material";
+import { Paper, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, TablePagination, SelectChangeEvent, IconButton, Icon } from "@mui/material";
 import { getAuth, User } from "firebase/auth";
 import { ChangeEvent, FC, useContext, useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { AssignmentDataObject } from "../../models/AssignmentsDataObject";
+import { AssignmentDataObject } from "../../models/objects/AssignmentsDataObject";
 import { AssignmentStatus } from "../../models/enumeration/assignment-status-enum";
 import { AssignmentRequestService } from "../../services/request-services/assignment-request-service";
-import Blitzkontext from "../../utils/Blitzkontext";
+import Lock from '@mui/icons-material/Lock';
+import LockOpen from '@mui/icons-material/LockOpen';
+import { AssignmentRow } from "../../models/objects/AssignmentRowObject";
 
 interface AssignmentsListProps {
   assignmentData: AssignmentDataObject;
@@ -42,6 +44,14 @@ export const AssignmentsList: FC<AssignmentsListProps> = ({
     }
   }
 
+  const handleLockPlayerClick = (userId: number) => {
+    assignmentRequestService.lockUser(gameId, userId).then(() => refetch );
+  }
+
+  const handleUnlockPlayerClick = (userId: number) => {
+    assignmentRequestService.unlockUser(gameId, userId).then(() => refetch );
+  }
+
   return (
     <TableContainer>
       <Table stickyHeader aria-label="sticky table" size="small">
@@ -60,7 +70,7 @@ export const AssignmentsList: FC<AssignmentsListProps> = ({
         </TableHead>
         <TableBody>
           {
-            assignmentData.assignments.map((assignment:any) => {
+            assignmentData.assignments.map((assignment: AssignmentRow) => {
               return (
                 <TableRow hover role="checkbox" tabIndex={-1} key={assignment.countryId}>
                   <TableCell>
@@ -86,6 +96,21 @@ export const AssignmentsList: FC<AssignmentsListProps> = ({
                   </TableCell>
                   <TableCell>
                     {assignment.assignmentStatus}
+                    {assignment.assignmentStatus === AssignmentStatus.LOCKED && <Lock/>}
+                  </TableCell>
+                  <TableCell>
+                    {
+                      assignment.assignmentStatus === AssignmentStatus.LOCKED
+                      && <IconButton onClick={() => {handleUnlockPlayerClick(assignment.playerId)}}>
+                          <Lock fontSize="small"/>
+                        </IconButton>
+                    }
+                    {
+                      assignment.assignmentStatus === AssignmentStatus.ASSIGNED
+                      && <IconButton onClick={() => { handleLockPlayerClick(assignment.playerId)}}>
+                          <LockOpen fontSize="small"/>
+                        </IconButton>
+                    }
                   </TableCell>
                 </TableRow>
               )
