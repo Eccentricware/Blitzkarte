@@ -65,6 +65,8 @@ export const AssignmentsAdm: FC<AssignmentsAdmProps> = ({assignmentData, refetch
     startButtonDisabled = true;
   }
 
+  let cancelGameText = '';
+
   const nonLockedPlayers = assignmentData.registrants.filter((registrant: any) =>
     [
       AssignmentStatus.REGISTERED,
