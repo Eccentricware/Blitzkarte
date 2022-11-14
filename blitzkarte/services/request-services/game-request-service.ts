@@ -28,4 +28,10 @@ export class GameRequestService extends AbstractRequestService {
       gameId: gameId
     });
   }
+
+  async cancelGame(gameId: number): Promise<any> {
+    return this.post('games/cancel', {
+      gameId: gameId
+    });
+  }
 }
