@@ -1,6 +1,6 @@
 import { Button, Grid } from "@mui/material";
 import { User } from "firebase/auth";
-import { FC, useContext, useEffect } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { AssignmentStatus } from "../../models/enumeration/assignment-status-enum";
 import { AssignmentRequestService } from "../../services/request-services/assignment-request-service";
@@ -20,6 +20,13 @@ export const AssignmentsAdm: FC<AssignmentsAdmProps> = ({assignmentData, refetch
   const gameCtx = useContext(Blitzkontext).currentGame;
   const data = assignmentData;
   const gameId = gameCtx.id ? gameCtx.id : 7;
+
+
+  const [cancelGameHint, setCancelGameHint] = useState('');
+  const [cancelGameClicks, setCancelGameClicks] = useState<number>(Number(0));
+  const [cancelButtonVariant, setCancelButtonVariant] = useState<'contained' | 'outlined' | undefined>(undefined);
+  const [cancelButtonText, setCancelButtonText] = useState('Cancel Game');
+  const [cancelButtonColor, setCancelButtonColor] = useState('error');
 
   const allAssigned = assignmentData.allAssigned;
   const partialRosterStart = assignmentData.partialRosterStart;
@@ -65,8 +72,6 @@ export const AssignmentsAdm: FC<AssignmentsAdmProps> = ({assignmentData, refetch
     startButtonDisabled = true;
   }
 
-  let cancelGameText = '';
-
   const nonLockedPlayers = assignmentData.registrants.filter((registrant: any) =>
     [
       AssignmentStatus.REGISTERED,
@@ -84,6 +89,31 @@ export const AssignmentsAdm: FC<AssignmentsAdmProps> = ({assignmentData, refetch
   const handleStartGameClick = () => {
     gameRequestService.startGame(gameId);
   }
+
+  const handleCancelGameClick = () => {
+    setCancelGameClicks(cancelGameClicks + 1);
+
+    if (cancelGameClicks + 1 === 1) {
+      setCancelGameHint('So, you should know that cancelling the game is irreversible.');
+      setCancelButtonVariant('outlined');
+      setCancelButtonColor('warning');
+    }
+
+    if (cancelGameClicks + 1 === 2) {
+      setCancelGameHint('If you want to run a game after cancelling, you will need to start from scratch, including recruitment.');
+      setCancelButtonColor('error');
+    }
+
+    if (cancelGameClicks + 1 === 3) {
+      setCancelGameHint('Okay this is seriously the final warning. Clicking one more time will cancel this game forever.');
+      setCancelButtonVariant('contained');
+      setCancelButtonColor('error');
+    }
+
+    if (cancelGameClicks + 1 === 4) {
+      gameRequestService.cancelGame(gameId);
+    }
+  };
 
   return (
     <Grid container spacing={1}>
@@ -103,10 +133,13 @@ export const AssignmentsAdm: FC<AssignmentsAdmProps> = ({assignmentData, refetch
         >
           {startButtonLabel}
         </Button>
+        {cancelGameHint !== '' && <div>{cancelGameHint}</div>}
         <Button
           color="error"
+          variant={cancelButtonVariant}
+          onClick={handleCancelGameClick}
         >
-          Cancel Game
+          {cancelButtonText}
         </Button>
       </Grid>
       <Grid item xs={6}>
