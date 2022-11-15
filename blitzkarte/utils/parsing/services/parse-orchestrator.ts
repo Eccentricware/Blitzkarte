@@ -8,10 +8,10 @@ import { NodePin } from '../classes/node';
 import { Country } from '../classes/country';
 import { Unit } from '../classes/unit';
 import { Terrain } from '../classes/terrain';
-import { initialRenderData, RenderData } from '../../../models/RenderDataObject';
-import { FinalStatusCheck, initialFinalStatusCheck } from '../../../models/FinalStatusCheckObject';
+import { initialRenderData, RenderData } from '../../../models/objects/RenderDataObject';
+import { FinalStatusCheck, initialFinalStatusCheck } from '../../../models/objects/FinalStatusCheckObject';
 import { NodeLink } from '../classes/nodeLink';
-import { initialOmniBoxData, OmniBoxData } from '../../../models/OmniBoxDataObject';
+import { initialOmniBoxData, OmniBoxData } from '../../../models/objects/OmniBoxDataObject';
 import { convertSnakeToTitleCase } from '../../general/formatters';
 
 export class Parser {

@@ -63,7 +63,7 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
   const [untfRuleEnabled, setUntfRuleEnabled] = useState(false);
   const [madOrdersRule, setMadOrdersRule] = useState(false);
   const [voteDeadlineExtension, setVoteDeadlineExtension] = useState(false);
-  const [finalReadinessCheck, setFinalReadinessCheck] = useState(true);
+  const [finalReadinessCheck, setFinalReadinessCheck] = useState(false);
   const [partialRosterStart, setPartialRosterStart] = useState(false);
 
   const gameRules: any[] = [
