@@ -251,6 +251,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
         <FormControlLabel
           label="Partial Roster Start"
           labelPlacement="start"
+          disabled
           control={
             <Switch
               checked={settings.partialRosterStart}
@@ -264,6 +265,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
         <FormControlLabel
           label="Final Readiness Check"
           labelPlacement="start"
+          disabled
           control={
             <Switch
               checked={settings.finalReadinessCheck}

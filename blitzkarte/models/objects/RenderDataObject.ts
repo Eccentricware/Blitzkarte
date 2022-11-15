@@ -1,10 +1,10 @@
-import { City } from '../utils/parsing/classes/city'
-import { LabelPin } from '../utils/parsing/classes/label'
-import { NodeLink } from '../utils/parsing/classes/nodeLink'
-import { NodePin } from '../utils/parsing/classes/node'
-import { Terrain } from '../utils/parsing/classes/terrain'
-import { Unit } from '../utils/parsing/classes/unit'
-import { LabelLine } from '../utils/parsing/classes/labelLine'
+import { City } from '../../utils/parsing/classes/city'
+import { LabelPin } from '../../utils/parsing/classes/label'
+import { NodeLink } from '../../utils/parsing/classes/nodeLink'
+import { NodePin } from '../../utils/parsing/classes/node'
+import { Terrain } from '../../utils/parsing/classes/terrain'
+import { Unit } from '../../utils/parsing/classes/unit'
+import { LabelLine } from '../../utils/parsing/classes/labelLine'
 
 export interface RenderData {
   terrain: {

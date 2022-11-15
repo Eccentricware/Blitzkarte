@@ -248,6 +248,7 @@ export const NewGameSettings: FC<NewGameSettingsProps> = ({settings}: NewGameSet
         <FormControlLabel
           label="Final Readiness Check"
           labelPlacement="start"
+          disabled
           control={
             <Switch
               checked={settings.finalReadinessCheck}
