@@ -10,6 +10,7 @@ export class SchedulerService {
     'Friday': 5,
     'Saturday': 6
   };
+
   acceptedTimeZones: string[] = [
     'Asia/Bangkok', // + 8
     'Africa/Monrovia', // 0

@@ -86,8 +86,8 @@ export const AssignmentsAdm: FC<AssignmentsAdmProps> = ({assignmentData, refetch
     assignmentStatus: ''
   });
 
-  const handleStartGameClick = () => {
-    gameRequestService.startGame(gameId);
+  const handleGameReadyClick = () => {
+    gameRequestService.declareReady(gameId);
   }
 
   const handleCancelGameClick = () => {
@@ -129,7 +129,7 @@ export const AssignmentsAdm: FC<AssignmentsAdmProps> = ({assignmentData, refetch
           color={startButtonColor}
           variant="contained"
           disabled={startButtonDisabled}
-          onClick={handleStartGameClick}
+          onClick={handleGameReadyClick}
         >
           {startButtonLabel}
         </Button>
