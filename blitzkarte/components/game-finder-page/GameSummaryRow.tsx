@@ -1,8 +1,8 @@
 import { Grid } from "@mui/material";
 import { useRouter } from "next/router";
 import React, { FC, useContext } from "react";
-import { GameDataObject } from "../../models/GameDataObject";
-import { GameSummaryObject } from "../../models/GameSummaryDataObject";
+import { GameDataObject } from "../../models/objects/GameDataObject";
+import { GameSummaryObject } from "../../models/objects/GameSummaryDataObject";
 import Blitzkontext from "../../utils/Blitzkontext";
 import { convertSnakeToTitleCase } from "../../utils/general/formatters";
 

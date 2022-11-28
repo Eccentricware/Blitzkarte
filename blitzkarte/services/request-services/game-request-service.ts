@@ -23,8 +23,8 @@ export class GameRequestService extends AbstractRequestService {
     });
   }
 
-  async startGame(gameId: number): Promise<any> {
-    return this.post('games/start', {
+  async declareReady(gameId: number): Promise<any> {
+    return this.post('games/declare-ready', {
       gameId: gameId
     });
   }
