@@ -27,10 +27,11 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
     const scaling = mapCtx.map.scaling;
 
     renderData.units.forEach((unit: any) => {
+      const unitType = unit.type.toLowerCase();
       gsap.to(s(`.${unit.name}_left`), {
         attr: {
-          'transform': `translate (${unit.loc[0] - 16000 - (mapCtx.map.unitSizing[unit.type].baseWidth / 2 * view.current.zoom)}
-            ${unit.loc[1] - (mapCtx.map.unitSizing[unit.type].baseHeight / 2 * view.current.zoom)})
+          'transform': `translate (${unit.loc[0] - 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
+            ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
             scale(1)`
         },
         ease: ease,
@@ -39,8 +40,8 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
 
       gsap.to(s(`.${unit.name}_center`), {
         attr: {
-          'transform': `translate (${unit.loc[0] - (mapCtx.map.unitSizing[unit.type].baseWidth / 2 * view.current.zoom)}
-            ${unit.loc[1] - (mapCtx.map.unitSizing[unit.type].baseHeight / 2 * view.current.zoom)})
+          'transform': `translate (${unit.loc[0] - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
+            ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
             scale(1)`
         },
         ease: ease,
@@ -49,8 +50,8 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
 
       gsap.to(s(`.${unit.name}_right`), {
         attr: {
-          'transform': `translate (${unit.loc[0] + 16000 - (mapCtx.map.unitSizing[unit.type].baseWidth / 2 * view.current.zoom)}
-            ${unit.loc[1] - (mapCtx.map.unitSizing[unit.type].baseHeight / 2 * view.current.zoom)})
+          'transform': `translate (${unit.loc[0] + 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
+            ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
             scale(1)`
         },
         ease: ease,
@@ -144,10 +145,11 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
     });
 
     renderData.units.forEach((unit: any) => {
+      const unitType = unit.type.toLowerCase();
       gsap.to(s(`.${unit.name}_left`), {
         attr: {
-          'transform': `translate (${unit.loc[0] - 16000 - (mapCtx.map.unitSizing[unit.type].baseWidth / 2 * view.current.zoom)}
-            ${unit.loc[1] - (mapCtx.map.unitSizing[unit.type].baseHeight / 2 * view.current.zoom)})
+          'transform': `translate (${unit.loc[0] - 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
+            ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
             scale(${view.current.zoom})`
         },
         ease: ease,
@@ -155,8 +157,8 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
       });
       gsap.to(s(`.${unit.name}_center`), {
         attr: {
-          'transform': `translate (${unit.loc[0] - (mapCtx.map.unitSizing[unit.type].baseWidth / 2 * view.current.zoom)}
-            ${unit.loc[1] - (mapCtx.map.unitSizing[unit.type].baseHeight / 2 * view.current.zoom)})
+          'transform': `translate (${unit.loc[0] - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
+            ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
             scale(${view.current.zoom})`
         },
         ease: ease,
@@ -164,8 +166,8 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
       });
       gsap.to(s(`.${unit.name}_right`), {
         attr: {
-          'transform': `translate (${unit.loc[0] + 16000 - (mapCtx.map.unitSizing[unit.type].baseWidth / 2 * view.current.zoom)}
-            ${unit.loc[1] - (mapCtx.map.unitSizing[unit.type].baseHeight / 2 * view.current.zoom)})
+          'transform': `translate (${unit.loc[0] + 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
+            ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
             scale(${view.current.zoom})`
         },
         ease: ease,
@@ -320,10 +322,11 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
     });
 
     renderData.units.forEach((unit: any) => {
+      const unitType = unit.type.toLowerCase();
       gsap.to(s(`.${unit.name}_left`), {
         attr: {
-          'transform': `translate (${unit.loc[0] - 16000 - (mapCtx.map.unitSizing[unit.type].baseWidth / 2 * view.current.zoom)}
-            ${unit.loc[1] - (mapCtx.map.unitSizing[unit.type].baseHeight / 2 * view.current.zoom)})
+          'transform': `translate (${unit.loc[0] - 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
+            ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
             scale(${view.current.zoom})`
         },
         ease: ease,
@@ -331,8 +334,8 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
       });
       gsap.to(s(`.${unit.name}_center`), {
         attr: {
-          'transform': `translate (${unit.loc[0] - (mapCtx.map.unitSizing[unit.type].baseWidth / 2 * view.current.zoom)}
-            ${unit.loc[1] - (mapCtx.map.unitSizing[unit.type].baseHeight / 2 * view.current.zoom)})
+          'transform': `translate (${unit.loc[0] - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
+            ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
             scale(${view.current.zoom})`
         },
         ease: ease,
@@ -340,8 +343,8 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
       });
       gsap.to(s(`.${unit.name}_right`), {
         attr: {
-          'transform': `translate (${unit.loc[0] + 16000 - (mapCtx.map.unitSizing[unit.type].baseWidth / 2 * view.current.zoom)}
-            ${unit.loc[1] - (mapCtx.map.unitSizing[unit.type].baseHeight / 2 * view.current.zoom)})
+          'transform': `translate (${unit.loc[0] + 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
+            ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
             scale(${view.current.zoom})`
         },
         ease: ease,
@@ -558,10 +561,11 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
     });
 
     renderData.units.forEach((unit: any) => {
+      const unitType = unit.type.toLowerCase();
       gsap.to(s(`.${unit.name}_left`), {
         attr: {
-          'transform': `translate (${unit.loc[0] - 16000 - mapCtx.map.unitSizing[unit.type].baseWidth / 2}
-            ${unit.loc[1] - mapCtx.map.unitSizing[unit.type].baseHeight / 2})
+          'transform': `translate (${unit.loc[0] - 16000 - mapCtx.map.unitSizing[unitType].baseWidth / 2}
+            ${unit.loc[1] - mapCtx.map.unitSizing[unitType].baseHeight / 2})
             scale(1)`
         },
         ease: ease,
@@ -569,8 +573,8 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
       });
       gsap.to(s(`.${unit.name}_center`), {
         attr: {
-          'transform': `translate (${unit.loc[0] - mapCtx.map.unitSizing[unit.type].baseWidth / 2}
-            ${unit.loc[1] - mapCtx.map.unitSizing[unit.type].baseHeight / 2})
+          'transform': `translate (${unit.loc[0] - mapCtx.map.unitSizing[unitType].baseWidth / 2}
+            ${unit.loc[1] - mapCtx.map.unitSizing[unitType].baseHeight / 2})
             scale(1)`
         },
         ease: ease,
@@ -578,8 +582,8 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
       });
       gsap.to(s(`.${unit.name}_right`), {
         attr: {
-          'transform': `translate (${unit.loc[0] + 16000 - mapCtx.map.unitSizing[unit.type].baseWidth / 2}
-            ${unit.loc[1] - mapCtx.map.unitSizing[unit.type].baseHeight / 2})
+          'transform': `translate (${unit.loc[0] + 16000 - mapCtx.map.unitSizing[unitType].baseWidth / 2}
+            ${unit.loc[1] - mapCtx.map.unitSizing[unitType].baseHeight / 2})
             scale(1)`
         },
         ease: ease,

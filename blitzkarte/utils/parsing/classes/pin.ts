@@ -1,3 +1,5 @@
+import { UnitType } from "../../../models/enumeration/unit-enumerations";
+
 export class Pin {
   name!: string;
 
@@ -115,19 +117,19 @@ export class Pin {
 
     switch(this.unit) {
       case 'a':
-        this.unit = 'army';
+        this.unit = UnitType.ARMY;
         break;
       case 'f':
-        this.unit = 'fleet';
+        this.unit = UnitType.FLEET;
         break;
       case 'w':
-        this.unit = 'wing';
+        this.unit = UnitType.WING;
         break;
       case 'n':
-        this.unit = 'nuke';
+        this.unit = UnitType.NUKE;
         break;
       case 'g':
-        this.unit = 'garrison';
+        this.unit = UnitType.GARRISON;
         break;
     }
   }

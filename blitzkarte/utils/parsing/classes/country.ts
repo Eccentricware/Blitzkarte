@@ -18,11 +18,13 @@ export class Country {
   unitCounts: {
     army: number,
     fleet: number,
+    garrison: number,
     wing: number,
     nuke: number
   } = {
     army: 0,
     fleet: 0,
+    garrison: 0,
     wing: 0,
     nuke: 0
   };

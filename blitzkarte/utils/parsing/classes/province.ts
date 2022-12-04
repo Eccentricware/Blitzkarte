@@ -1,3 +1,4 @@
+import { UnitType } from "../../../models/enumeration/unit-enumerations";
 import { convertSnakeToTitleCase } from "../../general/formatters";
 
 interface TerrainApproval {
@@ -363,14 +364,14 @@ export class Province {
     let noLandUnits: string[] = ['decorative', 'impassible', 'pole', 'sea'];
     if (noLandUnits.includes(this.type)
     && this.unit.length === 1
-    && (this.unit[0].type === 'army' || this.unit[0].type === 'nuke')) {
+    && (this.unit[0].type === UnitType.ARMY || this.unit[0].type === UnitType.NUKE)) {
       this.errors.push(`Land unit ${this.unit[0].name} can not occupy ${this.type} province ${this.name}`);
     }
 
     let noSeaUnits: string[] = ['decorative', 'impassible', 'inland'];
     if (noSeaUnits.includes(this.type)
       && this.unit.length === 1
-      && this.unit[0].type === 'fleet') {
+      && this.unit[0].type === UnitType.FLEET) {
       this.errors.push(`Sea unit ${this.unit[0].name} can not occupy ${this.type} province ${this.name}`);
     }
 

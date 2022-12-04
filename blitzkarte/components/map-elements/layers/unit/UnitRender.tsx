@@ -8,7 +8,8 @@ interface Props {
 }
 
 export const UnitRender: FC<Props> = ({unit}: Props) => {
-  const unitSVG = UnitSVGs[unit.type];
+  const unitType = unit.type.toLowerCase();
+  const unitSVG = UnitSVGs[unitType];
   const flagSVG = FlagSVGs[unit.countryKey];
 
   return (
@@ -18,14 +19,14 @@ export const UnitRender: FC<Props> = ({unit}: Props) => {
           <g className={unit.name} key={unit.name}>
             <g className={unit.name + '_left'} transform={
               `translate(
-              ${unit.loc[0] - map.unitSizing[unit.type].width / 2 - 16000}
-              ${unit.loc[1] - map.unitSizing[unit.type].height / 2}
+              ${unit.loc[0] - map.unitSizing[unitType].width / 2 - 16000}
+              ${unit.loc[1] - map.unitSizing[unitType].height / 2}
             )`}
             >
               <g transform={
                 `translate(
-                ${map.flagSizing.offset[unit.type].x}
-                ${map.flagSizing.offset[unit.type].y}
+                ${map.flagSizing.offset[unitType].x}
+                ${map.flagSizing.offset[unitType].y}
               )
 
               scale(${0.5})
@@ -39,14 +40,14 @@ export const UnitRender: FC<Props> = ({unit}: Props) => {
             </g>
             <g className={unit.name + '_center'} transform={
                 `translate(
-                ${unit.loc[0] - map.unitSizing[unit.type].width / 2}
-                ${unit.loc[1] - map.unitSizing[unit.type].height / 2}
+                ${unit.loc[0] - map.unitSizing[unitType].width / 2}
+                ${unit.loc[1] - map.unitSizing[unitType].height / 2}
               )`}
               >
                 <g transform={
                   `translate(
-                    ${map.flagSizing.offset[unit.type].x}
-                    ${map.flagSizing.offset[unit.type].y}
+                    ${map.flagSizing.offset[unitType].x}
+                    ${map.flagSizing.offset[unitType].y}
                   )
 
                   scale(${0.5})
@@ -59,14 +60,14 @@ export const UnitRender: FC<Props> = ({unit}: Props) => {
             </g>
             <g className={unit.name + '_right'} transform={
               `translate(
-              ${unit.loc[0] - map.unitSizing[unit.type].width / 2 + 16000}
-              ${unit.loc[1] - map.unitSizing[unit.type].height / 2}
+              ${unit.loc[0] - map.unitSizing[unitType].width / 2 + 16000}
+              ${unit.loc[1] - map.unitSizing[unitType].height / 2}
             )`}
             >
               <g transform={
                 `translate(
-                ${map.flagSizing.offset[unit.type].x}
-                ${map.flagSizing.offset[unit.type].y}
+                ${map.flagSizing.offset[unitType].x}
+                ${map.flagSizing.offset[unitType].y}
               )
 
               scale(${0.5})
