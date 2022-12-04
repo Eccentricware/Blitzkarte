@@ -26,7 +26,7 @@ export class Country {
     fleet: 0,
     garrison: 0,
     wing: 0,
-    nuke: undefined
+    nuke: 0
   };
   adjustments: number = 0;
   valid: boolean;

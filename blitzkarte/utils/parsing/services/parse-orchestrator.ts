@@ -392,13 +392,14 @@ export class Parser {
     this.units.forEach(unit => {
       let node: NodePin = this.referenceElement('nodes', unit.node);
       let province: Province = this.referenceElement('provinces', node.province);
+      const typeCased = unit.type.toLowerCase();
       province.unit.push(unit);
       if (province.country) {
         let country: Country = this.referenceElement('countries', province.country);
         if (country) {
           country.units.push(unit.name);
-          country.unitCounts[unit.type]++;
-          unit.fullName = `${unit.country} ${convertSnakeToTitleCase(unit.type)} ${country.unitCounts[unit.type]}`;
+          country.unitCounts[typeCased]++;
+          unit.fullName = `${unit.country} ${unit.type} ${country.unitCounts[typeCased]}`;
         } else {
           this.errors.push(`Unit ${province.name} country does not exist: ${province.country}`);
         }
