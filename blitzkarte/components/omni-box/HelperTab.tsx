@@ -39,8 +39,13 @@ export const HelperTab: FC = () => {
         <b>Example Full:</b> pinType=city,type=capital,country=Australia,rank=d,color=#6da6db<br />
         <b>Example Abbreviated:</b> p=c,t=c,country=Australia,rank=d,color=#6da6db<br />
         <b>city (c):</b> capital (c), vote (v), supplyCenter (s) is used for controlled cities, dormant (d) used for uncontrolled cities. Do not add if province does not have a city. If it is a capital, furhter information is required.<br />
-        <b>country:</b> Name of the country. Use _ instead of spaces. <b>rank:</b> a, b, c, d, e for players, n for non-player countries (where the garrisons are assigned).<br /><b>color:</b> in valid CSS format. It should be easy to get the hex version (#ffffff) from Illustrator.<br />
+        <b>country:</b> Name of the country. Use _ instead of spaces.
         <br />
+        <b>rank:</b> a, b, c, d, e for players, n for non-player countries (where the garrisons are assigned).<br /><b>color:</b> in valid CSS format. It should be easy to get the hex version (#ffffff) from Illustrator.<br />
+        <b>nuke:</b>Skip if country doesn't have nukes. Use "0", "Unlimited" or "U" for unlimited range. Otherwise use a number for the specific range.
+        Can use n for abbreviation.<br/>
+        Examples: nuke=Unlimited, n=5, nuke=0
+        <br/><br/>
         <b>Labels (Displays province name or specific coasts)</b><br />
         <b>pinType (p):</b> label (l). Always required.<br />
         <b>number (n):</b> Set to any number to distinguish labels apart. Useful for provinces that wrap around the map and multi-coast provinces. Only required when multiple lables are used in the same province.<br />

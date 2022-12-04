@@ -16,7 +16,7 @@ export const StatsTableBody: FC<StatsTableRow> = ({countries}: StatsTableRow) =>
               <td>{country.cities.length}</td>
               <td>{country.votes}</td>
               <td>{country.bankedBuilds}</td>
-              <td>{country.nuke}</td>
+              <td>{country.nuke === 0 ? 'U' : country.nuke}</td>
               <td>{country.adjustments}</td>
             </tr>
           )
