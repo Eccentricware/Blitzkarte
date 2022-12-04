@@ -11,6 +11,13 @@ export class Unit {
   countryKey!: string;
   valid: boolean;
   errors: string[] = [];
+  validUnitTypes: string[] = [
+    'a', 'A', 'army', 'Army', 'ARMY',
+    'f', 'F', 'fleet', 'Fleet', 'FLEET',
+    'w', 'W', 'wing', 'Wing', 'WING',
+    'n', 'N', 'nuke', 'Nuke', 'NUKE',
+    'g', 'G', 'garrison', 'Garrison', 'GARRSION'
+  ];
 
   constructor(node: Pin, country: string) {
     this.name = `${country}_${node.unit}_${node.name}`;
@@ -32,8 +39,7 @@ export class Unit {
   }
 
   validateType(): boolean {
-    let validUnitTypes: string[] = ['a', 'army', 'f', 'fleet', 'w', 'wing', 'n', 'nuke', 'g', 'garrison'];
-    if (this.type && !validUnitTypes.includes(this.type)) {
+    if (this.type && !this.validUnitTypes.includes(this.type)) {
       this.errors.push(`Invalid Unit Type: ${this.name}`);
       return false;
     }
