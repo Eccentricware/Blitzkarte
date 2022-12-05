@@ -15,7 +15,7 @@ export class Pin {
   key: string | undefined;
   rank: string | undefined;
   color: string | undefined;
-  nuke: number | undefined;
+  nuke: string | undefined;
   bankedBuilds: number | undefined;
   cx: string | undefined;
   cy: string | undefined;
@@ -34,6 +34,7 @@ export class Pin {
   r: string | undefined; // rank
   f: string | undefined; // color
   nr: string | undefined; // nuke
+  b: number | undefined; // bankedBuilds
 
   constructor(pinString: string, provinceName: string) {
     this.province = provinceName;
@@ -100,7 +101,11 @@ export class Pin {
     }
 
     if (this.nr) {
-      this.nuke = Number(this.nr);
+      this.nuke = this.nr;
+    }
+
+    if (this.b) {
+      this.bankedBuilds = this.b;
     }
 
     switch(this.pinType) {

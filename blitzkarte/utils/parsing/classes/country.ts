@@ -9,7 +9,7 @@ export class Country {
   keyName: string;
   rank: string;
   color: string;
-  nuke: number;
+  nuke: number | undefined;
   bankedBuilds: number;
   provinces: string[] = [];
   votes: number = 1;
@@ -20,13 +20,13 @@ export class Country {
     fleet: number,
     garrison: number,
     wing: number,
-    nuke: number
+    nuke: number | undefined
   } = {
     army: 0,
     fleet: 0,
     garrison: 0,
     wing: 0,
-    nuke: 0
+    nuke: undefined
   };
   adjustments: number = 0;
   valid: boolean;
@@ -76,11 +76,18 @@ export class Country {
     return color;
   }
 
-  setNuke(pin: Pin): number {
-    let nuke: number = 0;
+  setNuke(pin: Pin): number | undefined {
+    let nuke: number | undefined = undefined;
     if (pin.nuke) {
-      nuke = Number(pin.nuke);
+      if (pin.nuke.charAt(0).toLowerCase() === 'u') {
+        nuke = 0;
+      } else if (Number(pin.nuke) !== NaN) {
+        nuke = Number(pin.nuke);
+      } else {
+        nuke = -1;
+      }
     }
+
     return nuke;
   }
 
@@ -96,8 +103,9 @@ export class Country {
     let nameValid: boolean = this.validateName(pin);
     let rankValid: boolean = this.validateRank(pin);
     let colorValid: boolean = this.validateColor(pin);
+    let nukeValid: boolean = this.validateNuke(pin);
 
-    return nameValid && rankValid && colorValid;
+    return nameValid && rankValid && colorValid && nukeValid;
   }
 
   validateName(pin: Pin): boolean {
@@ -120,6 +128,14 @@ export class Country {
   validateColor(pin: Pin): boolean {
     if (!this.color) {
       this.errors.push(`No color: ${this.name ? this.name : pin.name}`);
+      return false;
+    }
+    return true;
+  }
+
+  validateNuke(pin: Pin): boolean {
+    if (this.nuke === -1) {
+      this.errors.push(`Invalid nuke range: ${this.name ? this.name : pin.name}`);
       return false;
     }
     return true;
