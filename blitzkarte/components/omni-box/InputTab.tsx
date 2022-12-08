@@ -9,6 +9,7 @@ import Blitzkontext from '../../utils/Blitzkontext';
 import { erzahler } from '../../utils/general/erzahler';
 import { SchedulerService } from '../../services/scheduler-service';
 import { GameRequestService } from '../../services/request-services/game-request-service';
+import { NewGameData } from '../../models/objects/games/NewGameDataObject';
 
 interface InputProps {
   input: any;
@@ -21,8 +22,8 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
   const [gameNameAvailable, setGameNameAvailable] = useState(true);
   const [deadlineType, setDeadlineType] = useState('weekly');
   const [observeDst, setObserveDst] = useState(true);
-  const [gameStart, setGameStart] = useState<Date | null>(new Date());
-  const [firstTurnDeadline, setFirstTurnDeadline] = useState<Date | null>(new Date());
+  const [gameStart, setGameStart] = useState<Date | undefined>(new Date());
+  const [firstTurnDeadline, setFirstTurnDeadline] = useState<Date | undefined>(new Date());
 
   const [ordersDay, setOrdersDay] = useState('Monday');
   const [ordersTime, setOrdersTime] = useState(new Date('2000-01-01 12:00:00'));
@@ -214,7 +215,7 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
     return gameRequestService.checkAvailability(gameName);
   }
 
-  const handleGameStartChange = (date: Date | null) => {
+  const handleGameStartChange = (date: Date | undefined) => {
     setGameStart(date);
   }
 
@@ -231,7 +232,7 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
     && debug.errors.length === 0 && debug.criticals.length === 0) {
       const idToken: Promise<string> | undefined = bkCtx.user.user?.getIdToken();
       idToken?.then((token: any) => {
-        const gameData = {
+        const gameData: NewGameData = {
           gameName: gameName,
           assignmentMethod: 'manual',
           stylizedStartYear: stylizedStartYear,
@@ -355,8 +356,8 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
           <MenuItem value="scheduled" disabled>Manually Set Start and First Deadline</MenuItem>
         </Select>
       </div>
-      <div>Game Start: {gameStart !== null && `${gameStart?.toDateString()} | ${gameStart?.toLocaleTimeString()}`}</div>
-      <div>First Turn: {firstTurnDeadline !== null && `${firstTurnDeadline.toDateString()} | ${firstTurnDeadline.toLocaleTimeString()}`}</div>
+      <div>Game Start: {gameStart !== undefined && `${gameStart?.toDateString()} | ${gameStart?.toLocaleTimeString()}`}</div>
+      <div>First Turn: {firstTurnDeadline !== undefined && `${firstTurnDeadline.toDateString()} | ${firstTurnDeadline.toLocaleTimeString()}`}</div>
       <div>
         <Select
           id='deadline-type-select'

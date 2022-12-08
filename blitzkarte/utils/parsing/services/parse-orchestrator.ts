@@ -40,6 +40,17 @@ export class Parser {
     countries: {},
     units: {}
   }
+  dbRows = {
+    provinces: {},
+    terrain: {},
+    nodes: {},
+    links: {},
+    cities: {},
+    labels: {},
+    labelLines: {},
+    countries: {},
+    units: {}
+  };
   activeProvince: boolean = false;
   warnings: string[] = [];
   errors: string[] = [];
@@ -79,19 +90,20 @@ export class Parser {
     initialOmniBoxData.debug.criticals = this.criticals;
 
     // Feedback
-    console.log('Provinces: ', this.provinces);
-    console.log('Nodes:', this.nodes);
-    console.log('Cities', this.cities);
-    console.log('Labels:', this.labels);
-    console.log('Label Lines:', this.labelLines);
-    console.log('Countries:', this.countries);
-    console.log('Units:', this.units);
-    console.log('Name To Index Libraries:', this.nameToIndexLibraries);
-    console.log('Render Elements:', this.renderElements);
-    console.log('Warnings:', this.warnings);
-    console.log('Errors:', this.errors);
-    console.log('Critical:', this.criticals);
+    // console.log('Provinces: ', this.provinces);
+    // console.log('Nodes:', this.nodes);
+    // console.log('Cities', this.cities);
+    // console.log('Labels:', this.labels);
+    // console.log('Label Lines:', this.labelLines);
+    // console.log('Countries:', this.countries);
+    // console.log('Units:', this.units);
+    // console.log('Name To Index Libraries:', this.nameToIndexLibraries);
+    // console.log('Render Elements:', this.renderElements);
+    // console.log('Warnings:', this.warnings);
+    // console.log('Errors:', this.errors);
+    // console.log('Critical:', this.criticals);
 
+    this.prepareDbRows();
   }
 
   // Save information into their respective classes
@@ -449,5 +461,35 @@ export class Parser {
         this.collectCriticals(country.critical);
       }
     });
+  }
+
+  prepareDbRows() {
+    this.countries.forEach((country: Country) => {
+      this.dbRows.countries[country.name] = country;
+    });
+
+    this.links.forEach((link: any) => {
+      this.dbRows.links[link.name] = link;
+    });
+
+    this.nodes.forEach((node: NodePin) => {
+      this.dbRows.nodes[node.name] = node;
+    });
+
+    this.provinces.forEach((province: Province) => {
+      this.dbRows.provinces[province.name] = province;
+    });
+
+    this.units.forEach((unit: Unit) => {
+      if (unit.fullName) {
+        this.dbRows.units[unit.fullName] = unit;
+      } else {
+        this.dbRows.units[unit.name] = unit;
+      }
+    });
+
+    this.dbRows.terrain = this.terrain;
+    this.dbRows.labels = this.labels;
+    this.dbRows.labelLines = this.labelLines;
   }
 }

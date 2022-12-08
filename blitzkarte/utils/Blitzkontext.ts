@@ -24,14 +24,14 @@ interface ContextStructure {
   },
   newGame: {
     dbRows: {
-      countries: Country[],
-      provinces: Province[],
-      terrain: Terrain[],
-      labels: LabelPin[],
-      labelLines: LabelLine[],
-      nodes: NodePin[],
-      links: NodeLink[],
-      units: Unit[]
+      countries: any,
+      provinces: any,
+      terrain: any,
+      labels: any,
+      labelLines: any,
+      nodes: any,
+      links: any,
+      units: any
     },
     settings: any;
     omniBoxData: any;
@@ -49,14 +49,14 @@ export default React.createContext<ContextStructure>({
   currentGame: {},
   newGame: {
     dbRows: {
-      countries: [],
-      provinces: [],
-      terrain: [],
-      labels: [],
-      labelLines: [],
-      nodes: [],
-      links: [],
-      units: []
+      countries: {},
+      provinces: {},
+      terrain: {},
+      labels: {},
+      labelLines: {},
+      nodes: {},
+      links: {},
+      units: {}
     },
     settings: {},
     omniBoxData: initialOmniBoxData
