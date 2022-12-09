@@ -4,9 +4,10 @@ import { ViewControls } from './ViewControls';
 import { gsap } from 'gsap'
 import React from 'react';
 import Blitzkontext from '../../../utils/Blitzkontext';
+import { RenderData } from '../../../models/objects/RenderDataObject';
 
 interface Props {
-  renderData: any;
+  renderData: RenderData;
 }
 
 export const MapContainer: FC<Props> = ({ renderData }: Props) => {

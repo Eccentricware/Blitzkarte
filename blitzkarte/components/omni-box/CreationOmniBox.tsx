@@ -28,7 +28,7 @@ const TabPanel = ({index, value, children}: TabPanelProps) => {
   )
 }
 
-export const OmniBox: FC<OmniProps> = ({omniBoxData}: OmniProps) => {
+export const CreationOmniBox: FC<OmniProps> = ({omniBoxData}: OmniProps) => {
   const [panel, setPanel] = React.useState(0);
 
   const handleChange = (event: React.ChangeEvent<{}>, newPanel: number) => {

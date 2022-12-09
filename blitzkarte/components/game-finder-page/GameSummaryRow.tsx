@@ -17,7 +17,7 @@ export const GameSummaryRow: FC<GameSummaryRowProps> = ({game}: GameSummaryRowPr
     <Grid container className="game-summary-row" onClick={() => {
       bkCtx.currentGame.id = game.gameId;
       console.log('Context game ID set:', bkCtx.currentGame.id);
-      router.push('/game-details');
+      router.push(`/game-details/${game.gameId}`);
     }}>
       <Grid item xs={2}>{game.gameName}</Grid>
       <Grid item xs={2}>
