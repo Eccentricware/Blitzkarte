@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { GameSummaryObject } from "../../models/GameSummaryDataObject";
+import { GameSummaryObject } from "../../models/objects/GameSummaryDataObject";
 import { GameSummaryRow } from "./GameSummaryRow";
 
 interface FindGameResultsContainerProps {
