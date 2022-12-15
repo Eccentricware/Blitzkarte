@@ -162,7 +162,7 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({queryResult, 
       setVotesTimeSpan: setVotesTimeSpan,
       votesTimeType: votesTimeType,
       setVotesTimeType: setVotesTimeType,
-      displayAsAdmin: gameData.displayAsAdmin,
+      isAdmin: gameData.isAdmin,
       gameStatus: gameData.gameStatus
     }
 
@@ -201,7 +201,7 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({queryResult, 
       setFinalReadinessCheck: setFinalReadinessCheck,
       partialRosterStart: partialRosterStart,
       setPartialRosterStart: setPartialRosterStart,
-      displayAsAdmin: gameData.displayAsAdmin,
+      isAdmin: gameData.isAdmin,
       gameStatus: gameData.gameStatus
     };
 
@@ -323,7 +323,7 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({queryResult, 
             fullWidth
             error={!gameNameAvailable}
             helperText={!gameNameAvailable ? 'Game Name Unavailable' : ''}
-            disabled={!gameData.displayAsAdmin || gameData.gameStatus !== GameStatus.REGISTRATION}
+            disabled={!gameData.isAdmin || gameData.gameStatus !== GameStatus.REGISTRATION}
             onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
               handleGameNameChange(event.target.value);
             }}
@@ -333,7 +333,7 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({queryResult, 
           <Select id="first-turn-timing"
             value={turn1Timing}
             label="When players are ready:"
-            disabled={!gameData.displayAsAdmin || gameData.gameStatus !== GameStatus.REGISTRATION}
+            disabled={!gameData.isAdmin || gameData.gameStatus !== GameStatus.REGISTRATION}
             onChange={(event: SelectChangeEvent<string>) => {
               handleTurnOneTimingChange(event.target.value)
             }}
@@ -354,7 +354,7 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({queryResult, 
             value={deadlineType}
             label="Deadline Type"
             fullWidth
-            disabled={!gameData.displayAsAdmin || gameData.gameStatus !== GameStatus.REGISTRATION}
+            disabled={!gameData.isAdmin || gameData.gameStatus !== GameStatus.REGISTRATION}
             onChange={(event: SelectChangeEvent<string>): void => {
               handleDeadlineTypeChange(event.target.value);
             }}
@@ -383,7 +383,7 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({queryResult, 
           <GameSettings settings={settings}/>
         </div>
         {
-          gameData.displayAsAdmin &&
+          gameData.isAdmin &&
           <div>
             <Button
               color="inherit"

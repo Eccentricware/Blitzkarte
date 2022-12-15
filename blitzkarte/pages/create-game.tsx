@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import React, { useContext, useEffect, useState } from 'react';
 import { Parser } from '../utils/parsing/services/parse-orchestrator';
 import { RenderData, initialRenderData } from '../models/objects/RenderDataObject';
-import { OmniBox } from '../components/omni-box/CreationOmniBox';
+import { CreationOmniBox } from '../components/omni-box/CreationOmniBox';
 import { initialOmniBoxData, OmniBoxData } from '../models/objects/OmniBoxDataObject';
 import { NavBarSignedIn } from '../components/nav-bar/NavBarSignedIn';
 import Head from 'next/head';
@@ -153,7 +153,7 @@ const CreateGamePage: NextPage = () => {
             <div className="column"><MapContainer renderData={renderData}/></div>
           </Grid>
           <Grid item>
-            <div className="column"><OmniBox omniBoxData={omniBoxData}/></div>
+            <div className="column"><CreationOmniBox omniBoxData={omniBoxData}/></div>
           </Grid>
         </Grid>
       </div>

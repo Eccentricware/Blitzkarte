@@ -14,6 +14,7 @@ interface AssignmentsListProps {
   assignmentRequestService: AssignmentRequestService;
   nonLockedPlayers: any[];
   refetch: any;
+  gameId: number;
 }
 
 interface Column {
@@ -34,14 +35,11 @@ export const AssignmentsList: FC<AssignmentsListProps> = ({
   assignmentData,
   assignmentRequestService,
   nonLockedPlayers,
-  refetch
+  refetch,
+  gameId
 }: AssignmentsListProps) => {
-  let gameId = 7;
   const handleChoosePlayerChange = (userId: number, countryId: number) => {
-    if (gameId) {
-      assignmentRequestService.assignUser(gameId, userId, countryId).then(() => { refetch(); });
-
-    }
+    assignmentRequestService.assignUser(gameId, userId, countryId).then(() => { refetch(); });
   }
 
   const handleLockPlayerClick = (userId: number) => {

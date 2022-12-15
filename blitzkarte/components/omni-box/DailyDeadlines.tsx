@@ -28,7 +28,7 @@ export const DailyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProps
   const [currentNominationsTime, setCurrentNominationsTime] = useState(deadlineOps.nominationsTime);
   const [editingVotes, setEditingVotes] = useState(false);
   const [currentVotesTime, setCurrentVotesTime] = useState(deadlineOps.votesTime);
-  const [displayAsAdmin, setDisplayAsAdmin] = useState(deadlineOps.displayAsAdmin === false ? deadlineOps.displayAsAdmin : true);
+  const [isAdmin, setisAdmin] = useState(deadlineOps.isAdmin === false ? deadlineOps.isAdmin : true);
 
   // Edits on/off triggers validation of ordering
   const handleEditOrdersToggle = () => {
@@ -87,7 +87,7 @@ export const DailyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProps
         <TimelineItem>
           <TimelineOppositeContent>
             {
-              deadlineOps.voteDuringOrders && displayAsAdmin
+              deadlineOps.voteDuringOrders && isAdmin
                 ? <div>
                   <CallSplitIcon fontSize="small" onClick={handleVotesDuringOrdersChange} />
                   Orders / Votes
@@ -120,7 +120,7 @@ export const DailyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProps
                   <CheckIcon fontSize="small" onClick={handleEditOrdersToggle} />
                 </div>
                 :
-                <div>{String(deadlineOps.ordersTime.getHours())}:{String(deadlineOps.ordersTime.getMinutes()).padStart(2, '0')} {displayAsAdmin && <EditIcon fontSize="small" onClick={handleEditOrdersToggle} />}
+                <div>{String(deadlineOps.ordersTime.getHours())}:{String(deadlineOps.ordersTime.getMinutes()).padStart(2, '0')} {isAdmin && <EditIcon fontSize="small" onClick={handleEditOrdersToggle} />}
                 </div>
             }
           </TimelineContent>
@@ -155,7 +155,7 @@ export const DailyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProps
                   <CheckIcon fontSize="small" onClick={handleEditRetreatsToggle} />
                 </div>
                 :
-                <div>{String(deadlineOps.retreatsTime.getHours())}:{String(deadlineOps.retreatsTime.getMinutes()).padStart(2, '0')} {displayAsAdmin && <EditIcon fontSize="small" onClick={handleEditRetreatsToggle} />}
+                <div>{String(deadlineOps.retreatsTime.getHours())}:{String(deadlineOps.retreatsTime.getMinutes()).padStart(2, '0')} {isAdmin && <EditIcon fontSize="small" onClick={handleEditRetreatsToggle} />}
                 </div>
             }
           </TimelineContent>
@@ -164,7 +164,7 @@ export const DailyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProps
         <TimelineItem>
           <TimelineOppositeContent>
             {
-              deadlineOps.nominateDuringAdjustments && displayAsAdmin
+              deadlineOps.nominateDuringAdjustments && isAdmin
                 ? <div>
                   <CallSplitIcon fontSize="small" onClick={
                     handleNominationsDuringAdjustmentsChange
@@ -205,7 +205,7 @@ export const DailyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProps
                   <CheckIcon fontSize="small" onClick={handleEditAdjustmentsToggle} />
                 </div>
                 :
-                <div>{String(deadlineOps.adjustmentsTime.getHours())}:{String(deadlineOps.adjustmentsTime.getMinutes()).padStart(2, '0')} {displayAsAdmin && <EditIcon fontSize="small" onClick={handleEditAdjustmentsToggle} />}
+                <div>{String(deadlineOps.adjustmentsTime.getHours())}:{String(deadlineOps.adjustmentsTime.getMinutes()).padStart(2, '0')} {isAdmin && <EditIcon fontSize="small" onClick={handleEditAdjustmentsToggle} />}
                 </div>
             }
           </TimelineContent>
@@ -218,7 +218,7 @@ export const DailyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProps
             <TimelineOppositeContent>
               <div>
                 {
-                  displayAsAdmin &&
+                  isAdmin &&
                   <MergeTypeIcon fontSize="small"
                     onClick={handleNominationsDuringAdjustmentsChange}
                   />
@@ -254,7 +254,7 @@ export const DailyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProps
                     <CheckIcon fontSize="small" onClick={handleEditNominationsToggle} />
                   </div>
                   :
-                  <div>{String(deadlineOps.nominationsTime.getHours())}:{String(deadlineOps.nominationsTime.getMinutes()).padStart(2, '0')} {displayAsAdmin && <EditIcon fontSize="small" onClick={handleEditNominationsToggle} />}
+                  <div>{String(deadlineOps.nominationsTime.getHours())}:{String(deadlineOps.nominationsTime.getMinutes()).padStart(2, '0')} {isAdmin && <EditIcon fontSize="small" onClick={handleEditNominationsToggle} />}
                   </div>
               }
             </TimelineContent>
@@ -267,7 +267,7 @@ export const DailyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProps
             <TimelineOppositeContent>
               <div>
                 {
-                  displayAsAdmin &&
+                  isAdmin &&
                   <MergeTypeIcon fontSize="small"
                     onClick={handleVotesDuringOrdersChange}
                   />
@@ -299,7 +299,7 @@ export const DailyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProps
                     <CheckIcon fontSize="small" onClick={handleEditVotesToggle} />
                   </div>
                   :
-                  <div>{String(deadlineOps.votesTime.getHours())}:{String(deadlineOps.votesTime.getMinutes()).padStart(2, '0')} {displayAsAdmin && <EditIcon fontSize="small" onClick={handleEditVotesToggle} />}
+                  <div>{String(deadlineOps.votesTime.getHours())}:{String(deadlineOps.votesTime.getMinutes()).padStart(2, '0')} {isAdmin && <EditIcon fontSize="small" onClick={handleEditVotesToggle} />}
                   </div>
               }
             </TimelineContent>
