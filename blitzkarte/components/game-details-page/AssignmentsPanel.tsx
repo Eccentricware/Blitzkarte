@@ -6,9 +6,10 @@ import { AssignmentsStd } from "./AssignmentsStd";
 
 interface AssignmentsPanelProps {
   queryResult: UseQueryResult<any>;
+  gameId: number;
 }
 
-export const AssignmentsPanel: FC<AssignmentsPanelProps> = ({queryResult}: AssignmentsPanelProps) => {
+export const AssignmentsPanel: FC<AssignmentsPanelProps> = ({queryResult, gameId}: AssignmentsPanelProps) => {
   if (queryResult.isFetching) {
       return <StallGlobe mode="querying" message={'Assignments Panel: Fetching'}/>
   }
@@ -20,8 +21,10 @@ export const AssignmentsPanel: FC<AssignmentsPanelProps> = ({queryResult}: Assig
   if (queryResult.data) {
     return (
       queryResult.data.userIsAdmin
-      ? <AssignmentsAdm assignmentData={queryResult.data} refetch={queryResult.refetch}/>
-      : <AssignmentsStd registrationTypes={queryResult.data.userStatus}/>
+      ? <AssignmentsAdm assignmentData={queryResult.data}
+        refetch={queryResult.refetch}
+        gameId={gameId}/>
+      : <AssignmentsStd registrationTypes={queryResult.data.userStatus} />
     )
   }
 

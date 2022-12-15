@@ -14,7 +14,7 @@ import { GameDetailsSettings } from "./GameDetailsSettings";
 
 interface GameDetailsBodyProps {
   user: User | undefined;
-  gameId: number | undefined;
+  gameId: number;
 }
 
 const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBodyProps) => {
@@ -25,18 +25,10 @@ const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBo
   const [gameNameAvailable, setGameNameAvailable] = useState(true);
 
   const gameDetailsQueryResult: UseQueryResult<any> = useQuery('gameDetailsQuery', () => {
-    if (!gameId) {
-      gameId = globalDefaultGameId;
-    }
-
     return gameRequestService.getGameDetails(gameId);
   });
 
   const assignmentsQueryResult: UseQueryResult<any> = useQuery('getAssignmentData', () => {
-    if (!gameId) {
-      gameId = globalDefaultGameId;
-    }
-
     return assignmentRequestService.getAssignmentData(gameId);
   });
 
@@ -108,7 +100,7 @@ const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBo
         />
       </Grid>
       <Grid item xs={12} sm={7}>
-        <AssignmentsPanel queryResult={assignmentsQueryResult} />
+        <AssignmentsPanel queryResult={assignmentsQueryResult} gameId={gameId}/>
       </Grid>
       {/* <Grid item xs={12} sm={4}>Chat</Grid> */}
     </Grid>

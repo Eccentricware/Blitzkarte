@@ -47,7 +47,7 @@ export class AbstractRequestService {
     // idToken: string | undefined
   ): Promise<any> {
     // idToken = idToken ? idToken : '';
-    console.log('idToken in baseGetRequest', this.idToken);
+    // console.log('idToken in baseGetRequest', this.idToken);
 
     return fetch(`${this.host}:${this.port}/${route}`, {
       method: 'GET',

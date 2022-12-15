@@ -75,7 +75,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
           <FormControlLabel
             label="Observe Daylight Savings"
             labelPlacement="start"
-            disabled={!settings.displayAsAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
+            disabled={!settings.isAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
             control={
               <Switch
                 checked={settings.observeDst}
@@ -89,7 +89,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
         <TextField type="number"
           label="Stylized Start Year"
           value={settings.stylizedStartYear}
-          disabled={!settings.displayAsAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
+          disabled={!settings.isAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
           onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
             handleStylizedStartYearChange(event.target.value);
           }}
@@ -98,7 +98,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
       <div>
         <Select id="nomination-timing"
           value={settings.nominationTiming}
-          disabled={!settings.displayAsAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
+          disabled={!settings.isAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
           onChange={(event: SelectChangeEvent<string>) => {
             handleNominationTimingChange(event.target.value);
           }}
@@ -111,7 +111,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
         settings.nominationTiming === 'set' &&
         <TextField type="number"
           value={settings.nominationYear}
-          disabled={!settings.displayAsAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
+          disabled={!settings.isAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
           onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
             handleNominationYearChange(event.target.value);
           }}
@@ -122,7 +122,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
         <TextField type="number"
           label="Concurrent Game Limit"
           value={settings.concurrentGamesLimit}
-          disabled={!settings.displayAsAdmin}
+          disabled={!settings.isAdmin}
           onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
             handleConcurrentGamesLimitChange(event.target.value);
           }}
@@ -137,7 +137,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
               <Switch
                 checked={settings.automaticAssignments}
                 disabled
-                // disabled={!settings.displayAsAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
+                // disabled={!settings.isAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
               />
             }
           />
@@ -152,7 +152,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
               <Switch
                 checked={settings.ratingLimits}
                 onChange={handleRatingLimitsChange}
-                disabled={!settings.displayAsAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
+                disabled={!settings.isAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
               />
             }
           />
@@ -162,7 +162,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
         settings.ratingLimits &&
         <Slider id="fun-range-slider"
           value={settings.funRange}
-          disabled={!settings.displayAsAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
+          disabled={!settings.isAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
           onChange={handleFunRangeChange}
           marks={[
             {value: 0, label: 0},
@@ -175,7 +175,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
         settings.ratingLimits &&
         <Slider id="skill-range-slider"
           value={settings.skillRange}
-          disabled={!settings.displayAsAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
+          disabled={!settings.isAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
           onChange={handleSkillRangeChange}
           marks={[
             {value: 0, label: 0},
@@ -187,7 +187,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
       <TextField type="number"
         label="NMR Tolerance"
         value={settings.nmrTolerance}
-        disabled={!settings.displayAsAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
+        disabled={!settings.isAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
         onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
           handleNmrToleranceChange(event.target.value);
         }}
@@ -199,7 +199,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
           control={
             <Switch
               checked={settings.blindCreator}
-              disabled={!settings.displayAsAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
+              disabled={!settings.isAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
               onChange={handleBlindCreatorChange}
             />
           }
@@ -213,7 +213,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
             <Switch
               checked={settings.untfRule}
               disabled
-              // disabled={!settings.displayAsAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
+              // disabled={!settings.isAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
               onChange={handleUntfRuleChange}
             />
           }
@@ -227,7 +227,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
             <Switch
               checked={settings.madOrdersRule}
               disabled
-              // disabled={!settings.displayAsAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
+              // disabled={!settings.isAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
               onChange={handleMadOrdersRuleChange}
             />
           }
@@ -241,7 +241,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
             <Switch
               checked={settings.voteDeadlineExtension}
               disabled
-              // disabled={!settings.displayAsAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
+              // disabled={!settings.isAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
               onChange={handleVoteDeadlineExtensionChange}
             />
           }
@@ -255,7 +255,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
           control={
             <Switch
               checked={settings.partialRosterStart}
-              disabled={!settings.displayAsAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
+              disabled={!settings.isAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
               onChange={handlePartialRosterStartChange}
             />
           }
@@ -269,7 +269,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
           control={
             <Switch
               checked={settings.finalReadinessCheck}
-              disabled={!settings.displayAsAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
+              disabled={!settings.isAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
               onChange={handleFinalReadinessCheckChange}
             />
           }

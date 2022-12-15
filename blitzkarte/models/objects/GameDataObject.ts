@@ -9,7 +9,7 @@ export interface GameDataObject {
   concurrentGamesLimit: number;
   currentYear: number;
   deadlineType: string;
-  displayAsAdmin: boolean;
+  isAdmin: boolean;
   finalReadinessCheck: boolean;
   gameId: number;
   gameName: string;

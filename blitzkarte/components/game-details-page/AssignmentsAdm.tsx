@@ -11,16 +11,14 @@ import { AssignmentsList } from "./AssignmentsList";
 interface AssignmentsAdmProps {
   assignmentData: any;
   refetch: any;
+  gameId: number;
 }
 
-export const AssignmentsAdm: FC<AssignmentsAdmProps> = ({assignmentData, refetch}: AssignmentsAdmProps) => {
+export const AssignmentsAdm: FC<AssignmentsAdmProps> = ({assignmentData, refetch, gameId}: AssignmentsAdmProps) => {
   const assignmentRequestService = new AssignmentRequestService();
   const gameRequestService = new GameRequestService();
 
-  const gameCtx = useContext(Blitzkontext).currentGame;
   const data = assignmentData;
-  const gameId = gameCtx.id ? gameCtx.id : 7;
-
 
   const [cancelGameHint, setCancelGameHint] = useState('');
   const [cancelGameClicks, setCancelGameClicks] = useState<number>(Number(0));
@@ -75,7 +73,8 @@ export const AssignmentsAdm: FC<AssignmentsAdmProps> = ({assignmentData, refetch
   const nonLockedPlayers = assignmentData.registrants.filter((registrant: any) =>
     [
       AssignmentStatus.REGISTERED,
-      AssignmentStatus.ASSIGNED
+      AssignmentStatus.ASSIGNED,
+      AssignmentStatus.ACTIVE
     ].includes(registrant.assignmentStatus)
       && registrant.assignmentType === 'Player'
   );
@@ -119,6 +118,7 @@ export const AssignmentsAdm: FC<AssignmentsAdmProps> = ({assignmentData, refetch
     <Grid container spacing={1}>
       <Grid item xs={6}>
         <AssignmentsList
+          gameId={gameId}
           assignmentData={data}
           assignmentRequestService={assignmentRequestService}
           nonLockedPlayers={nonLockedPlayers}
