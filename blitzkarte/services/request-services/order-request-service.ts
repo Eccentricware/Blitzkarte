@@ -1,4 +1,4 @@
-import { TurnOrders } from "../../models/objects/TurnOptions";
+import { TurnOrders } from "../../models/objects/TurnOptionsObjects";
 import { AbstractRequestService } from "./abstract-request-service";
 
 export class OrderRequestService extends AbstractRequestService {

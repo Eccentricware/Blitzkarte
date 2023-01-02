@@ -8,9 +8,13 @@ import { HelperTab } from './HelperTab';
 import { ChatTab } from "./ChatTab";
 import { PreviousTab } from "./PreviousTab";
 import { OrdersTab } from "./OrdersTab";
+import { UseQueryResult } from "react-query";
+import { UnitOrder } from "../../models/objects/TurnOptionsObjects";
 
 interface OmniProps {
   omniBoxData: OmniBoxData;
+  turnOptionsResult: UseQueryResult<any>;
+  orderSet: UnitOrder[];
 }
 
 interface TabPanelProps {
@@ -31,7 +35,7 @@ const TabPanel = ({index, value, children}: TabPanelProps) => {
   )
 }
 
-export const PlayOmniBox: FC<OmniProps> = ({omniBoxData}: OmniProps) => {
+export const PlayOmniBox: FC<OmniProps> = ({omniBoxData, turnOptionsResult, orderSet}: OmniProps) => {
   const [panel, setPanel] = React.useState(0);
 
   const handleChange = (event: React.ChangeEvent<{}>, newPanel: number) => {
@@ -42,15 +46,21 @@ export const PlayOmniBox: FC<OmniProps> = ({omniBoxData}: OmniProps) => {
     <div className="omni-box">
       <Box>
         <Tabs value={panel} onChange={handleChange} centered>
-          <Tab label="Orders"/>
+          {
+            (turnOptionsResult.data && turnOptionsResult.data.countryId !== 0)
+            && <Tab label="Orders"/>
+          }
           <Tab label="Stats"/>
           <Tab label="Chat" disabled={true}/>
-          <Tab label="Previous"/>
+          <Tab label="History"/>
         </Tabs>
       </Box>
-      <TabPanel value={panel} index={0}>
-        <OrdersTab/>
-      </TabPanel>
+      {
+        (turnOptionsResult.data && turnOptionsResult.data.countryId !== 0)
+        &&  <TabPanel value={panel} index={0}>
+              <OrdersTab orderOptions={turnOptionsResult.data} orderSet={orderSet}/>
+            </TabPanel>
+      }
       <TabPanel value={panel} index={1}>
         <StatsTable stats={omniBoxData.stats} />
       </TabPanel>

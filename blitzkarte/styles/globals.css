@@ -87,3 +87,20 @@ text {
   margin: 2px;
   border-radius: 8px;
 }
+
+.order-row {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.order-unit {
+  width: 90px;
+}
+
+.order-type {
+  width: 80px;
+}
+
+.order-destination {
+  width: 80px;
+}
