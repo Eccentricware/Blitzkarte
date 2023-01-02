@@ -3,6 +3,7 @@ import { User } from "firebase/auth";
 import { FC, useContext } from "react";
 import { useQuery, UseQueryResult } from "react-query";
 import { initialRenderData } from "../../models/objects/RenderDataObject";
+import { UnitOrder } from "../../models/objects/TurnOptionsObjects";
 import { OrderRequestService } from "../../services/request-services/order-request-service";
 import Blitzkontext from "../../utils/Blitzkontext";
 import { MapContainer } from "../map-elements/map/MapContainer";
@@ -17,6 +18,7 @@ const GameBody: FC<GameBodyProps> = ({user, gameId}: GameBodyProps) => {
   const orderRequestService: OrderRequestService = new OrderRequestService();
   const renderData = initialRenderData;
   const omniBoxData = useContext(Blitzkontext).newGame.omniBoxData;
+  const orderSet: UnitOrder[] = [];
 
   const turnOrdersResult: UseQueryResult<any> = useQuery('getTurnOrders', () => {
     return orderRequestService.getTurnOrders(gameId);
@@ -28,7 +30,12 @@ const GameBody: FC<GameBodyProps> = ({user, gameId}: GameBodyProps) => {
         <div className="column"><MapContainer renderData={renderData}/></div>
       </Grid>
       <Grid item>
-        <div className="column"><PlayOmniBox omniBoxData={omniBoxData}/></div>
+        <div className="column">
+          <PlayOmniBox omniBoxData={omniBoxData}
+            turnOptionsResult={turnOrdersResult}
+            orderSet={orderSet}
+          />
+        </div>
       </Grid>
     </Grid>
   )
