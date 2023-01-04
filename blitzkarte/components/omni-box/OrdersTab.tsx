@@ -1,22 +1,22 @@
 import { FC } from "react"
-import { DoubleTurnOptions, UnitOrder } from "../../models/objects/TurnOptionsObjects";
+import { DoubleTurnOptions, UnitOrder } from "../../models/objects/TurnOrdersObjects";
 import { TurnOrdersPanel } from "./TurnOrdersPanel";
 
-interface OrderOptionsProps {
-  orderOptions: DoubleTurnOptions;
-  orderSet: UnitOrder[];
+interface OrderOrdersProps {
+  options: DoubleTurnOptions;
+  orders: any;
 }
 
-export const OrdersTab: FC<OrderOptionsProps> = ({orderOptions, orderSet}: OrderOptionsProps) => {
+export const OrdersTab: FC<OrderOrdersProps> = ({options, orders}: OrderOrdersProps) => {
   return (
     <div>
       {
-        orderOptions.pending
-        && <TurnOrdersPanel turnOptions={orderOptions.pending} orderSet={orderSet}/>
+        options.pending
+        && <TurnOrdersPanel turnOptions={options.pending} orders={orders.pending}/>
       }
       {
-        orderOptions.preliminary
-        && <TurnOrdersPanel turnOptions={orderOptions.preliminary} orderSet={orderSet}/>
+        options.preliminary
+        && <TurnOrdersPanel turnOptions={options.preliminary} orders={orders.preliminary}/>
       }
     </div>
   )

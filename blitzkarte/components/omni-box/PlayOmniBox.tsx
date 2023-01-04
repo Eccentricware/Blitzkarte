@@ -1,5 +1,5 @@
 import { Box, Tab, Tabs } from "@mui/material";
-import React, { FC } from "react";
+import { ChangeEvent, FC, ReactNode, useState } from "react";
 import { OmniBoxData } from "../../models/objects/OmniBoxDataObject";
 import { InputTab } from "./InputTab";
 import { DebugTab } from "./DebugTab";
@@ -9,16 +9,17 @@ import { ChatTab } from "./ChatTab";
 import { PreviousTab } from "./PreviousTab";
 import { OrdersTab } from "./OrdersTab";
 import { UseQueryResult } from "react-query";
-import { UnitOrder } from "../../models/objects/TurnOptionsObjects";
+import { UnitOrder } from "../../models/objects/TurnOrdersObjects";
 
 interface OmniProps {
   omniBoxData: OmniBoxData;
   turnOptionsResult: UseQueryResult<any>;
+  turnOrdersResult: UseQueryResult<any>;
   orderSet: UnitOrder[];
 }
 
 interface TabPanelProps {
-  children?: React.ReactNode;
+  children?: ReactNode;
   index: number;
   value: number;
 }
@@ -35,10 +36,11 @@ const TabPanel = ({index, value, children}: TabPanelProps) => {
   )
 }
 
-export const PlayOmniBox: FC<OmniProps> = ({omniBoxData, turnOptionsResult, orderSet}: OmniProps) => {
-  const [panel, setPanel] = React.useState(0);
+export const PlayOmniBox: FC<OmniProps> = ({
+  omniBoxData, turnOptionsResult, turnOrdersResult, orderSet}: OmniProps) => {
+  const [panel, setPanel] = useState(0);
 
-  const handleChange = (event: React.ChangeEvent<{}>, newPanel: number) => {
+  const handleChange = (event: ChangeEvent<{}>, newPanel: number) => {
     setPanel(newPanel);
   }
 
@@ -47,7 +49,7 @@ export const PlayOmniBox: FC<OmniProps> = ({omniBoxData, turnOptionsResult, orde
       <Box>
         <Tabs value={panel} onChange={handleChange} centered>
           {
-            (turnOptionsResult.data && turnOptionsResult.data.countryId !== 0)
+            (turnOptionsResult.data && turnOrdersResult.data)
             && <Tab label="Orders"/>
           }
           <Tab label="Stats"/>
@@ -56,9 +58,10 @@ export const PlayOmniBox: FC<OmniProps> = ({omniBoxData, turnOptionsResult, orde
         </Tabs>
       </Box>
       {
-        (turnOptionsResult.data && turnOptionsResult.data.countryId !== 0)
+        (turnOptionsResult.data && turnOrdersResult.data)
         &&  <TabPanel value={panel} index={0}>
-              <OrdersTab orderOptions={turnOptionsResult.data} orderSet={orderSet}/>
+              <OrdersTab options={turnOptionsResult.data}
+                orders={turnOrdersResult.data}/>
             </TabPanel>
       }
       <TabPanel value={panel} index={1}>

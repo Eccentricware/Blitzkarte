@@ -80,3 +80,16 @@ export interface UnitOrder {
   destinationId: number;
   destinationLoc: number[];
 }
+
+export interface Order {
+  orderId?: number;
+  orderSetId: number;
+  orderedUnitId: number;
+  orderedUnitLoc?: number[];
+  orderType: string;
+  secondaryUnitId?: number | undefined;
+  secondaryUnitLoc?: number[];
+  destinationId?: number;
+  eventLoc?: number[];
+  orderStatus?: string;
+}
