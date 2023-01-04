@@ -1,18 +1,24 @@
 import { FC } from "react";
-import { TurnOptions, UnitOptionsFinalized, UnitOrder } from "../../models/objects/TurnOptionsObjects";
 import { DateTime } from 'luxon';
 import { Units } from "./Units";
+import { TurnOptions, UnitOrder } from "../../models/objects/TurnOrdersObjects";
 
 interface TurnOrdersPanelProps {
   turnOptions: TurnOptions;
-  orderSet: UnitOrder[];
+  orders: any;
 }
 
-export const TurnOrdersPanel: FC<TurnOrdersPanelProps> = ({turnOptions, orderSet}: TurnOrdersPanelProps) => {
+export const TurnOrdersPanel: FC<TurnOrdersPanelProps> = ({turnOptions, orders}: TurnOrdersPanelProps) => {
   return (
     <div>
       <h4>{turnOptions.name} - {DateTime.fromISO(turnOptions.deadline).toLocaleString(DateTime.DATETIME_SHORT)}</h4>
-        { turnOptions.units && <Units units={turnOptions.units} orderSet={orderSet}/> }
+        {
+          turnOptions.units
+          &&
+          <Units units={turnOptions.units}
+            unitOrders={orders.units}
+          />
+        }
       </div>
   )
 }

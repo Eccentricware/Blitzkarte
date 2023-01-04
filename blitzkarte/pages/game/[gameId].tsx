@@ -4,7 +4,6 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useContext } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import GameDetailsBody from "../../components/game-details-page/GameDetailsBody";
 import GameBody from "../../components/game-page/GameBody";
 import StallGlobe from "../../components/icons/StallGlobe";
 import { NavBarSignedIn } from "../../components/nav-bar/NavBarSignedIn";

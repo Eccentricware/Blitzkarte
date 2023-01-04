@@ -1,25 +1,25 @@
 import { Select, SelectChangeEvent } from "@mui/material";
 import { ChangeEvent, FC, useEffect, useState } from "react";
 import { OrderDisplay } from "../../models/enumeration/order-enums";
-import { OptionDestination, SecondaryUnit, UnitOptionsFinalized, UnitOrder } from "../../models/objects/TurnOptionsObjects";
+import { OptionDestination, Order, SecondaryUnit, UnitOptionsFinalized, UnitOrder } from "../../models/objects/TurnOrdersObjects";
 
 interface UnitProps {
   unit: UnitOptionsFinalized;
-  orderSet: UnitOrder[];
+  orders: any;
 }
 
-export const UnitOrders: FC<UnitProps> = ({unit, orderSet}: UnitProps) => {
-  const [order, setOrder] = useState<UnitOrder|undefined>(undefined);
-  const [orderType, setOrderType] = useState('Hold');
-  const [moveDestinationId, setMoveDestinationId] = useState(0);
-  const [moveTransportedDestinationId, setMoveTransportedDestinationId] = useState(0);
-  const [nukeTargetId, setNukeTargetId] = useState(0);
-  const [supportUnitId, setSupportUnitId] = useState(0);
-  const [supportDestinationId, setSupportDestinationId] = useState(0);
-  const [supportTranportedUnitId, setSupportTransportedUnitId] = useState(0);
-  const [supportTransportedDestinationId, setSupportTransportedDestinationId] = useState(0);
-  const [transportedUnitId, setTransportedUnitId] = useState(0);
-  const [transportDestinationId, setTransportDestinationId] = useState(0);
+export const UnitOrders: FC<UnitProps> = ({unit, orders}: UnitProps) => {
+  const [order, setOrder] = useState<Order|undefined>(undefined);
+  const [orderType, setOrderType] = useState<string|undefined>(undefined);
+  const [moveDestinationId, setMoveDestinationId] = useState<number|undefined>(0);
+  const [moveTransportedDestinationId, setMoveTransportedDestinationId] = useState<number|undefined>(0);
+  const [nukeTargetId, setNukeTargetId] = useState<number|undefined>(0);
+  const [supportUnitId, setSupportUnitId] = useState<number|undefined>(0);
+  const [supportDestinationId, setSupportDestinationId] = useState<number|undefined>(0);
+  const [supportTranportedUnitId, setSupportTransportedUnitId] = useState<number|undefined>(0);
+  const [supportTransportedDestinationId, setSupportTransportedDestinationId] = useState<number|undefined>(0);
+  const [transportedUnitId, setTransportedUnitId] = useState<number|undefined>(0);
+  const [transportDestinationId, setTransportDestinationId] = useState<number|undefined>(0);
 
   const handleOrderTypeChange = (orderType: string) => {
     setOrderType(orderType);
@@ -30,11 +30,36 @@ export const UnitOrders: FC<UnitProps> = ({unit, orderSet}: UnitProps) => {
   }
 
   useEffect(() => {
-    const priorOrder = orderSet.find((order: UnitOrder) => unit.unitId === order.unitId);
+    const priorOrder: Order = orders.find((order: any) => unit.unitId === order.orderedUnitId);
     if (priorOrder) {
       setOrder(priorOrder);
-    } else {
+      setOrderType(priorOrder.orderType);
+      if (priorOrder.orderType === OrderDisplay.MOVE) {
+        setMoveDestinationId(priorOrder.destinationId);
+      }
 
+      if (priorOrder.orderType === OrderDisplay.MOVE_CONVOYED) {
+        setMoveTransportedDestinationId(priorOrder.destinationId);
+      }
+
+      if (priorOrder.orderType === OrderDisplay.DETONATE) {
+        setNukeTargetId(priorOrder.destinationId);
+      }
+
+      if (priorOrder.orderType === OrderDisplay.SUPPORT) {
+        setSupportUnitId(priorOrder.secondaryUnitId);
+        setSupportDestinationId(priorOrder.destinationId);
+      }
+
+      if (priorOrder.orderType === OrderDisplay.SUPPORT_CONVOYED) {
+        setSupportTransportedUnitId(priorOrder.secondaryUnitId);
+        setSupportTransportedDestinationId(priorOrder.destinationId);
+      }
+
+      if (priorOrder.orderType === OrderDisplay.AIRLIFT || priorOrder.orderType === OrderDisplay.CONVOY) {
+        setTransportedUnitId(priorOrder.secondaryUnitId);
+        setTransportDestinationId(priorOrder.destinationId);
+      }
     }
   });
 
@@ -83,9 +108,9 @@ export const UnitOrders: FC<UnitProps> = ({unit, orderSet}: UnitProps) => {
           &&
           <select className="order-destination">
           {
-            unit.supportStandardDestinations[supportUnitId].map((destination: OptionDestination) => {
-              return <option key={destination.nodeId}>{destination.nodeName}</option>
-            })
+            // unit.supportStandardDestinations[supportUnitId].map((destination: OptionDestination) => {
+            //   return <option key={destination.nodeId}>{destination.nodeName}</option>
+            // })
           }
         </select>
       }

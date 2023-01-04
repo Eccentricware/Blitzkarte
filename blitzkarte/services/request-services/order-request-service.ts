@@ -1,4 +1,4 @@
-import { TurnOrders } from "../../models/objects/TurnOptionsObjects";
+import { TurnOrders } from "../../models/objects/TurnOrdersObjects";
 import { AbstractRequestService } from "./abstract-request-service";
 
 export class OrderRequestService extends AbstractRequestService {
@@ -6,7 +6,11 @@ export class OrderRequestService extends AbstractRequestService {
     super();
   }
 
+  async getTurnOptions(gameId: number): Promise<TurnOrders> {
+    return this.get(`orders/${gameId}/options`);
+  }
+
   async getTurnOrders(gameId: number): Promise<TurnOrders> {
-    return this.get(`orders/${gameId}`);
+    return this.get(`orders/${gameId}/orders`);
   }
 }
