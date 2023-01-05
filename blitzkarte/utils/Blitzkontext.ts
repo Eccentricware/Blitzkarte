@@ -62,5 +62,3 @@ export default React.createContext<ContextStructure>({
     omniBoxData: initialOmniBoxData
   }
 });
-
-export const globalDefaultGameId = 7;

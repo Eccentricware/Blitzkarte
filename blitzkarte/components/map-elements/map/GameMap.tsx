@@ -23,7 +23,7 @@ export const GameMap: FC<Props> = ({renderData, mapRef, refs}: Props) => {
               <TerrainLayer terrainRenderData={renderData.terrain} />
               <CityLayer cityData={renderData.cities}/>
               <LabelLayer labelPinData={renderData.labels} labelLineData={renderData.labelLines} />
-              { renderData.nodes.display ?
+              { (renderData.nodes && renderData.nodes.display) ?
                 <NodeLayer nodeData={renderData.nodes} nodeRefs={refs}/>
                 :
                 <UnitLayer unitData={renderData.units} />

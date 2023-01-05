@@ -1,5 +1,5 @@
 import { Box, Tab, Tabs } from "@mui/material";
-import React, { FC } from "react";
+import React, { ChangeEvent, FC } from "react";
 import { OmniBoxData } from "../../models/objects/OmniBoxDataObject";
 import { InputTab } from "./InputTab";
 import { DebugTab } from "./DebugTab";
@@ -31,7 +31,7 @@ const TabPanel = ({index, value, children}: TabPanelProps) => {
 export const CreationOmniBox: FC<OmniProps> = ({omniBoxData}: OmniProps) => {
   const [panel, setPanel] = React.useState(0);
 
-  const handleChange = (event: React.ChangeEvent<{}>, newPanel: number) => {
+  const handleChange = (event: ChangeEvent<{}>, newPanel: number) => {
     setPanel(newPanel);
   }
 

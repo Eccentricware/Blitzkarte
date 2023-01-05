@@ -66,68 +66,68 @@ export class Terrain {
       case 'land':
       case 'l':
         this.type = 'land';
-        this.fill = '#83a584';
-        this.stroke = 'black';
+        // this.fill = '#83a584';
+        // this.stroke = 'black';
         this.renderCategory = 'land';
         break;
       case 'sea':
       case 's':
         this.type = 'sea';
-        this.fill = '#42cafe';
-        this.stroke = 'white';
+        // this.fill = '#42cafe';
+        // this.stroke = 'white';
         this.renderCategory = 'sea';
         break;
       case 'bridge':
       case 'b':
         this.type = 'bridge';
-        this.fill = 'none';
-        this.stroke = 'red';
+        // this.fill = 'none';
+        // this.stroke = 'red';
         this.renderCategory = 'line';
         break;
       case 'border':
         this.type = 'border';
-        this.fill = 'none';
-        this.stroke = 'darkgray';
+        // this.fill = 'none';
+        // this.stroke = 'darkgray';
         this.renderCategory = 'line';
         break;
       case 'canal':
       case 'c':
         this.type = 'canal';
-        this.fill = '#42cafe';
-        this.stroke = 'white';
+        // this.fill = '#42cafe';
+        // this.stroke = 'white';
         this.renderCategory = 'canal';
         break;
       case 'pole':
         this.type = 'pole';
-        this.fill = '#fdfdfd';
-        this.stroke = '#fdfdfd';
+        // this.fill = '#fdfdfd';
+        // this.stroke = '#fdfdfd';
         this.renderCategory = 'land';
         break;
       case 'impassible':
       case 'i':
         this.type = 'impassible';
-        this.fill = '#460002';
-        this.stroke = 'black';
+        // this.fill = '#460002';
+        // this.stroke = 'black';
         this.renderCategory = 'land';
         break;
 
       // Decorative terrain
       case 'ice':
-        this.type = 'decorative';
-        this.fill = '#fdfdfd';
-        this.stroke = 'none';
+        this.type = 'ice';
+        // this.fill = '#fdfdfd';
+        // this.stroke = 'none';
         this.renderCategory = 'land';
         break;
       case 'isle':
-        this.type = 'decorative';
-        this.fill = '#83a584';
-        this.stroke = 'none';
+        this.type = 'isle';
+        // this.fill = '#83a584';
+        // this.stroke = 'none';
         this.renderCategory = 'land';
         break;
       case 'lake':
-        this.type = 'decorative';
-        this.fill = '#c5e6c5';
-        this.stroke = 'black';
+        this.type = 'lake';
+        // this.fill = '#c5e6c5';
+        // this.stroke = 'black';
         this.renderCategory = 'sea';
         break;
 
