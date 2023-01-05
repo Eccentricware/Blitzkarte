@@ -291,7 +291,6 @@ export class Parser {
     });
   }
 
-
   terrainReferences() {
     this.terrain.forEach(terrain => {
       let province: Province = this.referenceElement('provinces', terrain.province);

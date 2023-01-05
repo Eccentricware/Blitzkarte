@@ -1,4 +1,5 @@
-import { Country } from "../utils/parsing/classes/country";
+import { Country } from "../../utils/parsing/classes/country";
+
 
 export interface OmniBoxData {
   messaging: any;

@@ -8,7 +8,9 @@ interface TerrainApproval {
   bridge: string[];
   pole: string[];
   impassible: string[];
-  decorative: string[];
+  ice: string[];
+  isle: string[];
+  lake: string[];
 }
 
 interface NodeApproval {
@@ -43,7 +45,9 @@ export class Province {
     bridge: [],
     pole: [],
     impassible: [],
-    decorative: []
+    ice: [],
+    isle: [],
+    lake: [],
   };
   nodeApproval: NodeApproval = {
     event: [],

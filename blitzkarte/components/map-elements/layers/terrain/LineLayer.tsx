@@ -13,24 +13,24 @@ const LineLayer: FC<Props> = ({ lineRenderData }: Props) => {
           <g key={line.name}>
             <polyline
               points={line.points}
-              fill={line.fill}
+              fill="none"
               strokeMiterlimit="10"
-              stroke={line.stroke}
+              stroke="red"
               strokeWidth="12"
               transform="translate(-16000 10000)"
             />
             <polyline
               points={line.points}
-              fill={line.fill}
+              fill="none"
               strokeMiterlimit="10"
-              stroke={line.stroke}
+              stroke="red"
               strokeWidth="12"
             />
             <polyline
               points={line.points}
-              fill={line.fill}
+              fill="none"
               strokeMiterlimit="10"
-              stroke={line.stroke}
+              stroke="red"
               strokeWidth="12"
               transform="translate(16000 10000)"
             />
