@@ -11,18 +11,15 @@ interface OrderLayerProps {
 }
 
 export const OrderLayer: FC<OrderLayerProps> = ({orderData}: OrderLayerProps) => {
-  const orders = orderData[orderData.render];
-  console.log('OrderLayer orders:', orders);
-
-  const supports = orders.units.filter((unit: any) => [
+  const supports = orderData.units.filter((unit: any) => [
     OrderDisplay.AIRLIFT, OrderDisplay.CONVOY, OrderDisplay.SUPPORT, OrderDisplay.SUPPORT_CONVOYED
   ].includes(unit.orderType));
 
-  const moves = orders.units.filter((unit: any) => [
+  const moves = orderData.units.filter((unit: any) => [
     OrderDisplay.DETONATE, OrderDisplay.MOVE, OrderDisplay.MOVE_CONVOYED
   ].includes(unit.orderType));
 
-  const holds = orders.units.filter((unit: any) => [
+  const holds = orderData.units.filter((unit: any) => [
     OrderDisplay.HOLD, OrderDisplay.DISBAND
   ].includes(unit.orderType));
 

@@ -59,7 +59,7 @@ const GameBody: FC<GameBodyProps> = ({user, gameId}: GameBodyProps) => {
       </Grid>
       <Grid item>
         <div className="column">
-          <PlayOmniBox omniBoxData={omniBoxData}
+          <PlayOmniBox
             turnOptionsResult={turnOptionsResult}
             turnOrdersResult={turnOrdersResult}
             orderSet={orderSet}
