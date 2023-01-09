@@ -10,7 +10,7 @@ const LineLayer: FC<Props> = ({ lineRenderData }: Props) => {
     <g className="line-layer">
       {
         lineRenderData.map(line => (
-          <g key={line.name}>
+          <g key={line.points}>
             <polyline
               points={line.points}
               fill="none"

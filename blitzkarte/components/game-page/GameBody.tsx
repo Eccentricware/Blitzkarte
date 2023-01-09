@@ -3,7 +3,7 @@ import { User } from "firebase/auth";
 import { FC, useContext, useState } from "react";
 import { useQuery, UseQueryResult } from "react-query";
 import { initialRenderData } from "../../models/objects/RenderDataObject";
-import { UnitOrder } from "../../models/objects/TurnOrdersObjects";
+import { Order, TurnOrders, UnitOrder } from "../../models/objects/TurnOrdersObjects";
 import { OrderRequestService } from "../../services/request-services/order-request-service";
 import { MapRequestService } from "../../services/request-services/OrderRequestService";
 import Blitzkontext from "../../utils/Blitzkontext";
@@ -23,8 +23,13 @@ const GameBody: FC<GameBodyProps> = ({user, gameId}: GameBodyProps) => {
   // Refactors Impending
   let renderData = initialRenderData;
   const omniBoxData = useContext(Blitzkontext).newGame.omniBoxData;
-  const orderSet: UnitOrder[] = [];
-  //
+  const [orderSet, setOrderSet] = useState<TurnOrders|undefined>(undefined);
+  const [nudger, setNudge] = useState(false);
+
+  const nudge = {
+    get: nudger,
+    set: setNudge
+  }
 
   const currentMapResult: UseQueryResult<any> = useQuery('getCurrentMap', () => {
     return mapRequestService.getCurrentMap(gameId);
@@ -41,10 +46,16 @@ const GameBody: FC<GameBodyProps> = ({user, gameId}: GameBodyProps) => {
     return orderRequestService.getTurnOrders(gameId);
   });
 
+
   return (
     <Grid container columns={2}>
       <Grid item>
-        <div className="column"><MapContainer renderData={renderData}/></div>
+        <div className="column">
+          <MapContainer renderData={renderData}
+            turnOrdersResult={turnOrdersResult}
+            orderSet={orderSet}
+          />
+        </div>
       </Grid>
       <Grid item>
         <div className="column">
@@ -52,6 +63,8 @@ const GameBody: FC<GameBodyProps> = ({user, gameId}: GameBodyProps) => {
             turnOptionsResult={turnOptionsResult}
             turnOrdersResult={turnOrdersResult}
             orderSet={orderSet}
+            nudge={nudge}
+            gameId={gameId}
           />
         </div>
       </Grid>

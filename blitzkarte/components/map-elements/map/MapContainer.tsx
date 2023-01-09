@@ -5,16 +5,21 @@ import { gsap } from 'gsap'
 import React from 'react';
 import Blitzkontext from '../../../utils/Blitzkontext';
 import { RenderData } from '../../../models/objects/RenderDataObject';
+import { UseQueryResult } from 'react-query';
+import { TurnOrders } from '../../../models/objects/TurnOrdersObjects';
 
 interface Props {
   renderData: RenderData;
+  turnOrdersResult: UseQueryResult<any>;
+  orderSet: TurnOrders | undefined;
 }
 
-export const MapContainer: FC<Props> = ({ renderData }: Props) => {
+export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet }: Props) => {
   // const [viewBox, setViewBox] = useState('0 0 16000 10000');
   const [zoomed, setZoomed] = useState(false);
   const [atTop, setAtTop] = useState(true);
   const [atBottom, setAtBottom] = useState(true);
+  const [nudger, setNudger] = useState(false);
 
   const mapCtx = useContext(Blitzkontext);
 
@@ -29,7 +34,8 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
 
     renderData.units.forEach((unit: any) => {
       const unitType = unit.type.toLowerCase();
-      gsap.to(s(`.${unit.name}_left`), {
+      const unitName = unit.name.split(' ').join('_');
+      gsap.to(s(`.${unitName}_left`), {
         attr: {
           'transform': `translate (${unit.loc[0] - 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
             ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
@@ -39,7 +45,7 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
         duration: 0
       });
 
-      gsap.to(s(`.${unit.name}_center`), {
+      gsap.to(s(`.${unitName}_center`), {
         attr: {
           'transform': `translate (${unit.loc[0] - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
             ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
@@ -49,7 +55,7 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
         duration: 0
       });
 
-      gsap.to(s(`.${unit.name}_right`), {
+      gsap.to(s(`.${unitName}_right`), {
         attr: {
           'transform': `translate (${unit.loc[0] + 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
             ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
@@ -147,7 +153,8 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
 
     renderData.units.forEach((unit: any) => {
       const unitType = unit.type.toLowerCase();
-      gsap.to(s(`.${unit.name}_left`), {
+      const unitName = unit.name.split(' ').join('_');
+      gsap.to(s(`.${unitName}_left`), {
         attr: {
           'transform': `translate (${unit.loc[0] - 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
             ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
@@ -156,7 +163,7 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
         ease: ease,
         duration: 1
       });
-      gsap.to(s(`.${unit.name}_center`), {
+      gsap.to(s(`.${unitName}_center`), {
         attr: {
           'transform': `translate (${unit.loc[0] - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
             ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
@@ -165,7 +172,7 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
         ease: ease,
         duration: 1
       });
-      gsap.to(s(`.${unit.name}_right`), {
+      gsap.to(s(`.${unitName}_right`), {
         attr: {
           'transform': `translate (${unit.loc[0] + 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
             ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
@@ -324,7 +331,8 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
 
     renderData.units.forEach((unit: any) => {
       const unitType = unit.type.toLowerCase();
-      gsap.to(s(`.${unit.name}_left`), {
+      const unitName = unit.name.split(' ').join('_');
+      gsap.to(s(`.${unitName}_left`), {
         attr: {
           'transform': `translate (${unit.loc[0] - 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
             ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
@@ -333,7 +341,7 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
         ease: ease,
         duration: 1
       });
-      gsap.to(s(`.${unit.name}_center`), {
+      gsap.to(s(`.${unitName}_center`), {
         attr: {
           'transform': `translate (${unit.loc[0] - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
             ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
@@ -342,7 +350,7 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
         ease: ease,
         duration: 1
       });
-      gsap.to(s(`.${unit.name}_right`), {
+      gsap.to(s(`.${unitName}_right`), {
         attr: {
           'transform': `translate (${unit.loc[0] + 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
             ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
@@ -563,7 +571,8 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
 
     renderData.units.forEach((unit: any) => {
       const unitType = unit.type.toLowerCase();
-      gsap.to(s(`.${unit.name}_left`), {
+      const unitName = unit.name.split(' ').join('_');
+      gsap.to(s(`.${unitName}_left`), {
         attr: {
           'transform': `translate (${unit.loc[0] - 16000 - mapCtx.map.unitSizing[unitType].baseWidth / 2}
             ${unit.loc[1] - mapCtx.map.unitSizing[unitType].baseHeight / 2})
@@ -572,7 +581,7 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
         ease: ease,
         duration: 1
       });
-      gsap.to(s(`.${unit.name}_center`), {
+      gsap.to(s(`.${unitName}_center`), {
         attr: {
           'transform': `translate (${unit.loc[0] - mapCtx.map.unitSizing[unitType].baseWidth / 2}
             ${unit.loc[1] - mapCtx.map.unitSizing[unitType].baseHeight / 2})
@@ -581,7 +590,7 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
         ease: ease,
         duration: 1
       });
-      gsap.to(s(`.${unit.name}_right`), {
+      gsap.to(s(`.${unitName}_right`), {
         attr: {
           'transform': `translate (${unit.loc[0] + 16000 - mapCtx.map.unitSizing[unitType].baseWidth / 2}
             ${unit.loc[1] - mapCtx.map.unitSizing[unitType].baseHeight / 2})
@@ -653,7 +662,12 @@ export const MapContainer: FC<Props> = ({ renderData }: Props) => {
   return (
     <div className="map-container">
       <svg id="map-container" className="map-container" width="1488" height="930" viewBox="0 0 16000 10000">
-        <GameMap renderData={renderData} mapRef={mapRef} refs={llRef}/>
+        <GameMap renderData={renderData}
+          turnOrdersResult={turnOrdersResult}
+          orderSet={orderSet}
+          mapRef={mapRef}
+          refs={llRef}
+        />
         <g transform='translate(14500 8500)'>
           <ViewControls viewOps={viewOps}/>
         </g>
