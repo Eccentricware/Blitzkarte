@@ -390,6 +390,7 @@ export class Parser {
             let city: City = this.referenceElement('cities', province.cities[0]);
             if (city.type === 's' || city.type === 'c') {
               country.cities.push(city.name);
+              country.cityCount = country.cities.length;
             }
           }
         } else {

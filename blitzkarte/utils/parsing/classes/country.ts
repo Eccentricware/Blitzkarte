@@ -14,6 +14,7 @@ export class Country {
   provinces: string[] = [];
   votes: number = 1;
   cities: string[] = [];
+  cityCount: number = 0;
   units: string[] = [];
   unitCounts: {
     army: number,
@@ -81,7 +82,7 @@ export class Country {
     if (pin.nuke) {
       if (pin.nuke.charAt(0).toLowerCase() === 'u') {
         nuke = 0;
-      } else if (Number(pin.nuke) !== NaN) {
+      } else if (!Number.isNaN(pin.nuke)) {
         nuke = Number(pin.nuke);
       } else {
         nuke = -1;

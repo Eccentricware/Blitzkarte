@@ -8,14 +8,17 @@ import { HelperTab } from './HelperTab';
 import { ChatTab } from "./ChatTab";
 import { PreviousTab } from "./PreviousTab";
 import { OrdersTab } from "./OrdersTab";
-import { UseQueryResult } from "react-query";
-import { UnitOrder } from "../../models/objects/TurnOrdersObjects";
+import { useQuery, UseQueryResult } from "react-query";
+import { TurnOrders } from "../../models/objects/TurnOrdersObjects";
+import { GameRequestService } from "../../services/request-services/game-request-service";
 
 interface OmniProps {
   omniBoxData: OmniBoxData;
   turnOptionsResult: UseQueryResult<any>;
   turnOrdersResult: UseQueryResult<any>;
-  orderSet: UnitOrder[];
+  orderSet: TurnOrders | undefined;
+  nudge: any;
+  gameId: number;
 }
 
 interface TabPanelProps {
@@ -37,12 +40,17 @@ const TabPanel = ({index, value, children}: TabPanelProps) => {
 }
 
 export const PlayOmniBox: FC<OmniProps> = ({
-  omniBoxData, turnOptionsResult, turnOrdersResult, orderSet}: OmniProps) => {
+  omniBoxData, turnOptionsResult, turnOrdersResult, orderSet, gameId, nudge}: OmniProps) => {
+  const gameRequestService = new GameRequestService();
   const [panel, setPanel] = useState(0);
 
   const handleChange = (event: ChangeEvent<{}>, newPanel: number) => {
     setPanel(newPanel);
   }
+
+  const { data: countryStats } = useQuery('getStatsTable', () => {
+    return gameRequestService.getStatsTable(gameId);
+  });
 
   return (
     <div className="omni-box">
@@ -52,8 +60,8 @@ export const PlayOmniBox: FC<OmniProps> = ({
             (turnOptionsResult.data && turnOrdersResult.data)
             && <Tab label="Orders"/>
           }
-          <Tab label="Stats"/>
-          <Tab label="Chat" disabled={true}/>
+          { countryStats && <Tab label="Stats"/> }
+          {/* <Tab label="Chat" disabled={true}/> */}
           <Tab label="History"/>
         </Tabs>
       </Box>
@@ -61,15 +69,20 @@ export const PlayOmniBox: FC<OmniProps> = ({
         (turnOptionsResult.data && turnOrdersResult.data)
         &&  <TabPanel value={panel} index={0}>
               <OrdersTab options={turnOptionsResult.data}
-                orders={turnOrdersResult.data}/>
+                orders={turnOrdersResult.data}
+                nudge={nudge}/>
             </TabPanel>
       }
-      <TabPanel value={panel} index={1}>
-        <StatsTable stats={omniBoxData.stats} />
-      </TabPanel>
-      <TabPanel value={panel} index={2}>
+      {
+        countryStats
+          &&
+        <TabPanel value={panel} index={1}>
+          <StatsTable stats={countryStats} />
+        </TabPanel>
+      }
+      {/* <TabPanel value={panel} index={2}>
         <ChatTab />
-      </TabPanel>
+      </TabPanel> */}
       <TabPanel value={panel} index={3}>
         <PreviousTab/>
       </TabPanel>

@@ -9,6 +9,7 @@ interface Props {
 
 export const UnitRender: FC<Props> = ({unit}: Props) => {
   const unitType = unit.type.toLowerCase();
+  const unitName = unit.name.split(' ').join('_');
   const unitSVG = UnitSVGs[unitType];
   const flagSVG = FlagSVGs[unit.countryKey];
 
@@ -16,8 +17,8 @@ export const UnitRender: FC<Props> = ({unit}: Props) => {
     <Blitzkontext.Consumer>
       {({map}) => {
         return (
-          <g className={unit.name} key={unit.name}>
-            <g className={unit.name + '_left'} transform={
+          <g className={unitName} key={unitName}>
+            <g className={unitName + '_left'} transform={
               `translate(
               ${unit.loc[0] - map.unitSizing[unitType].width / 2 - 16000}
               ${unit.loc[1] - map.unitSizing[unitType].height / 2}
@@ -38,7 +39,7 @@ export const UnitRender: FC<Props> = ({unit}: Props) => {
               {unitSVG}
 
             </g>
-            <g className={unit.name + '_center'} transform={
+            <g className={unitName + '_center'} transform={
                 `translate(
                 ${unit.loc[0] - map.unitSizing[unitType].width / 2}
                 ${unit.loc[1] - map.unitSizing[unitType].height / 2}
@@ -58,7 +59,7 @@ export const UnitRender: FC<Props> = ({unit}: Props) => {
 
                 {unitSVG}
             </g>
-            <g className={unit.name + '_right'} transform={
+            <g className={unitName + '_right'} transform={
               `translate(
               ${unit.loc[0] - map.unitSizing[unitType].width / 2 + 16000}
               ${unit.loc[1] - map.unitSizing[unitType].height / 2}

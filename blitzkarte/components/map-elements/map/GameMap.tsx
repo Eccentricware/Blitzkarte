@@ -5,14 +5,19 @@ import { CityLayer } from '../layers/city/CityLayer';
 import { UnitLayer } from '../layers/unit/UnitLayer';
 import { NodeLayer } from '../layers/node/NodeLayer';
 import Blitzkontext from '../../../utils/Blitzkontext';
+import { UseQueryResult } from 'react-query';
+import { OrderLayer } from '../layers/orders/OrderLayer';
+import { TurnOrders } from '../../../models/objects/TurnOrdersObjects';
 
 interface Props {
   renderData: any;
   mapRef: any;
   refs: any;
+  turnOrdersResult: UseQueryResult;
+  orderSet: TurnOrders | undefined;
 }
 
-export const GameMap: FC<Props> = ({renderData, mapRef, refs}: Props) => {
+export const GameMap: FC<Props> = ({renderData, mapRef, refs, turnOrdersResult}: Props) => {
   return (
     <Blitzkontext.Consumer>
       {({map}) => {
@@ -23,6 +28,7 @@ export const GameMap: FC<Props> = ({renderData, mapRef, refs}: Props) => {
               <TerrainLayer terrainRenderData={renderData.terrain} />
               <CityLayer cityData={renderData.cities}/>
               <LabelLayer labelPinData={renderData.labels} labelLineData={renderData.labelLines} />
+              { (turnOrdersResult &&turnOrdersResult.data) && <OrderLayer orderData={turnOrdersResult.data} /> }
               { (renderData.nodes && renderData.nodes.display) ?
                 <NodeLayer nodeData={renderData.nodes} nodeRefs={refs}/>
                 :

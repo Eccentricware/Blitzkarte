@@ -60,9 +60,9 @@ export interface UnitOptionsFinalized {
 }
 
 export interface SecondaryUnit {
-  id: number | undefined;
+  id: number;
   displayName: string;
-  loc: number[] | undefined;
+  loc: number[];
 }
 
 export interface OptionDestination {
