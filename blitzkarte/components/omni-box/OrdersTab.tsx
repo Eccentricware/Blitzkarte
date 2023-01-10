@@ -34,12 +34,12 @@ export const OrdersTab: FC<OrderOrdersProps> = ({options, orders, nudge}: OrderO
       {
         options.offerTechOptions
           &&
-        <TechTransfer giving={true} transferOptions={options.offerTechOptions} techTransferPartner={1}/>
+        <TechTransfer giving={true} transferOptions={options.offerTechOptions} orders={orders}/>
       }
       {
         options.receiveTechOptions
           &&
-        <TechTransfer giving={false} transferOptions={options.receiveTechOptions} techTransferPartner={1}/>
+        <TechTransfer giving={false} transferOptions={options.receiveTechOptions} orders={orders}/>
       }
       {
         options.buildTransfers

@@ -1,21 +1,22 @@
 import { ChangeEvent, FC, useEffect, useState } from "react";
-import { TransferCountry } from "../../models/objects/OptionsObjects";
+import { TransferTechCountry } from "../../models/objects/OptionsObjects";
+import { TurnOrders } from "../../models/objects/TurnOrdersObjects";
 
 interface Props {
   giving: boolean;
   transferOptions: {
     turnStatus: string;
-    options: TransferCountry[];
+    options: TransferTechCountry[];
   };
-  techTransferPartner: number;
+  orders: any;
 }
 
-export const TechTransfer: FC<Props> = ({giving, transferOptions, techTransferPartner}: Props) => {
+export const TechTransfer: FC<Props> = ({giving, transferOptions, orders}: Props) => {
   const [countries, setCountries] = useState(transferOptions.options);
-  const [transferPartner, setTransferPartner] = useState(techTransferPartner);
+  const [transferPartner, setTransferPartner] = useState(orders.techTransfer ? orders.techTransfer : 0);
 
   const handlePartnerChange = (countryId: string) => {
-    techTransferPartner = Number(countryId);
+    orders.techTransfer = Number(countryId);
     setTransferPartner(Number(countryId));
   }
 
@@ -28,7 +29,7 @@ export const TechTransfer: FC<Props> = ({giving, transferOptions, techTransferPa
           }}
         >
           {
-            countries.map((country: TransferCountry) =>
+            countries.map((country: TransferTechCountry) =>
               <option key={country.countryId} value={country.countryId}>{country.countryName}</option>
             )
           }
