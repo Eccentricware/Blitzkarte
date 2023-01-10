@@ -21,15 +21,16 @@ export interface TurnOptionsFinal {
   };
   buildTransfers?: {
     turnStatus: string;
-    options: TransferCountry[];
+    options: TransferBuildsCountry[];
+    builds: number;
   };
   offerTechOptions?: {
     turnStatus: string;
-    options: TransferCountry[];
+    options: TransferTechCountry[];
   };
   receiveTechOptions?: {
     turnStatus: string;
-    options: TransferCountry[];
+    options: TransferTechCountry[];
   };
   builds?: {
     turnStatus: string;
@@ -66,12 +67,15 @@ interface UnitOptionsFinalized {
   transportDestinations: Record<string, OptionDestination[]>;
 }
 
-interface TransferCountry {
+export interface TransferTechCountry {
   countryId: number;
   countryName: string;
 }
+export interface TransferBuildsCountry extends TransferTechCountry {
+  builds: number;
+}
 
-interface BuildLoc {
+export interface BuildLoc {
   countryId: number;
   countryName: string;
   provinceName: string;
@@ -85,7 +89,7 @@ interface BuildLoc {
   airNodeLoc: number[];
 }
 
-interface AtRiskUnit {
+export interface AtRiskUnit {
   countryId: number;
 	countryName: string;
 	rank: string;
@@ -96,13 +100,13 @@ interface AtRiskUnit {
 	loc: number[];
 }
 
-interface NominatableCountry {
+export interface NominatableCountry {
   countryId: number;
   countryName: string;
   rank: string;
 }
 
-interface Nomination {
+export interface Nomination {
   nominationId: number;
   rankSignature: string;
   countries: NominatableCountry[];

@@ -32,23 +32,20 @@ export const OrdersTab: FC<OrderOrdersProps> = ({options, orders, nudge}: OrderO
         />
       }
       {
-        options.buildTransfers
-          &&
-        <BuildTransfer transferOptions={options.buildTransfers}/>
-      }
-      {
         options.offerTechOptions
           &&
-        <TechTransfer transferOptions={options.offerTechOptions}/>
-      }
-      {/* {
-        options.pending
-        && <TurnOrdersPanel turnOptions={options.pending} orders={orders.pending} nudge={nudge}/>
+        <TechTransfer giving={true} transferOptions={options.offerTechOptions} techTransferPartner={1}/>
       }
       {
-        options.preliminary
-        && <TurnOrdersPanel turnOptions={options.preliminary} orders={orders.preliminary} nudge={nudge}/>
-      } */}
+        options.receiveTechOptions
+          &&
+        <TechTransfer giving={false} transferOptions={options.receiveTechOptions} techTransferPartner={1}/>
+      }
+      {
+        options.buildTransfers
+          &&
+        <BuildTransfer transferOptions={options.buildTransfers} transferOrders={orders.buildTransfers}/>
+      }
       <Button
         color="inherit"
         variant="contained"

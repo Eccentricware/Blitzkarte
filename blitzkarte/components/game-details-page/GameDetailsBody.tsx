@@ -4,7 +4,6 @@ import { FC, useEffect, useState } from "react";
 import { useQuery, UseQueryResult } from "react-query";
 import { AssignmentRequestService } from "../../services/request-services/assignment-request-service";
 import { GameRequestService } from "../../services/request-services/game-request-service";
-import { globalDefaultGameId } from "../../utils/Blitzkontext";
 import { erzahler } from "../../utils/general/erzahler";
 import StallGlobe from "../icons/StallGlobe";
 import { AssignmentsAdm } from "./AssignmentsAdm";

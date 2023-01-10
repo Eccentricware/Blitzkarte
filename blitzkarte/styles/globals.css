@@ -104,3 +104,8 @@ text {
 .order-destination {
   width: 80px;
 }
+
+.build-transfer-row {
+  display: flex;
+  flex-wrap: nowrap;
+}
