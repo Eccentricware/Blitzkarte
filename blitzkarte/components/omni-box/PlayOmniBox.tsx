@@ -13,7 +13,6 @@ import { TurnOrders } from "../../models/objects/TurnOrdersObjects";
 import { GameRequestService } from "../../services/request-services/game-request-service";
 
 interface OmniProps {
-  omniBoxData: OmniBoxData;
   turnOptionsResult: UseQueryResult<any>;
   turnOrdersResult: UseQueryResult<any>;
   orderSet: TurnOrders | undefined;
@@ -39,8 +38,7 @@ const TabPanel = ({index, value, children}: TabPanelProps) => {
   )
 }
 
-export const PlayOmniBox: FC<OmniProps> = ({
-  omniBoxData, turnOptionsResult, turnOrdersResult, orderSet, gameId, nudge}: OmniProps) => {
+export const PlayOmniBox: FC<OmniProps> = ({turnOptionsResult, turnOrdersResult, orderSet, gameId, nudge}: OmniProps) => {
   const gameRequestService = new GameRequestService();
   const [panel, setPanel] = useState(0);
 
@@ -58,7 +56,8 @@ export const PlayOmniBox: FC<OmniProps> = ({
         <Tabs value={panel} onChange={handleChange} centered>
           {
             (turnOptionsResult.data && turnOrdersResult.data)
-            && <Tab label="Orders"/>
+              &&
+            <Tab label="Orders"/>
           }
           { countryStats && <Tab label="Stats"/> }
           {/* <Tab label="Chat" disabled={true}/> */}
@@ -67,11 +66,13 @@ export const PlayOmniBox: FC<OmniProps> = ({
       </Box>
       {
         (turnOptionsResult.data && turnOrdersResult.data)
-        &&  <TabPanel value={panel} index={0}>
-              <OrdersTab options={turnOptionsResult.data}
-                orders={turnOrdersResult.data}
-                nudge={nudge}/>
-            </TabPanel>
+          &&
+        <TabPanel value={panel} index={0}>
+          <OrdersTab options={turnOptionsResult.data}
+            orders={turnOrdersResult.data}
+            nudge={nudge}
+          />
+        </TabPanel>
       }
       {
         countryStats

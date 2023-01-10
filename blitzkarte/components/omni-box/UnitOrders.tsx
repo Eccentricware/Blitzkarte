@@ -11,40 +11,24 @@ interface UnitProps {
 }
 
 export const UnitOrders: FC<UnitProps> = ({unit, orders, nudge}: UnitProps) => {
-  const [order, setOrder] = useState<Order|undefined>(undefined);
-  const [orderType, setOrderType] = useState<string>(unit.orderTypes[0]);
-  const [moveDestinationId, setMoveDestinationId] = useState<number>(0);
-  const [moveTransportedDestinationId, setMoveTransportedDestinationId] = useState<number>(0);
-  const [nukeTargetId, setNukeTargetId] = useState<number>(0);
-  const [supportUnitId, setSupportUnitId] = useState<number>(0);
-  const [supportDestinationId, setSupportDestinationId] = useState<number>(0);
-  const [standardSupport, setStandardSupport] = useState({unitId: supportUnitId, destinationId: supportDestinationId });
-  const [supportTranportedUnitId, setSupportTransportedUnitId] = useState<number>(0);
-  const [supportTransportedDestinationId, setSupportTransportedDestinationId] = useState<number>(0);
-  const [transportedUnitId, setTransportedUnitId] = useState<number>(0);
-  const [transportDestinationId, setTransportDestinationId] = useState<number>(0);
+  const [order, setOrder] = useState<Order>(orders.find((order: any) => unit.unitId === order.orderedUnitId));
 
   const handleOrderTypeChange = (orderType: string) => {
-    setOrderType(orderType);
-
     const updatedOrder = order;
-    if (updatedOrder) {
+    // if (updatedOrder) {
       updatedOrder.orderType = orderType;
 
       if (orderType === OrderDisplay.MOVE) {
-        setMoveDestinationId(unit.moveDestinations[0].nodeId);
         updatedOrder.destinationId = unit.moveDestinations[0].nodeId;
         updatedOrder.eventLoc = unit.moveDestinations[0].loc;
       }
 
       if (orderType === OrderDisplay.MOVE_CONVOYED) {
-        setMoveTransportedDestinationId(unit.moveTransportedDestinations[0].nodeId);
         updatedOrder.destinationId = unit.moveTransportedDestinations[0].nodeId;
         updatedOrder.eventLoc = unit.moveTransportedDestinations[0].loc;
       }
 
       if (orderType === OrderDisplay.DETONATE) {
-        setNukeTargetId(unit.nukeTargets[0].nodeId);
         updatedOrder.destinationId = unit.nukeTargets[0].nodeId;
         updatedOrder.eventLoc = unit.nukeTargets[0].loc;
       }
@@ -53,10 +37,41 @@ export const UnitOrders: FC<UnitProps> = ({unit, orders, nudge}: UnitProps) => {
         const supportUnit = unit.supportStandardUnits[0];
         if (supportUnit.id) {
           const destination = unit.supportStandardDestinations[supportUnit.id][0];
-          setSupportUnitId(supportUnit.id);
           updatedOrder.secondaryUnitId = supportUnit.id;
           updatedOrder.secondaryUnitLoc = supportUnit.loc;
-          setSupportDestinationId(destination.nodeId);
+          updatedOrder.destinationId = destination.nodeId;
+          updatedOrder.eventLoc = destination.loc;
+        }
+      }
+
+      if (orderType === OrderDisplay.SUPPORT_CONVOYED) {
+        const supportUnit = unit.supportStandardUnits[0];
+        if (supportUnit.id) {
+          const destination = unit.supportTransportedDestinations[supportUnit.id][0];
+          updatedOrder.secondaryUnitId = supportUnit.id;
+          updatedOrder.secondaryUnitLoc = supportUnit.loc;
+          updatedOrder.destinationId = destination.nodeId;
+          updatedOrder.eventLoc = destination.loc;
+        }
+      }
+
+      if (orderType === OrderDisplay.AIRLIFT) {
+        const supportUnit = unit.transportableUnits[0];
+        if (supportUnit.id) {
+          const destination = unit.transportDestinations[supportUnit.id][0];
+          updatedOrder.secondaryUnitId = supportUnit.id;
+          updatedOrder.secondaryUnitLoc = supportUnit.loc;
+          updatedOrder.destinationId = destination.nodeId;
+          updatedOrder.eventLoc = destination.loc;
+        }
+      }
+
+      if (orderType === OrderDisplay.CONVOY) {
+        const supportUnit = unit.transportableUnits[0];
+        if (supportUnit.id) {
+          const destination = unit.transportDestinations[supportUnit.id][0];
+          updatedOrder.secondaryUnitId = supportUnit.id;
+          updatedOrder.secondaryUnitLoc = supportUnit.loc;
           updatedOrder.destinationId = destination.nodeId;
           updatedOrder.eventLoc = destination.loc;
         }
@@ -64,15 +79,14 @@ export const UnitOrders: FC<UnitProps> = ({unit, orders, nudge}: UnitProps) => {
 
       setOrder(updatedOrder);
       nudge.set(!nudge.get);
-    }
+    // }
   }
 
   const handleMoveDestinationChange = (destinationId: string) => {
     const destination = unit.moveDestinations.find((destination: OptionDestination) => destination.nodeId === Number(destinationId));
-    setMoveDestinationId(Number(destinationId));
     const updatedOrder = order;
 
-    if (updatedOrder && destination) {
+    if (destination) {
       updatedOrder.destinationId = destination.nodeId;
       updatedOrder.eventLoc = destination.loc;
       setOrder(updatedOrder);
@@ -82,10 +96,9 @@ export const UnitOrders: FC<UnitProps> = ({unit, orders, nudge}: UnitProps) => {
 
   const handleMoveTransportedDestinationChange = (destinationId: string) => {
     const destination = unit.moveTransportedDestinations.find((destination: OptionDestination) => destination.nodeId === Number(destinationId));
-    setMoveTransportedDestinationId(Number(destinationId));
     const updatedOrder = order;
 
-    if (updatedOrder && destination) {
+    if (destination) {
       updatedOrder.destinationId = destination.nodeId;
       updatedOrder.eventLoc = destination.loc;
       setOrder(updatedOrder);
@@ -95,7 +108,6 @@ export const UnitOrders: FC<UnitProps> = ({unit, orders, nudge}: UnitProps) => {
 
   const handleNukeTargetChange = (destinationId: string) => {
     const destination = unit.nukeTargets.find((destination: OptionDestination) => destination.nodeId === Number(destinationId));
-    setNukeTargetId(Number(destinationId));
     const updatedOrder = order;
 
     if (updatedOrder && destination) {
@@ -106,11 +118,76 @@ export const UnitOrders: FC<UnitProps> = ({unit, orders, nudge}: UnitProps) => {
     nudge.set(!nudge.get);
   }
 
+  const handleTransportedUnitChange = (unitId: string) => {
+    const updatedOrder = order;
+    const supportUnit = unit.transportableUnits.find((unit: SecondaryUnit) => unit.id === Number(unitId));
+
+    if (supportUnit) {
+
+      if (updatedOrder && supportUnit && supportUnit.id) {
+        updatedOrder.secondaryUnitId = supportUnit.id;
+        updatedOrder.secondaryUnitLoc = supportUnit.loc;
+
+        const destination = unit.transportDestinations[unitId][0];
+        updatedOrder.destinationId = destination.nodeId;
+        updatedOrder.eventLoc = destination.loc;
+        setOrder(updatedOrder);
+      }
+    }
+    nudge.set(!nudge.get);
+  }
+
+  const handleTransportedDestinationChange = (destinationId: string) => {
+    if (order.secondaryUnitId) {
+      const destination = unit.transportDestinations[order.secondaryUnitId].find((destination: OptionDestination) => destination.nodeId === Number(destinationId));
+      const updatedOrder = order;
+
+      if (updatedOrder && destination) {
+        updatedOrder.destinationId = destination.nodeId;
+        updatedOrder.eventLoc = destination.loc;
+        setOrder(updatedOrder);
+      }
+    }
+    nudge.set(!nudge.get);
+  }
+
+  const handleSupportTransportedUnitChange = (unitId: string) => {
+    const updatedOrder = order;
+    const supportUnit = unit.supportTransportedUnits.find((unit: SecondaryUnit) => unit.id === Number(unitId));
+
+    if (supportUnit) {
+
+      if (updatedOrder && supportUnit && supportUnit.id) {
+        updatedOrder.secondaryUnitId = supportUnit.id;
+        updatedOrder.secondaryUnitLoc = supportUnit.loc;
+
+        const destination = unit.supportTransportedDestinations[unitId][0];
+        updatedOrder.destinationId = destination.nodeId;
+        updatedOrder.eventLoc = destination.loc;
+        setOrder(updatedOrder);
+      }
+    }
+    nudge.set(!nudge.get);
+  }
+
+  const handleSupportTransportedDestinationChange = (destinationId: string) => {
+    if (order.secondaryUnitId) {
+      const destination = unit.supportTransportedDestinations[order.secondaryUnitId].find((destination: OptionDestination) => destination.nodeId === Number(destinationId));
+      const updatedOrder = order;
+
+      if (updatedOrder && destination) {
+        updatedOrder.destinationId = destination.nodeId;
+        updatedOrder.eventLoc = destination.loc;
+        setOrder(updatedOrder);
+      }
+    }
+    nudge.set(!nudge.get);
+  }
+
   const handleSupportUnitChange = (unitId: string) => {
     const updatedOrder = order;
     const supportUnit = unit.supportStandardUnits.find((unit: SecondaryUnit) => unit.id === Number(unitId));
-    setSupportUnitId(Number(unitId));
-    setSupportDestinationId(unit.supportStandardDestinations[unitId][0].nodeId);
+
     if (supportUnit) {
 
       if (updatedOrder && supportUnit && supportUnit.id) {
@@ -127,57 +204,23 @@ export const UnitOrders: FC<UnitProps> = ({unit, orders, nudge}: UnitProps) => {
   }
 
   const handleSupportDestinationChange = (destinationId: string) => {
-    const destination = unit.moveDestinations.find((destination: OptionDestination) => destination.nodeId === Number(destinationId));
-    setSupportDestinationId(Number(destinationId));
-    const updatedOrder = order;
+    if (order.secondaryUnitId) {
+      const destination = unit.supportStandardDestinations[order.secondaryUnitId].find((destination: OptionDestination) => destination.nodeId === Number(destinationId));
+      const updatedOrder = order;
 
-    if (updatedOrder && destination) {
-      updatedOrder.destinationId = destination.nodeId;
-      updatedOrder.eventLoc = destination.loc;
-      setOrder(updatedOrder);
+      if (updatedOrder && destination) {
+        updatedOrder.destinationId = destination.nodeId;
+        updatedOrder.eventLoc = destination.loc;
+        setOrder(updatedOrder);
+      }
     }
     nudge.set(!nudge.get);
   }
 
-  useEffect(() => {
-    const priorOrder: Order = orders.find((order: any) => unit.unitId === order.orderedUnitId);
-    if (priorOrder) {
-      setOrder(priorOrder);
-      setOrderType(priorOrder.orderType);
-      if (priorOrder.orderType === OrderDisplay.MOVE && priorOrder.destinationId) {
-        setMoveDestinationId(priorOrder.destinationId);
-      }
-
-      if (priorOrder.orderType === OrderDisplay.MOVE_CONVOYED && priorOrder.destinationId) {
-        setMoveTransportedDestinationId(priorOrder.destinationId);
-      }
-
-      if (priorOrder.orderType === OrderDisplay.DETONATE && priorOrder.destinationId) {
-        setNukeTargetId(priorOrder.destinationId);
-      }
-
-      if (priorOrder.orderType === OrderDisplay.SUPPORT && priorOrder.secondaryUnitId && priorOrder.destinationId) {
-        setSupportUnitId(priorOrder.secondaryUnitId);
-        setSupportDestinationId(priorOrder.destinationId);
-      }
-
-      if (priorOrder.orderType === OrderDisplay.SUPPORT_CONVOYED && priorOrder.secondaryUnitId && priorOrder.destinationId) {
-        setSupportTransportedUnitId(priorOrder.secondaryUnitId);
-        setSupportTransportedDestinationId(priorOrder.destinationId);
-      }
-
-      if ((priorOrder.orderType === OrderDisplay.AIRLIFT || priorOrder.orderType === OrderDisplay.CONVOY)
-      && priorOrder.secondaryUnitId && priorOrder.destinationId) {
-        setTransportedUnitId(priorOrder.secondaryUnitId);
-        setTransportDestinationId(priorOrder.destinationId);
-      }
-    }
-  }, []);
-
   return(
     <div className="order-row">
       <div className="order-unit">{unit.unitDisplay}</div>
-      <select className="order-type" value={orderType}
+      <select className="order-type" value={order.orderType}
         onChange={(event: ChangeEvent<HTMLSelectElement>) => {
           handleOrderTypeChange(event.target.value);
         }}
@@ -189,9 +232,9 @@ export const UnitOrders: FC<UnitProps> = ({unit, orders, nudge}: UnitProps) => {
         }
       </select>
       {
-        orderType === OrderDisplay.MOVE
+        order.orderType === OrderDisplay.MOVE
           &&
-        <select className="order-destination" value={moveDestinationId}
+        <select className="order-destination" value={order.destinationId}
           onChange={(event: ChangeEvent<HTMLSelectElement>) => {
             handleMoveDestinationChange(event.target.value);
           }}
@@ -204,9 +247,9 @@ export const UnitOrders: FC<UnitProps> = ({unit, orders, nudge}: UnitProps) => {
         </select>
       }
       {
-        orderType === OrderDisplay.MOVE_CONVOYED
+        order.orderType === OrderDisplay.MOVE_CONVOYED
           &&
-        <select className="order-destination" value={moveTransportedDestinationId}
+        <select className="order-destination" value={order.destinationId}
           onChange={(event: ChangeEvent<HTMLSelectElement>) => {
             handleMoveTransportedDestinationChange(event.target.value);
           }}
@@ -219,9 +262,9 @@ export const UnitOrders: FC<UnitProps> = ({unit, orders, nudge}: UnitProps) => {
         </select>
       }
       {
-        orderType === OrderDisplay.DETONATE
+        order.orderType === OrderDisplay.DETONATE
           &&
-        <select className="order-destination" value={nukeTargetId}
+        <select className="order-destination" value={order.destinationId}
           onChange={(event: ChangeEvent<HTMLSelectElement>) => {
             handleNukeTargetChange(event.target.value);
           }}
@@ -234,28 +277,120 @@ export const UnitOrders: FC<UnitProps> = ({unit, orders, nudge}: UnitProps) => {
         </select>
       }
       {
-        orderType === OrderDisplay.SUPPORT
+        order.orderType === OrderDisplay.SUPPORT
           &&
         <Fragment>
-          <select className="order-unit" value={supportUnitId}
+          <select className="order-unit" value={order.secondaryUnitId}
             onChange={(event: ChangeEvent<HTMLSelectElement>) => {
               handleSupportUnitChange(event.target.value);
             }}
           >
             {
               unit.supportStandardUnits.map((secondaryUnit: SecondaryUnit) => {
-                return <option key={secondaryUnit.id}>{secondaryUnit.displayName}</option>
+                return <option key={secondaryUnit.id} value={secondaryUnit.id}>{secondaryUnit.displayName}</option>
               })
             }
           </select>
-          <select className="order-destination" value={supportDestinationId}
+          <select className="order-destination" value={order.destinationId}
             onChange={(event: ChangeEvent<HTMLSelectElement>) => {
               handleSupportDestinationChange(event.target.value);
             }}
           >
             {
-              unit.supportStandardDestinations[supportUnitId].map((destination: OptionDestination) => {
-                return <option key={destination.nodeId}>{destination.nodeName}</option>
+              order.secondaryUnitId
+                &&
+              unit.supportStandardDestinations[order.secondaryUnitId].map((destination: OptionDestination) => {
+                return <option key={destination.nodeId} value={destination.nodeId}>{destination.nodeName}</option>
+              })
+            }
+          </select>
+        </Fragment>
+      }
+      {
+        order.orderType === OrderDisplay.SUPPORT_CONVOYED
+          &&
+        <Fragment>
+          <select className="order-unit" value={order.secondaryUnitId}
+            onChange={(event: ChangeEvent<HTMLSelectElement>) => {
+              handleSupportTransportedUnitChange(event.target.value);
+            }}
+          >
+            {
+              unit.supportTransportedUnits.map((secondaryUnit: SecondaryUnit) => {
+                return <option key={secondaryUnit.id} value={secondaryUnit.id}>{secondaryUnit.displayName}</option>
+              })
+            }
+          </select>
+          <select className="order-destination" value={order.destinationId}
+            onChange={(event: ChangeEvent<HTMLSelectElement>) => {
+              handleSupportTransportedDestinationChange(event.target.value);
+            }}
+          >
+            {
+              order.secondaryUnitId
+                &&
+              unit.supportTransportedDestinations[order.secondaryUnitId].map((destination: OptionDestination) => {
+                return <option key={destination.nodeId} value={destination.nodeId}>{destination.nodeName}</option>
+              })
+            }
+          </select>
+        </Fragment>
+      }
+      {
+        order.orderType === OrderDisplay.AIRLIFT
+          &&
+        <Fragment>
+          <select className="order-unit" value={order.secondaryUnitId}
+            onChange={(event: ChangeEvent<HTMLSelectElement>) => {
+              handleTransportedUnitChange(event.target.value);
+            }}
+          >
+            {
+              unit.transportableUnits.map((secondaryUnit: SecondaryUnit) => {
+                return <option key={secondaryUnit.id} value={secondaryUnit.id}>{secondaryUnit.displayName}</option>
+              })
+            }
+          </select>
+          <select className="order-destination" value={order.destinationId}
+            onChange={(event: ChangeEvent<HTMLSelectElement>) => {
+              handleTransportedDestinationChange(event.target.value);
+            }}
+          >
+            {
+              order.secondaryUnitId
+                &&
+              unit.transportDestinations[order.secondaryUnitId].map((destination: OptionDestination) => {
+                return <option key={destination.nodeId} value={destination.nodeId}>{destination.nodeName}</option>
+              })
+            }
+          </select>
+        </Fragment>
+      }
+      {
+        order.orderType === OrderDisplay.CONVOY
+          &&
+        <Fragment>
+          <select className="order-unit" value={order.secondaryUnitId}
+            onChange={(event: ChangeEvent<HTMLSelectElement>) => {
+              handleTransportedUnitChange(event.target.value);
+            }}
+          >
+            {
+              unit.transportableUnits.map((secondaryUnit: SecondaryUnit) => {
+                return <option key={secondaryUnit.id} value={secondaryUnit.id}>{secondaryUnit.displayName}</option>
+              })
+            }
+          </select>
+          <select className="order-destination" value={order.destinationId}
+            onChange={(event: ChangeEvent<HTMLSelectElement>) => {
+              handleTransportedDestinationChange(event.target.value);
+            }}
+          >
+            {
+              order.secondaryUnitId
+                &&
+              unit.transportDestinations[order.secondaryUnitId].map((destination: OptionDestination) => {
+                return <option key={destination.nodeId} value={destination.nodeId}>{destination.nodeName}</option>
               })
             }
           </select>

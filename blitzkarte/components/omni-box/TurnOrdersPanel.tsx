@@ -6,7 +6,7 @@ import { TechTransfer } from "./TechTransfer";
 import { BuildTransfer } from "./BuildTransfer";
 
 interface TurnOrdersPanelProps {
-  turnOptions: TurnOptions;
+  turnOptions: any;
   orders: any;
   nudge: any;
 }
