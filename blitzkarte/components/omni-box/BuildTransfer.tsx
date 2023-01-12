@@ -60,6 +60,7 @@ export const BuildTransfer: FC<Props> = ({transferOptions, transferOrders}: Prop
           setRemainingBuilds(newRemainingBuilds);
        } else if (countryId === 0) {
           const newRemainingBuilds = remainingBuilds + transferOrders[index].builds;
+          updatedGiftedIds[index] = countryId;
           transferOrders[index] = {
             countryId: countryId,
             countryName: country.countryName,

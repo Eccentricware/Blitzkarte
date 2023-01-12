@@ -34,7 +34,8 @@ export interface TurnOptionsFinal {
   };
   builds?: {
     turnStatus: string;
-    options: BuildLoc[];
+    builds: number;
+    locations: BuildOptions;
   }
   disbands?: {
     turnStatus: string;
@@ -71,7 +72,9 @@ export interface TransferTechCountry {
   countryId: number;
   countryName: string;
 }
-export interface TransferBuildsCountry extends TransferTechCountry {
+export interface TransferBuildsCountry {
+  countryId: number;
+  countryName: string;
   builds: number;
 }
 
@@ -80,13 +83,13 @@ export interface BuildLoc {
   countryName: string;
   provinceName: string;
   cityLoc: number[];
-  landNodeId: number;
-  landNodeLoc: number[];
-  seaNodeId: number;
-  seaNodeLoc: number[];
-  seaNodeName: string;
-  airNodeId: number;
-  airNodeLoc: number[];
+  landNodeId?: number;
+  landNodeLoc?: number[];
+  seaNodeId?: number;
+  seaNodeLoc?: number[];
+  seaNodeName?: string;
+  airNodeId?: number;
+  airNodeLoc?: number[];
 }
 
 export interface AtRiskUnit {
@@ -112,3 +115,9 @@ export interface Nomination {
   countries: NominatableCountry[];
   votesRequired: number;
 }
+
+export interface BuildOptions {
+  land: BuildLoc[],
+  sea: BuildLoc[],
+  air: BuildLoc[]
+};
