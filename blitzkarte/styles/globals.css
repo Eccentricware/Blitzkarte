@@ -109,3 +109,8 @@ text {
   display: flex;
   flex-wrap: nowrap;
 }
+
+.nuke-tech-transfer-row {
+  display: flex;
+  flex-wrap: nowrap;
+}

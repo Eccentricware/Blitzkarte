@@ -1,8 +1,10 @@
 import { Button } from "@mui/material";
 import { FC } from "react"
 import { TurnOptionsFinal } from "../../models/objects/OptionsObjects";
-import { DoubleTurnOptions, UnitOrder } from "../../models/objects/TurnOrdersObjects";
+import { TurnOrdersFinal } from "../../models/objects/OrdersObjects";
+import { DoubleTurnOptions, TurnOrders, UnitOrder } from "../../models/objects/TurnOrdersObjects";
 import { OrderRequestService } from "../../services/request-services/order-request-service";
+import { BuildsPanel } from "./BuildsPanel";
 import { BuildTransfer } from "./BuildTransfer";
 import { TechTransfer } from "./TechTransfer";
 import { TurnOrdersPanel } from "./TurnOrdersPanel";
@@ -10,7 +12,7 @@ import { Units } from "./Units";
 
 interface OrderOrdersProps {
   options: TurnOptionsFinal;
-  orders: any;
+  orders: TurnOrdersFinal;
   nudge: any;
 }
 
@@ -26,25 +28,27 @@ export const OrdersTab: FC<OrderOrdersProps> = ({options, orders, nudge}: OrderO
       {
         options.units
           &&
-        <Units units={options.units}
-          unitOrders={orders.units}
-          nudge={nudge}
-        />
+        <Units units={options.units} unitOrders={orders.units} nudge={nudge}/>
       }
       {
-        options.offerTechOptions
+        options.offerTechOptions && orders.techTransfers
           &&
-        <TechTransfer giving={true} transferOptions={options.offerTechOptions} orders={orders}/>
+        <TechTransfer giving={false} transferOptions={options.offerTechOptions} order={orders.techTransfers[0]}/>
       }
       {
-        options.receiveTechOptions
+        options.receiveTechOptions && orders.techTransfers
           &&
-        <TechTransfer giving={false} transferOptions={options.receiveTechOptions} orders={orders}/>
+        <TechTransfer giving={true} transferOptions={options.receiveTechOptions} order={orders.techTransfers[0]}/>
       }
       {
-        options.buildTransfers
+        options.buildTransfers && orders.buildTransfers
           &&
         <BuildTransfer transferOptions={options.buildTransfers} transferOrders={orders.buildTransfers}/>
+      }
+      {
+        options.builds && orders.builds
+          &&
+        <BuildsPanel options={options.builds} orders={orders.builds}/>
       }
       <Button
         color="inherit"

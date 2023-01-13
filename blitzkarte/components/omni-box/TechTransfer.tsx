@@ -1,5 +1,6 @@
 import { ChangeEvent, FC, useEffect, useState } from "react";
 import { TransferTechCountry } from "../../models/objects/OptionsObjects";
+import { TransferTechOrder } from "../../models/objects/OrdersObjects";
 import { TurnOrders } from "../../models/objects/TurnOrdersObjects";
 
 interface Props {
@@ -8,22 +9,27 @@ interface Props {
     turnStatus: string;
     options: TransferTechCountry[];
   };
-  orders: any;
+  order: TransferTechOrder;
 }
 
-export const TechTransfer: FC<Props> = ({giving, transferOptions, orders}: Props) => {
+export const TechTransfer: FC<Props> = ({giving, transferOptions, order}: Props) => {
   const [countries, setCountries] = useState(transferOptions.options);
-  const [transferPartner, setTransferPartner] = useState(orders.techTransfer ? orders.techTransfer : 0);
+  const [transferPartnerId, setTransferPartnerId] = useState(order.techPartnerId);
 
-  const handlePartnerChange = (countryId: string) => {
-    orders.techTransfer = Number(countryId);
-    setTransferPartner(Number(countryId));
+  const handlePartnerChange = (id: string) => {
+    const countryId = Number(id)
+    const techPartner = transferOptions.options.find((partner: TransferTechCountry) => countryId === partner.countryId);
+    if (techPartner) {
+      order.techPartnerId = techPartner.countryId;
+      order.techPartnerName = techPartner.countryName;
+      setTransferPartnerId(Number(countryId));
+    }
   }
 
   return (
-    <div>
-      <div>{giving ? 'Offer Nuke Tech To:' : 'Request Nuke Tech From:'}</div>
-        <select className="nuke-tech-transfer-select" value={transferPartner}
+    <div className="nuke-tech-transfer-row">
+      <div>{giving ? 'Offer Nuke Tech To: ' : 'Request Nuke Tech From: '}</div>
+        <select className="nuke-tech-transfer-select" value={order.techPartnerId}
           onChange={(event: ChangeEvent<HTMLSelectElement>) => {
             handlePartnerChange(event.target.value);
           }}
