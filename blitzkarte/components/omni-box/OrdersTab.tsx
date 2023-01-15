@@ -48,7 +48,7 @@ export const OrdersTab: FC<OrderOrdersProps> = ({options, orders, nudge}: OrderO
       {
         options.builds && orders.builds
           &&
-        <BuildsPanel options={options.builds} orders={orders.builds}/>
+        <BuildsPanel options={options.builds} orders={orders.builds[0]}/>
       }
       <Button
         color="inherit"

@@ -105,12 +105,22 @@ text {
   width: 80px;
 }
 
-.build-transfer-row {
+.build-transfer-row,
+.build-order-row,
+.nuke-tech-transfer-row {
   display: flex;
   flex-wrap: nowrap;
 }
 
-.nuke-tech-transfer-row {
-  display: flex;
-  flex-wrap: nowrap;
+.build-summary-value,
+.summary-number-input {
+  text-align: right;
+}
+
+.build-summary-value {
+  text-align: right;
+}
+
+.summary-number-input {
+  width: 50px;
 }
