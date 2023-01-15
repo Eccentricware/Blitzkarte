@@ -79,17 +79,10 @@ export interface TransferBuildsCountry {
 }
 
 export interface BuildLoc {
-  countryId: number;
-  countryName: string;
-  provinceName: string;
-  cityLoc: number[];
-  landNodeId?: number;
-  landNodeLoc?: number[];
-  seaNodeId?: number;
-  seaNodeLoc?: number[];
-  seaNodeName?: string;
-  airNodeId?: number;
-  airNodeLoc?: number[];
+  province: string;
+  display: string;
+  nodeId: number;
+  nodeLoc: number[];
 }
 
 export interface AtRiskUnit {
