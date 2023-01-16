@@ -101,7 +101,7 @@ export interface Build {
   typeId: number;
   buildType: string;
   nodeId: number;
-  nodeName: string;
+  nodeName?: string;
   provinceName: string;
   loc: number[];
 }
