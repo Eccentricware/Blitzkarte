@@ -123,9 +123,12 @@ export const BuildsPanel: FC<Props> = ({options, orders}: Props) => {
     const updatedBuildTypeArray: UnitBuildOption[][] = [];
     const presence = getPresence();
     const fullPresence = [...presence.army, ...presence.fleet, ...presence.wing, ...presence.nuke];
-    const coastAvailable = options.locations.sea.filter((loc: BuildLoc) => !fullPresence.includes(loc.province)).length > 0;
 
     orders.builds.forEach((order: Build) => {
+      const coastAvailable = options.locations.sea.filter(
+        (loc: BuildLoc) => !fullPresence.includes(loc.province) || order.provinceName === loc.province
+      ).length > 0;
+
       const buildTypeArray: UnitBuildOption[] = [
         {
           id: 0,
@@ -401,7 +404,44 @@ export const BuildsPanel: FC<Props> = ({options, orders}: Props) => {
     }
   }
 
+  const handleBuildLocChange = (id: string, index: number, orders: BuildOrder) => {
+    const newLoc: BuildLocRender | undefined = buildLocs[index].find((loc: BuildLocRender) => loc.nodeId === Number(id));
 
+    if (newLoc !== undefined) {
+      orders.builds[index] = {
+        typeId: orders.builds[index].typeId,
+        buildType: orders.builds[index].buildType,
+        nodeId: newLoc.nodeId,
+        provinceName: newLoc.province,
+        loc: newLoc.nodeLoc
+      }
+
+      const newBuildLocIds: number[] = buildLocIds.slice();
+      newBuildLocIds[index] = newLoc.nodeId;
+      setBuildLocIds(newBuildLocIds);
+      updateBuildTypeArrays(bankedBuildsRemaining);
+      updateLocationArrays();
+    }
+  }
+  const handleNukeLocChange = (id: string, index: number, orders: BuildOrder) => {
+    const newLoc: BuildLocRender | undefined = nukeLocs[index].find((loc: BuildLocRender) => loc.nodeId === Number(id));
+
+    if (newLoc !== undefined) {
+      orders.nukesReady[index] = {
+        typeId: orders.nukesReady[index].typeId,
+        buildType: orders.nukesReady[index].buildType,
+        nodeId: newLoc.nodeId,
+        provinceName: newLoc.province,
+        loc: newLoc.nodeLoc
+      }
+
+      const newNukeLocIds: number[] = nukeLocIds.slice();
+      newNukeLocIds[index] = newLoc.nodeId;
+      setNukeLocIds(newNukeLocIds);
+      updateBuildTypeArrays(bankedBuildsRemaining);
+      updateLocationArrays();
+    }
+  }
 
   return (
     <div>
@@ -419,7 +459,11 @@ export const BuildsPanel: FC<Props> = ({options, orders}: Props) => {
                 {
                   nukeLocs[index]
                     &&
-                  <select value={nukeLocIds[index]}>
+                  <select value={nukeLocIds[index]}
+                    onChange={(event: ChangeEvent<HTMLSelectElement>) => {
+                      handleNukeLocChange(event.target.value, index, orders);
+                    }}
+                  >
                     {
                       nukeLocs[index].map((loc: BuildLocRender) => (
                         <option key={loc.nodeId} value={loc.nodeId} disabled={loc.disabled}>{loc.display}</option>
@@ -458,7 +502,11 @@ export const BuildsPanel: FC<Props> = ({options, orders}: Props) => {
               || order.buildType === BuildType.NUKE_RUSH)
               && buildLocs[index])
                 &&
-              <select value={buildLocIds[index]}>
+              <select value={buildLocIds[index]}
+                onChange={(event: ChangeEvent<HTMLSelectElement>) => {
+                  handleBuildLocChange(event.target.value, index, orders);
+                }}
+              >
                 {
                   buildLocs[index].map((loc: BuildLocRender) => (
                     <option key={loc.nodeId} value={loc.nodeId} disabled={loc.disabled}>{loc.display}</option>

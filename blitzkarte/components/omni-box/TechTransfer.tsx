@@ -27,7 +27,7 @@ export const TechTransfer: FC<Props> = ({giving, transferOptions, order}: Props)
   }
 
   return (
-    <div className="nuke-tech-transfer-row">
+    <div className="nuke-tech-transfer-row" style={{padding: '5px'}}>
       <div>{giving ? 'Offer Nuke Tech To: ' : 'Request Nuke Tech From: '}</div>
         <select className="nuke-tech-transfer-select" value={order.techPartnerId}
           onChange={(event: ChangeEvent<HTMLSelectElement>) => {

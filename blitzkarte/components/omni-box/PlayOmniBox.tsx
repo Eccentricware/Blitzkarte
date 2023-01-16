@@ -6,7 +6,7 @@ import { DebugTab } from "./DebugTab";
 import { StatsTable } from "./StatsTable";
 import { HelperTab } from './HelperTab';
 import { ChatTab } from "./ChatTab";
-import { PreviousTab } from "./PreviousTab";
+import { HistoryTab } from "./HistoryTab";
 import { OrdersTab } from "./OrdersTab";
 import { useQuery, UseQueryResult } from "react-query";
 import { TurnOrders } from "../../models/objects/TurnOrdersObjects";
@@ -85,7 +85,7 @@ export const PlayOmniBox: FC<OmniProps> = ({turnOptionsResult, turnOrdersResult,
         <ChatTab />
       </TabPanel> */}
       <TabPanel value={panel} index={3}>
-        <PreviousTab/>
+        <HistoryTab/>
       </TabPanel>
     </div>
   )

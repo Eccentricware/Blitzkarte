@@ -12,16 +12,13 @@ interface UnitsProps {
 }
 
 export const Units: FC<UnitsProps> = ({units, unitOrders, nudge}: UnitsProps) => {
-  console.log('Units.unitOrders:', unitOrders)
   return (
-    <div>
-      <div>
-        {
-         units.options.map((unit: UnitOptionsFinalized) => {
-            return <UnitOrders key={unit.unitId} unit={unit} orders={unitOrders} nudge={nudge}/>
-          })
-        }
-      </div>
+    <div style={{padding: '5px'}}>
+      {
+        units.options.map((unit: UnitOptionsFinalized) => {
+          return <UnitOrders key={unit.unitId} unit={unit} orders={unitOrders} nudge={nudge}/>
+        })
+      }
     </div>
   )
 }
