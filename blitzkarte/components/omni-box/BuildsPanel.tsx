@@ -30,35 +30,55 @@ export interface BuildLocRender {
 }
 
 export interface UnitPresence {
+  all: string[];
   army: string[];
   fleet: string[];
   wing: string[];
   nuke: string[];
+  slowNuke: string[];
+}
+
+interface Counts {
+  adjustmentsBeingBanked: number;
+  adjustmentsIncreasingRange: number;
+  nukeRangeEnd: number;
+  bankedBuildsRemaining: number;
+  bankedBuildsIncreasingRange?: number;
+  bankedBuildsRushingNukes: number;
+  bankedBuildsEnd: number;
 }
 
 export const BuildsPanel: FC<Props> = ({options, orders}: Props) => {
+  const getNukesRushedCount = (): number => {
+    let totalRushing = 0;
+
+    orders.builds.forEach((build: Build) => {
+      if (build.buildType === BuildType.NUKE_RUSH) {
+        totalRushing++;
+      }
+    });
+
+    return totalRushing;
+  }
   const [nukeLocIds, setNukeLocIds] = useState<number[]>(orders.nukesReady.map((nuke: Build) => nuke.nodeId));
-  const [nukeLocs, setNukeLocs] = useState<BuildLoc[][]>([]);
+  const [nukeLocs, setNukeLocs] = useState<BuildLocRender[][]>([]);
   const [nukeRangeEnd, setNukeRangeEnd] = useState(orders.nukeRange);
 
   const [buildTypeIds, setBuildTypeIds] = useState<number[]>(orders.builds.map((build: Build) => build.typeId));
   const [buildTypes, setBuildTypes] = useState<UnitBuildOption[][]>([]);
   const [buildLocIds, setBuildLocIds] = useState<number[]>(orders.builds.map((build: Build) => build.nodeId));
-  const [buildLocs, setBuildsLocs] = useState<BuildLoc[][]>([]);
+  const [buildLocs, setBuildsLocs] = useState<BuildLocRender[][]>([]);
 
   const [adjustmentsBeingBanked, setAdjustmentsBeingBanked] = useState(0);
   const [adjustmentsIncreasingRange, setAdjustmentsIncreasingRange] = useState(0);
 
   const [bankedBuildsRemaining, setBankedBuildsRemaining] = useState(orders.bankedBuilds);
-  const [bankedBuildsIncreasingRange, setBankedBuildsIncreasingRange] = useState(0);
-  const [buildsRushingNukes, setBuildsRushingNukes] = useState(0);
+  const [bankedBuildsIncreasingRange, setBankedBuildsIncreasingRange] = useState(orders.increaseRange);
+  const [bankedBuildsRushingNukes, setBankedBuildsRushingNukes] = useState(getNukesRushedCount());
   const [bankedBuildsEnd, setBankedBuildsEnd] = useState(orders.bankedBuilds);
 
   const [unitPresence, setUnitPresence] = useState<UnitPresence>();
   const [buildOrders, setBuildOrders] = useState(orders.builds);
-  const [bankedBuildsStored, setBankedBuildsStored] = useState(0);
-
-
 
   useEffect(() => {
     updateBuildTypeArrays(orders.bankedBuilds);
@@ -90,15 +110,20 @@ export const BuildsPanel: FC<Props> = ({options, orders}: Props) => {
     nukePresence.push(...orders.nukesReady.map((build: Build) => build.provinceName));
 
     return {
+      all: [...armyPresence, ...fleetPresence, ...wingPresence, ...nukePresence],
       army: armyPresence,
       fleet: fleetPresence,
       wing: wingPresence,
-      nuke: nukePresence
+      nuke: nukePresence,
+      slowNuke: orders.nukesReady.map((build: Build) => build.provinceName)
     }
   }
 
   const updateBuildTypeArrays = (bankedBuilds: number) => {
     const updatedBuildTypeArray: UnitBuildOption[][] = [];
+    const presence = getPresence();
+    const fullPresence = [...presence.army, ...presence.fleet, ...presence.wing, ...presence.nuke];
+    const coastAvailable = options.locations.sea.filter((loc: BuildLoc) => !fullPresence.includes(loc.province)).length > 0;
 
     orders.builds.forEach((order: Build) => {
       const buildTypeArray: UnitBuildOption[] = [
@@ -112,7 +137,7 @@ export const BuildsPanel: FC<Props> = ({options, orders}: Props) => {
         },
       ];
 
-      if (order.buildType === BuildType.FLEET || options.locations.sea.filter((loc: BuildLoc) => loc.province === order.provinceName).length > 0) {
+      if (order.buildType === BuildType.FLEET || coastAvailable) {
         buildTypeArray.push({
           id: 2,
           type: BuildType.FLEET
@@ -151,59 +176,97 @@ export const BuildsPanel: FC<Props> = ({options, orders}: Props) => {
     setBuildTypes(updatedBuildTypeArray);
   }
 
+  const getNodeTypeFromBuildType = (buildType: BuildType | string): string => {
+    switch(buildType) {
+      case BuildType.ARMY:
+        case BuildType.NUKE_RUSH:
+          case BuildType.NUKE_FINISH:
+        return 'land';
+      case BuildType.FLEET:
+        return 'sea';
+      case BuildType.WING:
+        return 'air';
+      default:
+        return 'skip';
+    }
+  }
+
+  const getUnitTypeFromBuildType = (buildType: BuildType | string): string => {
+    switch(buildType) {
+      case BuildType.ARMY:
+        return 'army';
+      case BuildType.FLEET:
+        return 'fleet';
+      case BuildType.WING:
+        return 'wing';
+      case BuildType.NUKE_RUSH:
+      case BuildType.NUKE_FINISH:
+        return 'nuke';
+      default:
+        return 'skip';
+    }
+  }
+
+  const getBuildTypeDefaultLoc = (buildType: BuildType): BuildLoc => {
+    const nodeType = getNodeTypeFromBuildType(buildType);
+    const unitType = getUnitTypeFromBuildType(buildType);
+    const presences: UnitPresence = getPresence();
+
+    return options.locations[nodeType].find((loc: BuildLoc) => !presences.all.includes(loc.province));
+  }
+
   const updateLocationArrays = () => {
     const presences = getPresence();
 
-    const updatedBuildLocs: BuildLoc[][] = [];
+    const updatedBuildLocs: BuildLocRender[][] = [];
 
-    orders.builds.forEach((order: Build, index: number) => {
-      let unitNodeType: string = '';
-      let buildType = order.buildType.toLowerCase();
-      if (order.buildType === BuildType.ARMY) {
-        unitNodeType = 'land';
-      } else if (order.buildType === BuildType.NUKE_RUSH || order.buildType === BuildType.NUKE_FINISH) {
-        unitNodeType = 'land';
-        buildType = 'nuke';
-      } else if (order.buildType === BuildType.FLEET) {
-        unitNodeType = 'sea';
-      } else if (order.buildType === BuildType.WING) {
-        unitNodeType = 'air';
-      } else {
+    orders.builds.forEach((order: Build) => {
+      const nodeType: string = getNodeTypeFromBuildType(order.buildType);
+      const buildType = order.buildType.toLowerCase();
+
+      if (nodeType === 'skip') {
         updatedBuildLocs.push([]);
         return;
       }
 
-      const unitTypePresence: string[] = presences[buildType];
+      const unitType = getUnitTypeFromBuildType(order.buildType);
 
-      const unitTypeLocs: BuildLoc[] = options.locations[unitNodeType].filter((loc: BuildLoc) =>
-        !presences[buildType].includes(loc.province) || loc.province === order.provinceName
+      if (unitType === 'skip') {
+        updatedBuildLocs.push([]);
+        return;
+      }
+
+      const unitTypeLocs: BuildLoc[] = options.locations[nodeType].filter((loc: BuildLoc) =>
+        !presences[unitType].includes(loc.province) || loc.province === order.provinceName
       );
 
-      const unitTypeLocRender: BuildLoc[] = unitTypeLocs.map((loc: BuildLoc) => {
+      const unitTypeLocRender: BuildLocRender[] = unitTypeLocs.map((loc: BuildLoc) => {
         return {
           province: loc.province,
           display: loc.display,
           nodeId: loc.nodeId,
-          nodeLoc: loc.nodeLoc
+          nodeLoc: loc.nodeLoc,
+          disabled: presences.all.includes(loc.province) && order.provinceName !== loc.province
         }
       });
 
       updatedBuildLocs.push(unitTypeLocRender);
     });
 
-    const updatedNukeLocs: BuildLoc[][] = [];
+    const updatedNukeLocs: BuildLocRender[][] = [];
 
-    orders.nukesReady.forEach((order: Build, index: number) => {
+    orders.nukesReady.forEach((order: Build) => {
       const unitTypeLocs: BuildLoc[] = options.locations.land.filter((loc: BuildLoc) =>
         !presences.nuke.includes(loc.province) || loc.province === order.provinceName
       );
 
-      const unitTypeLocRender: BuildLoc[] = unitTypeLocs.map((loc: BuildLoc) => {
+      const unitTypeLocRender: BuildLocRender[] = unitTypeLocs.map((loc: BuildLoc) => {
         return {
           province: loc.province,
           display: loc.display,
           nodeId: loc.nodeId,
-          nodeLoc: loc.nodeLoc
+          nodeLoc: loc.nodeLoc,
+          disabled: presences.all.includes(loc.province) && order.provinceName !== loc.province
         }
       });
 
@@ -216,63 +279,137 @@ export const BuildsPanel: FC<Props> = ({options, orders}: Props) => {
 
   const updateBankedBuilds = () => {
     const bankedBuilds = orders.builds.filter((build: Build) => build.buildType === BuildType.BUILD).length;
-    setBankedBuildsStored(bankedBuilds);
+    setAdjustmentsIncreasingRange(bankedBuilds);
   }
 
   const handleBuildTypeChange = (type: string, index: number) => {
-    console.log('type:', type);
-    console.log('build', orders.builds[index]);
-    const buildType: UnitBuildOption = typeOptionsArray[type];
+    const buildType: UnitBuildOption | undefined = buildTypes[index].find((buildType: UnitBuildOption) => buildType.id === Number(type));
+    if (buildType === undefined) {
+      return;
+    }
 
     const updatedBuiltTypeIds = buildTypeIds.slice();
     updatedBuiltTypeIds[index] = buildType.id;
 
+    const nodeType = getNodeTypeFromBuildType(buildType.type);
+    let newLoc: BuildLoc = {
+      nodeId: 0,
+      province: buildType.type,
+      display: buildType.type,
+      nodeLoc: []
+    };
+
+    if (orders.builds[index].nodeId === 0 && nodeType !== 'skip') {
+      newLoc = getBuildTypeDefaultLoc(buildType.type);
+    } else if (nodeType !== 'skip') {
+      newLoc = options.locations[nodeType].find((loc: BuildLoc) => loc.province === orders.builds[index].provinceName);
+      if (newLoc === undefined) {
+        newLoc = getBuildTypeDefaultLoc(buildType.type);
+      }
+    }
+
+    let countChanges: Counts = getCountChanges(buildType.type, index);
+
+
     orders.builds[index].typeId = buildType.id;
     orders.builds[index].buildType = buildType.type;
+
+    orders.builds[index] = {
+      typeId: buildType.id,
+      buildType: buildType.type,
+      nodeId: newLoc.nodeId,
+      provinceName: newLoc.province,
+      loc: newLoc.nodeLoc
+    }
+
+    setAdjustmentsIncreasingRange(adjustmentsIncreasingRange + countChanges.adjustmentsIncreasingRange);
+    setNukeRangeEnd(nukeRangeEnd + countChanges.nukeRangeEnd);
+    setAdjustmentsBeingBanked(adjustmentsBeingBanked + countChanges.adjustmentsBeingBanked);
+    setBankedBuildsRushingNukes(bankedBuildsRushingNukes + countChanges.bankedBuildsRushingNukes);
+    setBankedBuildsRemaining(bankedBuildsRemaining + countChanges.bankedBuildsRemaining);
+    setBankedBuildsEnd(bankedBuildsEnd + countChanges.bankedBuildsEnd);
+
     setBuildTypeIds(updatedBuiltTypeIds);
     updateLocationArrays();
   }
 
-  const handleBuildIncreasingRangeChange = (amount: string) => {
-    let rangeAdded = Number(amount);
-    const bankedBuildsStart = orders.bankedBuilds - getNukesRushedCount() - bankedBuildsIncreasingRange;
-    const startAbove0 = bankedBuildsStart > 0;
+  const getCountChanges = (buildType: BuildType, index: number): Counts => {
+    let adjustmentsBeingBanked = 0;
+    let adjustmentsIncreasingRange = 0;
+    let nukeRangeEnd = 0;
 
-    if (rangeAdded > bankedBuildsStart) {
-      rangeAdded = bankedBuildsStart;
+    let bankedBuildsRemaining = 0;
+    let bankedBuildsEnd = 0;
+    let bankedBuildsRushingNukes = 0;
+
+    const wasIncreasingNukeRange = orders.builds[index].buildType === BuildType.RANGE;
+    const changeIncreasingNukeRange = buildType === BuildType.RANGE;
+
+    if (wasIncreasingNukeRange !== changeIncreasingNukeRange) {
+      adjustmentsIncreasingRange += changeIncreasingNukeRange ? 1 : -1;
+      nukeRangeEnd += changeIncreasingNukeRange ? 1 : -1;
     }
 
-    const newBankedBuildsRemaining = bankedBuildsStart - rangeAdded;
+    const wasBankingBuild = orders.builds[index].buildType === BuildType.BUILD;
+    const changeBankingBuild = buildType === BuildType.BUILD;
+
+    if (wasBankingBuild !== changeBankingBuild) {
+      adjustmentsBeingBanked += changeBankingBuild ? 1 : -1;
+      bankedBuildsEnd += changeBankingBuild ? 1 : -1;
+    }
+
+    const wasRushingNuke = orders.builds[index].buildType === BuildType.NUKE_RUSH;
+    const changeRushingNuke = buildType === BuildType.NUKE_RUSH;
+
+    if (wasRushingNuke !== changeRushingNuke) {
+      bankedBuildsRushingNukes += changeRushingNuke ? 1 : -1;
+      bankedBuildsRemaining += changeRushingNuke ? -1 : 1;
+      bankedBuildsEnd += changeRushingNuke ? -1 : 1;
+    }
+
+    const countChanges: Counts = {
+      adjustmentsIncreasingRange: adjustmentsIncreasingRange,
+      nukeRangeEnd: nukeRangeEnd,
+      bankedBuildsRushingNukes: bankedBuildsRushingNukes,
+      bankedBuildsRemaining: bankedBuildsRemaining,
+      adjustmentsBeingBanked: adjustmentsBeingBanked,
+      bankedBuildsEnd: bankedBuildsEnd
+    }
+
+    return countChanges
+  }
+
+  const handleBuildIncreasingRangeChange = (amount: string) => {
+    let newBbIncreasingRange = Number(amount);
+    const startAbove0 = bankedBuildsRemaining > 0;
+
+    const max = bankedBuildsIncreasingRange + bankedBuildsRemaining;
+    if (newBbIncreasingRange > max) {
+      newBbIncreasingRange = max;
+    }
+
+    orders.increaseRange = newBbIncreasingRange;
+    const newBankedBuildsRemaining = bankedBuildsRemaining - (newBbIncreasingRange - bankedBuildsIncreasingRange);
     const endAbove0 = newBankedBuildsRemaining > 0;
-    setBankedBuildsIncreasingRange(rangeAdded);
+
+    setBankedBuildsIncreasingRange(newBbIncreasingRange);
     setBankedBuildsRemaining(newBankedBuildsRemaining);
-    setBankedBuildsEnd(newBankedBuildsRemaining + bankedBuildsStored);
-    setNukeRangeEnd(orders.nukeRange + adjustmentsIncreasingRange + rangeAdded);
+    setBankedBuildsEnd(newBankedBuildsRemaining + adjustmentsBeingBanked);
+    setNukeRangeEnd(orders.nukeRange + adjustmentsIncreasingRange + newBbIncreasingRange);
     if (startAbove0 !== endAbove0) {
       updateBuildTypeArrays(newBankedBuildsRemaining);
     }
   }
 
-  const getNukesRushedCount = (): number => {
-    let totalRushing = 0;
 
-    orders.builds.forEach((build: Build) => {
-      if (build.buildType === BuildType.NUKE_RUSH) {
-        totalRushing++;
-      }
-    });
-
-    return totalRushing;
-  }
 
   return (
     <div>
-      <div>Total Builds: {orders.buildCount}</div>
       {
         orders.nukesReady.length > 0
           &&
         <div>
-          <div>Nukes are ready for placement:</div>
+          <div>{orders.nukesReady.length} {orders.nukesReady.length === 1 ? 'Nuke Has Finished Production:' : 'Nukes Have Finished Production:' }</div>
           {
             orders.nukesReady.map((order: Build, index: number) => (
               <div className="build-order-row" key={index}>
@@ -284,8 +421,8 @@ export const BuildsPanel: FC<Props> = ({options, orders}: Props) => {
                     &&
                   <select value={nukeLocIds[index]}>
                     {
-                      nukeLocs[index].map((loc: BuildLoc) => (
-                        <option key={loc.nodeId} value={loc.nodeId}>{loc.display}</option>
+                      nukeLocs[index].map((loc: BuildLocRender) => (
+                        <option key={loc.nodeId} value={loc.nodeId} disabled={loc.disabled}>{loc.display}</option>
                       ))
                     }
                   </select>
@@ -295,8 +432,9 @@ export const BuildsPanel: FC<Props> = ({options, orders}: Props) => {
           }
         </div>
       }
+      <br/>
 
-      <div>{options.builds > 0 ? 'Builds:' : 'You have no adjustments this turn'}</div>
+      <div>{options.builds} {options.builds === 1 ? 'Build:' : 'Builds'}</div>
       {
         orders.builds.map((order: Build, index: number) => (
           <div key={index} className="build-order-row">
@@ -317,13 +455,13 @@ export const BuildsPanel: FC<Props> = ({options, orders}: Props) => {
               ((order.buildType === BuildType.ARMY
               || order.buildType === BuildType.FLEET
               || order.buildType === BuildType.WING
-              || order.buildType === BuildType.NUKE_FINISH)
+              || order.buildType === BuildType.NUKE_RUSH)
               && buildLocs[index])
                 &&
               <select value={buildLocIds[index]}>
                 {
-                  buildLocs[index].map((loc: BuildLoc) => (
-                    <option key={loc.nodeId} value={loc.nodeId}>{loc.display}</option>
+                  buildLocs[index].map((loc: BuildLocRender) => (
+                    <option key={loc.nodeId} value={loc.nodeId} disabled={loc.disabled}>{loc.display}</option>
                   ))
                 }
               </select>
@@ -331,22 +469,24 @@ export const BuildsPanel: FC<Props> = ({options, orders}: Props) => {
           </div>
         ))
       }
-
-      <div>Banked Builds</div>
-      <table>
-        <tr><td>Turn Start</td><td className="build-summary-value">{orders.bankedBuilds}</td></tr>
-        {Number.isInteger(orders.nukeRange) && <tr><td>Rushing Nukes</td><td className="build-summary-value">-{buildsRushingNukes}</td></tr>}
-        {Number.isInteger(orders.nukeRange) && <tr><td>Increasing Range</td><td className="build-summary-value">-{bankedBuildsIncreasingRange}</td></tr>}
-        <tr><td>Remaining:</td><td className="build-summary-value">{bankedBuildsRemaining}</td></tr>
-        <tr><td>Adjustments</td><td className="build-summary-value">+{adjustmentsBeingBanked}</td></tr>
-        <tr><td>Turn End</td><td className="build-summary-value">{bankedBuildsEnd}</td></tr>
-      </table>
       <br/>
 
       {
         Number.isInteger(orders.nukeRange)
           &&
         <div>
+          <div>
+            Banked Builds =&gt; Nuke Range:
+            <br/>
+            <input type="number" min="0"
+                    value={bankedBuildsIncreasingRange}
+                    onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                      handleBuildIncreasingRangeChange(event.target.value);
+                    }}
+                  />
+          </div>
+
+          <br/>
           <div>Nuclear Range</div>
           <table>
             <tr><td>Turn Start</td><td className="build-summary-value">{orders.nukeRange === 0 ? 'Unlimited' : orders.nukeRange}</td></tr>
@@ -354,18 +494,27 @@ export const BuildsPanel: FC<Props> = ({options, orders}: Props) => {
             <tr>
               <td>Banked Builds</td>
               <td className="build-summary-value">
-                + <input className="summary-number-input" dir="rtl" type="number" min="0"
-                    value={bankedBuildsIncreasingRange}
-                    onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                      handleBuildIncreasingRangeChange(event.target.value);
-                    }}
-                  />
+                +{bankedBuildsIncreasingRange}
               </td>
             </tr>
             <tr><td>Turn End</td><td className="build-summary-value">{nukeRangeEnd}</td></tr>
           </table>
         </div>
       }
+      <br/>
+
+      <div>Banked Builds</div>
+      <table>
+        <tr><td>Turn Start</td><td className="build-summary-value">{orders.bankedBuilds}</td></tr>
+        {Number.isInteger(orders.nukeRange) && <tr><td>Rushing Nukes</td><td className="build-summary-value">-{bankedBuildsRushingNukes}</td></tr>}
+        {Number.isInteger(orders.nukeRange) && <tr><td>Increasing Range</td><td className="build-summary-value">-{bankedBuildsIncreasingRange}</td></tr>}
+        {Number.isInteger(orders.nukeRange) && <tr><td>Remaining:</td><td className="build-summary-value">{bankedBuildsRemaining}</td></tr>}
+        <tr><td>Adjustments</td><td className="build-summary-value">+{adjustmentsBeingBanked}</td></tr>
+        <tr><td>Turn End</td><td className="build-summary-value">{bankedBuildsEnd}</td></tr>
+      </table>
+
+
+
     </div>
   )
 }
