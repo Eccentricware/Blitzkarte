@@ -1,4 +1,5 @@
 import { Button } from "@mui/material";
+import { DateTime } from "luxon";
 import { FC } from "react"
 import { TurnOptionsFinal } from "../../models/objects/OptionsObjects";
 import { TurnOrdersFinal } from "../../models/objects/OrdersObjects";
@@ -21,10 +22,37 @@ export const OrdersTab: FC<OrderOrdersProps> = ({options, orders, nudge}: OrderO
   const handleSubmitOrdersClick = () => {
     orderRequestService.submitOrders(orders);
   };
+  const pendingColor = orders.pendingDefault === true ? 'red' : 'green';
+  const preliminaryColor = orders.pendingDefault === true ? 'yellow' : '#8facbd';
 
   console.log('OrdersTab.orders', orders);
   return (
     <div>
+      {
+        options.pending
+          &&
+        <div style={{border: `${pendingColor} solid 2px`, borderRadius: '7px'}}>
+          <b>
+            <table>
+              <tr><td>Pending Turn:</td><td>{options.pending.name}</td></tr>
+              <tr><td> Deadline:</td><td> {options.pending.deadline}</td></tr>
+            </table>
+          </b>
+        </div>
+      }
+      {
+        options.preliminary
+          &&
+        <div  style={{border: `${preliminaryColor} solid 2px`, borderRadius: '7px'}}>
+          <b>
+            <table>
+              <tr><td>Pending Turn:</td><td>{options.preliminary.name}</td></tr>
+              <tr><td> Deadline:</td><td> {options.preliminary.deadline}</td></tr>
+            </table>
+          </b>
+        </div>
+      }
+
       {
         options.units
           &&

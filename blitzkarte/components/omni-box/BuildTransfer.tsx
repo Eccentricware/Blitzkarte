@@ -160,7 +160,7 @@ export const BuildTransfer: FC<Props> = ({transferOptions, transferOrders}: Prop
   }
 
   return (
-    <div>
+    <div style={{padding: 5}}>
       <div className="build-transfer-row">
         <div style={{width: 110}}>Banked Builds:</div>
         <div> {transferOptions.builds}</div>
