@@ -1,8 +1,18 @@
 export interface TurnOrdersFinal {
   gameId: number;
   userId: number;
+  countryId: number;
+  pending?: {
+    orderSetId?: number;
+    default?: boolean;
+    restricted?: boolean;
+    skipped?: boolean;
+  };
+  preliminary?: {
+    orderSetId?: number;
+    default?: number;
+  }
   role?: string;
-  countryId?: number;
   countryName?: string;
   turnType?: string;
   message?: string;
@@ -11,8 +21,8 @@ export interface TurnOrdersFinal {
   render?: string;
   units?: any[];
   buildTransfers?: TransferBuildOrder[];
-  techTransfers?: TransferTechOrder[];
-  builds?: BuildOrder[];
+  techTransfer?: TransferTechOrder;
+  builds?: BuildOrders;
   disbands?: any[];
   nomination?: any;
   votes?: any[];
@@ -27,18 +37,6 @@ export interface SingleTurnOrders {
   votes?: any[];
 }
 
-export interface OrderSetFinalResult {
-  order_set_id: number;
-  country_id: number;
-  country_name: string;
-  default_orders: boolean;
-  tech_partner_id: number;
-  new_unit_types: string[];
-  new_unit_locs: number[];
-  units_disbanding: number[];
-  build_transfer_recipients: any[];
-  build_transfer_amounts: number[];
-}
 
 export interface OrderSetFinal {
   orderSetId: number;
@@ -55,15 +53,6 @@ export interface OrderSetFinal {
 export interface TransferCountry {
   countryId: number;
   countryName: string;
-}
-export interface TransferBuildOrdersResults {
-  build_transfer_recipients: TransferCountryResult[];
-  build_transfer_tuples: number[];
-}
-
-export interface TransferCountryResult {
-  country_id: number;
-  country_name: string;
 }
 
 export interface TransferBuildOrder {
@@ -86,7 +75,7 @@ export interface TransferTechOrder {
   techPartnerName: string;
   hasNukes: boolean;
 }
-export interface BuildOrder {
+export interface BuildOrders {
   countryId: number;
   countryName: string;
   bankedBuilds: number;

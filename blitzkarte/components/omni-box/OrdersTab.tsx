@@ -31,19 +31,19 @@ export const OrdersTab: FC<OrderOrdersProps> = ({options, orders, nudge}: OrderO
       {
         options.pending
           &&
-        <div style={{border: `${pendingColor} solid 2px`, borderRadius: '7px'}}>
-          <b>
-            <table>
+        <div style={{border: `${pendingColor} solid 2px`, borderRadius: '7px', fontWeight: 'bold'}}>
+          <table>
+            <tbody>
               <tr><td>Pending Turn:</td><td>{options.pending.name}</td></tr>
               <tr><td> Deadline:</td><td> {options.pending.deadline}</td></tr>
-            </table>
-          </b>
+            </tbody>
+          </table>
         </div>
       }
       {
         options.preliminary
           &&
-        <div  style={{border: `${preliminaryColor} solid 2px`, borderRadius: '7px'}}>
+        <div  style={{border: `${preliminaryColor} solid 2px`, borderRadius: '7px', fontWeight: 'bold'}}>
           <b>
             <table>
               <tr><td>Pending Turn:</td><td>{options.preliminary.name}</td></tr>
@@ -59,14 +59,14 @@ export const OrdersTab: FC<OrderOrdersProps> = ({options, orders, nudge}: OrderO
         <Units units={options.units} unitOrders={orders.units} nudge={nudge}/>
       }
       {
-        options.offerTechOptions && orders.techTransfers
+        options.offerTechOptions && orders.techTransfer
           &&
-        <TechTransfer giving={false} transferOptions={options.offerTechOptions} order={orders.techTransfers[0]}/>
+        <TechTransfer giving={false} transferOptions={options.offerTechOptions} order={orders.techTransfer}/>
       }
       {
-        options.receiveTechOptions && orders.techTransfers
+        options.receiveTechOptions && orders.techTransfer
           &&
-        <TechTransfer giving={true} transferOptions={options.receiveTechOptions} order={orders.techTransfers[0]}/>
+        <TechTransfer giving={true} transferOptions={options.receiveTechOptions} order={orders.techTransfer}/>
       }
       {
         options.buildTransfers && orders.buildTransfers
@@ -76,7 +76,7 @@ export const OrdersTab: FC<OrderOrdersProps> = ({options, orders, nudge}: OrderO
       {
         options.builds && orders.builds
           &&
-        <BuildsPanel options={options.builds} orders={orders.builds[0]}/>
+        <BuildsPanel options={options.builds} orders={orders.builds}/>
       }
       <Button
         color="inherit"

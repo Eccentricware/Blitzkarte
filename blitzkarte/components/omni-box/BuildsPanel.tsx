@@ -1,7 +1,7 @@
 import { ChangeEvent, FC, Fragment, useEffect, useState } from "react";
 import { BuildType, UnitType } from "../../models/enumeration/unit-enumerations";
 import { BuildLoc } from "../../models/objects/OptionsObjects";
-import { Build, BuildOrder } from "../../models/objects/OrdersObjects";
+import { Build, BuildOrders } from "../../models/objects/OrdersObjects";
 
 interface Props {
   options: {
@@ -13,7 +13,7 @@ interface Props {
       air: BuildLoc[]
     }
   };
-  orders: BuildOrder;
+  orders: BuildOrders;
 }
 
 interface UnitBuildOption {
@@ -404,7 +404,7 @@ export const BuildsPanel: FC<Props> = ({options, orders}: Props) => {
     }
   }
 
-  const handleBuildLocChange = (id: string, index: number, orders: BuildOrder) => {
+  const handleBuildLocChange = (id: string, index: number, orders: BuildOrders) => {
     const newLoc: BuildLocRender | undefined = buildLocs[index].find((loc: BuildLocRender) => loc.nodeId === Number(id));
 
     if (newLoc !== undefined) {
@@ -423,7 +423,7 @@ export const BuildsPanel: FC<Props> = ({options, orders}: Props) => {
       updateLocationArrays();
     }
   }
-  const handleNukeLocChange = (id: string, index: number, orders: BuildOrder) => {
+  const handleNukeLocChange = (id: string, index: number, orders: BuildOrders) => {
     const newLoc: BuildLocRender | undefined = nukeLocs[index].find((loc: BuildLocRender) => loc.nodeId === Number(id));
 
     if (newLoc !== undefined) {
@@ -537,15 +537,12 @@ export const BuildsPanel: FC<Props> = ({options, orders}: Props) => {
           <br/>
           <div>Nuclear Range</div>
           <table>
-            <tr><td>Turn Start</td><td className="build-summary-value">{orders.nukeRange === 0 ? 'Unlimited' : orders.nukeRange}</td></tr>
-            <tr><td>Adjustments</td><td className="build-summary-value">+{adjustmentsIncreasingRange}</td></tr>
-            <tr>
-              <td>Banked Builds</td>
-              <td className="build-summary-value">
-                +{bankedBuildsIncreasingRange}
-              </td>
-            </tr>
-            <tr><td>Turn End</td><td className="build-summary-value">{nukeRangeEnd}</td></tr>
+            <tbody>
+              <tr><td>Turn Start</td><td className="build-summary-value">{orders.nukeRange === 0 ? 'Unlimited' : orders.nukeRange}</td></tr>
+              <tr><td>Adjustments</td><td className="build-summary-value">+{adjustmentsIncreasingRange}</td></tr>
+              <tr><td>Banked Builds</td><td className="build-summary-value">+{bankedBuildsIncreasingRange}</td></tr>
+              <tr><td>Turn End</td><td className="build-summary-value">{nukeRangeEnd}</td></tr>
+            </tbody>
           </table>
         </div>
       }
@@ -553,12 +550,20 @@ export const BuildsPanel: FC<Props> = ({options, orders}: Props) => {
 
       <div>Banked Builds</div>
       <table>
-        <tr><td>Turn Start</td><td className="build-summary-value">{orders.bankedBuilds}</td></tr>
-        {Number.isInteger(orders.nukeRange) && <tr><td>Rushing Nukes</td><td className="build-summary-value">-{bankedBuildsRushingNukes}</td></tr>}
-        {Number.isInteger(orders.nukeRange) && <tr><td>Increasing Range</td><td className="build-summary-value">-{bankedBuildsIncreasingRange}</td></tr>}
-        {Number.isInteger(orders.nukeRange) && <tr><td>Remaining:</td><td className="build-summary-value">{bankedBuildsRemaining}</td></tr>}
-        <tr><td>Adjustments</td><td className="build-summary-value">+{adjustmentsBeingBanked}</td></tr>
-        <tr><td>Turn End</td><td className="build-summary-value">{bankedBuildsEnd}</td></tr>
+        <tbody>
+          <tr><td>Turn Start</td><td className="build-summary-value">{orders.bankedBuilds}</td></tr>
+          {
+            Number.isInteger(orders.nukeRange)
+              &&
+            <Fragment>
+              <tr><td>Rushing Nukes</td><td className="build-summary-value">-{bankedBuildsRushingNukes}</td></tr>
+              <tr><td>Increasing Range</td><td className="build-summary-value">-{bankedBuildsIncreasingRange}</td></tr>
+              <tr><td>Remaining:</td><td className="build-summary-value">{bankedBuildsRemaining}</td></tr>
+            </Fragment>
+          }
+          <tr><td>Adjustments</td><td className="build-summary-value">+{adjustmentsBeingBanked}</td></tr>
+          <tr><td>Turn End</td><td className="build-summary-value">{bankedBuildsEnd}</td></tr>
+        </tbody>
       </table>
 
 
