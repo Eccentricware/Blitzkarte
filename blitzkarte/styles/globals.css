@@ -124,3 +124,8 @@ text {
 .summary-number-input {
   width: 50px;
 }
+
+.submission-error {
+  color: red;
+  font-weight: bolder;
+}

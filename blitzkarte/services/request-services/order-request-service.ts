@@ -8,7 +8,7 @@ export class OrderRequestService extends AbstractRequestService {
   }
 
   async getTurnOptions(gameId: number): Promise<TurnOptions> {
-    return this.get(`orders/${gameId}/options`);
+    return this.get(`options/${gameId}`);
   }
 
   async getTurnOrders(gameId: number): Promise<TurnOrders> {

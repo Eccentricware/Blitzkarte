@@ -23,7 +23,7 @@ export interface TurnOrdersFinal {
   buildTransfers?: TransferBuildOrder[];
   techTransfer?: TransferTechOrder;
   builds?: BuildOrders;
-  disbands?: any[];
+  disbands?: DisbandOrders;
   nomination?: any;
   votes?: any[];
 }
@@ -91,6 +91,37 @@ export interface Build {
   buildType: string;
   nodeId: number;
   nodeName?: string;
+  provinceName: string;
+  loc: number[];
+}
+
+export interface DisbandOrders {
+  countryId: number;
+  countryName: string;
+  bankedBuilds: number;
+  disbands: number;
+  unitDisbandingDetailed: DisbandingUnitDetail[];
+  nukeLocs: number[];
+  nukeBuildDetails?: NukeBuildInDisband[];
+  nukeRange: number;
+  increaseRange: number;
+  unitsDisbanding: number[];
+}
+
+export interface BuildLocation {
+  province: string;
+  display: string;
+  nodeId: number;
+  nodeLoc: number[];
+}
+
+export interface NukeBuildInDisband extends BuildLocation {
+  unitId: number;
+}
+
+export interface DisbandingUnitDetail {
+  unitId: number;
+  unitType: string;
   provinceName: string;
   loc: number[];
 }
