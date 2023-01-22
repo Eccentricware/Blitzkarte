@@ -6,14 +6,14 @@ export interface TurnOptionsFinal {
   countryId: number;
   countryName: string;
   pending?: {
-    id: number;
-    name: string;
-    deadline: string;
+    id?: number;
+    name?: string;
+    deadline?: Date | string;
   };
   preliminary?: {
-    id: number;
-    name: string;
-    deadline: string;
+    id?: number;
+    name?: string;
+    deadline?: Date | string;
   };
   units?: {
     turnStatus: string;
@@ -37,10 +37,7 @@ export interface TurnOptionsFinal {
     builds: number;
     locations: BuildOptions;
   }
-  disbands?: {
-    turnStatus: string;
-    options: AtRiskUnit[];
-  }
+  disbands?: DisbandOptions;
   nominations?: {
     turnStatus: string;
     options: NominatableCountry[];
@@ -86,14 +83,10 @@ export interface BuildLoc {
 }
 
 export interface AtRiskUnit {
-  countryId: number;
-	countryName: string;
-	rank: string;
-	flagKey: string;
-	unitId: number;
-	unitType: string;
-	provinceName: string;
-	loc: number[];
+  unitId: number;
+  unitType: string;
+  provinceName: string;
+  loc: number[];
 }
 
 export interface NominatableCountry {
@@ -114,3 +107,12 @@ export interface BuildOptions {
   sea: BuildLoc[],
   air: BuildLoc[]
 };
+
+export interface DisbandOptions {
+  disbandCount: number;
+  cityCount: number;
+  unitCount: number;
+  units: AtRiskUnit[];
+  nukesInProduction: number;
+  nukeLocs: BuildLoc[];
+}

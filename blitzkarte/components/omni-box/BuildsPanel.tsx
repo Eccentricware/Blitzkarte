@@ -1,5 +1,5 @@
 import { ChangeEvent, FC, Fragment, useEffect, useState } from "react";
-import { BuildType, UnitType } from "../../models/enumeration/unit-enumerations";
+import { BuildType } from "../../models/enumeration/unit-enumerations";
 import { BuildLoc } from "../../models/objects/OptionsObjects";
 import { Build, BuildOrders } from "../../models/objects/OrdersObjects";
 
@@ -76,9 +76,6 @@ export const BuildsPanel: FC<Props> = ({options, orders}: Props) => {
   const [bankedBuildsIncreasingRange, setBankedBuildsIncreasingRange] = useState(orders.increaseRange);
   const [bankedBuildsRushingNukes, setBankedBuildsRushingNukes] = useState(getNukesRushedCount());
   const [bankedBuildsEnd, setBankedBuildsEnd] = useState(orders.bankedBuilds);
-
-  const [unitPresence, setUnitPresence] = useState<UnitPresence>();
-  const [buildOrders, setBuildOrders] = useState(orders.builds);
 
   useEffect(() => {
     updateBuildTypeArrays(orders.bankedBuilds);

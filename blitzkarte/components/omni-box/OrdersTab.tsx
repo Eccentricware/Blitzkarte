@@ -1,12 +1,13 @@
 import { Button } from "@mui/material";
 import { DateTime } from "luxon";
-import { FC } from "react"
+import { FC, useState } from "react"
 import { TurnOptionsFinal } from "../../models/objects/OptionsObjects";
 import { TurnOrdersFinal } from "../../models/objects/OrdersObjects";
 import { DoubleTurnOptions, TurnOrders, UnitOrder } from "../../models/objects/TurnOrdersObjects";
 import { OrderRequestService } from "../../services/request-services/order-request-service";
 import { BuildsPanel } from "./BuildsPanel";
 import { BuildTransfer } from "./BuildTransfer";
+import { DisbandsPanel } from "./DisbandsPanel";
 import { TechTransfer } from "./TechTransfer";
 import { TurnOrdersPanel } from "./TurnOrdersPanel";
 import { Units } from "./Units";
@@ -18,6 +19,7 @@ interface OrderOrdersProps {
 }
 
 export const OrdersTab: FC<OrderOrdersProps> = ({options, orders, nudge}: OrderOrdersProps) => {
+  const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
   const orderRequestService = new OrderRequestService();
   const handleSubmitOrdersClick = () => {
     orderRequestService.submitOrders(orders);
@@ -78,10 +80,20 @@ export const OrdersTab: FC<OrderOrdersProps> = ({options, orders, nudge}: OrderO
           &&
         <BuildsPanel options={options.builds} orders={orders.builds}/>
       }
+      {
+        options.disbands && orders.disbands
+          &&
+        <DisbandsPanel
+          options={options.disbands}
+          orders={orders.disbands}
+          setSubmitDisabled={setSubmitDisabled}
+        />
+      }
       <Button
         color="inherit"
         variant="contained"
         onClick={handleSubmitOrdersClick}
+        disabled={submitDisabled}
       >
         Submit Orders
       </Button>
