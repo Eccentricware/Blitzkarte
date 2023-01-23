@@ -8,6 +8,7 @@ import { OrderRequestService } from "../../services/request-services/order-reque
 import { BuildsPanel } from "./BuildsPanel";
 import { BuildTransfer } from "./BuildTransfer";
 import { DisbandsPanel } from "./DisbandsPanel";
+import { NominationPanel } from "./NominationPanel";
 import { TechTransfer } from "./TechTransfer";
 import { TurnOrdersPanel } from "./TurnOrdersPanel";
 import { Units } from "./Units";
@@ -84,8 +85,17 @@ export const OrdersTab: FC<OrderOrdersProps> = ({options, orders, nudge}: OrderO
         options.disbands && orders.disbands
           &&
         <DisbandsPanel
-          options={options.disbands}
+          options={options.disbands.options}
           orders={orders.disbands}
+          setSubmitDisabled={setSubmitDisabled}
+        />
+      }
+      {
+        options.nominations && orders.nomination
+          &&
+        <NominationPanel
+          options={options.nominations.options}
+          orders={orders.nomination}
           setSubmitDisabled={setSubmitDisabled}
         />
       }
