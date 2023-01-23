@@ -47,7 +47,7 @@ export interface TurnOptionsFinal {
   }
   votes?: {
     turnStatus: string;
-    options: Nomination[];
+    options: VotingOptions;
   }
 }
 
@@ -101,7 +101,7 @@ export interface NominatableCountry {
 
 export interface Nomination {
   nominationId: number;
-  rankSignature: string;
+  signature: string;
   countries: NominatableCountry[];
   votesRequired: number;
 }
@@ -124,4 +124,9 @@ export interface DisbandOptions {
 export interface NominationOptions {
   victoryBase: number,
   countries: NominatableCountry[]
+}
+
+export interface VotingOptions {
+  duplicateAlerts: string[];
+  nominations: Nomination[];
 }
