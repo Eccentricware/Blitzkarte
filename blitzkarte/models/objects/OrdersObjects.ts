@@ -24,7 +24,7 @@ export interface TurnOrdersFinal {
   techTransfer?: TransferTechOrder;
   builds?: BuildOrders;
   disbands?: DisbandOrders;
-  nomination?: any;
+  nomination?: NominationOrder;
   votes?: any[];
 }
 
@@ -124,4 +124,17 @@ export interface DisbandingUnitDetail {
   unitType: string;
   provinceName: string;
   loc: number[];
+}
+
+export interface NominationOrder {
+  countryIds: number[];
+  countryDetails: NominatableCountry[];
+  coalitionSignature: string;
+}
+
+export interface NominatableCountry {
+  countryId: number;
+  countryName: string;
+  rank: string;
+  penalty?: number;
 }

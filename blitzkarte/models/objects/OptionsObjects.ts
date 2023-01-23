@@ -37,10 +37,13 @@ export interface TurnOptionsFinal {
     builds: number;
     locations: BuildOptions;
   }
-  disbands?: DisbandOptions;
+  disbands?: {
+    turnStatus: string;
+    options: DisbandOptions;
+  };
   nominations?: {
     turnStatus: string;
-    options: NominatableCountry[];
+    options: NominationOptions;
   }
   votes?: {
     turnStatus: string;
@@ -93,6 +96,7 @@ export interface NominatableCountry {
   countryId: number;
   countryName: string;
   rank: string;
+  penalty?: number;
 }
 
 export interface Nomination {
@@ -115,4 +119,9 @@ export interface DisbandOptions {
   units: AtRiskUnit[];
   nukesInProduction: number;
   nukeLocs: BuildLoc[];
+}
+
+export interface NominationOptions {
+  victoryBase: number,
+  countries: NominatableCountry[]
 }

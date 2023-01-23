@@ -107,7 +107,8 @@ text {
 
 .build-transfer-row,
 .build-order-row,
-.nuke-tech-transfer-row {
+.nuke-tech-transfer-row,
+.nomination-list {
   display: flex;
   flex-wrap: nowrap;
 }

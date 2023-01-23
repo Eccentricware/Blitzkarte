@@ -18,8 +18,8 @@ export const DisbandsPanel: FC<DisbandProps> = ({options, orders, setSubmitDisab
   const [nukeLocs, setNukeLocs] = useState<BuildLoc[][]>([]);
 
   const [bankedBuildsIncreasingRange, setBankedBuildsIncreasingRange] = useState(orders.increaseRange);
-  const [bankedBuildsRemaining, setBankedBuildsRemaining] = useState(orders.bankedBuilds);
-  const [nukeRangeEnd, setNukeRangeEnd] = useState(orders.nukeRange);
+  const [bankedBuildsRemaining, setBankedBuildsRemaining] = useState(orders.bankedBuilds - orders.increaseRange);
+  const [nukeRangeEnd, setNukeRangeEnd] = useState(orders.nukeRange + orders.increaseRange);
 
   const [showNoNukeLocError, setShowNoNukeLocError] = useState<boolean>(false);
 
@@ -84,7 +84,6 @@ export const DisbandsPanel: FC<DisbandProps> = ({options, orders, setSubmitDisab
 
   const handleBuildIncreasingRangeChange = (amount: string) => {
     let newBbIncreasingRange = Number(amount);
-    const startAbove0 = bankedBuildsRemaining > 0;
 
     const max = bankedBuildsIncreasingRange + bankedBuildsRemaining;
     if (newBbIncreasingRange > max) {
@@ -92,7 +91,7 @@ export const DisbandsPanel: FC<DisbandProps> = ({options, orders, setSubmitDisab
     }
 
     orders.increaseRange = newBbIncreasingRange;
-    const newBankedBuildsRemaining = bankedBuildsRemaining - (newBbIncreasingRange - bankedBuildsIncreasingRange);
+    const newBankedBuildsRemaining = orders.bankedBuilds - newBbIncreasingRange;
 
     setBankedBuildsIncreasingRange(newBbIncreasingRange);
     setBankedBuildsRemaining(newBankedBuildsRemaining);
@@ -204,7 +203,7 @@ export const DisbandsPanel: FC<DisbandProps> = ({options, orders, setSubmitDisab
           }
         </tbody>
       </table>
-
+      <br/>
 
       {
         Number.isInteger(orders.nukeRange)
