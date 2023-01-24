@@ -12,6 +12,7 @@ import { NominationPanel } from "./NominationPanel";
 import { TechTransfer } from "./TechTransfer";
 import { TurnOrdersPanel } from "./TurnOrdersPanel";
 import { Units } from "./Units";
+import { VotingPanel } from "./VotingPanel";
 
 interface OrderOrdersProps {
   options: TurnOptionsFinal;
@@ -56,6 +57,14 @@ export const OrdersTab: FC<OrderOrdersProps> = ({options, orders, nudge}: OrderO
         </div>
       }
 
+      {
+        options.votes && orders.votes
+          &&
+        <VotingPanel
+          options={options.votes.options}
+          orders={orders.votes}
+        />
+      }
       {
         options.units
           &&
