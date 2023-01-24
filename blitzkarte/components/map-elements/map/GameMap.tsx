@@ -18,11 +18,18 @@ interface Props {
 }
 
 export const GameMap: FC<Props> = ({renderData, mapRef, refs, turnOrdersResult}: Props) => {
+  const maxHeight = window.innerHeight - 45;
+  const maxWidth = window.innerWidth - 420;
+  console.log(`Max Height: ${maxHeight} | Width: ${maxWidth}`);
+
+  const [width, setWidth] = useState(maxWidth);
+  const [height, setHeight] = useState(maxHeight * 1.6 >= maxWidth ? maxWidth / 1.6 : maxHeight);
+
   return (
     <Blitzkontext.Consumer>
       {({map}) => {
         return (
-          <svg id="map" ref={mapRef} className="map" width="16000" height="10000"
+          <svg id="map" ref={mapRef} className="map" width={width} height={height}
             viewBox="0 0 16000 10000">
             <g ref={refs}>
               <TerrainLayer terrainRenderData={renderData.terrain} />

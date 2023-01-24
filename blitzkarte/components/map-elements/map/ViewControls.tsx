@@ -54,7 +54,7 @@ export const ViewControls: FC<ViewControlProps> = ({
   }
 
   return (
-    <svg width="1500" height="1500" viewBox="0 0 502.24 502.24">
+    <svg width="150" height="150" viewBox="0 0 500 500">
       <g id="Globe" className="map-view-button" onClick={handleReset}>
         <circle cx="251.12" cy="251.12" r="109.83" fill={viewOps.zoomed ? "aqua" : 'darkgray'} stroke="black" strokeMiterlimit="10" strokeWidth={5}/>
         <polygon points="196.6 158.47 205.75 167.07 202.98 185.37 214.9 182.87 231.53 182.59 235.69 193.96 227.1 204.49 225.16 223.62 227.38 236.1 221.28 236.1 217.95 228.06 209.08 223.62 209.63 237.49 216.15 249.13 227.1 253.29 237.36 272.42 241.51 296.54 231.26 321.76 224.05 337.57 216.29 343.11 213.24 331.19 214.35 293.49 196.6 287.94 184.68 266.04 188.56 243.58 175.81 227.23 165.28 215.86 166.66 227.78 160.84 231.94 158.07 210.59 156.47 195.38 162.16 189.05 189.69 164 196.6 158.47" fill={viewOps.zoomed ? 'lime' : 'gray'} stroke="#000" strokeMiterlimit="10" />

@@ -660,18 +660,16 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
 
 
   return (
-    <div className="map-container">
-      <svg id="map-container" className="map-container" width="1488" height="930" viewBox="0 0 16000 10000">
-        <GameMap renderData={renderData}
-          turnOrdersResult={turnOrdersResult}
-          orderSet={orderSet}
-          mapRef={mapRef}
-          refs={llRef}
-        />
-        <g transform='translate(14500 8500)'>
-          <ViewControls viewOps={viewOps}/>
-        </g>
-      </svg>
+    <div className="map-container" style={{height: window.innerHeight - 55}}>
+      <GameMap renderData={renderData}
+        turnOrdersResult={turnOrdersResult}
+        orderSet={orderSet}
+        mapRef={mapRef}
+        refs={llRef}
+      />
+      <div className='view-controls'>
+      <ViewControls viewOps={viewOps}/>
+      </div>
     </div>
   )
 }
