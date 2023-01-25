@@ -85,7 +85,7 @@ export interface Order {
   orderId?: number;
   orderSetId: number;
   orderedUnitId: number;
-  orderedUnitLoc?: number[];
+  loc?: number[];
   orderType: string;
   secondaryUnitId?: number | undefined;
   secondaryUnitLoc?: number[];

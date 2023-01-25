@@ -1,7 +1,7 @@
 export interface TurnOrdersFinal {
-  gameId: number;
-  userId: number;
-  countryId: number;
+  // gameId: number;
+  // userId: number;
+  // countryId: number;
   pending?: {
     orderSetId?: number;
     default?: boolean;
@@ -25,7 +25,9 @@ export interface TurnOrdersFinal {
   builds?: BuildOrders;
   disbands?: DisbandOrders;
   nomination?: NominationOrder;
-  votes?: any[];
+  votes?: {
+    nominations: number[];
+  };
 }
 
 export interface SingleTurnOrders {
@@ -112,7 +114,7 @@ export interface BuildLocation {
   province: string;
   display: string;
   nodeId: number;
-  nodeLoc: number[];
+  loc: number[];
 }
 
 export interface NukeBuildInDisband extends BuildLocation {
