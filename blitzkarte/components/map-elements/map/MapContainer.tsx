@@ -7,19 +7,20 @@ import Blitzkontext from '../../../utils/Blitzkontext';
 import { RenderData } from '../../../models/objects/RenderDataObject';
 import { UseQueryResult } from 'react-query';
 import { TurnOrders } from '../../../models/objects/TurnOrdersObjects';
+import { Unit } from '../../../utils/parsing/classes/unit';
 
 interface Props {
   renderData: RenderData;
   turnOrdersResult: UseQueryResult<any>;
   orderSet: TurnOrders | undefined;
+  nudge: any;
 }
 
-export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet }: Props) => {
+export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet, nudge }: Props) => {
   // const [viewBox, setViewBox] = useState('0 0 16000 10000');
   const [zoomed, setZoomed] = useState(false);
   const [atTop, setAtTop] = useState(true);
   const [atBottom, setAtBottom] = useState(true);
-  const [nudger, setNudger] = useState(false);
 
   const mapCtx = useContext(Blitzkontext);
 
@@ -31,6 +32,9 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
   useEffect(() => {
     const view = mapCtx.map.view;
     const scaling = mapCtx.map.scaling;
+    const endOrderCircleR = scaling.orderCircle.r * view.current.zoom;
+    const endOrderCircleStrokeWidth = scaling.orderCircle.strokeWidth * view.current.zoom;
+    const endOrderLineStrokeWidth = scaling.orderLine.strokeWidth * view.current.zoom;
 
     renderData.units.forEach((unit: any) => {
       const unitType = unit.type.toLowerCase();
@@ -39,7 +43,7 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
         attr: {
           'transform': `translate (${unit.loc[0] - 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
             ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
-            scale(1)`
+            scale(${view.current.zoom})`
         },
         ease: ease,
         duration: 0
@@ -49,7 +53,7 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
         attr: {
           'transform': `translate (${unit.loc[0] - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
             ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
-            scale(1)`
+            scale(${view.current.zoom})`
         },
         ease: ease,
         duration: 0
@@ -59,7 +63,7 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
         attr: {
           'transform': `translate (${unit.loc[0] + 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
             ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
-            scale(1)`
+            scale(${view.current.zoom})`
         },
         ease: ease,
         duration: 0
@@ -97,7 +101,24 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
         duration: 0
       });
     });
-  });
+
+    gsap.to(s('.order-circle'), {
+      attr: {
+        'r': endOrderCircleR,
+        'stroke-width': endOrderCircleStrokeWidth
+      },
+      ease: ease,
+      duration: 0
+    });
+
+    gsap.to(s('.order-line'), {
+      attr: {
+        'stroke-width': endOrderLineStrokeWidth
+      },
+      ease: ease,
+      duration: 0
+    });
+  }, [nudge]);
 
   const zoomIn = () => {
     const view = mapCtx.map.view;
@@ -117,6 +138,9 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
     const endLabelSize = scaling.label.size * view.current.zoom;
     const endSupplyCenterR = scaling.supplyCenter.r * view.current.zoom;
     const endSupplyCenterStrokeWidth = scaling.supplyCenter.strokeWidth * view.current.zoom;
+    const endOrderCircleR = scaling.orderCircle.r * view.current.zoom;
+    const endOrderCircleStrokeWidth = scaling.orderCircle.strokeWidth * view.current.zoom;
+    const endOrderLineStrokeWidth = scaling.orderLine.strokeWidth * view.current.zoom;
 
     gsap.to(mapRef.current, {
       attr: { viewBox: endViewBox },
@@ -151,36 +175,21 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
       duration: 1
     });
 
-    renderData.units.forEach((unit: any) => {
-      const unitType = unit.type.toLowerCase();
-      const unitName = unit.name.split(' ').join('_');
-      gsap.to(s(`.${unitName}_left`), {
-        attr: {
-          'transform': `translate (${unit.loc[0] - 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
-            ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
-            scale(${view.current.zoom})`
-        },
-        ease: ease,
-        duration: 1
-      });
-      gsap.to(s(`.${unitName}_center`), {
-        attr: {
-          'transform': `translate (${unit.loc[0] - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
-            ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
-            scale(${view.current.zoom})`
-        },
-        ease: ease,
-        duration: 1
-      });
-      gsap.to(s(`.${unitName}_right`), {
-        attr: {
-          'transform': `translate (${unit.loc[0] + 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
-            ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
-            scale(${view.current.zoom})`
-        },
-        ease: ease,
-        duration: 1
-      });
+    gsap.to(s('.order-circle'), {
+      attr: {
+        'r': endOrderCircleR,
+        'stroke-width': endOrderCircleStrokeWidth
+      },
+      ease: ease,
+      duration: 1
+    });
+
+    gsap.to(s('.order-line'), {
+      attr: {
+        'stroke-width': endOrderLineStrokeWidth
+      },
+      ease: ease,
+      duration: 1
     });
 
     renderData.cities.votingCenters.forEach((city: any) => {
@@ -215,6 +224,40 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
       });
     });
 
+    renderData.units.forEach((unit: any) => {
+      const unitType = unit.type.toLowerCase();
+      const unitName = unit.name.split(' ').join('_');
+      gsap.to(s(`.${unitName}_left`), {
+        attr: {
+          'transform': `translate (${unit.loc[0] - 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
+            ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
+            scale(${view.current.zoom})`
+        },
+        ease: ease,
+        duration: 1
+      });
+      gsap.to(s(`.${unitName}_center`), {
+        attr: {
+          'transform': `translate (${unit.loc[0] - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
+            ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
+            scale(${view.current.zoom})`
+        },
+        ease: ease,
+        duration: 1
+      });
+      gsap.to(s(`.${unitName}_right`), {
+        attr: {
+          'transform': `translate (${unit.loc[0] + 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
+            ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
+            scale(${view.current.zoom})`
+        },
+        ease: ease,
+        duration: 1
+      });
+    });
+
+
+
     view.current.width = endWidth;
     view.current.height = endHeight;
     view.current.x = endX;
@@ -248,8 +291,10 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
     const endLineWidth = scaling.linkLine.width * view.current.zoom;
     const endNodeRadius = scaling.node.radius * view.current.zoom;
     const endLabelSize = scaling.label.size * view.current.zoom;
-    const endSupplyCenterR = scaling.supplyCenter.r * (1 + view.current.zoom) / 2;
-    const endSupplyCenterStrokeWidth = scaling.supplyCenter.strokeWidth
+    const endSupplyCenterR = scaling.supplyCenter.r * view.current.zoom;
+    const endSupplyCenterStrokeWidth = scaling.supplyCenter.strokeWidth * view.current.zoom;
+    const endOrderCircleR = scaling.orderCircle.r * view.current.zoom;
+    const endOrderCircleStrokeWidth = scaling.orderCircle.strokeWidth * view.current.zoom;
 
     let startX: number = view.current.x;
     let endX: number = view.current.center[0] - (endWidth / 2);
@@ -329,7 +374,16 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
       duration: 1
     });
 
-    renderData.units.forEach((unit: any) => {
+    gsap.to(s('.order-circle'), {
+      attr: {
+        'r': endOrderCircleR,
+        'stroke-width': endOrderCircleStrokeWidth
+      },
+      ease: ease,
+      duration: 1
+    });
+
+    renderData.units.forEach((unit: Unit) => {
       const unitType = unit.type.toLowerCase();
       const unitName = unit.name.split(' ').join('_');
       gsap.to(s(`.${unitName}_left`), {
@@ -569,6 +623,15 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
       duration: 1
     });
 
+    gsap.to(s('.order-circle'), {
+      attr: {
+        'r': scaling.orderCircle.r,
+        'stroke-width': scaling.orderCircle.strokeWidth
+      },
+      ease: ease,
+      duration: 1
+    });
+
     renderData.units.forEach((unit: any) => {
       const unitType = unit.type.toLowerCase();
       const unitName = unit.name.split(' ').join('_');
@@ -668,7 +731,7 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
         refs={llRef}
       />
       <div className='view-controls'>
-      <ViewControls viewOps={viewOps}/>
+        <ViewControls viewOps={viewOps}/>
       </div>
     </div>
   )

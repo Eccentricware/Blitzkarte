@@ -54,6 +54,7 @@ const GameBody: FC<GameBodyProps> = ({user, gameId}: GameBodyProps) => {
           <MapContainer renderData={renderData}
             turnOrdersResult={turnOrdersResult}
             orderSet={orderSet}
+            nudge={nudge}
           />
         </div>
       </Grid>

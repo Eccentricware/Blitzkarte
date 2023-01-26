@@ -35,7 +35,7 @@ export const GameMap: FC<Props> = ({renderData, mapRef, refs, turnOrdersResult}:
               <TerrainLayer terrainRenderData={renderData.terrain} />
               <CityLayer cityData={renderData.cities}/>
               <LabelLayer labelPinData={renderData.labels} labelLineData={renderData.labelLines} />
-              { (turnOrdersResult &&turnOrdersResult.data) && <OrderLayer orderData={turnOrdersResult.data} /> }
+              { (turnOrdersResult && turnOrdersResult.data) && <OrderLayer orderData={turnOrdersResult.data} /> }
               { (renderData.nodes && renderData.nodes.display) ?
                 <NodeLayer nodeData={renderData.nodes} nodeRefs={refs}/>
                 :

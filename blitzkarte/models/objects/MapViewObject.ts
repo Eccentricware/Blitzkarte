@@ -43,6 +43,13 @@ export interface MapViewObject {
       r: number,
       strokeWidth: number
     },
+    orderCircle: {
+      r: number,
+      strokeWidth: number
+    },
+    orderLine: {
+      strokeWidth: number
+    },
     votingCenter: {
       width: number,
       height: number,
@@ -170,6 +177,13 @@ export const mapViewDefault: MapViewObject = {
     supplyCenter: {
       r: 40,
       strokeWidth: 4
+    },
+    orderCircle: {
+      r: 135,
+      strokeWidth: 4
+    },
+    orderLine: {
+      strokeWidth: 20
     },
     votingCenter: {
       width: 160,
