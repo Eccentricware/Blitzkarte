@@ -80,7 +80,7 @@ export const NominationPanel: FC<NominationProps> = ({options, orders, setSubmit
 
   return (
     <div>
-      <p>Nominate a coalition for victory from any 3 surviving countries.</p>
+      <p className="omni-paragraph">Nominate a coalition for victory from any 3 surviving countries.</p>
       <div>
       {
         candidateOptions.map((options: NominatableCountry[], index) =>
@@ -102,8 +102,8 @@ export const NominationPanel: FC<NominationProps> = ({options, orders, setSubmit
         )
       }
       </div>
-      <p>Coalition Signature: {coalitionSignature}</p>
-      <p>Votes Required: {victoryReq}</p>
+      <p className="omni-paragraph">Coalition Signature: {coalitionSignature}</p>
+      <p className="omni-paragraph">Votes Required: {victoryReq}</p>
     </div>
   )
 }

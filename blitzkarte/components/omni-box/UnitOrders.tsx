@@ -28,7 +28,7 @@ export const UnitOrders: FC<UnitProps> = ({unit, orders, nudge}: UnitProps) => {
         updatedOrder.eventLoc = unit.moveTransportedDestinations[0].loc;
       }
 
-      if (orderType === OrderDisplay.DETONATE) {
+      if (orderType === OrderDisplay.NUKE) {
         updatedOrder.destinationId = unit.nukeTargets[0].nodeId;
         updatedOrder.eventLoc = unit.nukeTargets[0].loc;
       }
@@ -262,7 +262,7 @@ export const UnitOrders: FC<UnitProps> = ({unit, orders, nudge}: UnitProps) => {
         </select>
       }
       {
-        order.orderType === OrderDisplay.DETONATE
+        order.orderType === OrderDisplay.NUKE
           &&
         <select className="order-destination" value={order.destinationId}
           onChange={(event: ChangeEvent<HTMLSelectElement>) => {

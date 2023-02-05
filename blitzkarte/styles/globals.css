@@ -20,8 +20,15 @@ a {
 }
 
 p {
-  width: 400px;
   word-wrap: break-word;
+}
+
+.section-header {
+  text-align: center;
+}
+
+.about-section {
+  padding: 10px;
 }
 
 /* #stall-globe-container {
@@ -40,7 +47,8 @@ p {
   font-size: smaller;
 }
 
-.guidelines {
+.omni-paragraph {
+  width: 400px;
   font-size: smaller;
 }
 
@@ -129,4 +137,15 @@ text {
 .submission-error {
   color: red;
   font-weight: bolder;
+}
+
+.game-state-body {
+  text-align: center;
+  margin: 25px;
+}
+
+.clickup-embed {
+  background: darkgray;
+  border: 1px solid #ccc;
+  width: 50%;
 }

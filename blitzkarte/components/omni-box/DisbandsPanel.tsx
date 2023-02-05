@@ -107,7 +107,7 @@ export const DisbandsPanel: FC<DisbandProps> = ({options, orders, setSubmitDisab
         nodeId: newLoc.nodeId,
         province: newLoc.province,
         display: newLoc.display,
-        nodeLoc: newLoc.nodeLoc
+        loc: newLoc.nodeLoc
       };
 
       // eslint-disable-next-line
@@ -144,7 +144,7 @@ export const DisbandsPanel: FC<DisbandProps> = ({options, orders, setSubmitDisab
   return (
     <div>
       {
-        <p>
+        <p className="omni-paragraph">
           {`With ${options.cityCount} ${ options.cityCount === 1 ? 'city' : 'cities'}
           and ${options.unitCount} ${ options.unitCount === 1 ? 'unit' : 'units' },
           you must disband ${options.disbandCount} ${ options.disbandCount === 1 ? 'unit' : 'units'}.`}
@@ -153,7 +153,7 @@ export const DisbandsPanel: FC<DisbandProps> = ({options, orders, setSubmitDisab
       {
         options.nukesInProduction > 0
           &&
-        <p>Even though you are disbanding, you can still place your nukes in production if you have empty centers.</p>
+        <p className="omni-paragraph">Even though you are disbanding, you can still place your nukes in production if you have empty centers.</p>
       }
       <table>
         <tbody>

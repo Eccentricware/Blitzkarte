@@ -150,7 +150,7 @@ const CreateGamePage: NextPage = () => {
 
         <Grid container columns={2}>
           <Grid item>
-            <div className="column"><MapContainer renderData={renderData}/></div>
+            <div className="column"><MapContainer renderData={renderData} turnOrdersResult={undefined} orderSet={undefined} nudge={undefined}/></div>
           </Grid>
           <Grid item>
             <div className="column"><CreationOmniBox omniBoxData={omniBoxData}/></div>

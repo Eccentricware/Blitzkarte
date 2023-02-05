@@ -13,7 +13,7 @@ interface Props {
   renderData: any;
   mapRef: any;
   refs: any;
-  turnOrdersResult: UseQueryResult;
+  turnOrdersResult: UseQueryResult | undefined;
   orderSet: TurnOrders | undefined;
 }
 
