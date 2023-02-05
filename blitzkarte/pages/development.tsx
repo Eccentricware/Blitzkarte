@@ -1,17 +1,15 @@
-import { Grid } from '@mui/material'
-import { getAuth } from 'firebase/auth'
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import { useContext } from 'react'
-import { useAuthState } from 'react-firebase-hooks/auth'
-import StallGlobe from '../components/icons/StallGlobe'
-import IndexBody from '../components/index-page/IndexBody'
-import { NavBarSignedIn } from '../components/nav-bar/NavBarSignedIn'
-import { NavBarSignedOut } from '../components/nav-bar/NavBarSignedOut'
-import styles from '../styles/Home.module.css'
-import Blitzkontext from '../utils/Blitzkontext'
+import { getAuth } from "firebase/auth";
+import { NextPage } from "next";
+import Head from "next/head";
+import { useContext } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { DevelopmentBody } from "../components/development-page/DevelopmentBody";
+import StallGlobe from "../components/icons/StallGlobe";
+import { NavBarSignedIn } from "../components/nav-bar/NavBarSignedIn";
+import { NavBarSignedOut } from "../components/nav-bar/NavBarSignedOut";
+import Blitzkontext from "../utils/Blitzkontext";
 
-const Home: NextPage = () => {
+const Development: NextPage = () => {
   // className={styles.container}
   const auth = getAuth();
   const [user, loading, error] = useAuthState(auth);
@@ -43,7 +41,8 @@ const Home: NextPage = () => {
           <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <IndexBody user={user}/>
+        <NavBarSignedIn title={'State of the Game'} />
+        <DevelopmentBody/>
       </div>
     )
   }
@@ -68,9 +67,10 @@ const Home: NextPage = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <IndexBody user={null}/>
+      <NavBarSignedOut title={""} />
+      <DevelopmentBody/>
     </div>
   )
 }
 
-export default Home
+export default Development;

@@ -3,7 +3,7 @@ import { FC } from "react";
 export const HelperTab: FC = () => {
   return (
     <div>
-      <p className="guidelines">
+      <p className="omni-paragraph">
         For the map to parse the layer names in Illustrator must follow a certain format.Improper formatting or detected mismatching elements will provide &quot;warning&quot;, &quot;error&quot;, or &quot;criticial&quot; feedback. Many of the properties can be abbreviated as noted. ALL properties should be together without any spaces, separated by commas, with an equal sign to assign the value.<br />
         <br />
 

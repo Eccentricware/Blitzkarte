@@ -109,9 +109,10 @@ export const NavBarSignedIn: FC<AppBarProps> = ({title}: AppBarProps) => {
         <Toolbar>
           <Container>
             <Button color="inherit"
+              disabled
               onClick={handleGameSelectionMenuOpen}
             >
-              Click here for cool stuff!
+              Navigation
             </Button>
           </Container>
 

@@ -11,7 +11,7 @@ import { Unit } from '../../../utils/parsing/classes/unit';
 
 interface Props {
   renderData: RenderData;
-  turnOrdersResult: UseQueryResult<any>;
+  turnOrdersResult: UseQueryResult<any> | undefined;
   orderSet: TurnOrders | undefined;
   nudge: any;
 }

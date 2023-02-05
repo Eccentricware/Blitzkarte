@@ -562,9 +562,6 @@ export const BuildsPanel: FC<Props> = ({options, orders}: Props) => {
           <tr><td>Turn End</td><td className="build-summary-value">{bankedBuildsEnd}</td></tr>
         </tbody>
       </table>
-
-
-
     </div>
   )
 }

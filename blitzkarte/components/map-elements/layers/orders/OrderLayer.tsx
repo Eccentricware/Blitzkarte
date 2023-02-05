@@ -13,7 +13,7 @@ interface OrderLayerProps {
 
 export const OrderLayer: FC<OrderLayerProps> = ({orderData}: OrderLayerProps) => {
   const moves = orderData.units ? orderData.units.filter((unit: any) =>
-    [OrderDisplay.DETONATE, OrderDisplay.MOVE, OrderDisplay.MOVE_CONVOYED].includes(unit.orderType)
+    [OrderDisplay.NUKE, OrderDisplay.MOVE, OrderDisplay.MOVE_CONVOYED].includes(unit.orderType)
   ) : [];
 
   const holds = orderData.units ? orderData.units.filter((unit: any) => unit.orderType === OrderDisplay.HOLD ) : [];

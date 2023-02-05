@@ -30,7 +30,7 @@ export const VotingPanel: FC<VotingProps> = ({options, orders}: VotingProps) => 
 
   return (
     <div>
-      <p>You can vote on any number of coalitions.
+      <p className="omni-paragraph">You can vote on any number of coalitions.
         {options.duplicateAlerts.length > 0 && ' Duplicates have been grouped.'}
       </p>
       {
