@@ -10,7 +10,6 @@ import { BuildTransfer } from "./BuildTransfer";
 import { DisbandsPanel } from "./DisbandsPanel";
 import { NominationPanel } from "./NominationPanel";
 import { TechTransfer } from "./TechTransfer";
-import { TurnOrdersPanel } from "./TurnOrdersPanel";
 import { Units } from "./Units";
 import { VotingPanel } from "./VotingPanel";
 
@@ -39,7 +38,7 @@ export const OrdersTab: FC<OrderOrdersProps> = ({options, orders, nudge}: OrderO
           <table>
             <tbody>
               <tr><td>Pending Turn:</td><td>{options.pending.name}</td></tr>
-              <tr><td> Deadline:</td><td> {options.pending.deadline}</td></tr>
+              <tr><td> Deadline:</td><td> {DateTime.fromISO(options.pending.deadline).toLocaleString(DateTime.DATETIME_SHORT)}</td></tr>
             </tbody>
           </table>
         </div>

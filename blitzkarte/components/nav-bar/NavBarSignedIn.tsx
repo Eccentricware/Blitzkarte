@@ -46,6 +46,14 @@ export const NavBarSignedIn: FC<AppBarProps> = ({title}: AppBarProps) => {
     router.push('/dashboard');
   }
 
+  const handleLandingClick = () => {
+    router.push('/');
+  }
+
+  const handleDevelopmentClick = () => {
+    router.push('/development');
+  }
+
   const handleNewGameClick = () => {
     router.push('/create-game');
   }
@@ -84,16 +92,22 @@ export const NavBarSignedIn: FC<AppBarProps> = ({title}: AppBarProps) => {
       }}
       open={gameSelectionMenuOpen}
     >
+      <MenuItem>
+        <Button onClick={handleLandingClick}>Landing Page</Button>
+      </MenuItem>
+      <MenuItem>
+        <Button onClick={handleDevelopmentClick}>Development</Button>
+      </MenuItem>
       {
         router.pathname !== '/create-game' &&
         <MenuItem>
-          <Button onClick={handleNewGameClick}>New Game</Button>
+          <Button onClick={handleNewGameClick} disabled={true}>New Game</Button>
         </MenuItem>
       }
       {
         router.pathname !== '/game-finder' &&
         <MenuItem>
-          <Button onClick={handleFindGameClick}>Find Game</Button>
+          <Button onClick={handleFindGameClick}  disabled={true}>Find Game</Button>
         </MenuItem>
       }
       <MenuItem>
@@ -109,7 +123,6 @@ export const NavBarSignedIn: FC<AppBarProps> = ({title}: AppBarProps) => {
         <Toolbar>
           <Container>
             <Button color="inherit"
-              disabled
               onClick={handleGameSelectionMenuOpen}
             >
               Navigation
