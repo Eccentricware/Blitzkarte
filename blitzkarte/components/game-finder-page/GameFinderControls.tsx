@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { FindGameParametersObject } from "../../models/FindGameParametersObject"
+import { FindGameParametersObject } from "../../models/objects/FindGameParametersObject";
 
 interface GameFinderControlsProps {
   parameters: FindGameParametersObject;

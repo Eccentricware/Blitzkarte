@@ -43,6 +43,7 @@ const Home: NextPage = () => {
           <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
           <link rel="icon" href="/favicon.ico" />
         </Head>
+        <NavBarSignedIn title="Yes user"/>
         <IndexBody user={user}/>
       </div>
     )
@@ -68,6 +69,7 @@ const Home: NextPage = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <NavBarSignedOut title="No user"/>
       <IndexBody user={null}/>
     </div>
   )

@@ -57,10 +57,10 @@ const FAQ: FC = () => {
       <table className="about-section">
         <tbody>
         {
-          qas.map((qaPair: QuestionAnswerPair) =>
-            <Fragment>
-              <tr><b>{qaPair.question}</b></tr>
-              <tr>{qaPair.answer}</tr>
+          qas.map((qaPair: QuestionAnswerPair, index) =>
+            <Fragment key={index}>
+              <tr><td><b>{qaPair.question}</b></td></tr>
+              <tr><td>{qaPair.answer}</td></tr>
             </Fragment>
           )
         }

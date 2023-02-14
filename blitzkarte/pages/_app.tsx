@@ -8,9 +8,10 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { firebaseConfig } from '../utils/firebase/firebaseService';
 import firebase, { initializeApp } from 'firebase/app';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon'
 import { initialOmniBoxData } from '../models/objects/OmniBoxDataObject';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { LocalizationProvider } from '@mui/x-date-pickers';
 
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -31,7 +32,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Blitzkontext.Provider value={blitzkontext}>
       <QueryClientProvider client={queryClient}>
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <LocalizationProvider dateAdapter={AdapterLuxon}>
           <Component {...pageProps} />
         </LocalizationProvider>
       </QueryClientProvider>

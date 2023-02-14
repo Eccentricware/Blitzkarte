@@ -42,7 +42,7 @@ export const HelperTab: FC = () => {
         <b>country:</b> Name of the country. Use _ instead of spaces.
         <br />
         <b>rank:</b> a, b, c, d, e for players, n for non-player countries (where the garrisons are assigned).<br /><b>color:</b> in valid CSS format. It should be easy to get the hex version (#ffffff) from Illustrator.<br />
-        <b>nuke:</b>Skip if country doesn't have nukes. Use "0", "Unlimited" or "U" for unlimited range. Otherwise use a number for the specific range.
+        <b>nuke:</b>Skip if country doesn&apos;t have nukes. Use &quot;0&quot;, &quot;Unlimited&quot; or &quot;U&quot; for unlimited range. Otherwise use a number for the specific range.
         Can use n for abbreviation.<br/>
         Examples: nuke=Unlimited, n=5, nuke=0
         <br/><br/>

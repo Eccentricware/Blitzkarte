@@ -6,14 +6,14 @@ export interface TurnOptionsFinal {
   countryId: number;
   countryName: string;
   pending?: {
-    id?: number;
-    name?: string;
-    deadline?: Date | string;
+    id: number;
+    name: string;
+    deadline: string;
   };
   preliminary?: {
-    id?: number;
-    name?: string;
-    deadline?: Date | string;
+    id: number;
+    name: string;
+    deadline: string;
   };
   units?: {
     turnStatus: string;

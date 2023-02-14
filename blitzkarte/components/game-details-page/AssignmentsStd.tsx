@@ -48,7 +48,7 @@ export const AssignmentsStd: FC<AssignmentsStdProps> = ({registrationTypes}: Ass
 
   return (
     <div>
-      This game is hasn't started. Registration is open to all players!
+      This game is hasn&apos;t started. Registration is open to all players!
       <br/>
       Enter the Fray: <br/>
       {

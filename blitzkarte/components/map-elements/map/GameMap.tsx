@@ -8,12 +8,13 @@ import Blitzkontext from '../../../utils/Blitzkontext';
 import { UseQueryResult } from 'react-query';
 import { OrderLayer } from '../layers/orders/OrderLayer';
 import { TurnOrders } from '../../../models/objects/TurnOrdersObjects';
+import { TurnOrdersFinal } from '../../../models/objects/OrdersObjects';
 
 interface Props {
   renderData: any;
   mapRef: any;
   refs: any;
-  turnOrdersResult: UseQueryResult | undefined;
+  turnOrdersResult: UseQueryResult<TurnOrdersFinal> | undefined;
   orderSet: TurnOrders | undefined;
 }
 

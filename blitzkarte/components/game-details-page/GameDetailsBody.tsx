@@ -94,9 +94,13 @@ const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBo
         Banner?
       </Grid>
       <Grid item xs={12} sm={5}>
-        <GameDetailsSettings queryResult={gameDetailsQueryResult}
-          assignmentRefetch={assignmentsQueryResult.refetch}
-        />
+        {
+          gameDetailsQueryResult.data
+            &&
+          <GameDetailsSettings gameDetailsSettings={gameDetailsQueryResult.data}
+            assignmentRefetch={assignmentsQueryResult.refetch}
+          />
+        }
       </Grid>
       <Grid item xs={12} sm={7}>
         <AssignmentsPanel queryResult={assignmentsQueryResult} gameId={gameId}/>

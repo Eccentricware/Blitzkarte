@@ -15,13 +15,12 @@ import { WeeklyDeadlines } from "../omni-box/WeeklyDeadlines";
 import { GameSettings } from "./GameSettings";
 
 interface GameDetailsSettingsProps {
-  queryResult: UseQueryResult<any>;
+  gameDetailsSettings: any;
   assignmentRefetch: Function;
 }
 
-export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({queryResult, assignmentRefetch}: GameDetailsSettingsProps) => {
-  if (queryResult.data) {
-    const gameData = queryResult.data
+export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameDetailsSettings, assignmentRefetch}: GameDetailsSettingsProps) => {
+    const gameData = gameDetailsSettings
 
     const gameRequestService = new GameRequestService();
     const router = useRouter();
@@ -403,7 +402,4 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({queryResult, 
         }
       </div>
     )
-  }
-
-  return (<div>oh</div>)
 }
