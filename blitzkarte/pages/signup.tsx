@@ -8,6 +8,7 @@ import { Grid, TextField, Button } from "@mui/material";
 import Blitzkontext from "../utils/Blitzkontext";
 import { CredentialValidator } from "../utils/general/credentialValidator";
 import { useRouter } from "next/router";
+import { Google, Facebook, Email, Mail } from "@mui/icons-material";
 
 const SignupPage: NextPage = () => {
   const [username, setUsername] = useState('');
@@ -20,6 +21,8 @@ const SignupPage: NextPage = () => {
   const [password1Valid, setPassword1Valid] = useState(true);
   const [password2, setPassword2] = useState('');
   const [password2Valid, setPassword2Valid] = useState(true);
+  const [showProcessing, setShowProcessing] = useState(false);
+
   const firebaseCtx = useContext(Blitzkontext).user;
 
   const router = useRouter();
@@ -118,7 +121,7 @@ const SignupPage: NextPage = () => {
   };
 
   const handleSignUpWithGoogleClick = () => {
-    if (firebaseCtx.auth && username.length > 0 && usernameAvailable ) {
+    if (firebaseCtx.auth && username.length > 2 && usernameAvailable ) {
       firebaseService.signUpWithGoogle(firebaseCtx.auth, username)
         .then((result: any) => {
           if (result.success === true) {
@@ -128,11 +131,15 @@ const SignupPage: NextPage = () => {
         .catch((error: Error) => {
           console.log(error.message);
         });
+    } else if (username.length <= 2) {
+      setUsernameErrorMsg('Username must be at least 3 characters')
+    } else if (!usernameAvailable) {
+      setUsernameErrorMsg('Seriously, someone already has that username');
     }
   };
 
   const handleSignUpWithFacebookClick = () => {
-    if (firebaseCtx.auth && username.length > 0 && usernameAvailable) {
+    if (firebaseCtx.auth && username.length > 2 && usernameAvailable) {
       firebaseService.signUpWithFacebook(firebaseCtx.auth, username)
         .then((result: any) => {
           if (result.success === true) {
@@ -156,7 +163,7 @@ const SignupPage: NextPage = () => {
       <NavBarSignedOut title="Sign Up Page"/>
 
       <Grid container columns={1}>
-        <Grid item>
+        <Grid item style={{padding: 25}}>
           <TextField
             label="Username"
             required
@@ -171,28 +178,42 @@ const SignupPage: NextPage = () => {
               handleUsernameChange(event.target.value);
             }}
           /><br/>
-          <Button color="error"
-            variant="contained"
-            onClick={() => { handleToggleEmailOpsClick(); }}
-          >
-            <span className="firebaseui-idp-text firebaseui-idp-text-long">Email</span>
-          </Button>
-          <Button color="success"
-            variant="contained"
-            onClick={() => { handleSignUpWithGoogleClick(); }}
-          >
-            <span className="firebaseui-idp-text firebaseui-idp-text-long">Google</span>
-          </Button>
-          <Button color="primary"
-            variant="contained"
-            onClick={() => { handleSignUpWithFacebookClick(); }}
-          >
-            <span className="firebaseui-idp-text firebaseui-idp-text-long">Facebook</span>
-          </Button><br/>
+          <p>Create new Blitzkarte credentials or leverage an existing Google or Facebook Account</p>
+          <Grid container>
+            <Grid item>
+              <Button className="provider-signup-button"
+                color="error"
+                variant="contained"
+                onClick={() => { handleToggleEmailOpsClick(); }}
+              >
+                <span className="firebaseui-idp-text firebaseui-idp-text-long"><Mail color="inherit" fontSize="large"/></span>
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button className="provider-signup-button"
+                color="success"
+                variant="contained"
+                onClick={() => { handleSignUpWithGoogleClick(); }}
+              >
+                <span className="firebaseui-idp-text firebaseui-idp-text-long"><Google color='inherit' fontSize="large"/></span>
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button className="provider-signup-button"
+                color="primary"
+                variant="contained"
+                disabled={true}
+                onClick={() => { handleSignUpWithFacebookClick(); }}
+              >
+                <span className="firebaseui-idp-text firebaseui-idp-text-long"><Facebook color="inherit" fontSize="large"/></span>
+              </Button><br/>
+            </Grid>
+          </Grid>
           {
             showEmailOps &&
             <div>
               <TextField
+                className="provider-signup-field"
                 required
                 label="Email"
                 variant="outlined"
@@ -201,7 +222,7 @@ const SignupPage: NextPage = () => {
                   handleEmailChange(event.target.value);
                 }}
               /><br />
-              <TextField id="outlined-basic"
+              <TextField className="outlined-basic provider-signup-field"
                 label="Password"
                 type="password"
                 variant="outlined"
@@ -211,7 +232,7 @@ const SignupPage: NextPage = () => {
                   handlePassword1Change(event.target.value);
                 }}
               />
-              <TextField id="outlined-basic"
+              <TextField className="outlined-basic provider-signup-field"
                 label="Confirm Password"
                 type="password"
                 variant="outlined"
@@ -221,7 +242,9 @@ const SignupPage: NextPage = () => {
                   handlePassword2Change(event.target.value);
                 }}
               /><br />
-              <Button color="primary"
+              <Button
+                className="provider-signup-field"
+                color="primary"
                 variant="contained"
                 onClick={() => { handleEmailSignUpClick(); }}
               >

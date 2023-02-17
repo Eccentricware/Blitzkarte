@@ -1,7 +1,8 @@
-import React, { FC, Fragment, useState } from 'react';
+import React, { KeyboardEvent, ChangeEvent, createRef, FC, KeyboardEventHandler, useRef, useState } from 'react';
 import { AppBar, Box, Button, Container, Menu, MenuItem, TextField, Toolbar, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import { FirebaseService } from '../../utils/firebase/firebaseService';
+import { Facebook, Google } from '@mui/icons-material';
 
 interface AppBarProps {
   title: string;
@@ -13,6 +14,8 @@ export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
   const [password, setPassword] = useState('');
   const [loginFailure, setLoginFailure] = useState(false);
   const [passwordResetSent, setPasswordResetSent] = useState(false);
+  const passwordFieldRef = createRef<HTMLDivElement>();
+
   const router = useRouter();
   const firebaseService = new FirebaseService();
 
@@ -24,6 +27,7 @@ export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
 
   const handleMenuClose = () => {
     setAnchorEl(null);
+    setLoginFailure(false);
   }
 
   const handleSignupClick = () => {
@@ -45,6 +49,23 @@ export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
       });
   }
 
+  const keyEmailKeyDownEvent = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (['Enter', 'Tab'].includes(event.key)) {
+      event.preventDefault();
+      event.stopPropagation();
+      if (passwordFieldRef.current) {
+        passwordFieldRef.current.focus();
+      }
+    }
+  };
+
+  const keyPasswordKeyDownEvent = (event: KeyboardEvent<HTMLDivElement>) => {
+    console.log(event.code);
+    if (event.code === 'Enter') {
+      handleSignInWithEmailClick();
+    }
+  };
+
   const handleSignInWithEmailClick = () => {
     firebaseService.signInWithEmail(email, password)
       .then((result: any) => {
@@ -52,9 +73,10 @@ export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
         if (result.hasUsername === true) {
           router.push('/dashboard');
         }
-        setLoginFailure(true);
+        setLoginFailure(false);
       })
       .catch((error: Error) => {
+        setLoginFailure(true);
         console.log(error.message);
       });
   }
@@ -97,27 +119,35 @@ export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
         horizontal: 'right'
       }}
       open={isMenuOpen}
+      onClose={() => {
+        handleMenuClose()
+      }}
     >
       <MenuItem>
-        <TextField id="outlined-basic"
+        <TextField className="outlined-basic"
           label="Email"
           variant="outlined"
+          tabIndex={0}
           fullWidth
-          onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
+          onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
             handleEmailChange(event.target.value);
           }}
+          onKeyDown={keyEmailKeyDownEvent}
         />
       </MenuItem>
       <MenuItem>
-        <TextField id="outlined-basic"
+        <TextField className="outlined-basic"
           label="Password"
           type="password"
           variant="outlined"
+          tabIndex={1}
           error={loginFailure ? true : false}
           helperText={loginFailure ? 'Incorrect Login Credentials' : ''}
-          onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
+          onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
             handlePasswordChange(event.target.value);
           }}
+          onKeyDown={keyPasswordKeyDownEvent}
+          inputRef={passwordFieldRef}
         />
       </MenuItem>
       {
@@ -135,23 +165,24 @@ export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
         </MenuItem>
       }
       <MenuItem>
-        <Button onClick={handleSignInWithEmailClick}>&gt;</Button>
-        <Button onClick={handleGoogleLoginClick}>G</Button>
-        <Button onClick={handleFacebookLoginClick}>F</Button>
-        <Button onClick={handleMenuClose}>X</Button>
+        <Button onClick={handleGoogleLoginClick}><Google color='success'/></Button>
+        <Button onClick={handleFacebookLoginClick} disabled={true}><Facebook/></Button>
       </MenuItem>
     </Menu>
   )
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="sticky">
-        <Toolbar>
+      <AppBar position="sticky" style={{maxHeight: 45}}>
+        <Toolbar style={{minHeight: 45}}>
           <Container>
             <Button color="inherit"
-              disabled
+              disabled={router.pathname === '/'}
+              onClick={() => {
+                router.push('/');
+              }}
             >
-              Spectate Game
+              Landing Page
             </Button>
           </Container>
 

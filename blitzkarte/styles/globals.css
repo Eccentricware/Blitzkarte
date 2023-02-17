@@ -15,9 +15,9 @@ a {
   box-sizing: border-box;
 }
 
-.MuiToolbar-root {
+/* .MuiToolbar-root {
   min-height: 45px;
-}
+} */
 
 p {
   word-wrap: break-word;
@@ -148,4 +148,10 @@ text {
   background: darkgray;
   border: 1px solid #ccc;
   width: 50%;
+}
+
+.provider-signup-button,
+.provider-signup-field {
+  margin-right: 25px;
+  margin-bottom: 25px;
 }

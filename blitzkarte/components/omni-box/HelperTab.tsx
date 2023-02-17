@@ -38,7 +38,7 @@ export const HelperTab: FC = () => {
         <b>pinType (p):</b> city (c)<br />
         <b>Example Full:</b> pinType=city,type=capital,country=Australia,rank=d,color=#6da6db<br />
         <b>Example Abbreviated:</b> p=c,t=c,country=Australia,rank=d,color=#6da6db<br />
-        <b>city (c):</b> capital (c), vote (v), supplyCenter (s) is used for controlled cities, dormant (d) used for uncontrolled cities. Do not add if province does not have a city. If it is a capital, furhter information is required.<br />
+        <b>type (t):</b> capital (c), vote (v), supplyCenter (s) is used for controlled cities, dormant (d) used for uncontrolled cities. Do not add if province does not have a city. If it is a capital, furhter information is required.<br />
         <b>country:</b> Name of the country. Use _ instead of spaces.
         <br />
         <b>rank:</b> a, b, c, d, e for players, n for non-player countries (where the garrisons are assigned).<br /><b>color:</b> in valid CSS format. It should be easy to get the hex version (#ffffff) from Illustrator.<br />

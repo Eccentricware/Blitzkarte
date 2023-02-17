@@ -165,13 +165,27 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
   };
 
   const handleAddGoogleProviderClick = () => {
-    const result = firebaseService.addGoogleProvider(data.username);
-    console.log('Add Google Provider result', result);
+    if (userCtx.user) {
+      userCtx.user.getIdToken()
+        .then((idToken: string) => {
+          firebaseService.addGoogleProvider(idToken)
+            .then((result: any) => {
+            console.log('Add Google Provider result', result);
+          });
+        });
+    }
   };
 
   const handleAddFacebookProviderClick = () => {
-    const result = firebaseService.addFacebookProvider(data.username);
-    console.log('Add FacebookProvider Result', result);
+    if (userCtx.user) {
+      userCtx.user.getIdToken()
+        .then((idToken: string) => {
+          firebaseService.addFacebookProvider(idToken)
+            .then((result: any) => {
+            console.log('Add Facebook Provider result', result);
+          });
+        });
+    }
   };
 
   const handleMeridiemTimeChange = () => {
@@ -337,6 +351,7 @@ const DashboardBody: FC<DashboardBodyProps> = ({user}: DashboardBodyProps) => {
         </Button>
         <Button color="primary"
           variant="contained"
+          disabled={true}
           onClick={() => { handleAddFacebookProviderClick(); }}
         >
           <span className="firebaseui-idp-text firebaseui-idp-text-long">Facebook</span>
