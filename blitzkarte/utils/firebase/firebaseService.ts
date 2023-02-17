@@ -18,7 +18,9 @@ import {
   updateEmail
 } from "firebase/auth";
 import router from "next/router";
+import { useContext } from "react";
 import { UserRequestService } from "../../services/request-services/user-request-service";
+import Blitzkontext from "../Blitzkontext";
 import { erzahler } from "../general/erzahler";
 
 export const firebaseConfig = {
@@ -212,8 +214,13 @@ export class FirebaseService {
 
   async addEmailProvider(email: string, password: string, username: string) {
     const auth = getAuth();
+    const oldIdToken = await useContext(Blitzkontext).user.user?.getIdToken();
+    if (!oldIdToken) {
+      console.log('Add Email Provider Error: No current idToken!');
+      return;
+    }
 
-    const idToken: string =
+    const newIdToken: string =
       await createUserWithEmailAndPassword(auth, email, password)
         .then(async (userCredential: UserCredential) => {
           let user = userCredential.user;
@@ -226,44 +233,46 @@ export class FirebaseService {
         })
         .catch((error: Error) => error.message);
 
-    return this.postProvider(idToken, username);
+    return this.postProvider(oldIdToken, newIdToken);
   }
 
-  async addGoogleProvider(username: string) {
+  async addGoogleProvider(oldIdToken: string) {
     const auth = getAuth();
+
     const googleProvider: AuthProvider = new GoogleAuthProvider();
 
-    const idToken: string =
+    const newIdToken: string =
       await signInWithPopup(auth, googleProvider)
         .then(async (userCredential: UserCredential) =>
           await userCredential.user.getIdToken())
         .catch((error: Error) => error.message);
 
-    return this.postProvider(idToken, username);
+    return this.postProvider(oldIdToken, newIdToken);
   }
 
-  async addFacebookProvider(username: string) {
+  async addFacebookProvider(oldIdToken: string) {
     const auth = getAuth();
+
     const facebookProvider: AuthProvider = new FacebookAuthProvider();
 
-    const idToken: string =
+    const newIdToken: string =
       await signInWithPopup(auth, facebookProvider)
         .then(async (userCredential: UserCredential) =>
           await userCredential.user.getIdToken())
         .catch((error: Error) => error.message);
 
-    return this.postProvider(idToken, username);
+    return this.postProvider(oldIdToken, newIdToken);
   }
 
-  async postProvider(idToken: string, username: string) {
+  async postProvider(oldIdToken: string, newIdToken: string) {
     return fetch(`${erzahler.url}:${erzahler.port}/user/add-provider`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        idToken: idToken,
-        username: username
+        oldIdToken: oldIdToken,
+        newIdToken: newIdToken
       })
     })
       .then((response: any) => response.json())
