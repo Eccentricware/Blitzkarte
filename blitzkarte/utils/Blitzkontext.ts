@@ -4,14 +4,6 @@ import React from 'react';
 import { MapViewObject, mapViewDefault } from '../models/objects/MapViewObject';
 import { initialOmniBoxData } from '../models/objects/OmniBoxDataObject';
 import { firebaseConfig } from './firebase/firebaseService';
-import { Country } from './parsing/classes/country';
-import { LabelPin } from './parsing/classes/label';
-import { LabelLine } from './parsing/classes/labelLine';
-import { NodePin } from './parsing/classes/node';
-import { NodeLink } from './parsing/classes/nodeLink';
-import { Province } from './parsing/classes/province';
-import { Terrain } from './parsing/classes/terrain';
-import { Unit } from './parsing/classes/unit';
 
 interface ContextStructure {
   map: MapViewObject

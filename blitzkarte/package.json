@@ -1,10 +1,10 @@
 {
   "name": "blitzkarte",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "NODE_OPTIONS=\"--max_old_space_size=1024\" next build",
     "start": "next start",
     "lint": "next lint"
   },

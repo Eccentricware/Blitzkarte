@@ -21,7 +21,7 @@ export const NavBarSignedIn: FC<AppBarProps> = ({title}: AppBarProps) => {
     setProfileMenuOpen(true);
   }
 
-  const handleProfileMenuClose = (event: React.MouseEvent<HTMLElement>) => {
+  const handleProfileMenuClose = () => {
     setAnchorEl(null);
     setProfileMenuOpen(false);
   }
@@ -31,7 +31,7 @@ export const NavBarSignedIn: FC<AppBarProps> = ({title}: AppBarProps) => {
     setGameSelectionMenuOpen(true);
   }
 
-  const handleGameSelectionMenuClose = (event: React.MouseEvent<HTMLElement>) => {
+  const handleGameSelectionMenuClose = () => {
     setAnchorEl(null);
     setGameSelectionMenuOpen(false);
   }
@@ -70,6 +70,9 @@ export const NavBarSignedIn: FC<AppBarProps> = ({title}: AppBarProps) => {
         horizontal: 'right'
       }}
       open={profileMenuOpen}
+      onClose={() => {
+        handleProfileMenuClose();
+      }}
     >
       {router.pathname !== '/dashboard' &&
         <MenuItem>
@@ -78,7 +81,6 @@ export const NavBarSignedIn: FC<AppBarProps> = ({title}: AppBarProps) => {
       }
       <MenuItem>
         <Button onClick={handleSignOutClick}>Log Out</Button>
-        <Button onClick={handleProfileMenuClose}>X</Button>
       </MenuItem>
     </Menu>
   );
@@ -91,13 +93,22 @@ export const NavBarSignedIn: FC<AppBarProps> = ({title}: AppBarProps) => {
         horizontal: 'left'
       }}
       open={gameSelectionMenuOpen}
+      onClose={() => {
+        handleGameSelectionMenuClose();
+      }}
     >
-      <MenuItem>
-        <Button onClick={handleLandingClick}>Landing Page</Button>
-      </MenuItem>
-      <MenuItem>
-        <Button onClick={handleDevelopmentClick}>Development</Button>
-      </MenuItem>
+      {
+        router.pathname !== '/' &&
+        <MenuItem>
+          <Button onClick={handleLandingClick}>Landing Page</Button>
+        </MenuItem>
+      }
+      {
+        router.pathname !== '/development' &&
+        <MenuItem>
+          <Button onClick={handleDevelopmentClick}>Development</Button>
+        </MenuItem>
+      }
       {
         router.pathname !== '/create-game' &&
         <MenuItem>
@@ -110,17 +121,13 @@ export const NavBarSignedIn: FC<AppBarProps> = ({title}: AppBarProps) => {
           <Button onClick={handleFindGameClick}  disabled={true}>Find Game</Button>
         </MenuItem>
       }
-      <MenuItem>
-        {/* <Button onClick={handleSignOutClick}>Log Out</Button> */}
-        <Button onClick={handleGameSelectionMenuClose}>X</Button>
-      </MenuItem>
     </Menu>
   );
 
   return (
     <Box sx={{ flexGrow: 1}}>
-      <AppBar position="static">
-        <Toolbar>
+      <AppBar position="sticky" style={{maxHeight: 45}}>
+        <Toolbar style={{minHeight: 45}}>
           <Container>
             <Button color="inherit"
               onClick={handleGameSelectionMenuOpen}
