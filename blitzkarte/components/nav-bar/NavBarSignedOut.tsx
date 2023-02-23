@@ -1,8 +1,9 @@
 import React, { KeyboardEvent, ChangeEvent, createRef, FC, KeyboardEventHandler, useRef, useState } from 'react';
-import { AppBar, Box, Button, Container, Menu, MenuItem, TextField, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Button, Container, Menu, MenuItem, Modal, TextField, Toolbar, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import { FirebaseService } from '../../utils/firebase/firebaseService';
 import { Facebook, Google } from '@mui/icons-material';
+import { margin } from '@mui/system';
 
 interface AppBarProps {
   title: string;
@@ -60,7 +61,6 @@ export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
   };
 
   const keyPasswordKeyDownEvent = (event: KeyboardEvent<HTMLDivElement>) => {
-    console.log(event.code);
     if (event.code === 'Enter') {
       handleSignInWithEmailClick();
     }
@@ -69,7 +69,6 @@ export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
   const handleSignInWithEmailClick = () => {
     firebaseService.signInWithEmail(email, password)
       .then((result: any) => {
-        console.log('Email Result', result);
         if (result.hasUsername === true) {
           router.push('/dashboard');
         }
@@ -111,64 +110,89 @@ export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
       });
   }
 
+  const loginModalStyle = {
+    position: 'absolute' as 'absolute',
+    top: '10px',
+    right: '10px',
+    // transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    borderRadius: '10px',
+    boxShadow: 24,
+    p: 4,
+  };
+
   const loginMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right'
-      }}
+    <Modal
       open={isMenuOpen}
       onClose={() => {
         handleMenuClose()
       }}
     >
-      <MenuItem>
-        <TextField className="outlined-basic"
-          label="Email"
-          variant="outlined"
-          tabIndex={0}
-          fullWidth
-          onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
-            handleEmailChange(event.target.value);
-          }}
-          onKeyDown={keyEmailKeyDownEvent}
-        />
-      </MenuItem>
-      <MenuItem>
-        <TextField className="outlined-basic"
-          label="Password"
-          type="password"
-          variant="outlined"
-          tabIndex={1}
-          error={loginFailure ? true : false}
-          helperText={loginFailure ? 'Incorrect Login Credentials' : ''}
-          onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
-            handlePasswordChange(event.target.value);
-          }}
-          onKeyDown={keyPasswordKeyDownEvent}
-          inputRef={passwordFieldRef}
-        />
-      </MenuItem>
-      {
-        loginFailure &&
-        <MenuItem>
-          <Button
-            disabled={passwordResetSent ? true : false}
-            onClick={handlePasswordResetClick}>
-            {
-              passwordResetSent ?
-              'Sent Password Reset Email'
-              : 'Reset Password?'
-            }
-          </Button>
-        </MenuItem>
-      }
-      <MenuItem>
-        <Button onClick={handleGoogleLoginClick}><Google color='success'/></Button>
-        <Button onClick={handleFacebookLoginClick} disabled={true}><Facebook/></Button>
-      </MenuItem>
-    </Menu>
+      <Box sx={loginModalStyle}>
+          <div
+            style={{
+              textAlign: 'center',
+              fontWeight: 'bolder',
+              paddingBottom: 15
+            }}
+          >
+            Login Through Email Or A Provider</div>
+          <TextField className="outlined-basic"
+            label="Email"
+            variant="outlined"
+            style={{
+              width: '100%',
+              marginBottom: 10
+            }}
+            tabIndex={0}
+            fullWidth
+            onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
+              handleEmailChange(event.target.value);
+            }}
+            onKeyDown={keyEmailKeyDownEvent}
+          />
+          <TextField className="outlined-basic"
+            label="Password"
+            type="password"
+            variant="outlined"
+            style={{width: '100%'}}
+            tabIndex={1}
+            error={loginFailure ? true : false}
+            helperText={loginFailure ? 'Incorrect Login Credentials' : ''}
+            onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
+              handlePasswordChange(event.target.value);
+            }}
+            onKeyDown={keyPasswordKeyDownEvent}
+            inputRef={passwordFieldRef}
+          />
+        {
+          loginFailure &&
+            <Button variant='contained'
+              color="error"
+              style={{width: '100%'}}
+              disabled={passwordResetSent ? true : false}
+              onClick={handlePasswordResetClick}>
+              {
+                passwordResetSent ?
+                'Sent Password Reset Email'
+                : 'Reset Password?'
+              }
+            </Button>
+        }
+        <div
+          style={{
+            paddingTop: '25px',
+            marginTop: '25px',
+            borderTop: 'solid gray 2px'
+          }}>
+          <Button variant='contained' color='success'
+            onClick={handleGoogleLoginClick} style={{width: '50%'}}><Google color='inherit' fontSize="large"/>Google Provider</Button>
+          <Button onClick={handleFacebookLoginClick} style={{width: '50%'}} disabled={true}><Facebook color="inherit" fontSize="large"/>Facebook Provider</Button>
+        </div>
+      </Box>
+    </Modal>
   )
 
   return (
