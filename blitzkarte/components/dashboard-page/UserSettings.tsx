@@ -1,6 +1,6 @@
 import { Button, FormControlLabel, FormGroup, Switch, TextField } from '@mui/material';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { User } from 'firebase/auth';
 import { FC, Fragment, useContext, useEffect, useState } from 'react';
 import { QueryClient, useQuery, useQueryClient } from 'react-query';
@@ -32,8 +32,10 @@ const UserSettings: FC<UserSettingsProps> = ({user}: UserSettingsProps) => {
   const [newEmailValid, setNewEmailValid] = useState(true);
   const [providerEmail, setProviderEmail] = useState('');
   const [changingPassword, setChangingPassword] = useState(false);
+  const [password0, setPassword0] = useState('');
+  const [password0Valid, setPassword0Valid] = useState(true);
   const [password1, setPassword1] = useState('');
-  const [password1Valid, setPasswor1Valid] = useState(true);
+  const [password1Valid, setPassword1Valid] = useState(true);
   const [password2, setPassword2] = useState('');
   const [password2Valid, setPassword2Valid] = useState(true);
   const [passwordChangeSent, setPasswordChangeSent] = useState(false);
@@ -93,9 +95,8 @@ const UserSettings: FC<UserSettingsProps> = ({user}: UserSettingsProps) => {
       });
   }
 
-  const handlePasswordResetClick = () => {
-      firebaseService.resetPassword(currentEmail);
-      setPasswordChangeSent(true);
+  const handleChangePasswordClick = () => {
+    setChangingPassword(!changingPassword);
   }
 
   const handleCurrentEmailChange = (currentEmail: string) => {
@@ -123,12 +124,16 @@ const UserSettings: FC<UserSettingsProps> = ({user}: UserSettingsProps) => {
     setVerificationSent(true);
   }
 
+  const handlePassword0Change = (password0: string) => {
+    setPassword0(password0);
+  }
+
   const handlePassword1Change = (password1: string) => {
     setPassword1(password1);
     if (password1.length < 6) {
-      setPasswor1Valid(false);
+      setPassword1Valid(false);
     } else {
-      setPasswor1Valid(true);
+      setPassword1Valid(true);
     }
   }
 
@@ -211,35 +216,35 @@ const UserSettings: FC<UserSettingsProps> = ({user}: UserSettingsProps) => {
           <h3>User Settings</h3>
         </div>
         <TextField
-              required
-              label="Username"
-              variant="outlined"
-              disabled={true}
-              value={data.username}
-            />
+          required
+          label="Username"
+          variant="outlined"
+          disabled={true}
+          value={data.username}
+        />
         {
           data.email &&
           <div>
             Email: {data.email}<br />
             {
               (!changeEmailSubmitted && data.emailVerified === true) ?
-              <React.Fragment>
+              <Fragment>
                 <Button
                   color="inherit"
                   variant="contained"
                   onClick={handleChangingEmailClick}
                 >
-                  Change Email
+                  {changingEmail ? 'Cancel' : 'Change Email'}
                 </Button><br />
                 {
                   changingEmail &&
-                  <React.Fragment>
+                  <Fragment>
                     <h3 style={{color: 'red'}}>Enter Information To Confirm Email Change!</h3>
                     <TextField
                       label="Current Email"
                       variant="outlined"
                       error={!currentEmailValid}
-                      onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
+                      onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
                         handleCurrentEmailChange(event.target.value);
                       }}
                     /><br />
@@ -247,12 +252,12 @@ const UserSettings: FC<UserSettingsProps> = ({user}: UserSettingsProps) => {
                       label="New Email"
                       variant="outlined"
                       error={!newEmailValid}
-                      onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
+                      onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
                         handleNewEmailChange(event.target.value);
                       }}
                     /><br />
                     <TextField label="Enter Password" type="password" variant="outlined"
-                      onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
+                      onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
                         handlePassword1Change(event.target.value);
                       }}
                     />
@@ -264,11 +269,11 @@ const UserSettings: FC<UserSettingsProps> = ({user}: UserSettingsProps) => {
                     >
                       Submit Change
                     </Button><br />
-                  </React.Fragment>
+                  </Fragment>
                 }
-              </React.Fragment>
+              </Fragment>
               :
-              <React.Fragment>
+              <Fragment>
                 <Button
                   color="inherit"
                   variant="contained"
@@ -277,7 +282,7 @@ const UserSettings: FC<UserSettingsProps> = ({user}: UserSettingsProps) => {
                 >
                   Unverified Emails Cant Be Changed
                 </Button><br />
-              </React.Fragment>
+              </Fragment>
             }
             <br/>
             {
@@ -302,38 +307,54 @@ const UserSettings: FC<UserSettingsProps> = ({user}: UserSettingsProps) => {
               </div>
             }
             {
-              passwordChangeSent ?
-              <Button
-              color="inherit"
-              variant="contained"
-              disabled
-            >
-              Password Change Email Sent
-            </Button>
-            :
-            <Button
-              color="inherit"
-              variant="contained"
-              onClick={handlePasswordResetClick}
-            >
-              Change Password
-            </Button>
-            }
-              <br />
-            {
-              changingPassword &&
-              <div>
+              changingPassword
+                ?
+              <div
+                style={{
+                  display: 'flex',
+                  flexWrap: 'nowrap'
+                }}
+              >
+                <Button
+                  color="inherit"
+                  variant="contained"
+                  onClick={handleChangePasswordClick}
+                >
+                  Cancel
+                </Button>
+                <TextField
+                  label="Current Email"
+                  variant="outlined"
+                  error={!currentEmailValid}
+                  onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
+                    handleCurrentEmailChange(event.target.value);
+                  }}
+                />
+                <TextField  label="Current Password" type="password" variant="outlined"
+                  onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
+                    handlePassword0Change(event.target.value);
+                  }}
+                />
                 <TextField  label="New Password" type="password" variant="outlined"
-                  onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
+                  onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
                     handlePassword1Change(event.target.value);
                   }}
                 />
                 <TextField  label="Confirm New Password" type="password" variant="outlined"
-                  onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
+                  onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
                     handlePassword2Change(event.target.value);
                   }}
                 />
+
               </div>
+                :
+              <Button
+                color="inherit"
+                variant="contained"
+                onClick={handleChangePasswordClick}
+              >
+                Change Password
+              </Button>
             }
           </div>
         }
@@ -369,7 +390,7 @@ const UserSettings: FC<UserSettingsProps> = ({user}: UserSettingsProps) => {
               label="Email"
               variant="outlined"
               error={!newEmailValid}
-              onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
+              onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
                 handleNewEmailChange(event.target.value);
               }}
             /><br />
@@ -379,7 +400,7 @@ const UserSettings: FC<UserSettingsProps> = ({user}: UserSettingsProps) => {
               variant="outlined"
               error={!password1Valid}
                 helperText={!password1Valid && password1.length > 0 ? "Too short" : null}
-              onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
+              onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
                 handlePassword1Change(event.target.value);
               }}
             />
@@ -389,7 +410,7 @@ const UserSettings: FC<UserSettingsProps> = ({user}: UserSettingsProps) => {
               variant="outlined"
               error={!password2Valid}
               helperText={!password2Valid && password2.length > 0 ? "Passwords don't match" : null}
-              onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
+              onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
                 handlePassword2Change(event.target.value);
               }}
             /><br />
