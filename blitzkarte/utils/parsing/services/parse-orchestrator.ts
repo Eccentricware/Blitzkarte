@@ -67,7 +67,11 @@ export class Parser {
   constructor() {}
 
   parse(fileString: string) {
-    let elementStrings : string[] = fileString.split('><');
+    console.log('Initial:', fileString);
+    const minifiedString = fileString.replaceAll(/\>\s+\</g, '><');
+    console.log('Minified:', minifiedString);
+    const elementStrings : string[] = minifiedString.split('><');
+    console.log('Element Strings:', elementStrings);
     elementStrings.forEach(elementString => {
       let element = new Element(elementString);
       this.parseElement(element);
