@@ -59,7 +59,7 @@ export class Province {
   cities: string[] = [];
   voteType: string | undefined = undefined;
   unit: UnitApproval[] = [];
-  valid: boolean;
+  valid: boolean = false;
   approved: boolean = true;
   warnings: string[] = [];
   errors: string[] = [];
@@ -71,12 +71,17 @@ export class Province {
   c: string | undefined; // country
 
   constructor(provinceString: string) {
+    const dataRegexFinder: RegExp = /(?<=data-name\=\")(.+)(?=\")/g
     let properties = provinceString.split(' ');
     let validProperties: string[] = ['n', 'name', 'f', 'fullName', 't', 'type', 'c', 'country'];
 
+    let data: RegExpMatchArray | null = provinceString.match(dataRegexFinder);
+    if (data === null) {
+      return;
+    }
+
     if (properties.length >= 3) {
-      let data: string = properties[2];
-      let dataArray: string[] = data.slice(11, data.length - 1).split(',');
+      let dataArray: string[] = [] //data.slice(11, data.length - 1).split(',');
 
       dataArray.forEach(property => {
         let properKey: string = property.split('=')[0];
