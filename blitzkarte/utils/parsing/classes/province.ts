@@ -71,17 +71,13 @@ export class Province {
   c: string | undefined; // country
 
   constructor(provinceString: string) {
-    const dataRegexFinder: RegExp = /(?<=data-name\=\")(.+)(?=\")/g
-    let properties = provinceString.split(' ');
     let validProperties: string[] = ['n', 'name', 'f', 'fullName', 't', 'type', 'c', 'country'];
+    const dataRegexFinder: RegExp = /(?<=data-name\=\")(.+)(?=\")/g;
 
     let data: RegExpMatchArray | null = provinceString.match(dataRegexFinder);
-    if (data === null) {
-      return;
-    }
 
-    if (properties.length >= 3) {
-      let dataArray: string[] = [] //data.slice(11, data.length - 1).split(',');
+    if (data) {
+      const dataArray: string[] = data[0].split(',');
 
       dataArray.forEach(property => {
         let properKey: string = property.split('=')[0];
@@ -102,8 +98,8 @@ export class Province {
       if (this.valid && this.fullName) {
         this.fullName = this.fullName.replace('_', ' ');
       }
-      if (properties.length > 3) {
-        this.errors.push(`Spaces detected defining province. Use _ instead: ${this.name ? this.name : provinceString}`);
+      if (data.length > 1) {
+        this.errors.push(`Multiple data-name properties detected: ${this.name ? this.name : provinceString}`);
         this.valid = false;
       }
 
