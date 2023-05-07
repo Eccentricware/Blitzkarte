@@ -76,38 +76,37 @@ export class Province {
 
     let data: RegExpMatchArray | null = provinceString.match(dataRegexFinder);
 
-    if (data) {
-      const dataArray: string[] = data[0].split(',');
-
-      dataArray.forEach(property => {
-        let properKey: string = property.split('=')[0];
-        if (!validProperties.includes(properKey)) {
-          this.warnings.push(`Invalid property ${properKey} in ${this.name ? this.name : provinceString}`);
-        }
-        let value: string = property.split('=')[1];
-        this[properKey] = value;
-      });
-
-      this.applyAbbreviations();
-
-      if (this.country && this.country.indexOf('_') > 0) {
-        this.country = convertSnakeToTitleCase(this.country);
-      }
-
-      this.valid = this.validate(provinceString);
-      if (this.valid && this.fullName) {
-        this.fullName = this.fullName.replace('_', ' ');
-      }
-      if (data.length > 1) {
-        this.errors.push(`Multiple data-name properties detected: ${this.name ? this.name : provinceString}`);
-        this.valid = false;
-      }
-
-    } else {
+    if (!data) {
       this.valid = false;
-      if (provinceString.slice(6, provinceString.length - 1) !== 'Tracemap') {
-        this.errors.push(`Missing province data for ${provinceString.slice(6, provinceString.length - 1)}`);
+      this.errors.push(`Missing province data for ${provinceString.slice(6, provinceString.length - 1)}`);
+      return;
+    }
+
+    if (data.length > 1) {
+      this.errors.push(`Multiple data-name properties detected: ${this.name ? this.name : provinceString}`);
+      this.valid = false;
+    }
+
+    const dataArray: string[] = data[0].split(',');
+
+    dataArray.forEach(property => {
+      let properKey: string = property.split('=')[0];
+      if (!validProperties.includes(properKey)) {
+        this.warnings.push(`Invalid property ${properKey} in ${this.name ? this.name : provinceString}`);
       }
+      let value: string = property.split('=')[1];
+      this[properKey] = value;
+    });
+
+    this.applyAbbreviations();
+
+    if (this.country && this.country.indexOf('_') > 0) {
+      this.country = convertSnakeToTitleCase(this.country);
+    }
+
+    this.valid = this.validate(provinceString);
+    if (this.valid && this.fullName) {
+      this.fullName = this.fullName.replace('_', ' ');
     }
   }
 
