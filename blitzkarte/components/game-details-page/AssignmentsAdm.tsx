@@ -128,7 +128,7 @@ export const AssignmentsAdm: FC<AssignmentsAdmProps> = ({assignmentData, refetch
         <Button
           color={startButtonColor}
           variant="contained"
-          disabled={startButtonDisabled}
+          disabled={true}
           onClick={handleGameReadyClick}
         >
           {startButtonLabel}

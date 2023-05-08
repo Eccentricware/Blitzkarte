@@ -7,6 +7,20 @@ export const HelperTab: FC = () => {
         For the map to parse the layer names in Illustrator must follow a certain format.Improper formatting or detected mismatching elements will provide &quot;warning&quot;, &quot;error&quot;, or &quot;criticial&quot; feedback. Many of the properties can be abbreviated as noted. ALL properties should be together without any spaces, separated by commas, with an equal sign to assign the value.<br />
         <br />
 
+        <b><a href="https://drive.google.com/file/d/1AmlHBLALId07l8dZtj6m3F8R-vLKh2CO/view?usp=sharing" style={{color: 'red', cursor: 'pointer'}}>Get The Default Adobe Illustrator Template</a></b><br/>
+        Once your map data is ready, you can simply File ➝ Export ➝ Export As: SVG<br/>
+        - Styling - Presentation Attributes<br/>
+        - Font - SVG<br/>
+        - Images - Irrelevant<br/>
+        - Object IDs - Layer Names<br/>
+        - Decimal - 1<br/>
+        - Minify - OFF<br/>
+        - Responsive - Irrelevant<br/>
+
+        <br/>
+        <b><a href="https://drive.google.com/file/d/1aR9Bt_jjfU-MtxalJH0rNUnKBKUTsBrp/view?usp=sharing" style={{color: 'red', cursor: 'pointer'}}>Get The Default Demo SVG File</a></b><br/><br/>
+        <b>Copy-paste the contents of the file into the SVG Input field.</b><br/><br/>
+
         <b>SVG Element: g | Provinces</b><br />
         <b>Example Full:</b> name=SYD,fullName=Sydney,type=coast,country=Germany<br />
         <b>Example Abbreviated:</b> n=SYD,f=Sydney,t=c,c=Germany<br />

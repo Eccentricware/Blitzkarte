@@ -307,10 +307,6 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameDetailsSe
       });
     }
 
-    const handleCancelCreateGameClick = () => {
-      router.push('/');
-    }
-
     return (
       <div style={{width: 400}}>
         <div>
@@ -390,13 +386,6 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameDetailsSe
               onClick={handleUpdateGameClick}
             >
               Save Changes
-            </Button>
-            <Button
-              color="inherit"
-              variant="contained"
-              onClick={handleCancelCreateGameClick}
-            >
-              Cancel Changes
             </Button>
           </div>
         }

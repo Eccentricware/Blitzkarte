@@ -103,7 +103,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
             handleNominationTimingChange(event.target.value);
           }}
         >
-          <MenuItem value="set">Nominations Start Winter of Turn:</MenuItem>
+          <MenuItem value="set">Nominations Start Winter of Year:</MenuItem>
           <MenuItem value="any">Automatically When ABB Can Win</MenuItem>
           <MenuItem value="all">Automatically When All Votes Are Claimed</MenuItem>
         </Select>
@@ -199,7 +199,8 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
           control={
             <Switch
               checked={settings.blindCreator}
-              disabled={!settings.isAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
+              // disabled={!settings.isAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
+              disabled={true}
               onChange={handleBlindCreatorChange}
             />
           }

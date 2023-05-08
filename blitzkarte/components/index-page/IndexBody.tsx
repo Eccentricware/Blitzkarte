@@ -18,6 +18,7 @@ const IndexBody: FC<IndexBodyProps> = ({user}: IndexBodyProps) => {
         <h1 className={styles.title}>
           Welcome to Blitzkarte!
         </h1>
+        <h3>Work in progress. Status: Invite-only partial testing!</h3>
       </main>
       <Grid container spacing={1}>
         <Grid item xs={6}>
@@ -40,8 +41,14 @@ const IndexBody: FC<IndexBodyProps> = ({user}: IndexBodyProps) => {
               Customize the rules, settings, and starting game state to your liking, and the rest will be automated gloriously.
             </p>
           </div>
+          <div className="about-section">
+            <b>If you are interested in getting involved, <a style={{color: 'red', cursor: 'pointer'}} href="https://forms.clickup.com/2331253/f/274kn-1100/8YGUU6DU3WO9VD8CLI">please fill out the custom intake form</a> and <a href="https://discord.gg/c2RxaB2qMz" style={{color: 'red', cursor: 'pointer'}}>join the official Discord server!</a></b>
+          </div>
           <div className="about-section" onClick={() => router.push('/development')} style={{color: 'red', cursor: 'pointer'}}>
-            <b>Click here for Patch Notes, Known Bugs, RoadMap</b>
+            <b>Development Page: Patch Notes, Known Bugs, RoadMap</b>
+          </div>
+          <div className="about-section">
+            <b>There is not currently an official privacy policy page, but as the interim notification, only the email you used to sign up for is tracked.</b>
           </div>
         </Grid>
         <Grid item xs={6}>

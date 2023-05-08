@@ -12,8 +12,10 @@ export class SchedulerService {
   };
 
   acceptedTimeZones: string[] = [
-    'Asia/Bangkok', // + 8
+    // 'Asia/Bangkok', // + 8
     'Africa/Monrovia', // 0
+    'America/New_York', // -5
+    'America/Chicago', // -6
     'America/Denver', // -7
     'America/Los_Angeles' //-8
   ];

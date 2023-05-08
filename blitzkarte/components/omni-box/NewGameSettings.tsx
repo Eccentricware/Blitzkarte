@@ -99,7 +99,7 @@ export const NewGameSettings: FC<NewGameSettingsProps> = ({settings}: NewGameSet
             handleNominationTimingChange(event.target.value);
           }}
         >
-          <MenuItem value="set">Nominations Start Winter of Turn:</MenuItem>
+          <MenuItem value="set">Nominations Start Winter of Year:</MenuItem>
           <MenuItem value="any">Automatically When ABB Can Win</MenuItem>
           <MenuItem value="all">Automatically When All Votes Are Claimed</MenuItem>
         </Select>
