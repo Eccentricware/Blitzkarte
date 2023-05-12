@@ -13,6 +13,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import EditIcon from '@mui/icons-material/Edit';
 import MergeTypeIcon from '@mui/icons-material/MergeType';
 import { SchedulerService } from "../../services/scheduler-service";
+import { DateTime } from "luxon";
 
 
 interface DeadlinesProps {
@@ -100,40 +101,40 @@ export const WeeklyDeadlines: FC<DeadlinesProps> = ({deadlineOps}: DeadlinesProp
    deadlineOps.setOrdersDay(day);
   }
 
-  const handleOrdersTimeChange = (time: string | null) => {
-   deadlineOps.setOrdersTime(time);
+  const handleOrdersTimeChange = (time: DateTime | null) => {
+   deadlineOps.setOrdersTime(time?.toJSDate());
   }
 
   const handleRetreatsDayChange = (day: string) => {
    deadlineOps.setRetreatsDay(day);
   }
 
-  const handleRetreatsTimeChange = (time: Date | null) => {
-    deadlineOps.setRetreatsTime(time);
+  const handleRetreatsTimeChange = (time: DateTime | null) => {
+    deadlineOps.setRetreatsTime(time?.toJSDate());
   }
 
   const handleAdjustmentsDayChange = (day: string) => {
     deadlineOps.setAdjustmentsDay(day);
   }
 
-  const handleAdjustmentsTimeChange = (time: Date | null) => {
-    deadlineOps.setAdjustmentsTime(time);
+  const handleAdjustmentsTimeChange = (time: DateTime | null) => {
+    deadlineOps.setAdjustmentsTime(time?.toJSDate());
   }
 
   const handleNominationsDayChange = (day: string) => {
     deadlineOps.setNominationsDay(day);
   }
 
-  const handleNominationsTimeChange = (time: Date | null) => {
-    deadlineOps.setNominationsTime(time);
+  const handleNominationsTimeChange = (time: DateTime | null) => {
+    deadlineOps.setNominationsTime(time?.toJSDate());
   }
 
   const handleVotesDayChange = (day: string) => {
     deadlineOps.setVotesDay(day);
   }
 
-  const handleVotesTimeChange = (time: Date | null) => {
-    deadlineOps.setVotesTime(time);
+  const handleVotesTimeChange = (time: DateTime | null) => {
+    deadlineOps.setVotesTime(time?.toJSDate());
   }
 
   // Deadline Grouping
