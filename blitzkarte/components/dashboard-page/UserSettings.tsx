@@ -33,7 +33,6 @@ const UserSettings: FC<UserSettingsProps> = ({user}: UserSettingsProps) => {
   const [providerEmail, setProviderEmail] = useState('');
   const [changingPassword, setChangingPassword] = useState(false);
   const [password0, setPassword0] = useState('');
-  const [password0Valid, setPassword0Valid] = useState(true);
   const [password1, setPassword1] = useState('');
   const [password1Valid, setPassword1Valid] = useState(true);
   const [password2, setPassword2] = useState('');
@@ -87,6 +86,16 @@ const UserSettings: FC<UserSettingsProps> = ({user}: UserSettingsProps) => {
 
   const handleSubmitChangeEmailClick = () => {
     firebaseService.changeEmail(currentEmail, newEmail, password1)
+      .then(() => {
+        router.reload();
+      })
+      .catch((error: Error) => {
+        console.log('Change Email Error:', error.message);
+      });
+  }
+
+  const handleChangePasswordSubmitClick = () => {
+    firebaseService.changePassword(currentEmail, password0, password1)
       .then(() => {
         router.reload();
       })
@@ -234,7 +243,7 @@ const UserSettings: FC<UserSettingsProps> = ({user}: UserSettingsProps) => {
                   variant="contained"
                   onClick={handleChangingEmailClick}
                 >
-                  {changingEmail ? 'Cancel' : 'Change Email'}
+                  {changingEmail ? 'Cancel Email Change' : 'Change Email'}
                 </Button><br />
                 {
                   changingEmail &&
@@ -310,42 +319,61 @@ const UserSettings: FC<UserSettingsProps> = ({user}: UserSettingsProps) => {
               changingPassword
                 ?
               <div
-                style={{
-                  display: 'flex',
-                  flexWrap: 'nowrap'
-                }}
+                // style={{
+                //   display: 'flex',
+                //   flexWrap: 'nowrap'
+                // }}
               >
-                <Button
-                  color="inherit"
-                  variant="contained"
-                  onClick={handleChangePasswordClick}
-                >
-                  Cancel
-                </Button>
-                <TextField
-                  label="Current Email"
-                  variant="outlined"
-                  error={!currentEmailValid}
-                  onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
-                    handleCurrentEmailChange(event.target.value);
-                  }}
-                />
-                <TextField  label="Current Password" type="password" variant="outlined"
-                  onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
-                    handlePassword0Change(event.target.value);
-                  }}
-                />
-                <TextField  label="New Password" type="password" variant="outlined"
-                  onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
-                    handlePassword1Change(event.target.value);
-                  }}
-                />
-                <TextField  label="Confirm New Password" type="password" variant="outlined"
-                  onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
-                    handlePassword2Change(event.target.value);
-                  }}
-                />
-
+                <div className='dashboard-credential-row'>
+                  <Button
+                    color="inherit"
+                    variant="contained"
+                    onClick={handleChangePasswordClick}
+                  >
+                    Cancel Password Change
+                  </Button>
+                </div>
+                <h3 style={{color: 'red'}}>Enter Information To Confirm Email Change!</h3>
+                <div className='dashboard-credential-row'>
+                  <TextField
+                    label="Email"
+                    variant="outlined"
+                    error={!currentEmailValid}
+                    onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
+                      handleCurrentEmailChange(event.target.value);
+                    }}
+                  />
+                </div>
+                <div className='dashboard-credential-row'>
+                  <TextField  label="Current Password" type="password" variant="outlined"
+                    onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
+                      handlePassword0Change(event.target.value);
+                    }}
+                  />
+                </div>
+                <div className='dashboard-credential-row'>
+                  <TextField  label="New Password" type="password" variant="outlined"
+                    onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
+                      handlePassword1Change(event.target.value);
+                    }}
+                  />
+                </div>
+                <div className='dashboard-credential-row'>
+                  <TextField  label="Confirm New Password" type="password" variant="outlined"
+                    onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
+                      handlePassword2Change(event.target.value);
+                    }}
+                  />
+                </div><br/>
+                <div className='dashboard-credential-row'>
+                  <Button
+                    color="inherit"
+                    variant="contained"
+                    onClick={handleChangePasswordSubmitClick}
+                  >
+                    Submit Password Change
+                  </Button>
+                </div>
               </div>
                 :
               <Button

@@ -96,7 +96,8 @@ text {
   border-radius: 8px;
 }
 
-.order-row {
+.order-row,
+.dashboard-credential-row {
   display: flex;
   flex-wrap: nowrap;
 }

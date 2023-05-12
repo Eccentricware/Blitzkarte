@@ -15,7 +15,8 @@ import {
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
   updateProfile,
-  updateEmail
+  updateEmail,
+  updatePassword
 } from "firebase/auth";
 import router from "next/router";
 import { useContext } from "react";
@@ -142,6 +143,17 @@ export class FirebaseService {
 
       await updateEmail(currentUser, newEmail);
       await sendEmailVerification(currentUser);
+    }
+  }
+
+  async changePassword(email: string, currentPassword: string, newPassword: string) {
+    const auth = getAuth();
+
+    if (auth.currentUser) {
+      const currentUser: User = await signInWithEmailAndPassword(auth, email, currentPassword)
+        .then((userCredential: UserCredential) => userCredential.user);
+
+      await updatePassword(currentUser, newPassword);
     }
   }
 
