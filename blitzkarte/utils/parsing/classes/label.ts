@@ -21,7 +21,7 @@ export class LabelPin {
       this.name += `_${pin.number}`;
     }
     this.province = pin.province;
-    this.loc = pin.loc;
+    this.loc = pin.loc.map((coordinate: number) => Math.round(coordinate));
 
     this.valid = this.validate();
   }
