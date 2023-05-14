@@ -55,7 +55,10 @@ export class Pin {
     if (this.cx && this.cy) {
       let x: string = this.cx.slice(1, this.cx.length - 1);
       let y: string = this.cy.slice(1, this.cy.length - 1);
-      this.loc = [Number(x), Number(y)];
+      this.loc = [
+        Math.round(Number(x)),
+        Math.round(Number(y))
+      ];
     }
 
     if (!this.name) {
