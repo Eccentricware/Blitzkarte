@@ -2,6 +2,7 @@ import { Pin } from "./pin";
 
 export class NodePin {
   name!: string;
+  display!: string;
   province!: string;
   type!: string;
   adj: string[] | undefined;
@@ -16,6 +17,7 @@ export class NodePin {
   constructor(pin: Pin) {
     this.province = pin.province;
     this.name = this.processName(pin.name);
+    this.display = this.processDisplay(pin.name);
     this.type = pin.type;
     this.applyAbbreviations();
     this.fill = this.initializeFill();
@@ -33,6 +35,16 @@ export class NodePin {
       return `Node_in_${this.province}`;
     }
     return pinName;
+  }
+
+  // pinName is expected to be in the format of: province_type[_coast]
+  processDisplay(pinName: string): string {
+    const nameParts = pinName.split('_');
+    let display = nameParts[0].toUpperCase();
+    if (nameParts.length > 2) {
+      display += ` ${nameParts[2].toUpperCase()}`;
+    }
+    return display;
   }
 
   applyAbbreviations() {
