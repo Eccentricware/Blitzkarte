@@ -56,7 +56,7 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
   const [nominationYear, setNominationYear] = useState(8);
   const [concurrentGamesLimit, setConcurrentGamesLimit] = useState(0);
   const [automaticAssignments, setAutomaticAssignments] = useState(false);
-  const [ratingLimits, setRatingLimits] = useState(true);
+  const [ratingLimits, setRatingLimits] = useState(false);
   const [funRange, setFunRange] = useState([0, 100]);
   const [skillRange, setSkillRange] = useState([0, 100]);
   const [nmrTolerance, setNmrTolerance] = useState(3);
