@@ -1,12 +1,9 @@
 import { Grid } from "@mui/material";
 import { User } from "firebase/auth"
-import { FC, useContext, useEffect, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import { useQuery } from "react-query";
 import { FindGameParametersObject } from "../../models/objects/FindGameParametersObject";
-import { AbstractRequestService } from "../../services/request-services/abstract-request-service";
 import { GameRequestService } from "../../services/request-services/game-request-service";
-import Blitzkontext from "../../utils/Blitzkontext";
-import { erzahler } from "../../utils/general/erzahler";
 import StallGlobe from "../icons/StallGlobe";
 import { GameFinderControls } from "./GameFinderControls";
 import { FindGameResultsContainer } from "./GameFinderResults";

@@ -118,7 +118,7 @@ export const NavBarSignedIn: FC<AppBarProps> = ({title}: AppBarProps) => {
       {
         router.pathname !== '/game-finder' &&
         <MenuItem>
-          <Button onClick={handleFindGameClick}>Find Game</Button>
+          <Button onClick={handleFindGameClick}>Games</Button>
         </MenuItem>
       }
     </Menu>
