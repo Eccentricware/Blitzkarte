@@ -1,3 +1,4 @@
+import { GameFinderParameters } from "../../models/objects/GameFinderObjects";
 import { AbstractRequestService } from "./abstract-request-service";
 
 export class GameRequestService extends AbstractRequestService {
@@ -5,8 +6,13 @@ export class GameRequestService extends AbstractRequestService {
     super();
   }
 
-  async getGames(): Promise<any> {
-    return this.get('games/search');
+  async getGames(parameters: GameFinderParameters): Promise<any> {
+    return this.get(
+      `games/search` +
+      `?playing=${parameters.playing}` +
+      `&creator=${parameters.creator}` +
+      `&administrator=${parameters.administrator}`
+    );
   }
 
   async getGameDetails(gameId: number): Promise<any> {
