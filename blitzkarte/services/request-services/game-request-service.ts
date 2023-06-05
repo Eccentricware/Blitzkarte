@@ -6,12 +6,12 @@ export class GameRequestService extends AbstractRequestService {
     super();
   }
 
-  async getGames(parameters: GameFinderParameters): Promise<any> {
+  async getGames(idToken: string, parameters: GameFinderParameters): Promise<any> {
     return this.get(
-      `games/search` +
-      `?playing=${parameters.playing}` +
-      `&creator=${parameters.creator}` +
-      `&administrator=${parameters.administrator}`
+      `games/search`
+        + `?playing=${parameters.playing}`
+        + `&creator=${parameters.creator}`
+        + `&administrator=${parameters.administrator}`
     );
   }
 
