@@ -12,12 +12,13 @@ interface GameFinderBodyProps {
   user: User | null;
 }
 
-export const GameFinderBody: FC<GameFinderBodyProps> = ({}: GameFinderBodyProps) => {
+export const GameFinderBody: FC<GameFinderBodyProps> = ({user}: GameFinderBodyProps) => {
+  const gameRequestService = new GameRequestService();
+
   const [games, setGames] = useState([]);
   const [playing, setPlaying] = useState(true);
   const [creator, setCreator] = useState(false);
   const [administrator, setAdministrator] = useState(false);
-  const gameRequestService = new GameRequestService();
 
   const paramaters: GameFinderParameters = {
     playing: playing,
@@ -26,7 +27,14 @@ export const GameFinderBody: FC<GameFinderBodyProps> = ({}: GameFinderBodyProps)
   };
 
   const { isLoading, error, data, isFetching, refetch } = useQuery('getGames', () => {
-    return gameRequestService.getGames(paramaters);
+    if (user) {
+      return user.getIdToken()
+        .then((token) => {
+          return gameRequestService.getGames(token, paramaters);
+        })
+    } else {
+      return gameRequestService.getGames('', paramaters);
+    }
   });
 
   useEffect(() => {

@@ -33,27 +33,24 @@ export class AbstractRequestService {
     }
   }
 
-  async get(route: string): Promise<any> {
+  async get(route: string, idToken?: string): Promise<any> {
     // const idToken = await this.user?.getIdToken();
 
     return await this.baseGetRequest(
       route,
-      // this.idToken
+      idToken ? idToken : this.idToken
     );
   }
 
   async baseGetRequest(
     route: string,
-    // idToken: string | undefined
+    idToken: string
   ): Promise<any> {
-    // idToken = idToken ? idToken : '';
-    // console.log('idToken in baseGetRequest', this.idToken);
-
     return fetch(`${this.host}:${this.port}/${route}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        idToken: this.idToken
+        idToken: idToken
       }
     })
     .then((response: any) => {
