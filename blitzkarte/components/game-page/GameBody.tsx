@@ -34,6 +34,7 @@ const GameBody: FC<GameBodyProps> = ({user, gameId}: GameBodyProps) => {
   const currentMapResult: UseQueryResult<any> = useQuery('getCurrentMap', () => {
     return mapRequestService.getCurrentMap(gameId);
   });
+
   if (currentMapResult.data) {
     renderData = currentMapResult.data;
   }

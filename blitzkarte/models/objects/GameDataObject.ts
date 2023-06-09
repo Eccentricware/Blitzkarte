@@ -36,6 +36,10 @@ export interface GameDataObject {
   startTime: Date;
   stylizedStartYear: number;
   timeCreated: Date;
+  timeReady: Date;
+  timeStarted: Date;
+  timePaused: Date;
+  timeEnded: Date;
   turn1Timing: string;
   voteDelayCount: number | null;
   voteDelayDisplayCount: number | null;

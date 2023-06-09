@@ -7,14 +7,16 @@ import { AssignmentRequestService } from "../../services/request-services/assign
 import { GameRequestService } from "../../services/request-services/game-request-service";
 import Blitzkontext from "../../utils/Blitzkontext";
 import { AssignmentsList } from "./AssignmentsList";
+import { GameStatus } from "../../models/enumeration/game-status-enum";
 
 interface AssignmentsAdmProps {
   assignmentData: any;
   refetch: any;
   gameId: number;
+  gameStatus: GameStatus;
 }
 
-export const AssignmentsAdm: FC<AssignmentsAdmProps> = ({assignmentData, refetch, gameId}: AssignmentsAdmProps) => {
+export const AssignmentsAdm: FC<AssignmentsAdmProps> = ({assignmentData, refetch, gameId, gameStatus}: AssignmentsAdmProps) => {
   const assignmentRequestService = new AssignmentRequestService();
   const gameRequestService = new GameRequestService();
 
@@ -23,12 +25,12 @@ export const AssignmentsAdm: FC<AssignmentsAdmProps> = ({assignmentData, refetch
   const [cancelGameHint, setCancelGameHint] = useState('');
   const [cancelGameClicks, setCancelGameClicks] = useState<number>(Number(0));
   const [cancelButtonVariant, setCancelButtonVariant] = useState<'contained' | 'outlined' | undefined>(undefined);
-  const [cancelButtonText, setCancelButtonText] = useState('Cancel Game');
   const [cancelButtonColor, setCancelButtonColor] = useState('error');
 
   const allAssigned = assignmentData.allAssigned;
   const partialRosterStart = assignmentData.partialRosterStart;
   const finalReadinessCheck = assignmentData.finalReadinessCheck;
+  const cancelButtonText = gameStatus === GameStatus.REGISTRATION ? 'Cancel Game' : 'ABANDON Game';
 
   let nextStepDescription = 'Oh yeah. It\'s all coming together.';
 
@@ -36,7 +38,11 @@ export const AssignmentsAdm: FC<AssignmentsAdmProps> = ({assignmentData, refetch
   let startButtonColor: 'success' | 'error' = 'success';
   let startButtonLabel = 'Start Game';
 
-  if (allAssigned && finalReadinessCheck) {
+  if (gameStatus === GameStatus.READY) {
+    nextStepDescription = 'The roster has been finalized and the game is ready. '
+      + 'The game will start automatically with the announcment of country assignments at the scheduled time.';
+
+  } else if (allAssigned && finalReadinessCheck) {
     nextStepDescription = 'Clicking "Confirm and Start Game" will finalize these assignments and send a final confirmation request to all players. '
       + 'Once they\'ve accepted, game start and first turn deadlines will be locked and live. To skip this step, disable "Final Readiness Check"';
     startButtonLabel = 'Confirm and Start Game';
@@ -125,14 +131,18 @@ export const AssignmentsAdm: FC<AssignmentsAdmProps> = ({assignmentData, refetch
           refetch={refetch}
         />
         <div>{nextStepDescription}</div>
-        <Button
-          color={startButtonColor}
-          variant="contained"
-          disabled={startButtonDisabled}
-          onClick={handleGameReadyClick}
-        >
-          {startButtonLabel}
-        </Button>
+        {
+          gameStatus === GameStatus.REGISTRATION
+            &&
+          <Button
+            color={startButtonColor}
+            variant="contained"
+            disabled={startButtonDisabled}
+            onClick={handleGameReadyClick}
+          >
+            {startButtonLabel}
+          </Button>
+        }
         {cancelGameHint !== '' && <div>{cancelGameHint}</div>}
         <Button
           color="error"

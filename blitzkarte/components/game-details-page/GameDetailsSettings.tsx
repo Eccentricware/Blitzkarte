@@ -308,7 +308,7 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameDetailsSe
     }
 
     return (
-      <div style={{width: 400}}>
+      <div style={{width: 400, padding: 10}}>
         <div>
           <TextField id="outlined-basic"
             label="Game Name"
