@@ -69,7 +69,7 @@ export const NewGameSettings: FC<NewGameSettingsProps> = ({settings}: NewGameSet
 
   return (
     <div>
-      <div>
+      {/* <div>
         <FormGroup>
           <FormControlLabel
             label="Observe Daylight Savings"
@@ -82,7 +82,7 @@ export const NewGameSettings: FC<NewGameSettingsProps> = ({settings}: NewGameSet
             }
           />
         </FormGroup>
-      </div>
+      </div> */}
       <div>
         <TextField type="number"
           label="Stylized Start Year"
