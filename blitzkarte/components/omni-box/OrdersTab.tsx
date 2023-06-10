@@ -56,6 +56,8 @@ export const OrdersTab: FC<OrderOrdersProps> = ({options, orders, nudge}: OrderO
         </div>
       }
 
+      {options.countryName && <div className="country-order-header">{options.countryName} (You)</div>}
+
       {
         options.votes && orders.votes
           &&
