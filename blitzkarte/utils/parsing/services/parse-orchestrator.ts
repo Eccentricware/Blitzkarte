@@ -86,6 +86,7 @@ export class Parser {
     this.unitReferences();
     this.provinceReferences();
     this.validateProvinces();
+    this.validateNodes();
     this.validateCountries();
     this.sortCountries();
 
@@ -453,6 +454,15 @@ export class Parser {
         this.collectErrors(province.errors);
       } else {
 
+      }
+    });
+  }
+
+  validateNodes() {
+    this.nodes.forEach(node => {
+      if (!node.valid) {
+        this.collectWarnings(node.warnings);
+        this.collectErrors(node.errors);
       }
     });
   }
