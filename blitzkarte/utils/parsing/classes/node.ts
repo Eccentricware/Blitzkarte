@@ -1,3 +1,5 @@
+import { NodeType } from "../../../models/enumeration/node-type-enum";
+import { UnitType } from "../../../models/enumeration/unit-enumerations";
 import { Pin } from "./pin";
 
 export class NodePin {
@@ -85,9 +87,10 @@ export class NodePin {
     let nameValid: boolean = this.validateName();
     let typeValid: boolean = this.validateType();
     let adjValid: boolean = this.validateAdj();
+    let unitValid: boolean = this.validateUnit();
     // Province and Loc are validated in passed in generic Pin
 
-    return nameValid && typeValid && adjValid;
+    return nameValid && typeValid && adjValid && unitValid;
   }
 
   validateName(): boolean {
@@ -168,6 +171,37 @@ export class NodePin {
     }
 
     return adjValid;
+  }
+
+  validateUnit(): boolean {
+    let unitValid: boolean = true;
+
+    if (this.unit === UnitType.ARMY && this.type !== NodeType.LAND) {
+      this.errors.push(`Army unit ${this.name} is not on land`);
+      unitValid = false;
+    }
+
+    if (this.unit === UnitType.FLEET && this.type !== NodeType.SEA) {
+      this.errors.push(`Fleet unit ${this.name} is not on sea`);
+      unitValid = false;
+    }
+
+    if (this.unit === UnitType.WING && this.type !== NodeType.AIR) {
+      this.errors.push(`Wing unit ${this.name} is not on air`);
+      unitValid = false;
+    }
+
+    if (this.unit === UnitType.NUKE && this.type !== NodeType.LAND) {
+      this.errors.push(`Nuke unit ${this.name} is not on land`);
+      unitValid = false;
+    }
+
+    if (this.unit === UnitType.GARRISON && this.type !== NodeType.LAND) {
+      this.errors.push(`Garrison unit ${this.name} is not on land`);
+      unitValid = false;
+    }
+
+    return unitValid;
   }
 
   revokeApproval() {
