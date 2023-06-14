@@ -1,14 +1,21 @@
-# Blitzkarte
-This project is an overhaul of a previous full stack app of the same name and intent. Leveraging Express over Django REST for increased control direct database manipulation, this revamp should prove to be a much more streamlined and efficient program than its predecessor.
+# Project Blitzkarte
+Blitzkarte means "Lightning Map" in German, and it is a program which automates a gloabl variation of the social game Diplomacy.
+Players control a country as they cooperate and compete to be among the 3 winners.
+It is a turn based game where players submit orders for their countries in secret, and then simultaneous processed and announced, revealing everyone's true colors.
 
-## Client Side
-This repo stores the client side implementation of a full stack app which allows users to play a fascinating game of global domination.
-
-The client side will be responsible for properly receiving the state of the game accurately. The correct game(s) for the correct player and what their precise options are with the ability to submit those orders to the server for processing at deadline.
-
-The map importer will be able to import an SVG file and parse it to extract the intended game state. Provices, nodes, units and nations are all generated within moments!
+## Implementation
+The glory of React is leveraged to dynamically render a variety of complex operations.
+The game state is displayed as a map through the harmony of React, SVGs and navigated through Greensock.
+React renders the possible orders for the player, which is properly permissioned while leveraging firebase.
+ReactQuery is excellent at managing states and renders throughout the request lifecycle.
+We have site navigation powered by Next and various flair is accented by Material UI.
 
 ## Technologies:
-React.js
-Next.js
-SVGs for map rendering
+<img height="30" src="https://img.shields.io/badge/typescript-blue?style=for-the-badge&logo=typescript&logoColor=white"/>
+<img height="30" src="https://img.shields.io/badge/react-white?style=for-the-badge&logo=react&logoColor=blue"/>
+<img height="30" src="https://img.shields.io/badge/next-black?style=for-the-badge&logo=next.js&logoColor=white"/>
+<img height="30" src="https://img.shields.io/badge/firebase-blue?style=for-the-badge&logo=firebase&logoColor=orange"/>
+<img height="30" src="https://img.shields.io/badge/svg-white?style=for-the-badge&logo=svg&logoColor=orange"/>
+<img height="30" src="https://img.shields.io/badge/greensock-black?style=for-the-badge&logo=greensock&logoColor=green"/>
+<img height="30" src="https://img.shields.io/badge/react_query-white?style=for-the-badge&logo=reactquery&logoColor=red"/>
+<img height="30" src="https://img.shields.io/badge/material_ui-white?style=for-the-badge&logo=mui&logoColor=blue"/>
