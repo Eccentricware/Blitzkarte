@@ -3,7 +3,7 @@ Blitzkarte means "Lightning Map" in German, and it is a program which automates 
 Players control a country as they cooperate and compete to be among the 3 winners.
 It is a turn based game where players submit orders for their countries in secret, and then orders are simultaneously processed and announced, revealing everyone's true colors.
 
-Please keep in mind this is a work in progress (v0.1.1).
+Please keep in mind this is a work in progress.
 Game logic and operations have been prioritized over many of the aesthetics, which may currently appear rough or implemented in a non-final state.
 
 ## Key Features
@@ -23,6 +23,11 @@ The entire network of compatible movement options available can be displayed.
 Users have the option to signup through site-specific emil or leverage Oauth for a Google (or later Facebook) provider login!
 Users can even add secondary login methods to link to their account, allowing for a degree of flexibility should they choose to discontinue using a method.
 Being managed by an industry standard Google Firebase, this fast tracks security and reliability.
+
+### Proper Development, Testing and Production Workflow
+Two pairs of EC2s are dedicated to the testing and live environments.
+Utilizing test and www subdomain DNS routing, main and test branches are managed independently, with different databases for each.
+This allows for responsible test-driven development of new features in one environment which will not disturb smooth operations of production operations.
 
 ## Implementation
 The glory of React is leveraged to dynamically render a variety of complex operations.
