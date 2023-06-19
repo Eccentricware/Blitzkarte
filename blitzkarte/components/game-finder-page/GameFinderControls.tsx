@@ -1,14 +1,26 @@
 import { FC } from "react";
-import { FindGameParametersObject } from "../../models/objects/FindGameParametersObject";
+import { GameFinderParameters, GameFinderSettings } from "../../models/objects/GameFinderObjects";
 
 interface GameFinderControlsProps {
-  parameters: FindGameParametersObject;
+  settings: GameFinderSettings;
 }
 
-export const GameFinderControls: FC<GameFinderControlsProps> = ({parameters}: GameFinderControlsProps) => {
+export const GameFinderControls: FC<GameFinderControlsProps> = ({settings}: GameFinderControlsProps) => {
   return (
     <div>
-      Controls to query for games will go here.
+      <h3>Game Finder</h3>
+      <div>
+        <input type="checkbox" checked={settings.playing} onChange={() => settings.setPlaying(!settings.playing)}/>
+        <label>Playing</label>
+      </div>
+      <div>
+        <input type="checkbox" checked={settings.creator} onChange={() => settings.setCreator(!settings.creator)}/>
+        <label>Creator</label>
+      </div>
+      <div>
+        <input type="checkbox" checked={settings.administrator} onChange={() => settings.setAdministrator(!settings.administrator)}/>
+        <label>Administrator</label>
+      </div>
     </div>
   )
 }

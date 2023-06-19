@@ -54,7 +54,7 @@ export class Terrain {
 
     this.name = this.setName();
 
-    this.points = terrain.slice(pointsStartIndex + 8, pointsEndIndex);
+    this.points = this.roundCoordinates(terrain.slice(pointsStartIndex + 8, pointsEndIndex));
 
     this.findBounds();
 
@@ -221,5 +221,16 @@ export class Terrain {
       return false;
     }
     return true;
+  }
+
+  roundCoordinates(points: string): string {
+    // const pointsArray = points.split(' ');
+    return points.split(' ')
+      .map((point: string) => String(Math.floor(Number(point))) )
+      .join(' ');
+    // return roundedPointsArray.join(' ');
+    // return points.replaceAll(/(?<=[0-9])(\.)([0-9]+)(\s|$)/g, ' ')
+    //         .replaceAll(/(?<=[0-9])(\.)([0-9]+)(\s|$)/g, ' ')
+    //         .trim();
   }
 }

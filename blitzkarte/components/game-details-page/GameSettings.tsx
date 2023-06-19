@@ -70,7 +70,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
 
   return (
     <div>
-      <div>
+      {/* <div>
         <FormGroup>
           <FormControlLabel
             label="Observe Daylight Savings"
@@ -84,7 +84,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
             }
           />
         </FormGroup>
-      </div>
+      </div> */}
       <div>
         <TextField type="number"
           label="Stylized Start Year"
@@ -103,7 +103,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
             handleNominationTimingChange(event.target.value);
           }}
         >
-          <MenuItem value="set">Nominations Start Winter of Turn:</MenuItem>
+          <MenuItem value="set">Nominations Start Winter of Year:</MenuItem>
           <MenuItem value="any">Automatically When ABB Can Win</MenuItem>
           <MenuItem value="all">Automatically When All Votes Are Claimed</MenuItem>
         </Select>
@@ -118,7 +118,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
         />
       }
       </div>
-      <div>
+      {/* <div>
         <TextField type="number"
           label="Concurrent Game Limit"
           value={settings.concurrentGamesLimit}
@@ -127,8 +127,8 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
             handleConcurrentGamesLimitChange(event.target.value);
           }}
         />
-      </div>
-      <div>
+      </div> */}
+      {/* <div>
         <FormGroup>
           <FormControlLabel
             label="Automatic Assignments"
@@ -142,8 +142,8 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
             }
           />
         </FormGroup>
-      </div>
-      <div>
+      </div> */}
+      {/* <div>
         <FormGroup>
           <FormControlLabel
             label="Rating Limits"
@@ -183,29 +183,30 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
             {value: 100, label: 10},
           ]}
         />
-      }
-      <TextField type="number"
+      } */}
+      {/* <TextField type="number"
         label="NMR Tolerance"
         value={settings.nmrTolerance}
         disabled={!settings.isAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
         onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
           handleNmrToleranceChange(event.target.value);
         }}
-      />
-      <FormGroup>
+      /> */}
+      {/* <FormGroup>
         <FormControlLabel
           label="Blind Creator"
           labelPlacement="start"
           control={
             <Switch
               checked={settings.blindCreator}
-              disabled={!settings.isAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
+              // disabled={!settings.isAdmin || settings.gameStatus !== GameStatus.REGISTRATION}
+              disabled={true}
               onChange={handleBlindCreatorChange}
             />
           }
         />
-      </FormGroup>
-      <FormGroup>
+      </FormGroup> */}
+      {/* <FormGroup>
         <FormControlLabel
           label="United Nations Task Force"
           labelPlacement="start"
@@ -218,8 +219,8 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
             />
           }
         />
-      </FormGroup>
-      <FormGroup>
+      </FormGroup> */}
+      {/* <FormGroup>
         <FormControlLabel
           label="Mutually Assured Destruction"
           labelPlacement="start"
@@ -232,8 +233,8 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
             />
           }
         />
-      </FormGroup>
-      <FormGroup>
+      </FormGroup> */}
+      {/* <FormGroup>
         <FormControlLabel
           label="Votable Deadline Extensions"
           labelPlacement="start"
@@ -246,7 +247,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
             />
           }
         />
-      </FormGroup>
+      </FormGroup> */}
       <FormGroup>
         <FormControlLabel
           label="Partial Roster Start"
@@ -261,7 +262,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
           }
         />
       </FormGroup>
-      <FormGroup>
+      {/* <FormGroup>
         <FormControlLabel
           label="Final Readiness Check"
           labelPlacement="start"
@@ -274,7 +275,7 @@ export const GameSettings: FC<GameSettingsProps> = ({settings}: GameSettingsProp
             />
           }
         />
-      </FormGroup>
+      </FormGroup> */}
     </div>
   )
 }

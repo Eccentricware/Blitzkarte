@@ -18,6 +18,25 @@ const IndexBody: FC<IndexBodyProps> = ({user}: IndexBodyProps) => {
         <h1 className={styles.title}>
           Welcome to Blitzkarte!
         </h1>
+        <h3>This project is currently considered EARLY ACCESS, work in progress, invite only, test driven development. Multiple critical features are missing, and much of the presentation is not fine-tuned.</h3>
+        <div style={{display: 'flex'}}>
+          <a style={{color: 'red', cursor: 'pointer'}} href="https://forms.clickup.com/2331253/f/274kn-1100/8YGUU6DU3WO9VD8CLI">
+          <button className="about-section" style={{color: 'red', cursor: 'pointer'}}>
+            <b>New Tester Intake Form</b>
+          </button>
+          </a>
+          <button className="about-section" onClick={() => router.push('/development')} style={{color: 'red', cursor: 'pointer'}}>
+            <b>Patch Notes, Known Issues, RoadMap</b>
+          </button>
+          <a href="https://discord.gg/c2RxaB2qMz" style={{color: 'red', cursor: 'pointer'}}>
+            <button className="about-section" onClick={() => router.push('/development')} style={{color: 'red', cursor: 'pointer'}}>
+              <b>Official Discord Server</b>
+            </button>
+            </a>
+        </div>
+        <div className="about-section">
+          <b>There is not currently an official privacy policy page, but as the interim notification, only the email you used to sign up for is tracked.</b>
+        </div>
       </main>
       <Grid container spacing={1}>
         <Grid item xs={6}>
@@ -39,9 +58,6 @@ const IndexBody: FC<IndexBodyProps> = ({user}: IndexBodyProps) => {
               Blitzkart has a file parsing system that allows users to implement their vision of game balance and design.
               Customize the rules, settings, and starting game state to your liking, and the rest will be automated gloriously.
             </p>
-          </div>
-          <div className="about-section" onClick={() => router.push('/development')} style={{color: 'red', cursor: 'pointer'}}>
-            <b>Click here for Patch Notes, Known Bugs, RoadMap</b>
           </div>
         </Grid>
         <Grid item xs={6}>

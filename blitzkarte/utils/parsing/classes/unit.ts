@@ -26,7 +26,7 @@ export class Unit {
     this.country = country;
     this.countryKey = convertSpaceToCamelCase(country);
     this.node = node.name;
-    this.loc = node.loc;
+    this.loc = node.loc.map((coordinate: number) => Math.round(coordinate));
     this.valid = this.validate();
   }
 

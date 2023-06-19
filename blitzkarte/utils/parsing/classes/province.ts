@@ -59,7 +59,7 @@ export class Province {
   cities: string[] = [];
   voteType: string | undefined = undefined;
   unit: UnitApproval[] = [];
-  valid: boolean;
+  valid: boolean = false;
   approved: boolean = true;
   warnings: string[] = [];
   errors: string[] = [];
@@ -71,42 +71,42 @@ export class Province {
   c: string | undefined; // country
 
   constructor(provinceString: string) {
-    let properties = provinceString.split(' ');
     let validProperties: string[] = ['n', 'name', 'f', 'fullName', 't', 'type', 'c', 'country'];
+    const dataRegexFinder: RegExp = /(?<=data-name\=\")(.+)(?=\")/g;
 
-    if (properties.length >= 3) {
-      let data: string = properties[2];
-      let dataArray: string[] = data.slice(11, data.length - 1).split(',');
+    let data: RegExpMatchArray | null = provinceString.match(dataRegexFinder);
 
-      dataArray.forEach(property => {
-        let properKey: string = property.split('=')[0];
-        if (!validProperties.includes(properKey)) {
-          this.warnings.push(`Invalid property ${properKey} in ${this.name ? this.name : provinceString}`);
-        }
-        let value: string = property.split('=')[1];
-        this[properKey] = value;
-      });
-
-      this.applyAbbreviations();
-
-      if (this.country && this.country.indexOf('_') > 0) {
-        this.country = convertSnakeToTitleCase(this.country);
-      }
-
-      this.valid = this.validate(provinceString);
-      if (this.valid && this.fullName) {
-        this.fullName = this.fullName.replace('_', ' ');
-      }
-      if (properties.length > 3) {
-        this.errors.push(`Spaces detected defining province. Use _ instead: ${this.name ? this.name : provinceString}`);
-        this.valid = false;
-      }
-
-    } else {
+    if (!data) {
       this.valid = false;
-      if (provinceString.slice(6, provinceString.length - 1) !== 'Tracemap') {
-        this.errors.push(`Missing province data for ${provinceString.slice(6, provinceString.length - 1)}`);
+      this.errors.push(`Missing province data for ${provinceString.slice(6, provinceString.length - 1)}`);
+      return;
+    }
+
+    if (data.length > 1) {
+      this.errors.push(`Multiple data-name properties detected: ${this.name ? this.name : provinceString}`);
+      this.valid = false;
+    }
+
+    const dataArray: string[] = data[0].split(',');
+
+    dataArray.forEach(property => {
+      let properKey: string = property.split('=')[0];
+      if (!validProperties.includes(properKey)) {
+        this.warnings.push(`Invalid property ${properKey} in ${this.name ? this.name : provinceString}`);
       }
+      let value: string = property.split('=')[1];
+      this[properKey] = value;
+    });
+
+    this.applyAbbreviations();
+
+    if (this.country && this.country.indexOf('_') > 0) {
+      this.country = convertSnakeToTitleCase(this.country);
+    }
+
+    this.valid = this.validate(provinceString);
+    if (this.valid && this.fullName) {
+      this.fullName = this.fullName.replace('_', ' ');
     }
   }
 

@@ -3,13 +3,15 @@ import { UseQueryResult } from "react-query";
 import StallGlobe from "../icons/StallGlobe";
 import { AssignmentsAdm } from "./AssignmentsAdm";
 import { AssignmentsStd } from "./AssignmentsStd";
+import { GameStatus } from "../../models/enumeration/game-status-enum";
 
 interface AssignmentsPanelProps {
   queryResult: UseQueryResult<any>;
   gameId: number;
+  gameStatus: GameStatus;
 }
 
-export const AssignmentsPanel: FC<AssignmentsPanelProps> = ({queryResult, gameId}: AssignmentsPanelProps) => {
+export const AssignmentsPanel: FC<AssignmentsPanelProps> = ({queryResult, gameId, gameStatus}: AssignmentsPanelProps) => {
   if (queryResult.isFetching) {
       return <StallGlobe mode="querying" message={'Assignments Panel: Fetching'}/>
   }
@@ -22,9 +24,13 @@ export const AssignmentsPanel: FC<AssignmentsPanelProps> = ({queryResult, gameId
     return (
       queryResult.data.userIsAdmin
       ? <AssignmentsAdm assignmentData={queryResult.data}
-        refetch={queryResult.refetch}
-        gameId={gameId}/>
-      : <AssignmentsStd registrationTypes={queryResult.data.userStatus} />
+          refetch={queryResult.refetch}
+          gameId={gameId}
+          gameStatus={gameStatus}
+        />
+      : <AssignmentsStd registrationTypes={queryResult.data.userStatus}
+          gameStatus={gameStatus}
+        />
     )
   }
 

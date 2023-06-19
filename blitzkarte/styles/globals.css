@@ -94,6 +94,7 @@ text {
   padding: 3px;
   margin: 2px;
   border-radius: 8px;
+  cursor: pointer;
 }
 
 .order-row,

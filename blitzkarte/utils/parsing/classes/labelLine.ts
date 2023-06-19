@@ -24,7 +24,7 @@ export class LabelLine {
       } else {
         let keyValuePair: string[] = property.split('=');
         if (keysToConvertToNumbers.includes(keyValuePair[0])) {
-          this[keyValuePair[0]] = Number(keyValuePair[1].slice(1, keyValuePair[1].length -1));
+          this[keyValuePair[0]] = Math.round(Number(keyValuePair[1].slice(1, keyValuePair[1].length -1)));
         } else {
           this[keyValuePair[0]] = keyValuePair[1];
         }

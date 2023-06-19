@@ -4,11 +4,7 @@ import { FC, useEffect, useState } from "react";
 import { useQuery, UseQueryResult } from "react-query";
 import { AssignmentRequestService } from "../../services/request-services/assignment-request-service";
 import { GameRequestService } from "../../services/request-services/game-request-service";
-import { erzahler } from "../../utils/general/erzahler";
-import StallGlobe from "../icons/StallGlobe";
-import { AssignmentsAdm } from "./AssignmentsAdm";
 import { AssignmentsPanel } from "./AssignmentsPanel";
-import { AssignmentsStd } from "./AssignmentsStd";
 import { GameDetailsSettings } from "./GameDetailsSettings";
 
 interface GameDetailsBodyProps {
@@ -22,6 +18,7 @@ const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBo
 
   const [gameName, setGameName] = useState('');
   const [gameNameAvailable, setGameNameAvailable] = useState(true);
+  const [statusTime, setStatusTime] = useState<string>('Loading Time');
 
   const gameDetailsQueryResult: UseQueryResult<any> = useQuery('gameDetailsQuery', () => {
     return gameRequestService.getGameDetails(gameId);
@@ -36,44 +33,6 @@ const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBo
       setGameName(gameDetailsQueryResult.data.gameName);
     }
   }, [gameDetailsQueryResult.data]);
-
-  const handleGameNameChange = (name: string) => {
-    setGameName(name);
-    checkGameNameAvailable(name)
-      .then((gameNameAvailable: boolean) => {
-        validateGameName(name, gameNameAvailable);
-      });
-  }
-
-  const checkGameNameAvailable = (gameName: string): any => {
-    if (gameName.length === 0) {
-      gameName = '-';
-    }
-
-    return fetch(`${erzahler.url}:${erzahler.port}/check-game-name/${gameName}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    .then((result: any) => {
-      return result.json();
-    })
-    .then((available: any) => {
-      return available;
-    })
-    .catch((error: Error) => {
-      console.log('Error checking game name availability:', error.message);
-    });
-  }
-
-  const validateGameName = (gameName: string, gameNameAvailable: boolean) => {
-    if (!gameNameAvailable && gameName.length > 0) {
-      setGameNameAvailable(false);
-    } else {
-      setGameNameAvailable(true);
-    }
-  }
 
   // if (isFetching) {
   //   return <StallGlobe mode="querying" message={'GameDetailsBody: Fetching'}/>
@@ -103,7 +62,14 @@ const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBo
         }
       </Grid>
       <Grid item xs={12} sm={7}>
-        <AssignmentsPanel queryResult={assignmentsQueryResult} gameId={gameId}/>
+      {
+          gameDetailsQueryResult.data
+            &&
+          <AssignmentsPanel queryResult={assignmentsQueryResult}
+            gameId={gameId}
+            gameStatus={gameDetailsQueryResult.data.gameStatus}
+          />
+        }
       </Grid>
       {/* <Grid item xs={12} sm={4}>Chat</Grid> */}
     </Grid>
