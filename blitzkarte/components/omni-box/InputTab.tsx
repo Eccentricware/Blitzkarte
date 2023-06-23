@@ -67,6 +67,8 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
   const [finalReadinessCheck, setFinalReadinessCheck] = useState(false);
   const [partialRosterStart, setPartialRosterStart] = useState(false);
 
+  const [submitting, setSubmitting] = useState(false);
+
   const gameRules: any[] = [
     {
       key: 'untf',
@@ -230,6 +232,8 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
   const handleCreateGameClick = (): void => {
     if (bkCtx.newGame.dbRows.terrain.length > 0 && gameNameAvailable
     && debug.errors.length === 0 && debug.criticals.length === 0) {
+      setSubmitting(true);
+
       const idToken: Promise<string> | undefined = bkCtx.user.user?.getIdToken();
       idToken?.then((token: any) => {
         const gameData: NewGameData = {
@@ -393,13 +397,25 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
         <NewGameSettings settings={settings}/>
       </div>
       <div>
-        <Button
-          color="inherit"
-          variant="contained"
-          onClick={handleCreateGameClick}
-        >
-          Create Game
-        </Button>
+        {
+          submitting
+            ?
+          <Button
+            color="inherit"
+            variant="contained"
+            disabled
+          >
+            Saving
+          </Button>
+            :
+          <Button
+            color="inherit"
+            variant="contained"
+            onClick={handleCreateGameClick}
+          >
+            Create Game
+          </Button>
+        }
         <Button
           color="inherit"
           variant="contained"
