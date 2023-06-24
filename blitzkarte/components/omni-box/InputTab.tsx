@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { FC, Fragment, useContext, useEffect, useState } from 'react';
 import {  MenuItem, Select, SelectChangeEvent, TextField, Button } from '@mui/material';
 import { WeeklyDeadlines } from './WeeklyDeadlines';
 import { IntervalDeadlines } from './IntervalDeadlines';
@@ -66,6 +66,8 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
   const [voteDeadlineExtension, setVoteDeadlineExtension] = useState(false);
   const [finalReadinessCheck, setFinalReadinessCheck] = useState(false);
   const [partialRosterStart, setPartialRosterStart] = useState(false);
+
+  const [submitting, setSubmitting] = useState(false);
 
   const gameRules: any[] = [
     {
@@ -230,6 +232,8 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
   const handleCreateGameClick = (): void => {
     if (bkCtx.newGame.dbRows.terrain.length > 0 && gameNameAvailable
     && debug.errors.length === 0 && debug.criticals.length === 0) {
+      setSubmitting(true);
+
       const idToken: Promise<string> | undefined = bkCtx.user.user?.getIdToken();
       idToken?.then((token: any) => {
         const gameData: NewGameData = {
@@ -393,20 +397,35 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
         <NewGameSettings settings={settings}/>
       </div>
       <div>
-        <Button
-          color="inherit"
-          variant="contained"
-          onClick={handleCreateGameClick}
-        >
-          Create Game
-        </Button>
-        <Button
-          color="inherit"
-          variant="contained"
-          onClick={handleCancelCreateGameClick}
-        >
-          Cancel
-        </Button>
+        {
+          submitting
+            ?
+          <Button
+            color="inherit"
+            variant="contained"
+            disabled
+          >
+            Saving
+          </Button>
+            :
+          <Fragment>
+            <Button
+              color="inherit"
+              variant="contained"
+              onClick={handleCreateGameClick}
+            >
+              Create Game
+            </Button>
+            <Button
+              color="inherit"
+              variant="contained"
+              onClick={handleCancelCreateGameClick}
+            >
+              Cancel
+            </Button>
+          </Fragment>
+        }
+
       </div>
     </div>
   )
