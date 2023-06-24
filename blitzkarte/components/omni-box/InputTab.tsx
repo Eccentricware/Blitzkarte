@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { FC, Fragment, useContext, useEffect, useState } from 'react';
 import {  MenuItem, Select, SelectChangeEvent, TextField, Button } from '@mui/material';
 import { WeeklyDeadlines } from './WeeklyDeadlines';
 import { IntervalDeadlines } from './IntervalDeadlines';
@@ -408,21 +408,24 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
             Saving
           </Button>
             :
-          <Button
-            color="inherit"
-            variant="contained"
-            onClick={handleCreateGameClick}
-          >
-            Create Game
-          </Button>
+          <Fragment>
+            <Button
+              color="inherit"
+              variant="contained"
+              onClick={handleCreateGameClick}
+            >
+              Create Game
+            </Button>
+            <Button
+              color="inherit"
+              variant="contained"
+              onClick={handleCancelCreateGameClick}
+            >
+              Cancel
+            </Button>
+          </Fragment>
         }
-        <Button
-          color="inherit"
-          variant="contained"
-          onClick={handleCancelCreateGameClick}
-        >
-          Cancel
-        </Button>
+
       </div>
     </div>
   )
