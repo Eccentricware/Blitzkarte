@@ -1,15 +1,14 @@
-import { Grid } from '@mui/material'
 import { getAuth } from 'firebase/auth'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import StallGlobe from '../components/icons/StallGlobe'
 import IndexBody from '../components/index-page/IndexBody'
-import { NavBarSignedIn } from '../components/nav-bar/NavBarSignedIn'
+import { NavBarSelector } from '../components/nav-bar/NavBarSelector'
 import { NavBarSignedOut } from '../components/nav-bar/NavBarSignedOut'
-import styles from '../styles/Home.module.css'
 import Blitzkontext from '../utils/Blitzkontext'
+import { NavBarSignedIn } from '../components/nav-bar/NavBarSignedIn'
 
 const Home: NextPage = () => {
   // className={styles.container}
@@ -43,7 +42,7 @@ const Home: NextPage = () => {
           <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <NavBarSignedIn title="Yes user"/>
+        <NavBarSelector firebaseUser={user}/>
         <IndexBody user={user}/>
       </div>
     )
