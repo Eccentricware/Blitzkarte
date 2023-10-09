@@ -21,7 +21,7 @@ export interface TurnOptionsFinal {
   };
   buildTransfers?: {
     turnStatus: string;
-    options: TransferBuildsCountry[];
+    options: TransferBuildsOption[];
     builds: number;
   };
   offerTechOptions?: {
@@ -72,10 +72,21 @@ export interface TransferTechCountry {
   countryId: number;
   countryName: string;
 }
-export interface TransferBuildsCountry {
+export interface TransferBuildsOption {
   countryId: number;
   countryName: string;
   builds: number;
+}
+
+export interface TransferBuildOrder {
+  buildTransferOrderId?: number;
+  orderSetId?: number;
+  countryId?: number;
+  countryName?: string;
+  recipientId: number;
+  recipientName: string;
+  quantity: number;
+  uiRow?: number;
 }
 
 export interface BuildLoc {

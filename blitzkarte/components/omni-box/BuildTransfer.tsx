@@ -1,34 +1,34 @@
 import { Clear } from "@mui/icons-material";
 import { SelectChangeEvent, TextField } from "@mui/material";
 import { ChangeEvent, FC, useEffect, useState } from "react";
-import { TransferBuildsCountry, TransferTechCountry } from "../../models/objects/OptionsObjects";
+import { TransferBuildOrder, TransferBuildsOption, TransferTechCountry } from "../../models/objects/OptionsObjects";
 import { Country } from "../../utils/parsing/classes/country";
 
 interface Props {
   transferOptions: {
     builds: number;
-    options: TransferBuildsCountry[];
+    options: TransferBuildsOption[];
     turnStatus: string;
   };
-  transferOrders: TransferBuildsCountry[];
+  transferOrders: TransferBuildOrder[];
 }
 
 export const BuildTransfer: FC<Props> = ({transferOptions, transferOrders}: Props) => {
   const [remainingBuilds, setRemainingBuilds] = useState(transferOptions.builds);
-  const [recipientsArray, setRecipientsArray] = useState<TransferBuildsCountry[]>(transferOrders);
+  const [recipientsArray, setRecipientsArray] = useState<TransferBuildOrder[]>(transferOrders);
   const [giftedCountryIds, setGiftedCountryIds] = useState<number[]>([]);
   const [rowRecipientsOptions, setRecipientOptions] = useState<TransferTechCountry[][] | undefined>(undefined);
 
   useEffect(() => {
-    const countryIds = transferOrders.map((country: TransferBuildsCountry) => country.countryId );
+    const countryIds = transferOrders.map((country: TransferBuildOrder) => country.recipientId );
 
     if (remainingBuilds > 0) {
       countryIds.push(0);
 
       transferOrders.push({
-        countryId: 0,
-        countryName: '--Keep Builds--',
-        builds: 0
+        recipientId: 0,
+        recipientName: '--Keep Builds--',
+        quantity: 0
       });
       setRecipientsArray(transferOrders);
     }
@@ -46,27 +46,28 @@ export const BuildTransfer: FC<Props> = ({transferOptions, transferOrders}: Prop
     if (country) {
       if (countryId !== 0) {
         transferOrders[index] = {
-          countryId: countryId,
-          countryName: country.countryName,
-          builds: transferOrders[index].builds
+          recipientId: countryId,
+          recipientName: country.countryName,
+          quantity: transferOrders[index].quantity
         };
         updatedGiftedIds[index] = countryId;
 
       }
-        if (countryId === 0 && index !== transferOrders.length - 1) {
-          const newRemainingBuilds = remainingBuilds + transferOrders[index].builds;
-          updatedGiftedIds.splice(index, 1);
-          transferOrders.splice(index, 1);
-          setRemainingBuilds(newRemainingBuilds);
-       } else if (countryId === 0) {
-          const newRemainingBuilds = remainingBuilds + transferOrders[index].builds;
-          updatedGiftedIds[index] = countryId;
-          transferOrders[index] = {
-            countryId: countryId,
-            countryName: country.countryName,
-            builds: 0
-          };
-          setRemainingBuilds(newRemainingBuilds);
+      if (countryId === 0 && index !== transferOrders.length - 1) {
+        const newRemainingBuilds = remainingBuilds + transferOrders[index].quantity;
+        updatedGiftedIds.splice(index, 1);
+        transferOrders.splice(index, 1);
+        setRemainingBuilds(newRemainingBuilds);
+
+      } else if (countryId === 0) {
+        const newRemainingBuilds = remainingBuilds + transferOrders[index].quantity;
+        updatedGiftedIds[index] = countryId;
+        transferOrders[index] = {
+          recipientId: countryId,
+          recipientName: country.countryName,
+          quantity: 0
+        };
+        setRemainingBuilds(newRemainingBuilds);
        }
 
       setRecipientsArray(transferOrders);
@@ -76,7 +77,7 @@ export const BuildTransfer: FC<Props> = ({transferOptions, transferOrders}: Prop
   }
 
   const handleTransferAmountChange = (amount: string, index: number) => {
-    const startAmount = transferOrders[index].builds;
+    const startAmount = transferOrders[index].quantity;
     let totalSpent = getTotalSpent();
     const max = (transferOptions.builds - totalSpent) + startAmount;
 
@@ -85,24 +86,24 @@ export const BuildTransfer: FC<Props> = ({transferOptions, transferOrders}: Prop
       updatedAmount = max;
     }
 
-    transferOrders[index].builds = updatedAmount;
+    transferOrders[index].quantity = updatedAmount;
 
     let newRemainingBuilds = transferOptions.builds - getTotalSpent();
 
-    if (newRemainingBuilds > 0 && transferOrders[transferOrders.length - 1].countryId !== 0) {
+    if (newRemainingBuilds > 0 && transferOrders[transferOrders.length - 1].recipientId !== 0) {
       const countryIds = giftedCountryIds;
       countryIds.push(0);
 
       transferOrders.push({
-        countryId: 0,
-        countryName: '--Keep Builds--',
-        builds: 0
+        recipientId: 0,
+        recipientName: '--Keep Builds--',
+        quantity: 0
       });
       setGiftedCountryIds(countryIds);
       updateRecipientOptions(countryIds, transferOptions.builds - getTotalSpent());
     }
 
-    if ((updatedAmount === 0 || newRemainingBuilds === 0) && transferOrders[transferOrders.length - 1].countryId === 0) {
+    if ((updatedAmount === 0 || newRemainingBuilds === 0) && transferOrders[transferOrders.length - 1].recipientId === 0) {
       const countryIds = giftedCountryIds;
       countryIds.pop();
       transferOrders.pop();
@@ -117,7 +118,7 @@ export const BuildTransfer: FC<Props> = ({transferOptions, transferOrders}: Prop
 
   const getTotalSpent = (): number => {
     let totalSpent = 0;
-    recipientsArray.forEach((country: TransferBuildsCountry) => totalSpent += country.builds );
+    recipientsArray.forEach((country: TransferBuildOrder) => totalSpent += country.quantity );
     return totalSpent;
   }
 
@@ -125,7 +126,7 @@ export const BuildTransfer: FC<Props> = ({transferOptions, transferOrders}: Prop
     const initialRowRecipientOptions: any = [];
 
     countryIds.forEach((id: number, index: number) => {
-      initialRowRecipientOptions.push(transferOptions.options.filter((option: TransferBuildsCountry) => {
+      initialRowRecipientOptions.push(transferOptions.options.filter((option: TransferBuildsOption) => {
         return option.countryId === id || !countryIds.includes(option.countryId) || option.countryId === 0;
       }));
     });
@@ -137,7 +138,7 @@ export const BuildTransfer: FC<Props> = ({transferOptions, transferOrders}: Prop
     if (Number(amount) === 0) {
       const countryIds = giftedCountryIds;
       for (let index = transferOrders.length - 1; index >= 0; index--) {
-        if (transferOrders[index].builds === 0) {
+        if (transferOrders[index].quantity === 0) {
           transferOrders.splice(index, 1);
           countryIds.splice(index, 1);
         }
@@ -147,9 +148,9 @@ export const BuildTransfer: FC<Props> = ({transferOptions, transferOrders}: Prop
         countryIds.push(0);
 
         transferOrders.push({
-          countryId: 0,
-          countryName: '--Keep Builds--',
-          builds: 0
+          recipientId: 0,
+          recipientName: '--Keep Builds--',
+          quantity: 0
         });
       }
 
@@ -170,7 +171,7 @@ export const BuildTransfer: FC<Props> = ({transferOptions, transferOrders}: Prop
         <div>{remainingBuilds}</div>
       </div>
       {
-        recipientsArray.map((row: TransferBuildsCountry, index: number) => {
+        recipientsArray.map((row: TransferBuildOrder, index: number) => {
           return (
             <div className="build-transfer-row" key={index}>
               <select onChange={(event: ChangeEvent<HTMLSelectElement>) => {
@@ -185,14 +186,14 @@ export const BuildTransfer: FC<Props> = ({transferOptions, transferOrders}: Prop
                   )
                 }
               </select>
-              <input type="number" min="0" value={row.builds}
+              <input type="number" min="0" value={row.quantity}
                 onChange={(event: ChangeEvent<HTMLInputElement>) => {
                   handleTransferAmountChange(event.target.value, index);
                 }}
                 onBlur={(event: ChangeEvent<HTMLInputElement>) => {
                   cleanup(event.target.value);
                 }}
-                disabled={row.countryId === 0}
+                disabled={row.recipientId === 0}
               />
             </div>
           )
