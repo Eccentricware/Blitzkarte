@@ -27,7 +27,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "../../Erzahler/erzahler/models/objects/games/NewGameDataObject.ts"  ],
+  ],
   "exclude": [
     "node_modules"
   ]
