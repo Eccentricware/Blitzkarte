@@ -2,7 +2,7 @@ import React, { KeyboardEvent, ChangeEvent, createRef, FC, KeyboardEventHandler,
 import { AppBar, Box, Button, Container, Menu, MenuItem, Modal, TextField, Toolbar, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import { FirebaseService } from '../../utils/firebase/firebaseService';
-import { Facebook, Google } from '@mui/icons-material';
+import { Facebook, Google, Login, Cancel } from '@mui/icons-material';
 import { margin } from '@mui/system';
 
 interface AppBarProps {
@@ -80,6 +80,10 @@ export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
       });
   }
 
+  const handleCancelClick = () => {
+    setPassword('');
+  }
+
   const handleGoogleLoginClick = () => {
     const signInResult: Promise<any> = firebaseService.signInWithGoogle();
     signInResult.then((result: any) => {
@@ -131,42 +135,43 @@ export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
       }}
     >
       <Box sx={loginModalStyle}>
-          <div
-            style={{
-              textAlign: 'center',
-              fontWeight: 'bolder',
-              paddingBottom: 15
-            }}
-          >
-            Login Through Email Or A Provider</div>
-          <TextField className="outlined-basic"
-            label="Email"
-            variant="outlined"
-            style={{
-              width: '100%',
-              marginBottom: 10
-            }}
-            tabIndex={0}
-            fullWidth
-            onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
-              handleEmailChange(event.target.value);
-            }}
-            onKeyDown={keyEmailKeyDownEvent}
-          />
-          <TextField className="outlined-basic"
-            label="Password"
-            type="password"
-            variant="outlined"
-            style={{width: '100%'}}
-            tabIndex={1}
-            error={loginFailure ? true : false}
-            helperText={loginFailure ? 'Incorrect Login Credentials' : ''}
-            onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
-              handlePasswordChange(event.target.value);
-            }}
-            onKeyDown={keyPasswordKeyDownEvent}
-            inputRef={passwordFieldRef}
-          />
+        <div
+          style={{
+            textAlign: 'center',
+            fontWeight: 'bolder',
+            paddingBottom: 15
+          }}
+        >
+          Login Through Email Or A Provider</div>
+        <TextField className="outlined-basic"
+          label="Email"
+          variant="outlined"
+          style={{
+            width: '100%',
+            marginBottom: 10
+          }}
+          tabIndex={0}
+          fullWidth
+          onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
+            handleEmailChange(event.target.value);
+          }}
+          onKeyDown={keyEmailKeyDownEvent}
+        />
+        <TextField className="outlined-basic"
+          label="Password"
+          type="password"
+          variant="outlined"
+          value={password}
+          style={{width: '100%'}}
+          tabIndex={1}
+          error={loginFailure ? true : false}
+          helperText={loginFailure ? 'Incorrect Login Credentials' : ''}
+          onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
+            handlePasswordChange(event.target.value);
+          }}
+          onKeyDown={keyPasswordKeyDownEvent}
+          inputRef={passwordFieldRef}
+        />
         {
           loginFailure &&
             <Button variant='contained'
@@ -181,16 +186,40 @@ export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
               }
             </Button>
         }
-        <div
-          style={{
-            paddingTop: '25px',
-            marginTop: '25px',
-            borderTop: 'solid gray 2px'
-          }}>
-          <Button variant='contained' color='success'
-            onClick={handleGoogleLoginClick} style={{width: '50%'}}><Google color='inherit' fontSize="large"/>Google Provider</Button>
-          <Button onClick={handleFacebookLoginClick} style={{width: '50%'}} disabled={true}><Facebook color="inherit" fontSize="large"/>Facebook Provider</Button>
-        </div>
+        {
+          password.length === 0
+            ?
+          <div
+            style={{
+              paddingTop: '25px',
+              marginTop: '25px',
+              borderTop: 'solid gray 2px'
+            }}
+          >
+            <Button variant='contained' color='success' onClick={handleGoogleLoginClick} style={{width: '50%'}}>
+              <Google color='inherit' fontSize="large"/>Google Provider
+            </Button>
+            <Button onClick={handleFacebookLoginClick} style={{width: '50%'}} disabled={true}>
+              <Facebook color="inherit" fontSize="large"/>Facebook Provider
+            </Button>
+          </div>
+            :
+          <div
+            style={{
+              paddingTop: '25px',
+              marginTop: '25px',
+              borderTop: 'solid gray 2px'
+            }}
+          >
+            <Button variant='contained' color='success' onClick={handleSignInWithEmailClick} style={{width: '50%'}}>
+              <Login color='inherit' fontSize="large"/>
+              <div>Enter</div>
+            </Button>
+            <Button variant='contained' color='warning' onClick={handleCancelClick} style={{width: '50%'}}>
+              <Cancel color="inherit" fontSize="large"/>Cancel
+            </Button>
+          </div>
+        }
       </Box>
     </Modal>
   )
