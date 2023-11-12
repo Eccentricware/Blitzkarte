@@ -39,7 +39,7 @@ export const DevelopmentBody: FC<DevelopmentProps> = ({}:  DevelopmentProps) => 
           <Tab label="Patch Notes"/>
           <Tab label="Known Issues"/>
           <Tab label="Current Test Objectives"/>
-          <Tab label="Road Map"/>
+          {/* <Tab label="Road Map"/> */}
         </Tabs>
       </Box>
       <TabPanel value={panel} index={0}>
@@ -66,14 +66,14 @@ export const DevelopmentBody: FC<DevelopmentProps> = ({}:  DevelopmentProps) => 
           >
         </iframe>
       </TabPanel>
-      <TabPanel value={panel} index={3}>
+      {/* <TabPanel value={panel} index={3}>
         <iframe className="clickup-embed"
           src="https://sharing.clickup.com/2331253/wb/h/274kn-1160/e5dbc56655def80"
           // onWheel=""
           width="50%" height={height}
           >
         </iframe>
-      </TabPanel>
+      </TabPanel> */}
     </div>
   )
 }
