@@ -1,5 +1,3 @@
-import { TransferBuildOrder } from "./OptionsObjects";
-
 export interface TurnOrdersFinal {
   // gameId: number;
   // userId: number;
@@ -57,6 +55,12 @@ export interface OrderSetFinal {
 export interface TransferCountry {
   countryId: number;
   countryName: string;
+}
+
+export interface TransferBuildOrder {
+  countryId: number;
+  countryName: string;
+  builds: number;
 }
 
 export interface TransferTechOrderResult {

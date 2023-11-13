@@ -8,7 +8,6 @@ import { GameRequestService } from "../../services/request-services/game-request
 import Blitzkontext from "../../utils/Blitzkontext";
 import { AssignmentsList } from "./AssignmentsList";
 import { GameStatus } from "../../models/enumeration/game-status-enum";
-import { Router, useRouter } from "next/router";
 
 interface AssignmentsAdmProps {
   assignmentData: any;
@@ -20,7 +19,6 @@ interface AssignmentsAdmProps {
 export const AssignmentsAdm: FC<AssignmentsAdmProps> = ({assignmentData, refetch, gameId, gameStatus}: AssignmentsAdmProps) => {
   const assignmentRequestService = new AssignmentRequestService();
   const gameRequestService = new GameRequestService();
-  const router = useRouter();
 
   const data = assignmentData;
 
@@ -94,14 +92,7 @@ export const AssignmentsAdm: FC<AssignmentsAdmProps> = ({assignmentData, refetch
   });
 
   const handleGameReadyClick = () => {
-    gameRequestService.declareReady(gameId)
-      .then((result) => {
-        if (result.success) {
-          router.push(`/game/${gameId}`);
-        } else {
-          alert(`There was an error starting game ${gameId}`);
-        }
-      });
+    gameRequestService.declareReady(gameId);
   }
 
   const handleCancelGameClick = () => {
