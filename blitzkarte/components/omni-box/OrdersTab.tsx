@@ -3,7 +3,6 @@ import { DateTime } from "luxon";
 import { FC, useState } from "react"
 import { TurnOptionsFinal } from "../../models/objects/OptionsObjects";
 import { TurnOrdersFinal } from "../../models/objects/OrdersObjects";
-import { DoubleTurnOptions, TurnOrders, UnitOrder } from "../../models/objects/TurnOrdersObjects";
 import { OrderRequestService } from "../../services/request-services/order-request-service";
 import { BuildsPanel } from "./BuildsPanel";
 import { BuildTransfer } from "./BuildTransfer";
@@ -49,8 +48,8 @@ export const OrdersTab: FC<OrderOrdersProps> = ({options, orders, nudge}: OrderO
         <div  style={{border: `${preliminaryColor} solid 2px`, borderRadius: '7px', fontWeight: 'bold'}}>
           <b>
             <table>
-              <tr><td>Pending Turn:</td><td>{options.preliminary.name}</td></tr>
-              <tr><td> Deadline:</td><td> {options.preliminary.deadline}</td></tr>
+              <tr><td>Preliminary Turn:</td><td>{options.preliminary.name}</td></tr>
+              <tr><td> Deadline:</td><td> {DateTime.fromISO(options.preliminary.deadline).toLocaleString(DateTime.DATETIME_SHORT)}</td></tr>
             </table>
           </b>
         </div>
@@ -67,7 +66,7 @@ export const OrdersTab: FC<OrderOrdersProps> = ({options, orders, nudge}: OrderO
         />
       }
       {
-        options.units
+        options.units && orders.units
           &&
         <Units units={options.units} unitOrders={orders.units} nudge={nudge}/>
       }

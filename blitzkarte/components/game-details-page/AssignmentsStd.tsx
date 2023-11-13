@@ -4,6 +4,7 @@ import { AssignmentService } from "../../services/assignment-service";
 import Blitzkontext from "../../utils/Blitzkontext";
 import { GameStatus } from "../../models/enumeration/game-status-enum";
 import { getGameStatusDescription } from "../../utils/general/authors";
+import { useRouter } from "next/router";
 
 interface AssignmentsStdProps {
   registrationTypes: any;
@@ -12,7 +13,8 @@ interface AssignmentsStdProps {
 
 export const AssignmentsStd: FC<AssignmentsStdProps> = ({registrationTypes, gameStatus}: AssignmentsStdProps) => {
   const assignmentService = new AssignmentService();
-  const gameId = Number(useContext(Blitzkontext).currentGame.id);
+  const router = useRouter();
+  const gameId = Number(router.query.gameId);
 
   const checkRegistrationType = (targetType: string): boolean => {
     const filtered = registrationTypes.filter((registrationType: any) => {
