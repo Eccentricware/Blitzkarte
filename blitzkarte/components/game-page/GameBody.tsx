@@ -3,12 +3,12 @@ import { User } from "firebase/auth";
 import { FC, useContext, useState } from "react";
 import { useQuery, UseQueryResult } from "react-query";
 import { initialRenderData } from "../../models/objects/RenderDataObject";
-import { Order, TurnOrders, UnitOrder } from "../../models/objects/TurnOrdersObjects";
+import { TurnOrders } from "../../models/objects/TurnOrdersObjects";
 import { OrderRequestService } from "../../services/request-services/order-request-service";
-import { MapRequestService } from "../../services/request-services/OrderRequestService";
 import Blitzkontext from "../../utils/Blitzkontext";
 import { MapContainer } from "../map-elements/map/MapContainer";
 import { PlayOmniBox } from "../omni-box/PlayOmniBox";
+import { MapRequestService } from "../../services/request-services/map-request-service";
 
 interface GameBodyProps {
   user: User | undefined;

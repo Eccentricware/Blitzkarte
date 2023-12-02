@@ -54,15 +54,14 @@ export class AbstractRequestService {
       }
     })
     .then((response: any) => {
-      console.log('Response', response);
       return response.json();
     })
     .then((data: any) => {
-      console.log('Data', data);
+      console.log(`GET ${route} Success:`, data);
       return data;
     })
     .catch((error: Error) => {
-      console.log('Base Fetch Get Request Error: ' + error.message);
+      console.log(`GET ${route} Error:`, error.message);
     });
   }
 
@@ -93,15 +92,14 @@ export class AbstractRequestService {
       body: JSON.stringify(payload)
     })
     .then((response: any) => {
-      console.log('Response:', response)
       return response.json();
     })
     .then((data: any) => {
-      console.log('Data', data);
+      console.log(`POST ${route} Success:`, data);
       return data;
     })
     .catch((error: Error) => {
-      console.log('Base Fetch Post Request Error: ' + error.message);
+      console.log(`POST ${route} Error:`, error.message);
     });
   }
 
@@ -133,15 +131,14 @@ export class AbstractRequestService {
       body: JSON.stringify(payload)
     })
     .then((response: any) => {
-      console.log('Response:', response)
       return response.json();
     })
     .then((data: any) => {
-      console.log('Data', data);
+      console.log(`PUT ${route} Success:`, data);
       return data;
     })
     .catch((error: Error) => {
-      console.log('Base Fetch Post Request Error: ' + error.message);
+      console.log(`PUT ${route} Error:`, error.message);
     });
   }
 }
