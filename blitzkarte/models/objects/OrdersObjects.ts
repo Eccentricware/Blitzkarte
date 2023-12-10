@@ -1,5 +1,4 @@
 import { TurnStatus } from "../enumeration/turn-status-enum";
-import { TransferBuildOrder } from "./OptionsObjects";
 
 export interface TurnOrders {
   gameId: number;
@@ -41,6 +40,12 @@ export interface OrderSetFinal {
 export interface TransferCountry {
   countryId: number;
   countryName: string;
+}
+
+export interface TransferBuildOrder {
+  countryId: number;
+  countryName: string;
+  builds: number;
 }
 
 export interface TransferTechOrderResult {
