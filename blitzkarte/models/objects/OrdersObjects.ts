@@ -1,40 +1,25 @@
-export interface TurnOrdersFinal {
-  // gameId: number;
-  // userId: number;
-  // countryId: number;
-  pending?: {
-    orderSetId?: number;
-    default?: boolean;
-    restricted?: boolean;
-    skipped?: boolean;
-  };
-  preliminary?: {
-    orderSetId?: number;
-    default?: number;
-  }
+import { TurnStatus } from "../enumeration/turn-status-enum";
+
+export interface TurnOrders {
+  gameId: number;
+  userId: number;
   role?: string;
+  countryId?: number;
   countryName?: string;
-  turnType?: string;
+  pending?: SingleTurnOrders;
+  preliminary?: SingleTurnOrders;
   message?: string;
-  pendingDefault?: boolean;
-  preliminaryDefault?: boolean;
-  render?: string;
-  units?: any[];
-  buildTransfers?: TransferBuildOrder[];
-  techTransfer?: TransferTechOrder;
-  builds?: BuildOrders;
-  disbands?: DisbandOrders;
-  nomination?: NominationOrder;
-  votes?: {
-    nominations: number[];
-  };
 }
 
 export interface SingleTurnOrders {
+  turnStatus: TurnStatus;
+  orderSetId?: number;
+  default?: boolean;
   units?: any[]; // If (spring orders/retreats or fall orders/retreats)
-  transfers?: any[];
-  builds?: any[];
-  disbands?: any[];
+  techTransfer?: TransferTechOrder;
+  buildTransfers?: TransferBuildOrder[];
+  builds?: BuildOrders;
+  disbands?: DisbandOrders;
   nomination?: any;
   votes?: any[];
 }

@@ -5,7 +5,6 @@ import { Build, BuildOrders } from "../../models/objects/OrdersObjects";
 
 interface Props {
   options: {
-    turnStatus: string;
     builds: number;
     locations: {
       land: BuildLoc[],

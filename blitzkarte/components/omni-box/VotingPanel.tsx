@@ -3,24 +3,22 @@ import { Nomination, VotingOptions } from "../../models/objects/OptionsObjects";
 
 interface VotingProps {
   options: VotingOptions;
-  orders: {
-    nominations: number[];
-  };
+  orders: any[];
 }
 
 export const VotingPanel: FC<VotingProps> = ({options, orders}: VotingProps) => {
-  const [votes, setVotes] = useState(orders.nominations);
+  const [votes, setVotes] = useState(orders);
 
   const handleNominationClick = (nominationId: number) => {
-    const newVotes = orders.nominations.slice();
+    const newVotes = orders.slice();
     const index = newVotes.indexOf(nominationId);
 
     if (index > -1) {
       newVotes.splice(index, 1);
-      orders.nominations.splice(index, 1);
+      orders.splice(index, 1);
     } else {
       newVotes.push(nominationId);
-      orders.nominations.push(nominationId);
+      orders.push(nominationId);
     }
 
     setVotes(newVotes);
