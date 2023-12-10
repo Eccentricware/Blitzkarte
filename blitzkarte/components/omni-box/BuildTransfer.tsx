@@ -5,7 +5,6 @@ interface Props {
   transferOptions: {
     builds: number;
     options: TransferBuildsOption[];
-    turnStatus: string;
   };
   transferOrders: TransferBuildOrder[];
 }
