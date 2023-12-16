@@ -43,9 +43,9 @@ export interface TransferCountry {
 }
 
 export interface TransferBuildOrder {
-  countryId: number;
-  countryName: string;
-  builds: number;
+  recipientId: number;
+  recipientName: string;
+  quantity: number;
 }
 
 export interface TransferTechOrderResult {

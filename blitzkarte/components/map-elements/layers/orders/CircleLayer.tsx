@@ -12,28 +12,27 @@ export const CircleLayer: FC<CircleLayerProps> = ({orders, fill}: CircleLayerPro
     <g>
     {
       orders.map((order: Order | Build | NukeBuildInDisband | DisbandingUnitDetail, index: number) => {
-        const loc = order.loc ? order.loc : [0, 0];
         return (
           <g key={index}>
             <circle className="order-circle"
-              cx={loc[0] - 16000}
-              cy={loc[1]}
+              cx={order.loc[0] - 16000}
+              cy={order.loc[1]}
               r={135}
               fill={fill}
               stroke="black"
               strokeWidth={4}
             />
             <circle className="order-circle"
-              cx={loc[0]}
-              cy={loc[1]}
+              cx={order.loc[0]}
+              cy={order.loc[1]}
               r={135}
               fill={fill}
               stroke="black"
               strokeWidth={4}
             />
             <circle className="order-circle"
-              cx={loc[0] + 16000}
-              cy={loc[1]}
+              cx={order.loc[0] + 16000}
+              cy={order.loc[1]}
               r={135}
               fill={fill}
               stroke="black"

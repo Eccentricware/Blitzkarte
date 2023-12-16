@@ -5,8 +5,10 @@ export class Unit {
   name: string;
   fullName: string | undefined;
   type: string;
+  status: string;
   node: string;
   loc: number[];
+  eventLoc: number[];
   country: string;
   countryKey!: string;
   valid: boolean;
@@ -22,11 +24,13 @@ export class Unit {
   constructor(node: Pin, country: string) {
     this.name = `${country}_${node.unit}_${node.name}`;
     this.name = this.name.replace(' ', '_');
+    this.status = 'Active';
     this.type = `${node.unit}`;
     this.country = country;
     this.countryKey = convertSpaceToCamelCase(country);
     this.node = node.name;
     this.loc = node.loc.map((coordinate: number) => Math.round(coordinate));
+    this.eventLoc = [];
     this.valid = this.validate();
   }
 
