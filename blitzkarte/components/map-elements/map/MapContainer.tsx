@@ -39,10 +39,12 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
     renderData.units.forEach((unit: any) => {
       const unitType = unit.type.toLowerCase();
       const unitName = unit.name.split(' ').join('_');
+      const unitLoc = unit.status === 'Retreat' ? unit.eventLoc : unit.loc;
+
       gsap.to(s(`.${unitName}_left`), {
         attr: {
-          'transform': `translate (${unit.loc[0] - 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
-            ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
+          'transform': `translate (${unitLoc[0] - 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
+            ${unitLoc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
             scale(${view.current.zoom})`
         },
         ease: ease,
@@ -51,8 +53,8 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
 
       gsap.to(s(`.${unitName}_center`), {
         attr: {
-          'transform': `translate (${unit.loc[0] - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
-            ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
+          'transform': `translate (${unitLoc[0] - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
+            ${unitLoc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
             scale(${view.current.zoom})`
         },
         ease: ease,
@@ -61,8 +63,8 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
 
       gsap.to(s(`.${unitName}_right`), {
         attr: {
-          'transform': `translate (${unit.loc[0] + 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
-            ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
+          'transform': `translate (${unitLoc[0] + 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
+            ${unitLoc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
             scale(${view.current.zoom})`
         },
         ease: ease,
@@ -227,10 +229,12 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
     renderData.units.forEach((unit: any) => {
       const unitType = unit.type.toLowerCase();
       const unitName = unit.name.split(' ').join('_');
+      const unitLoc = unit.status === 'Retreat' ? unit.eventLoc : unit.loc;
+
       gsap.to(s(`.${unitName}_left`), {
         attr: {
-          'transform': `translate (${unit.loc[0] - 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
-            ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
+          'transform': `translate (${unitLoc[0] - 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
+            ${unitLoc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
             scale(${view.current.zoom})`
         },
         ease: ease,
@@ -238,8 +242,8 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
       });
       gsap.to(s(`.${unitName}_center`), {
         attr: {
-          'transform': `translate (${unit.loc[0] - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
-            ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
+          'transform': `translate (${unitLoc[0] - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
+            ${unitLoc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
             scale(${view.current.zoom})`
         },
         ease: ease,
@@ -247,8 +251,8 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
       });
       gsap.to(s(`.${unitName}_right`), {
         attr: {
-          'transform': `translate (${unit.loc[0] + 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
-            ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
+          'transform': `translate (${unitLoc[0] + 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
+            ${unitLoc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
             scale(${view.current.zoom})`
         },
         ease: ease,
@@ -386,10 +390,12 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
     renderData.units.forEach((unit: Unit) => {
       const unitType = unit.type.toLowerCase();
       const unitName = unit.name.split(' ').join('_');
+      const unitLoc = unit.status === 'Retreat' ? unit.eventLoc : unit.loc;
+
       gsap.to(s(`.${unitName}_left`), {
         attr: {
-          'transform': `translate (${unit.loc[0] - 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
-            ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
+          'transform': `translate (${unitLoc[0] - 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
+            ${unitLoc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
             scale(${view.current.zoom})`
         },
         ease: ease,
@@ -397,8 +403,8 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
       });
       gsap.to(s(`.${unitName}_center`), {
         attr: {
-          'transform': `translate (${unit.loc[0] - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
-            ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
+          'transform': `translate (${unitLoc[0] - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
+            ${unitLoc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
             scale(${view.current.zoom})`
         },
         ease: ease,
@@ -406,8 +412,8 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
       });
       gsap.to(s(`.${unitName}_right`), {
         attr: {
-          'transform': `translate (${unit.loc[0] + 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
-            ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
+          'transform': `translate (${unitLoc[0] + 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
+            ${unitLoc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
             scale(${view.current.zoom})`
         },
         ease: ease,
@@ -635,10 +641,12 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
     renderData.units.forEach((unit: any) => {
       const unitType = unit.type.toLowerCase();
       const unitName = unit.name.split(' ').join('_');
+      const unitLoc = unit.status === 'Retreat' ? unit.eventLoc : unit.loc;
+
       gsap.to(s(`.${unitName}_left`), {
         attr: {
-          'transform': `translate (${unit.loc[0] - 16000 - mapCtx.map.unitSizing[unitType].baseWidth / 2}
-            ${unit.loc[1] - mapCtx.map.unitSizing[unitType].baseHeight / 2})
+          'transform': `translate (${unitLoc[0] - 16000 - mapCtx.map.unitSizing[unitType].baseWidth / 2}
+            ${unitLoc[1] - mapCtx.map.unitSizing[unitType].baseHeight / 2})
             scale(1)`
         },
         ease: ease,
@@ -646,8 +654,8 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
       });
       gsap.to(s(`.${unitName}_center`), {
         attr: {
-          'transform': `translate (${unit.loc[0] - mapCtx.map.unitSizing[unitType].baseWidth / 2}
-            ${unit.loc[1] - mapCtx.map.unitSizing[unitType].baseHeight / 2})
+          'transform': `translate (${unitLoc[0] - mapCtx.map.unitSizing[unitType].baseWidth / 2}
+            ${unitLoc[1] - mapCtx.map.unitSizing[unitType].baseHeight / 2})
             scale(1)`
         },
         ease: ease,
@@ -655,8 +663,8 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
       });
       gsap.to(s(`.${unitName}_right`), {
         attr: {
-          'transform': `translate (${unit.loc[0] + 16000 - mapCtx.map.unitSizing[unitType].baseWidth / 2}
-            ${unit.loc[1] - mapCtx.map.unitSizing[unitType].baseHeight / 2})
+          'transform': `translate (${unitLoc[0] + 16000 - mapCtx.map.unitSizing[unitType].baseWidth / 2}
+            ${unitLoc[1] - mapCtx.map.unitSizing[unitType].baseHeight / 2})
             scale(1)`
         },
         ease: ease,

@@ -26,7 +26,6 @@ export interface SavedOption {
   unitId: number;
   unitType: string;
   provinceName: string;
-  canHold: boolean;
   orderType: string;
   secondaryUnitId?: number;
   secondaryUnitType?: string;
@@ -85,7 +84,7 @@ export interface Order {
   orderId?: number;
   orderSetId: number;
   orderedUnitId: number;
-  loc?: number[];
+  loc: number[];
   orderType: string;
   secondaryUnitId?: number | undefined;
   secondaryUnitLoc?: number[];
