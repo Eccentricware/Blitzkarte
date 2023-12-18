@@ -157,3 +157,11 @@ text {
   margin-right: 25px;
   margin-bottom: 25px;
 }
+
+.supply-center.active {
+  fill: white;
+}
+
+.supply-center.dormant {
+  fill: gray;
+}
