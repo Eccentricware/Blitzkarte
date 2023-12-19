@@ -6,8 +6,8 @@ import React from 'react';
 import Blitzkontext from '../../../utils/Blitzkontext';
 import { RenderData } from '../../../models/objects/RenderDataObject';
 import { UseQueryResult } from 'react-query';
-import { TurnOrders } from '../../../models/objects/TurnOrdersObjects';
 import { Unit } from '../../../utils/parsing/classes/unit';
+import { TurnOrders } from '../../../models/objects/OrdersObjects';
 
 interface Props {
   renderData: RenderData;
