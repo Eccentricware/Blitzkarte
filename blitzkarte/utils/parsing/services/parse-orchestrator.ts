@@ -360,25 +360,20 @@ export class Parser {
       province.cityLoc = city.loc;
       switch (city.type) {
         case 'c':
-          province.voteType = 'capital';
+          province.cityType = 'capital';
           province.owner = province.country;
-          province.voteColor = 'gold';
-          province.statusColor = 'gold';
           province.status = 'active';
           break;
         case 'v':
-          province.voteType = 'vote';
-          province.voteColor = 'gray';
-          province.statusColor = 'gray';
-          province.strokeColor = 'red';
+          province.cityType = 'vote';
           province.status = 'dormant';
           break;
         case 's':
-          province.statusColor = 'white';
+          province.cityType = 'supply';
           province.status = 'active';
           break;
         case 'd':
-          province.statusColor = 'gray';
+          province.cityType = 'supply';
           province.status = 'dormant';
           break;
       }

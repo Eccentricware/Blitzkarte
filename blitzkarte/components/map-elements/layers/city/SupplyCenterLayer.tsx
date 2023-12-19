@@ -12,7 +12,7 @@ export const SupplyCenterLayer: FC<Props> = ({supplyCenters}: Props) => {
       supplyCenters.map((city, i) => {
         return (
           <g key={i}>
-            <circle className="supply-center"
+            <circle className={`supply-center ${city.status}`}
               cx={city.loc[0] - 16000}
               cy={city.loc[1]}
               r={40}
@@ -20,7 +20,7 @@ export const SupplyCenterLayer: FC<Props> = ({supplyCenters}: Props) => {
               stroke="black"
               strokeWidth={4}
             />
-            <circle className="supply-center"
+            <circle className={`supply-center ${city.status}`}
               cx={city.loc[0]}
               cy={city.loc[1]}
               r={40}
@@ -28,7 +28,7 @@ export const SupplyCenterLayer: FC<Props> = ({supplyCenters}: Props) => {
               stroke="black"
               strokeWidth={4}
             />
-            <circle className="supply-center"
+            <circle className={`supply-center ${city.status}`}
               cx={city.loc[0] + 16000}
               cy={city.loc[1]}
               r={40}
