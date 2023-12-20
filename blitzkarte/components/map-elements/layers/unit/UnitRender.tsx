@@ -24,24 +24,24 @@ export const UnitRender: FC<Props> = ({unit}: Props) => {
                 &&
               <g>
                 <circle className="order-circle"
-                  cx={unitLoc[0] - 16000}
-                  cy={unitLoc[1]}
+                  cx={unit.loc[0] - 16000}
+                  cy={unit.loc[1]}
                   r={135}
                   fill="yellow"
                   stroke="black"
                   strokeWidth={4}
                 />
                 <circle className="order-circle"
-                  cx={unitLoc[0]}
-                  cy={unitLoc[1]}
+                  cx={unit.loc[0]}
+                  cy={unit.loc[1]}
                   r={135}
                   fill="yellow"
                   stroke="black"
                   strokeWidth={4}
                 />
                 <circle className="order-circle"
-                  cx={unitLoc[0] + 16000}
-                  cy={unitLoc[1]}
+                  cx={unit.loc[0] + 16000}
+                  cy={unit.loc[1]}
                   r={135}
                   fill="yellow"
                   stroke="black"
@@ -51,8 +51,8 @@ export const UnitRender: FC<Props> = ({unit}: Props) => {
             }
             <g className={unitName + '_left'} transform={
               `translate(
-              ${unitLoc[0] - map.unitSizing[unitType].width / 2 - 16000}
-              ${unitLoc[1] - map.unitSizing[unitType].height / 2}
+              ${unit.loc[0] - map.unitSizing[unitType].width / 2 - 16000}
+              ${unit.loc[1] - map.unitSizing[unitType].height / 2}
             )`}
             >
               <g transform={
@@ -72,8 +72,8 @@ export const UnitRender: FC<Props> = ({unit}: Props) => {
             </g>
             <g className={unitName + '_center'} transform={
                 `translate(
-                ${unitLoc[0] - map.unitSizing[unitType].width / 2}
-                ${unitLoc[1] - map.unitSizing[unitType].height / 2}
+                ${unit.loc[0] - map.unitSizing[unitType].width / 2}
+                ${unit.loc[1] - map.unitSizing[unitType].height / 2}
               )`}
               >
                 <g transform={
@@ -92,8 +92,8 @@ export const UnitRender: FC<Props> = ({unit}: Props) => {
             </g>
             <g className={unitName + '_right'} transform={
               `translate(
-              ${unitLoc[0] - map.unitSizing[unitType].width / 2 + 16000}
-              ${unitLoc[1] - map.unitSizing[unitType].height / 2}
+              ${unit.loc[0] - map.unitSizing[unitType].width / 2 + 16000}
+              ${unit.loc[1] - map.unitSizing[unitType].height / 2}
             )`}
             >
               <g transform={
