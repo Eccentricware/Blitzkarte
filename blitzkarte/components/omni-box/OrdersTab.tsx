@@ -32,7 +32,7 @@ export const OrdersTab: FC<OrderOrdersProps> = ({options, orders, nudge}: OrderO
         />
       }
       {
-        options.preliminary && orders.preliminary
+        options.preliminary && orders.preliminary && options.preliminary.applicable
           &&
         <TurnPanel
           options={options.preliminary}
