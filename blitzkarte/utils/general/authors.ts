@@ -1,5 +1,4 @@
 import { GameStatus } from "../../models/enumeration/game-status-enum"
-import { GameDataObject } from "../../models/objects/GameDataObject";
 
 export const getGameStatusDescription = (
   gameStatus: GameStatus): string => {
