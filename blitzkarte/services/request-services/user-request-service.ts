@@ -1,6 +1,3 @@
-import { User } from "firebase/auth";
-import { useContext } from "react";
-import Blitzkontext from "../../utils/Blitzkontext";
 import { AbstractRequestService } from "./abstract-request-service";
 
 export class UserRequestService extends AbstractRequestService {
@@ -14,5 +11,9 @@ export class UserRequestService extends AbstractRequestService {
 
   async saveProfileChange(payload: any) {
     this.put('user/update-settings', payload);
+  }
+
+  async reportGuest(guestId: string) {
+    this.get(`user/report-guest/${guestId}`);
   }
 }

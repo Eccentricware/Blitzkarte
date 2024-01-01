@@ -48,16 +48,19 @@ export const DisbandsPanel: FC<DisbandProps> = ({options, orders, setSubmitDisab
   }
 
   const updateNukeLocArrays = () => {
-    const updatedNukeLocs: BuildLoc[][] = [];
-    orders.nukeLocs.forEach((locId: number) => {
-      const nukeOptions = options.nukeLocs.filter((option: BuildLoc) =>
-        !nukeLocIds.includes(option.nodeId) || option.nodeId === locId || option.nodeId === 0
-      );
+    if (orders.nukeLocs?.length > 0) {
+      const updatedNukeLocs: BuildLoc[][] = [];
 
-      updatedNukeLocs.push(nukeOptions);
-    });
+      orders.nukeLocs.forEach((locId: number) => {
+        const nukeOptions = options.nukeLocs.filter((option: BuildLoc) =>
+          !nukeLocIds.includes(option.nodeId) || option.nodeId === locId || option.nodeId === 0
+        );
 
-    setNukeLocs(updatedNukeLocs);
+        updatedNukeLocs.push(nukeOptions);
+      });
+
+      setNukeLocs(updatedNukeLocs);
+    }
   }
 
   const handleDisbandCheckboxClick = (unitId: number) => {
@@ -206,7 +209,7 @@ export const DisbandsPanel: FC<DisbandProps> = ({options, orders, setSubmitDisab
       <br/>
 
       {
-        Number.isInteger(orders.nukeRange)
+        orders.nukeRange
           &&
         <div>
           <div>

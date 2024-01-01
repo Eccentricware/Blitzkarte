@@ -59,7 +59,11 @@ export const BuildsPanel: FC<Props> = ({options, orders}: Props) => {
 
     return totalRushing;
   }
-  const [nukeLocIds, setNukeLocIds] = useState<number[]>(orders.nukesReady.map((nuke: Build) => nuke.nodeId));
+  const [nukeLocIds, setNukeLocIds] = useState<number[]>(
+    orders.nukesReady?.length > 0
+      ? orders.nukesReady.map((nuke: Build) => nuke.nodeId)
+      : []
+  );
   const [nukeLocs, setNukeLocs] = useState<BuildLocRender[][]>([]);
   const [nukeRangeEnd, setNukeRangeEnd] = useState(orders.nukeRange);
 
@@ -103,7 +107,9 @@ export const BuildsPanel: FC<Props> = ({options, orders}: Props) => {
         .filter((build: Build) => build.buildType === BuildType.NUKE_RUSH)
         .map((build: Build) => build.provinceName);
 
-    nukePresence.push(...orders.nukesReady.map((build: Build) => build.provinceName));
+    if (orders.nukesReady) {
+      nukePresence.push(...orders.nukesReady.map((build: Build) => build.provinceName));
+    }
 
     return {
       all: [...armyPresence, ...fleetPresence, ...wingPresence, ...nukePresence],
@@ -111,7 +117,9 @@ export const BuildsPanel: FC<Props> = ({options, orders}: Props) => {
       fleet: fleetPresence,
       wing: wingPresence,
       nuke: nukePresence,
-      slowNuke: orders.nukesReady.map((build: Build) => build.provinceName)
+      slowNuke: orders.nukesReady
+        ? orders.nukesReady.map((build: Build) => build.provinceName)
+        : []
     }
   }
 
@@ -254,7 +262,7 @@ export const BuildsPanel: FC<Props> = ({options, orders}: Props) => {
 
     const updatedNukeLocs: BuildLocRender[][] = [];
 
-    orders.nukesReady.forEach((order: Build) => {
+    orders.nukesReady?.forEach((order: Build) => {
       const unitTypeLocs: BuildLoc[] = options.locations.land.filter((loc: BuildLoc) =>
         !presences.nuke.includes(loc.province) || loc.province === order.provinceName
       );
@@ -442,7 +450,7 @@ export const BuildsPanel: FC<Props> = ({options, orders}: Props) => {
   return (
     <div>
       {
-        orders.nukesReady.length > 0
+        orders.nukesReady?.length > 0
           &&
         <div>
           <div>{orders.nukesReady.length} {orders.nukesReady.length === 1 ? 'Nuke Has Finished Production:' : 'Nukes Have Finished Production:' }</div>

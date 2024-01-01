@@ -1,5 +1,5 @@
-import { TurnOrdersFinal } from "../../models/objects/OrdersObjects";
-import { TurnOptions, TurnOrders } from "../../models/objects/TurnOrdersObjects";
+import { TurnOptions } from "../../models/objects/TurnOrdersObjects";
+import { TurnOrders } from "../../models/objects/OrdersObjects";
 import { AbstractRequestService } from "./abstract-request-service";
 
 export class OrderRequestService extends AbstractRequestService {
@@ -15,7 +15,7 @@ export class OrderRequestService extends AbstractRequestService {
     return this.get(`orders/${gameId}/orders`);
   }
 
-  async submitOrders(orders: TurnOrdersFinal): Promise<any> {
+  async submitOrders(orders: TurnOrders): Promise<any> {
     this.post(`orders/submit`, {orders: orders});
   }
 }

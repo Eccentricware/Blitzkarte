@@ -11,36 +11,35 @@ export const CircleLayer: FC<CircleLayerProps> = ({orders, fill}: CircleLayerPro
   return (
     <g>
     {
-      orders.map((order: Order | Build | NukeBuildInDisband | DisbandingUnitDetail, index: number) => {
-        return (
-          <g key={index}>
-            <circle className="order-circle"
-              cx={order.loc[0] - 16000}
-              cy={order.loc[1]}
-              r={135}
-              fill={fill}
-              stroke="black"
-              strokeWidth={4}
-            />
-            <circle className="order-circle"
-              cx={order.loc[0]}
-              cy={order.loc[1]}
-              r={135}
-              fill={fill}
-              stroke="black"
-              strokeWidth={4}
-            />
-            <circle className="order-circle"
-              cx={order.loc[0] + 16000}
-              cy={order.loc[1]}
-              r={135}
-              fill={fill}
-              stroke="black"
-              strokeWidth={4}
-            />
-          </g>
-        )
-      })
+      orders.map((order: Order | Build | NukeBuildInDisband | DisbandingUnitDetail, index: number) =>
+        order.loc &&
+        <g key={index}>
+          <circle className="order-circle"
+            cx={order.loc[0] - 16000}
+            cy={order.loc[1]}
+            r={135}
+            fill={fill}
+            stroke="black"
+            strokeWidth={4}
+          />
+          <circle className="order-circle"
+            cx={order.loc[0]}
+            cy={order.loc[1]}
+            r={135}
+            fill={fill}
+            stroke="black"
+            strokeWidth={4}
+          />
+          <circle className="order-circle"
+            cx={order.loc[0] + 16000}
+            cy={order.loc[1]}
+            r={135}
+            fill={fill}
+            stroke="black"
+            strokeWidth={4}
+          />
+        </g>
+      )
     }
     </g>
   )

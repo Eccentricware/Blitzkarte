@@ -23,7 +23,7 @@ const GameBody: FC<GameBodyProps> = ({user, gameId}: GameBodyProps) => {
   // Refactors Impending
   let renderData = initialRenderData;
   const omniBoxData = useContext(Blitzkontext).newGame.omniBoxData;
-  const [orderSet, setOrderSet] = useState<TurnOrders|undefined>(undefined);
+  const [orderSet, setOrderSet] = useState<undefined>(undefined);
   const [nudger, setNudge] = useState(false);
 
   const nudge = {
