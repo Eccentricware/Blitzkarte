@@ -23,6 +23,10 @@ export class GameRequestService extends AbstractRequestService {
     return this.get(`games/check-name/${gameName}`);
   }
 
+  async createGame(gameData: any): Promise<any> {
+    return this.post('games/create', gameData);
+  }
+
   async update(gameData: any): Promise<any> {
     return this.put('games/update', {
       gameData: gameData

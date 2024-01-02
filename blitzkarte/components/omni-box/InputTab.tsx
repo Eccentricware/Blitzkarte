@@ -285,32 +285,49 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
           dbRows: bkCtx.newGame.dbRows
         };
 
-        fetch(`${erzahler.url}:${erzahler.port}/games/create`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            idToken: token
-          },
-          body: JSON.stringify({
-            gameData: gameData,
-            idToken: token
+        gameRequestService.createGame({
+          gameData: gameData,
+          idToken: token
+        })
+          .then((result: any) => {
+            if (result.success) {
+              console.log('New Game Result:', result);
+              bkCtx.currentGame.id = result.gameId;
+              router.push(`/game-details/${result.gameId}`);
+            } else {
+              result.errors.forEach((error: string) => console.log(error));
+            }
           })
-        })
-        .then((response: any) => {
-          return response.json();
-        })
-        .then((result: any) => {
-          if (result.success) {
-            console.log('New Game Result:', result);
-            bkCtx.currentGame.id = result.gameId;
-            router.push(`/game-details/${result.gameId}`);
-          } else {
-            result.errors.forEach((error: string) => console.log(error));
-          }
-        })
-        .catch((error: Error) => {
-          console.log(error.message);
-        });
+          .catch((error: Error) => {
+            console.log(error.message);
+          });
+
+        // fetch(`${erzahler.url}:${erzahler.port}/games/create`, {
+        //   method: 'POST',
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //     idToken: token
+        //   },
+        //   body: JSON.stringify({
+        //     gameData: gameData,
+        //     idToken: token
+        //   })
+        // })
+        // .then((response: any) => {
+        //   return response.json();
+        // })
+        // .then((result: any) => {
+        //   if (result.success) {
+        //     console.log('New Game Result:', result);
+        //     bkCtx.currentGame.id = result.gameId;
+        //     router.push(`/game-details/${result.gameId}`);
+        //   } else {
+        //     result.errors.forEach((error: string) => console.log(error));
+        //   }
+        // })
+        // .catch((error: Error) => {
+        //   console.log(error.message);
+        // });
       });
     } else {
       console.log('Yay I can tell there is no map');
