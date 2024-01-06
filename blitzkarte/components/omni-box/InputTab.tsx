@@ -350,8 +350,9 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
           <MenuItem value="scheduled" disabled>Manually Set Start and First Deadline</MenuItem>
         </Select>
       </div>
-      <div>Game Start: {gameStart !== undefined && `${gameStart?.toDateString()} | ${gameStart?.toLocaleTimeString()}`}</div>
-      <div>First Turn: {firstTurnDeadline !== undefined && `${firstTurnDeadline.toDateString()} | ${firstTurnDeadline.toLocaleTimeString()}`}</div>
+      <div>If the game were declared ready now:</div>
+      <div>Assignments Given: {gameStart !== null && `${gameStart?.toDateString()} | ${gameStart?.toLocaleTimeString()}`}</div>
+      <div>First Turn Due: {firstTurnDeadline !== undefined && `${firstTurnDeadline.toDateString()} | ${firstTurnDeadline.toLocaleTimeString()}`}</div>
       <div>
         <Select
           id='deadline-type-select'

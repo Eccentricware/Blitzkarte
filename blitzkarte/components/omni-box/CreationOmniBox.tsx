@@ -5,6 +5,7 @@ import { InputTab } from "./InputTab";
 import { DebugTab } from "./DebugTab";
 import { StatsTable } from "./StatsTable";
 import { HelperTab } from './HelperTab';
+import ReadMoreIcon from '@mui/icons-material/ReadMore';
 
 interface OmniProps {
   omniBoxData: OmniBoxData;
@@ -43,6 +44,7 @@ export const CreationOmniBox: FC<OmniProps> = ({omniBoxData}: OmniProps) => {
           <Tab label="Debug"/>
           <Tab label="Stats"/>
           <Tab label="Helper"/>
+          <Tab icon={<ReadMoreIcon />} />
         </Tabs>
       </Box>
       <TabPanel value={panel} index={0}>

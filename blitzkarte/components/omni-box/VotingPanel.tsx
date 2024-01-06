@@ -28,9 +28,9 @@ export const VotingPanel: FC<VotingProps> = ({options, orders}: VotingProps) => 
 
   return (
     <div>
-      <p className="omni-paragraph">You can vote on any number of coalitions.
-        {options.duplicateAlerts.length > 0 && ' Duplicates have been grouped.'}
-      </p>
+      <p className="omni-paragraph">You can vote on any number of coalitions.</p>
+      <p>You control {options.voteCount} {options.voteCount === 1 ? 'vote' : 'votes'} </p>
+      {options.duplicateAlerts.length > 0 && ' Duplicates have been grouped.'}
       {
         options.duplicateAlerts.map((alert: string, index: number) => (
           <p key={index}>{alert}</p>

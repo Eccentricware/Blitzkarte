@@ -11,6 +11,8 @@ import { OrdersTab } from "./OrdersTab";
 import { useQuery, UseQueryResult } from "react-query";
 import { TurnOrders } from "../../models/objects/TurnOrdersObjects";
 import { GameRequestService } from "../../services/request-services/game-request-service";
+import ReadMoreIcon from '@mui/icons-material/ReadMore';
+import { useRouter } from "next/router";
 
 interface OmniProps {
   turnOptionsResult: UseQueryResult<any>;
@@ -40,6 +42,7 @@ const TabPanel = ({index, value, children}: TabPanelProps) => {
 
 export const PlayOmniBox: FC<OmniProps> = ({turnOptionsResult, turnOrdersResult, orderSet, gameId, nudge}: OmniProps) => {
   const gameRequestService = new GameRequestService();
+  const router = useRouter();
   const [panel, setPanel] = useState(0);
 
   const handleChange = (event: ChangeEvent<{}>, newPanel: number) => {
@@ -60,8 +63,19 @@ export const PlayOmniBox: FC<OmniProps> = ({turnOptionsResult, turnOrdersResult,
             <Tab label="Orders"/>
           }
           { countryStats && <Tab label="Stats"/> }
-          {/* <Tab label="Chat" disabled={true}/> */}
+          <Tab label="Chat" disabled={true}/>
           <Tab label="History"/>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer'
+            }}
+            onClick={() => { router.push(`/game-details/${gameId}` )}}
+          >
+            <ReadMoreIcon />
+          </div>
         </Tabs>
       </Box>
       {
@@ -81,9 +95,9 @@ export const PlayOmniBox: FC<OmniProps> = ({turnOptionsResult, turnOrdersResult,
           <StatsTable stats={countryStats} />
         </TabPanel>
       }
-      {/* <TabPanel value={panel} index={2}>
+      <TabPanel value={panel} index={2}>
         <ChatTab />
-      </TabPanel> */}
+      </TabPanel>
       <TabPanel value={panel} index={3}>
         <HistoryTab/>
       </TabPanel>
