@@ -13,6 +13,7 @@ import { TurnOrders } from "../../models/objects/TurnOrdersObjects";
 import { GameRequestService } from "../../services/request-services/game-request-service";
 import ReadMoreIcon from '@mui/icons-material/ReadMore';
 import { useRouter } from "next/router";
+import { User } from "firebase/auth";
 
 interface OmniProps {
   turnOptionsResult: UseQueryResult<any>;
@@ -20,6 +21,7 @@ interface OmniProps {
   orderSet: TurnOrders | undefined;
   nudge: any;
   gameId: number;
+  user: User | undefined;
 }
 
 interface TabPanelProps {
@@ -40,10 +42,17 @@ const TabPanel = ({index, value, children}: TabPanelProps) => {
   )
 }
 
-export const PlayOmniBox: FC<OmniProps> = ({turnOptionsResult, turnOrdersResult, orderSet, gameId, nudge}: OmniProps) => {
+export const PlayOmniBox: FC<OmniProps> = ({
+  turnOptionsResult,
+  turnOrdersResult,
+  orderSet,
+  gameId,
+  nudge,
+  user
+}: OmniProps) => {
   const gameRequestService = new GameRequestService();
   const router = useRouter();
-  const [panel, setPanel] = useState(0);
+  const [panel, setPanel] = useState(user ? 0 : 1);
 
   const handleChange = (event: ChangeEvent<{}>, newPanel: number) => {
     setPanel(newPanel);
@@ -60,11 +69,11 @@ export const PlayOmniBox: FC<OmniProps> = ({turnOptionsResult, turnOrdersResult,
           {
             (turnOptionsResult.data && turnOrdersResult.data)
               &&
-            <Tab label="Orders"/>
+            <Tab label="Orders" disabled={user === undefined}/>
           }
           { countryStats && <Tab label="Stats"/> }
+          <Tab label="History" disabled/>
           <Tab label="Chat" disabled={true}/>
-          <Tab label="History"/>
           <div
             style={{
               display: 'flex',
@@ -96,10 +105,10 @@ export const PlayOmniBox: FC<OmniProps> = ({turnOptionsResult, turnOrdersResult,
         </TabPanel>
       }
       <TabPanel value={panel} index={2}>
-        <ChatTab />
+        <HistoryTab/>
       </TabPanel>
       <TabPanel value={panel} index={3}>
-        <HistoryTab/>
+        <ChatTab />
       </TabPanel>
     </div>
   )

@@ -217,8 +217,6 @@ const UserSettings: FC<UserSettingsProps> = ({user}: UserSettingsProps) => {
   }
 
   if (data) {
-    // console.log('user', user);
-    // console.log('data', data);
     return (
       <div>
         <div style={{textAlign: 'center'}}>

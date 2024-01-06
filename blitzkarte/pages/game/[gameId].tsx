@@ -26,7 +26,7 @@ const GamePage: NextPage = () => {
           <meta name="viewport" content="width=device-width, initial-scale=1"/>
           <link rel="icon" href="/favicon.ico"/>
         </Head>
-        <NavBarSignedOut title="Play The Game"/>
+        <NavBarSignedOut title="Gameplay"/>
         <StallGlobe mode="authenticating" message={"Game Page: Loading"}/>
       </div>
     )
@@ -42,7 +42,7 @@ const GamePage: NextPage = () => {
           <meta name="viewport" content="width=device-width, initial-scale=1"/>
           <link rel="icon" href="/favicon.ico"/>
         </Head>
-        <NavBarSignedIn title="Play The Game"/>
+        <NavBarSignedIn title="Gameplay"/>
         <GameBody gameId={gameId} user={user}/>
       </div>
     )
@@ -67,7 +67,8 @@ const GamePage: NextPage = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link rel="icon" href="/favicon.ico"/>
       </Head>
-      <NavBarSignedOut title="Play The Game"/>
+      <NavBarSignedOut title="Gameplay"/>
+      <GameBody gameId={gameId} user={undefined}/>
     </div>
   )
 }

@@ -41,14 +41,17 @@ export const OrdersTab: FC<OrdersProps> = ({options, orders, nudge}: OrdersProps
           nudge={nudge}
         />
       }
-      <Button
-        color="inherit"
-        variant="contained"
-        onClick={handleSubmitOrdersClick}
-        disabled={submitDisabled}
-      >
-        Submit Orders
-      </Button>
+      {
+        options.countryId > 0 &&
+        <Button
+          color="inherit"
+          variant="contained"
+          onClick={handleSubmitOrdersClick}
+          disabled={submitDisabled}
+        >
+          Submit Orders
+        </Button>
+      }
     </div>
   )
 }

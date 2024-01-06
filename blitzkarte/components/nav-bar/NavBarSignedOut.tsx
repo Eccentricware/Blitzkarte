@@ -4,12 +4,15 @@ import { useRouter } from 'next/router';
 import { FirebaseService } from '../../utils/firebase/firebaseService';
 import { Facebook, Google, Login, Cancel } from '@mui/icons-material';
 import { margin } from '@mui/system';
+import { set } from 'date-fns';
 
 interface AppBarProps {
   title: string;
 }
 
 export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
+  const [gameSelectionMenuOpen, setGameSelectionMenuOpen] = useState(false);
+  const [loginMenuOpen, setLoginMenuOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -20,14 +23,26 @@ export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
   const router = useRouter();
   const firebaseService = new FirebaseService();
 
-  const isMenuOpen = Boolean(anchorEl);
+
+
+  const handleGameSelectionMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+    setGameSelectionMenuOpen(true);
+  }
+
+  const handleGameSelectionMenuClose = () => {
+    setAnchorEl(null);
+    setGameSelectionMenuOpen(false);
+  }
 
   const handleSignInMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
+    setLoginMenuOpen(true);
   }
 
   const handleMenuClose = () => {
     setAnchorEl(null);
+    setLoginMenuOpen(false);
     setLoginFailure(false);
   }
 
@@ -114,6 +129,51 @@ export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
       });
   }
 
+  const handleLandingClick = () => {
+    router.push('/');
+  }
+
+  const handleDevelopmentClick = () => {
+    router.push('/development');
+  }
+
+  const handleFindGameClick = () => {
+    router.push('/game-finder');
+  }
+
+  const gameSelectionMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'left'
+      }}
+      open={gameSelectionMenuOpen}
+      onClose={() => {
+        handleGameSelectionMenuClose();
+      }}
+    >
+      {
+        router.pathname !== '/' &&
+        <MenuItem>
+          <Button onClick={handleLandingClick}>Landing Page</Button>
+        </MenuItem>
+      }
+      {
+        router.pathname !== '/development' &&
+        <MenuItem>
+          <Button onClick={handleDevelopmentClick}>Development</Button>
+        </MenuItem>
+      }
+      {
+        router.pathname !== '/game-finder' &&
+        <MenuItem>
+          <Button onClick={handleFindGameClick}>Games</Button>
+        </MenuItem>
+      }
+    </Menu>
+  );
+
   const loginModalStyle = {
     position: 'absolute' as 'absolute',
     top: '10px',
@@ -129,7 +189,7 @@ export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
 
   const loginMenu = (
     <Modal
-      open={isMenuOpen}
+      open={loginMenuOpen}
       onClose={() => {
         handleMenuClose()
       }}
@@ -230,12 +290,9 @@ export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
         <Toolbar style={{minHeight: 45}}>
           <Container>
             <Button color="inherit"
-              disabled={router.pathname === '/'}
-              onClick={() => {
-                router.push('/');
-              }}
+              onClick={handleGameSelectionMenuOpen}
             >
-              Landing Page
+              Navigation
             </Button>
           </Container>
 
@@ -245,7 +302,7 @@ export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
               component="div"
               align="center"
             >
-              Blitzkarte
+              {title}
             </Typography>
           </Container>
 
@@ -267,6 +324,7 @@ export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
           </Container>
         </Toolbar>
       </AppBar>
+      {gameSelectionMenu}
       {loginMenu}
     </Box>
   )

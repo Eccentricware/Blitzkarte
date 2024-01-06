@@ -4,7 +4,8 @@ export const getGameStatusDescription = (
   gameStatus: GameStatus): string => {
   switch (gameStatus) {
     case GameStatus.REGISTRATION:
-      return `The game is currently open for registration. Game start and first turn deadline is tentative.`;
+      return `The game is currently open for registration.`
+        + ` Assignment Announcements and First Turn deadline are tentative and may be delayed if game is not declared ready.`;
     case GameStatus.CANCELLED:
       return `The game was cancelled.`;
     case GameStatus.ABANDONED:
