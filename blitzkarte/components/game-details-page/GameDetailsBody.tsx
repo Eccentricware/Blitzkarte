@@ -6,11 +6,14 @@ import { AssignmentRequestService } from "../../services/request-services/assign
 import { GameRequestService } from "../../services/request-services/game-request-service";
 import { AssignmentsPanel } from "./AssignmentsPanel";
 import { GameDetailsSettings } from "./GameDetailsSettings";
+import TravelExploreIcon from '@mui/icons-material/TravelExplore';
 
 interface GameDetailsBodyProps {
   user: User | undefined;
   gameId: number;
 }
+
+// TravelExplore
 
 const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBodyProps) => {
   const gameRequestService = new GameRequestService();
@@ -52,7 +55,7 @@ const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBo
       {/* <Grid item xs={12}>
         Banner?
       </Grid> */}
-      <Grid item xs={12} sm={5}>
+      <Grid item xs={12} sm={4}>
         {
           gameDetailsQueryResult.data
             &&
@@ -61,17 +64,38 @@ const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBo
           />
         }
       </Grid>
-      <Grid item xs={12} sm={7}>
-      {
+      <Grid item xs={12} sm={4}>
+        {
           gameDetailsQueryResult.data
-            &&
+          &&
           <AssignmentsPanel queryResult={assignmentsQueryResult}
-            gameId={gameId}
-            gameStatus={gameDetailsQueryResult.data.gameStatus}
+          gameId={gameId}
+          gameStatus={gameDetailsQueryResult.data.gameStatus}
           />
         }
       </Grid>
-      {/* <Grid item xs={12} sm={4}>Chat</Grid> */}
+      <Grid item xs={12} sm={4}>
+        <div
+          style={{
+            display: 'flex',
+            color: 'white',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '50px',
+            width: '50%',
+            fontSize: '1.5rem',
+            fontWeight: 'bold',
+            cursor: 'pointer',
+            borderRadius: '5px',
+            backgroundColor: 'green',
+          }}
+          onClick={() => {
+            window.location.href = `/game/${gameId}`;
+          }}
+        >
+          Go To Map <TravelExploreIcon fontSize="large"/>
+        </div>
+      </Grid>
     </Grid>
   )
 }
