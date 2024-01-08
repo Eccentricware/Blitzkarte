@@ -19,7 +19,7 @@ import { HistoryRequestService } from "../../services/request-services/history-r
 interface OmniProps {
   turnOptionsResult: UseQueryResult<any>;
   turnOrdersResult: UseQueryResult<any>;
-  turnHistoryResult: UseQueryResult<any>;
+  turnHistoryResult: UseQueryResult<any> | undefined;
   orderSet: TurnOrders | undefined;
   nudge: any;
   gameId: number;
