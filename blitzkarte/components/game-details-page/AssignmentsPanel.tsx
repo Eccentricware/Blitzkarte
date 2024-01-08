@@ -30,6 +30,7 @@ export const AssignmentsPanel: FC<AssignmentsPanelProps> = ({queryResult, gameId
         />
       : <AssignmentsStd registrationTypes={queryResult.data.userStatus}
           gameStatus={gameStatus}
+          user={undefined}
         />
     )
   }
