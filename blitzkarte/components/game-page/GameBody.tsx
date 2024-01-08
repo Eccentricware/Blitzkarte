@@ -1,14 +1,15 @@
 import { Grid } from "@mui/material";
 import { User } from "firebase/auth";
-import { FC, useContext, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { useQuery, UseQueryResult } from "react-query";
 import { initialRenderData } from "../../models/objects/RenderDataObject";
-import { TurnOrders } from "../../models/objects/TurnOrdersObjects";
+import { TurnOptions, TurnOrders } from "../../models/objects/TurnOrdersObjects";
 import { OrderRequestService } from "../../services/request-services/order-request-service";
 import Blitzkontext from "../../utils/Blitzkontext";
 import { MapContainer } from "../map-elements/map/MapContainer";
 import { PlayOmniBox } from "../omni-box/PlayOmniBox";
 import { MapRequestService } from "../../services/request-services/map-request-service";
+import { HistoryRequestService } from "../../services/request-services/history-request-service";
 
 interface GameBodyProps {
   user: User | undefined;
@@ -18,12 +19,16 @@ interface GameBodyProps {
 const GameBody: FC<GameBodyProps> = ({user, gameId}: GameBodyProps) => {
   const mapRequestService = new MapRequestService();
   const orderRequestService: OrderRequestService = new OrderRequestService();
-  // const [renderData, setRenderData] = useState(initialRenderData);
+  const historyRequestService = new HistoryRequestService();
 
   // Refactors Impending
-  let renderData = initialRenderData;
+  // let renderData = initialRenderData;
   const omniBoxData = useContext(Blitzkontext).newGame.omniBoxData;
+
+  const [renderData, setRenderData] = useState(initialRenderData);
   const [orderSet, setOrderSet] = useState<undefined>(undefined);
+  const [historyTurnNumber, setHistoryTurnNumber] = useState<number>(0);
+  const [currentTab, setCurrentTab] = useState<number>(user ? 0 : 1);
   const [nudger, setNudge] = useState(false);
 
   const nudge = {
@@ -35,10 +40,6 @@ const GameBody: FC<GameBodyProps> = ({user, gameId}: GameBodyProps) => {
     return mapRequestService.getCurrentMap(gameId);
   });
 
-  if (currentMapResult.data) {
-    renderData = currentMapResult.data;
-  }
-
   const turnOptionsResult: UseQueryResult<any> = useQuery('getTurnOptions', () => {
     return orderRequestService.getTurnOptions(gameId);
   });
@@ -47,6 +48,40 @@ const GameBody: FC<GameBodyProps> = ({user, gameId}: GameBodyProps) => {
     return orderRequestService.getTurnOrders(gameId);
   });
 
+  const turnHistoryResult: UseQueryResult<any> = useQuery('getTurnHistory', () => {
+    return historyRequestService.getTurnHistory(gameId, historyTurnNumber);
+  });
+
+  const historyOps = {
+    get: historyTurnNumber,
+    set: setHistoryTurnNumber,
+    setCurrentTab: setCurrentTab
+  }
+
+  useEffect(() => {
+    if (currentMapResult.data) {
+      setRenderData(currentMapResult.data);
+    }
+  });
+
+  useEffect(() => {
+    if (turnOrdersResult.data) {
+      setOrderSet(turnOrdersResult.data);
+    }
+  }, [turnOrdersResult.data]);
+
+  useEffect(() => {
+    turnHistoryResult.refetch();
+  }, [historyTurnNumber]);
+
+  // useEffect(() => {
+  //   if (currentTab === 2 && turnHistoryResult.data) {
+  //     // console.log(turnHistoryResult.data.maps.renderData.result)
+  //     setRenderData(turnHistoryResult.data.maps.renderData.result);
+  //   } else if (currentMapResult.data) {
+  //     setRenderData(currentMapResult.data);
+  //   }
+  // }, [currentTab, turnHistoryResult.data, currentMapResult.data]);
 
   return (
     <Grid container columns={2}>
@@ -64,10 +99,12 @@ const GameBody: FC<GameBodyProps> = ({user, gameId}: GameBodyProps) => {
           <PlayOmniBox
             turnOptionsResult={turnOptionsResult}
             turnOrdersResult={turnOrdersResult}
+            turnHistoryResult={turnHistoryResult}
             orderSet={orderSet}
             nudge={nudge}
             gameId={gameId}
             user={user}
+            historyOps={historyOps}
           />
         </div>
       </Grid>

@@ -44,8 +44,4 @@ export class GameRequestService extends AbstractRequestService {
       gameId: gameId
     });
   }
-
-  async getStatsTable(gameId: number): Promise<any> {
-    return this.get(`games/stats/${gameId}`);
-  }
 }

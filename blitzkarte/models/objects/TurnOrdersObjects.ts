@@ -1,4 +1,7 @@
+import { DateTime } from "luxon";
+import { TurnType } from "../enumeration/TurnTypeEnum";
 import { OrderDisplay } from "../enumeration/order-enums";
+import { TurnStatus } from "../enumeration/turn-status-enum";
 
 export interface TurnOrders {
   turnOptions: DoubleTurnOptions;
@@ -91,4 +94,31 @@ export interface Order {
   destinationId?: number;
   eventLoc?: number[];
   orderStatus?: string;
+}
+
+interface CountryStats {
+  id: number;
+  name: string;
+  rank: string;
+  cityCount: number;
+  votes: number;
+  bankedBuilds: number;
+  nuke: number;
+  adjustments: number;
+}
+
+interface Turn {
+  turnId?: number;
+  gameId: number;
+  turnNumber: number;
+  turnName: string;
+  turnType: TurnType;
+  turnStatus: TurnStatus;
+  yearNumber: number;
+  deadline: Date | DateTime | string;
+}
+
+export interface GameStats {
+  countries: CountryStats[];
+  turns: Turn[];
 }
