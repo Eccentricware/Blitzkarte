@@ -16,7 +16,7 @@ export const GameFinderBody: FC<GameFinderBodyProps> = ({user}: GameFinderBodyPr
   const gameRequestService = new GameRequestService();
 
   const [games, setGames] = useState([]);
-  const [playing, setPlaying] = useState(true);
+  const [playing, setPlaying] = useState(false);
   const [creator, setCreator] = useState(false);
   const [administrator, setAdministrator] = useState(false);
 
@@ -75,7 +75,9 @@ export const GameFinderBody: FC<GameFinderBodyProps> = ({user}: GameFinderBodyPr
           <FindGameResultsContainer games={games} />
         </Grid>
         <Grid item xs={4}>
-          <GameFinderControls settings={settings}/>
+          <GameFinderControls settings={settings}
+            user={user}
+          />
         </Grid>
       </Grid>
     )

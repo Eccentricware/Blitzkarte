@@ -172,23 +172,27 @@ text {
 }
 
 .vote-star-outline.capital.active {
-  stroke: white;
+  stroke: black;
+  fill: gold;
   /* stroke-width: 5px; */
 }
 
 .vote-star-outline.voting-center.claimed {
   stroke: black;
+  fill: red;
   /* stroke-width: 5px; */
 }
 
 .vote-star-outline.voting-center.dormant {
   stroke: red;
+  fill: gray;
   /* stroke-width: 5px; */
 }
 
 .vote-star-outline.bombarded,
 .vote-star-outline.nuked {
   stroke: red;
+  fill: gray;
 }
 
 .vote-star-left.capital {

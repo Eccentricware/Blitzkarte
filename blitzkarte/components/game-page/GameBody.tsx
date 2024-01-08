@@ -67,6 +67,7 @@ const GameBody: FC<GameBodyProps> = ({user, gameId}: GameBodyProps) => {
             orderSet={orderSet}
             nudge={nudge}
             gameId={gameId}
+            user={user}
           />
         </div>
       </Grid>
