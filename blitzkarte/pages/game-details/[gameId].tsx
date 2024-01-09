@@ -17,7 +17,7 @@ const GameDetailsPage: NextPage = () => {
   const router = useRouter();
   const gameId: number = Number(router.query.gameId);
 
-  console.log('GameDetailsPage: user', user);
+  // console.log('GameDetailsPage: user', user);
 
   if (loading) {
     return (

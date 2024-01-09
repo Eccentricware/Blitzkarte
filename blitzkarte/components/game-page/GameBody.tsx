@@ -48,9 +48,9 @@ const GameBody: FC<GameBodyProps> = ({user, gameId}: GameBodyProps) => {
     return orderRequestService.getTurnOrders(gameId);
   });
 
-  // const turnHistoryResult: UseQueryResult<any> = useQuery('getTurnHistory', () => {
-  //   return historyRequestService.getTurnHistory(gameId, historyTurnNumber);
-  // });
+  const turnHistoryResult: UseQueryResult<any> = useQuery('getTurnHistory', () => {
+    return historyRequestService.getTurnHistory(gameId, historyTurnNumber);
+  });
 
   const historyOps = {
     get: historyTurnNumber,
@@ -70,9 +70,9 @@ const GameBody: FC<GameBodyProps> = ({user, gameId}: GameBodyProps) => {
     }
   }, [turnOrdersResult.data]);
 
-  // useEffect(() => {
-  //   turnHistoryResult.refetch();
-  // }, [historyTurnNumber]);
+  useEffect(() => {
+    turnHistoryResult.refetch();
+  }, [historyTurnNumber]);
 
   // useEffect(() => {
   //   if (currentTab === 2 && turnHistoryResult.data) {
@@ -99,7 +99,7 @@ const GameBody: FC<GameBodyProps> = ({user, gameId}: GameBodyProps) => {
           <PlayOmniBox
             turnOptionsResult={turnOptionsResult}
             turnOrdersResult={turnOrdersResult}
-            turnHistoryResult={undefined}
+            turnHistoryResult={turnHistoryResult}
             orderSet={orderSet}
             nudge={nudge}
             gameId={gameId}
