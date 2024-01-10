@@ -9,6 +9,7 @@ interface HistoryTabProps {
 }
 
 export const HistoryTab: FC<HistoryTabProps> = ({turns, turnHistoryResult, historyOps}) => {
+  console.log('turns', turns);
   const [selectedTurn, setSelectedTurn] = useState(turns.length - 1);
   const [selectedEvent, setSelectedEvent] = useState('orders');
 
@@ -24,12 +25,11 @@ export const HistoryTab: FC<HistoryTabProps> = ({turns, turnHistoryResult, histo
     <div>
       <select value={historyOps.get}
         onChange={handleTurnNumberChange}
-        disabled
       >
         {
           turns.map((turn) => {
             return (
-              <option key={turn.turnNumber} value={turn.turnNumber}>{turn.turnName}</option>
+              <option key={turn.turnNumber} value={turn.turnNumber}>{turn.turnName} {turn.turnNumber === 0 && '(Starting Map)'}</option>
             )
           })
         }

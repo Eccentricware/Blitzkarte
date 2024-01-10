@@ -1,13 +1,12 @@
 import { Button, Grid } from "@mui/material";
-import { User } from "firebase/auth";
 import { FC, useContext, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { AssignmentStatus } from "../../models/enumeration/assignment-status-enum";
 import { AssignmentRequestService } from "../../services/request-services/assignment-request-service";
 import { GameRequestService } from "../../services/request-services/game-request-service";
-import Blitzkontext from "../../utils/Blitzkontext";
 import { AssignmentsList } from "./AssignmentsList";
 import { GameStatus } from "../../models/enumeration/game-status-enum";
+import TravelExploreIcon from '@mui/icons-material/TravelExplore';
 
 interface AssignmentsAdmProps {
   assignmentData: any;
@@ -154,6 +153,26 @@ export const AssignmentsAdm: FC<AssignmentsAdmProps> = ({assignmentData, refetch
       </Grid>
       <Grid item xs={6}>
         Players Here
+        <div
+          style={{
+            display: 'flex',
+            color: 'white',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '50px',
+            width: '50%',
+            fontSize: '1.5rem',
+            fontWeight: 'bold',
+            cursor: 'pointer',
+            borderRadius: '5px',
+            backgroundColor: 'green',
+          }}
+          onClick={() => {
+            window.location.href = `/game/${gameId}`;
+          }}
+        >
+          Go To Map <TravelExploreIcon fontSize="large"/>
+        </div>
       </Grid>
     </Grid>
   )

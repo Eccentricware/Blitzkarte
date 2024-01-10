@@ -1,9 +1,10 @@
-import { FC } from "react";
+import { FC, useContext } from "react";
 import { UseQueryResult } from "react-query";
 import StallGlobe from "../icons/StallGlobe";
 import { AssignmentsAdm } from "./AssignmentsAdm";
 import { AssignmentsStd } from "./AssignmentsStd";
 import { GameStatus } from "../../models/enumeration/game-status-enum";
+import Blitzkontext from "../../utils/Blitzkontext";
 
 interface AssignmentsPanelProps {
   queryResult: UseQueryResult<any>;
@@ -12,12 +13,13 @@ interface AssignmentsPanelProps {
 }
 
 export const AssignmentsPanel: FC<AssignmentsPanelProps> = ({queryResult, gameId, gameStatus}: AssignmentsPanelProps) => {
+  const user = useContext(Blitzkontext).user.user;
   if (queryResult.isFetching) {
-      return <StallGlobe mode="querying" message={'Assignments Panel: Fetching'}/>
+    return <StallGlobe mode="querying" message={'Assignments Panel: Fetching'}/>
   }
 
   if (queryResult.isLoading) {
-      return <StallGlobe mode="querying" message={'Assignments Panel: Loading'}/>
+    return <StallGlobe mode="querying" message={'Assignments Panel: Loading'}/>
   }
 
   if (queryResult.data) {
@@ -30,12 +32,12 @@ export const AssignmentsPanel: FC<AssignmentsPanelProps> = ({queryResult, gameId
         />
       : <AssignmentsStd registrationTypes={queryResult.data.userStatus}
           gameStatus={gameStatus}
-          user={undefined}
+          user={user}
         />
     )
   }
 
   return (
-    <div>Why are you even here? How did you get here?</div>
+    <div>Let the admin know if you can see this because you are not supposed to see this.</div>
   )
 }

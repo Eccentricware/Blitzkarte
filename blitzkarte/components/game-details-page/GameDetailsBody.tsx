@@ -64,37 +64,17 @@ const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBo
           />
         }
       </Grid>
-      <Grid item xs={12} sm={4}>
+      <Grid item xs={12} sm={7}>
         {
           gameDetailsQueryResult.data
           &&
           <AssignmentsPanel queryResult={assignmentsQueryResult}
-          gameId={gameId}
-          gameStatus={gameDetailsQueryResult.data.gameStatus}
+            gameId={gameId}
+            gameStatus={gameDetailsQueryResult.data.gameStatus}
           />
         }
       </Grid>
       <Grid item xs={12} sm={4}>
-        <div
-          style={{
-            display: 'flex',
-            color: 'white',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '50px',
-            width: '50%',
-            fontSize: '1.5rem',
-            fontWeight: 'bold',
-            cursor: 'pointer',
-            borderRadius: '5px',
-            backgroundColor: 'green',
-          }}
-          onClick={() => {
-            window.location.href = `/game/${gameId}`;
-          }}
-        >
-          Go To Map <TravelExploreIcon fontSize="large"/>
-        </div>
       </Grid>
     </Grid>
   )

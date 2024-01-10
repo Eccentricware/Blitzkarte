@@ -10,16 +10,19 @@ import { MapContainer } from "../map-elements/map/MapContainer";
 import { PlayOmniBox } from "../omni-box/PlayOmniBox";
 import { MapRequestService } from "../../services/request-services/map-request-service";
 import { HistoryRequestService } from "../../services/request-services/history-request-service";
+import { useRouter } from "next/router";
 
 interface GameBodyProps {
   user: User | undefined;
   gameId: number;
 }
 
-const GameBody: FC<GameBodyProps> = ({user, gameId}: GameBodyProps) => {
+const GameBody: FC<GameBodyProps> = ({user}: GameBodyProps) => {
   const mapRequestService = new MapRequestService();
   const orderRequestService: OrderRequestService = new OrderRequestService();
   const historyRequestService = new HistoryRequestService();
+  const router = useRouter();
+  const gameId = Number(router.query.gameId);
 
   // Refactors Impending
   // let renderData = initialRenderData;
@@ -48,9 +51,9 @@ const GameBody: FC<GameBodyProps> = ({user, gameId}: GameBodyProps) => {
     return orderRequestService.getTurnOrders(gameId);
   });
 
-  // const turnHistoryResult: UseQueryResult<any> = useQuery('getTurnHistory', () => {
-  //   return historyRequestService.getTurnHistory(gameId, historyTurnNumber);
-  // });
+  const turnHistoryResult: UseQueryResult<any> = useQuery('getTurnHistory', () => {
+    return historyRequestService.getTurnHistory(gameId, historyTurnNumber);
+  });
 
   const historyOps = {
     get: historyTurnNumber,
@@ -70,9 +73,9 @@ const GameBody: FC<GameBodyProps> = ({user, gameId}: GameBodyProps) => {
     }
   }, [turnOrdersResult.data]);
 
-  // useEffect(() => {
-  //   turnHistoryResult.refetch();
-  // }, [historyTurnNumber]);
+  useEffect(() => {
+    turnHistoryResult.refetch();
+  }, [historyTurnNumber]);
 
   // useEffect(() => {
   //   if (currentTab === 2 && turnHistoryResult.data) {
@@ -99,7 +102,7 @@ const GameBody: FC<GameBodyProps> = ({user, gameId}: GameBodyProps) => {
           <PlayOmniBox
             turnOptionsResult={turnOptionsResult}
             turnOrdersResult={turnOrdersResult}
-            turnHistoryResult={undefined}
+            turnHistoryResult={turnHistoryResult}
             orderSet={orderSet}
             nudge={nudge}
             gameId={gameId}
