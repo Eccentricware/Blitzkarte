@@ -168,10 +168,10 @@ export const mapViewDefault: MapViewObject = {
       defaultWidth: 15
     },
     label: {
-      size: 100,
-      land: 100,
-      sea: 100,
-      coast: 64
+      size: 125,
+      land: 125,
+      sea: 125,
+      coast: 96
     },
     unit: 145,
     supplyCenter: {
