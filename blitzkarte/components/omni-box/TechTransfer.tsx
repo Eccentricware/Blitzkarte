@@ -5,20 +5,17 @@ import { TurnOrders } from "../../models/objects/TurnOrdersObjects";
 
 interface Props {
   giving: boolean;
-  transferOptions: {
-    turnStatus: string;
-    options: TransferTechCountry[];
-  };
+  transferOptions: TransferTechCountry[];
   order: TransferTechOrder;
 }
 
 export const TechTransfer: FC<Props> = ({giving, transferOptions, order}: Props) => {
-  const [countries, setCountries] = useState(transferOptions.options);
+  const [countries, setCountries] = useState(transferOptions);
   const [foreignCountryId, setForeignCountryId] = useState(order.foreignCountryId);
 
   const handlePartnerChange = (id: string) => {
     const countryId = Number(id)
-    const techPartner = transferOptions.options.find((partner: TransferTechCountry) => countryId === partner.countryId);
+    const techPartner = transferOptions.find((partner: TransferTechCountry) => countryId === partner.countryId);
     if (techPartner) {
       order.foreignCountryId = techPartner.countryId;
       order.foreignCountryName = techPartner.countryName;
