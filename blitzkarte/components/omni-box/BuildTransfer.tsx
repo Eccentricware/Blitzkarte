@@ -1,8 +1,5 @@
-import { Clear } from "@mui/icons-material";
-import { SelectChangeEvent, TextField } from "@mui/material";
 import { ChangeEvent, FC, useEffect, useState } from "react";
 import { TransferBuildOrder, TransferBuildsOption, TransferTechCountry } from "../../models/objects/OptionsObjects";
-import { Country } from "../../utils/parsing/classes/country";
 
 interface Props {
   transferOptions: {
