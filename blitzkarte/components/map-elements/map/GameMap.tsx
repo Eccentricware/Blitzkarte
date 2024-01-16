@@ -7,7 +7,7 @@ import { NodeLayer } from '../layers/node/NodeLayer';
 import Blitzkontext from '../../../utils/Blitzkontext';
 import { UseQueryResult } from 'react-query';
 import { OrderLayer } from '../layers/orders/OrderLayer';
-import { TurnOrders } from '../../../models/objects/TurnOrdersObjects';
+import { TurnOrders } from '../../../models/objects/OrdersObjects';
 
 interface Props {
   renderData: any;

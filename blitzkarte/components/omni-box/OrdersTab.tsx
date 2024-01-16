@@ -5,13 +5,13 @@ import { TurnOrders } from "../../models/objects/OrdersObjects";
 import { OrderRequestService } from "../../services/request-services/order-request-service";
 import TurnPanel from "./TurnPanel";
 
-interface OrderOrdersProps {
+interface OrdersProps {
   options: OptionsFinal;
   orders: TurnOrders;
   nudge: any;
 }
 
-export const OrdersTab: FC<OrderOrdersProps> = ({options, orders, nudge}: OrderOrdersProps) => {
+export const OrdersTab: FC<OrdersProps> = ({options, orders, nudge}: OrdersProps) => {
   const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
   const orderRequestService = new OrderRequestService();
   const handleSubmitOrdersClick = () => {
