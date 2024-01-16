@@ -6,6 +6,7 @@ export class City {
   province!: string;
   // status!: string;
   loc!: number[];
+  status: string;
   voteColor: string | undefined;
   statusColor: string | undefined;
   strokeColor: string = 'black';
@@ -20,21 +21,26 @@ export class City {
     this.loc = pin.loc;
 
     if (this.type === 'c') {
+      this.status = 'active';
       this.voteColor = 'gold';
       this.statusColor = 'gold';
       this.renderCategory = 'votingCenters';
     } else if (this.type === 'v') {
+      this.status = 'dormant';
       this.voteColor = 'gray';
       this.statusColor = 'gray';
       this.renderCategory = 'votingCenters';
       this.strokeColor = 'red';
     } else if (this.type === 's') {
+      this.status = 'active';
       this.statusColor = 'white';
       this.renderCategory = 'supplyCenters';
     } else if (this.type === 'd') {
+      this.status = 'dormant';
       this.statusColor = 'gray';
       this.renderCategory = 'supplyCenters';
     } else {
+      this.status = 'error';
       this.renderCategory = 'errorLayer'
     }
 

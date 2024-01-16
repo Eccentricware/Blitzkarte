@@ -13,10 +13,6 @@ export const UnitRender: FC<Props> = ({unit}: Props) => {
   const unitSVG = UnitSVGs[unitType];
   const flagSVG = FlagSVGs[unit.countryKey];
   const unitLoc = unit.status === 'Retreat' ? unit.eventLoc : unit.loc;
-  if (unit.name === 'Brazil Army 3' || unit.name === 'Argentina Army 1') {
-    console.log(unit.name, unit);
-    console.log(unitLoc);
-  }
 
   return (
     <Blitzkontext.Consumer>
