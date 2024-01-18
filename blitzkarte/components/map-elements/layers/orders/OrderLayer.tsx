@@ -60,8 +60,8 @@ export const OrderLayer: FC<OrderLayerProps> = ({orderData}: OrderLayerProps) =>
       { retreatOtb.length > 0 && <CircleLayer orders={retreatOtb} fill="red"/> }
       { moves.length > 0 && <LineLayer orders={moves} stroke="red"/> }
       { builds.length > 0 && <CircleLayer orders={builds} fill="green"/> }
-      { nukesReadyBuilding.length > 0 && <CircleLayer orders={nukesReadyBuilding} fill="green"/> }
-      { nukesReadyDisbanding.length > 0 && <CircleLayer orders={nukesReadyDisbanding} fill="green"/> }
+      { nukesReadyBuilding?.length > 0 && <CircleLayer orders={nukesReadyBuilding} fill="green"/> }
+      { nukesReadyDisbanding?.length > 0 && <CircleLayer orders={nukesReadyDisbanding} fill="green"/> }
       { disbands.length > 0 && <CircleLayer orders={disbands} fill="red"/> }
     </g>
   )
