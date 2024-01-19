@@ -1,20 +1,30 @@
 import { getAuth } from 'firebase/auth'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import StallGlobe from '../components/icons/StallGlobe'
 import IndexBody from '../components/index-page/IndexBody'
 import { NavBarSelector } from '../components/nav-bar/NavBarSelector'
 import { NavBarSignedOut } from '../components/nav-bar/NavBarSignedOut'
 import Blitzkontext from '../utils/Blitzkontext'
-import { NavBarSignedIn } from '../components/nav-bar/NavBarSignedIn'
+import { UserRequestService } from '../services/request-services/user-request-service'
 
 const Home: NextPage = () => {
-  // className={styles.container}
   const auth = getAuth();
   const [user, loading, error] = useAuthState(auth);
   const bkCtx = useContext(Blitzkontext);
+  const userRequestService = new UserRequestService();
+  if (loading === false && user === null) {
+    let guestId = localStorage.getItem('guestId');
+
+    if (!guestId) {
+      guestId = String(Math.floor(Math.random() * 1000000000));
+      localStorage.setItem('guestId', guestId);
+    }
+
+    userRequestService.reportGuest(guestId);
+  }
 
   if (loading) {
     return (

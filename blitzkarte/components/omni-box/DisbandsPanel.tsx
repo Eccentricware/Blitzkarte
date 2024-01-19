@@ -209,7 +209,7 @@ export const DisbandsPanel: FC<DisbandProps> = ({options, orders, setSubmitDisab
       <br/>
 
       {
-        Number.isInteger(orders.nukeRange)
+        orders.nukeRange
           &&
         <div>
           <div>
