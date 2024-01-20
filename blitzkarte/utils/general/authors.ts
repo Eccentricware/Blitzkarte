@@ -10,8 +10,8 @@ export const getGameStatusDescription = (
       return `The game was cancelled.`;
     case GameStatus.ABANDONED:
       return `The game was abandoned.`;
-    case GameStatus.ENDED:
-      return `The game ended. Congratulations to the winners!`;
+    case GameStatus.FINISHED:
+      return `The game finished. Congratulations to the winners!`;
     case GameStatus.PAUSED:
       return `The game was paused. Ask the game administrator for more information.`;
     case GameStatus.PLAYING:
