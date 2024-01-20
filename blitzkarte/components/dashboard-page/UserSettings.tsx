@@ -1,4 +1,4 @@
-import { Button, FormControlLabel, FormGroup, Switch, TextField } from '@mui/material';
+import { Button, FormControlLabel, FormGroup, MenuItem, Select, SelectChangeEvent, Switch, TextField } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { ChangeEvent } from 'react';
 import { User } from 'firebase/auth';
@@ -12,6 +12,7 @@ import { NavBarSignedIn } from '../nav-bar/NavBarSignedIn';
 import { CredentialValidator } from '../../utils/general/credentialValidator';
 import { TimeZoneSelector } from '../TimeZoneSelector';
 import { UserRequestService } from '../../services/request-services/user-request-service';
+import { set } from 'date-fns';
 
 interface UserSettingsProps {
   user: User | null;
@@ -43,6 +44,15 @@ const UserSettings: FC<UserSettingsProps> = ({user}: UserSettingsProps) => {
   const [verificationSent, setVerificationSent] = useState(false);
   const [timeZone, setTimeZone] = useState('America/Los_Angeles');
   const [meridiemTime, setMeridiemTime] = useState(true);
+  const [preferredContactMethod, setPreferredContactMethod] = useState<string>('none');
+  const [contactEmail, setContactEmail] = useState<string>('');
+  const [contactDiscord, setContactDiscord] = useState<string>('');
+  const [contactSlack, setContactSlack] = useState<string>('');
+  const [inGame, setInGame] = useState<boolean>(false);
+  const [otherContactMethod, setOtherContactMethod] = useState<string>('');
+  const [otherContactHandle, setOtherContactHandle] = useState<string>('');
+  const [noContactMethods, setNoContactMethods] = useState<boolean>(true);
+  const [contactMethodsReady, setContactMethodsReady] = useState<string[]>([]);
   const router = useRouter();
 
   const { isLoading, error, data, isFetching } = useQuery('userProfile', () => {
@@ -70,13 +80,38 @@ const UserSettings: FC<UserSettingsProps> = ({user}: UserSettingsProps) => {
 
       setTimeZone(data.timeZone);
       setMeridiemTime(data.meridiemTime);
+      setPreferredContactMethod(
+        data.contactPreferences.preferredMethod !== undefined
+        && data.contactPreferences.preferredMethod.length > 0
+        ? data.contactPreferences.preferredMethod
+        : 'none'
+      );
+      setContactEmail(
+        data.contactPreferences.email
+        ? data.contactPreferences.email
+        : data.email ? data.email : ''
+      );
+      setContactDiscord(data.contactPreferences.discord ? data.contactPreferences.discord : '');
+      setContactSlack(data.contactPreferences.slack ? data.contactPreferences.slack : '');
+      setInGame(data.contactPreferences.inGame ? data.contactPreferences.inGame : false);
+      setOtherContactMethod(data.contactPreferences.otherMethod ? data.contactPreferences.otherMethod : '');
+      setOtherContactHandle(data.contactPreferences.otherHandle ? data.contactPreferences.otherHandle : '');
     }
   }, [data, user]);
 
   const saveProfileChanges = () => {
     userRequestService.saveProfileChange({
       timeZone: timeZone,
-      meridiemTime: meridiemTime
+      meridiemTime: meridiemTime,
+      contactPreferences: {
+        preferredMethod: preferredContactMethod,
+        email: contactEmail,
+        discord: contactDiscord,
+        slack: contactSlack,
+        inGame: inGame,
+        otherMethod: otherContactMethod,
+        otherHandle: otherContactHandle
+      }
     });
   }
 
@@ -203,6 +238,50 @@ const UserSettings: FC<UserSettingsProps> = ({user}: UserSettingsProps) => {
   const handleMeridiemTimeChange = () => {
     setMeridiemTime(!meridiemTime);
   };
+
+  const handlePreferredContactMethodChange = (preferredContactMethod: string) => {
+    setPreferredContactMethod(preferredContactMethod);
+  }
+
+  const handleContactEmailChange = (contactEmail: string) => {
+    setContactEmail(contactEmail);
+    updateMethodsReady('email', contactEmail.length > 0);
+  }
+
+  const handleDiscordUsernameChange = (contactDiscord: string) => {
+    setContactDiscord(contactDiscord);
+    updateMethodsReady('discord', contactDiscord.length > 0);
+  }
+
+  const handleSlackUsernameChange = (contactSlack: string) => {
+    setContactSlack(contactSlack);
+    updateMethodsReady('slack', contactSlack.length > 0);
+  }
+
+  const handleOtherContactMethodChange = (otherContactMethod: string) => {
+    setOtherContactMethod(otherContactMethod);
+    updateMethodsReady('other', !!otherContactMethod && !!otherContactHandle);
+  }
+
+  const handleOtherContactUsernameChange = (otherContactHandle: string) => {
+    setOtherContactHandle(otherContactHandle);
+    updateMethodsReady('other', !!otherContactMethod && !!otherContactHandle);
+  }
+
+  const updateMethodsReady = (method: string, methodReady: boolean) => {
+    if (methodReady && !contactMethodsReady.includes(method)) {
+      if (preferredContactMethod === 'none') {
+        setPreferredContactMethod(method);
+      }
+      setContactMethodsReady([...contactMethodsReady, method]);
+    } else if (!methodReady && contactMethodsReady.includes(method)) {
+      let newMethodsReady = contactMethodsReady.filter((m: string) => m !== method);
+      if (!newMethodsReady.includes(preferredContactMethod)) {
+        setPreferredContactMethod(newMethodsReady.length > 0 ? newMethodsReady[0] : 'none');
+      }
+      setContactMethodsReady(newMethodsReady);
+    }
+  }
 
   if (isFetching) {
     return <StallGlobe mode="querying" message={'UserSettings: Fetching'}/>
@@ -462,6 +541,106 @@ const UserSettings: FC<UserSettingsProps> = ({user}: UserSettingsProps) => {
           />
         </FormGroup>
         <TimeZoneSelector timeZoneOps={timeZoneOps}/>
+        <FormGroup>
+          <h4>Contact Preferences</h4>
+          <Select
+            value={preferredContactMethod}
+            label="Preferred Contact Method"
+            onChange={(event: SelectChangeEvent<string>) => {
+              handlePreferredContactMethodChange(event.target.value);
+            }}
+          >
+            {
+              contactMethodsReady.length === 0 &&
+              <MenuItem value="none">Choose Preferred Contact Method</MenuItem>
+            }
+            <MenuItem
+              value="email"
+              disabled={!contactEmail}
+            >
+              Email
+            </MenuItem>
+            <MenuItem
+              value="discord"
+              disabled={!contactDiscord}
+            >
+              Discord
+            </MenuItem>
+            <MenuItem
+              value="slack"
+              disabled={!contactSlack}
+            >
+              Slack
+            </MenuItem>
+            <MenuItem
+              value="inGame"
+              disabled
+            >
+              In Game Chat
+            </MenuItem>
+            <MenuItem
+              value="other"
+              disabled={!otherContactMethod || !otherContactHandle}
+            >
+              {otherContactMethod ? otherContactMethod : 'Other'}
+            </MenuItem>
+          </Select>
+          <FormControlLabel
+            label="Use In Game Chat"
+            labelPlacement="start"
+            style={{alignSelf: 'flex-start'}}
+            value={inGame}
+            control={
+              <Switch
+                checked={inGame}
+                onChange={() => { setInGame(!inGame); }}
+                disabled
+              />
+            }
+          />
+          <TextField
+            label="Contact Email"
+            variant="outlined"
+            value={contactEmail}
+            onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
+              handleContactEmailChange(event.target.value);
+            }}
+          />
+          <TextField
+            label="Discord Username"
+            variant="outlined"
+            value={contactDiscord}
+            onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
+              handleDiscordUsernameChange(event.target.value);
+            }}
+          />
+          <TextField
+            label="Blitzkarte Slack Username"
+            variant="outlined"
+            value={contactSlack}
+            onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
+              handleSlackUsernameChange(event.target.value);
+            }}
+          />
+          <div className='dashboard-credential-row'>
+            <TextField
+              label="Other Contact Method"
+              variant="outlined"
+              value={otherContactMethod}
+              onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
+                handleOtherContactMethodChange(event.target.value);
+              }}
+            />
+            <TextField
+              label="Other Contact Username"
+              variant="outlined"
+              value={otherContactHandle}
+              onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
+                handleOtherContactUsernameChange(event.target.value);
+              }}
+            />
+          </div>
+        </FormGroup>
         <Button color="success"
           variant="contained"
           onClick={() => { saveProfileChanges(); }}

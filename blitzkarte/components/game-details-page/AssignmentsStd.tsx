@@ -5,15 +5,17 @@ import { GameStatus } from "../../models/enumeration/game-status-enum";
 import { getGameStatusDescription } from "../../utils/general/authors";
 import { User } from "firebase/auth";
 import { useRouter } from "next/router";
-import TravelExploreIcon from '@mui/icons-material/TravelExplore';
+import { ContactList } from "./ContactList";
 
 interface AssignmentsStdProps {
   registrationTypes: any;
   gameStatus: GameStatus;
   user: User | undefined;
+  assignmentData: any;
+  handleContactDetailsOpen: (event: React.MouseEvent<SVGSVGElement>, contact: any) => void;
 }
 
-export const AssignmentsStd: FC<AssignmentsStdProps> = ({registrationTypes, gameStatus, user}: AssignmentsStdProps) => {
+export const AssignmentsStd: FC<AssignmentsStdProps> = ({registrationTypes, gameStatus, user, assignmentData, handleContactDetailsOpen}: AssignmentsStdProps) => {
   const router = useRouter();
   const assignmentService = new AssignmentService();
   const gameId = Number(router.query.gameId);
@@ -79,87 +81,80 @@ export const AssignmentsStd: FC<AssignmentsStdProps> = ({registrationTypes, game
           Register As Player
         </Button>
       }
-      <div
-          style={{
-            display: 'flex',
-            color: 'white',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '50px',
-            width: '50%',
-            fontSize: '1.5rem',
-            fontWeight: 'bold',
-            cursor: 'pointer',
-            borderRadius: '5px',
-            backgroundColor: 'green',
-          }}
-          onClick={() => {
-            window.location.href = `/game/${gameId}`;
-          }}
-        >
-          Go To Map <TravelExploreIcon fontSize="large"/>
-        </div>
-      {/* {
-        registeredAsReserve
-          &&
-        <Button
-          color="inherit"
-          variant="contained"
-          onClick={() => { handleUnregisterUserClick('Reserve'); }}
-        >
-          Leave Reserve Pool
-        </Button>
-      } */}
-      {/* {
-        (registeredAsPlayer && gameStatus === GameStatus.REGISTRATION)
-        || registeredAsSpectator
-        || registeredAsReserve
-          &&
-        <Button
-          color={gameStatus === GameStatus.REGISTRATION ? "warning" : "inherit"}
-          variant="contained"
-          onClick={() => {handleRegisterUserClick('Reserve'); }}
-        >
-          {
-            registeredAsPlayer || registeredAsSpectator
-              ?
-            'Switch to Reserve'
-              :
-            'Join Reserve Pool'
-          }
-        </Button>
-      } */}
-        {/* <br/>
       {
-        registeredAsSpectator
-          &&
-        <Button
-          color="inherit"
-          variant="contained"
-          onClick={() => { handleUnregisterUserClick('Spectator'); }}
-        >
-          Leave Spectator Pool
-        </Button>
-      } */}
-      {/* {
-        (registeredAsPlayer && gameStatus === GameStatus.REGISTRATION)
-        || registeredAsReserve
-          &&
-        <Button
-          color="inherit"
-          variant="contained"
-          onClick={() => {handleRegisterUserClick('Spectator'); }}
-        >
-          {
-            registeredAsPlayer || registeredAsReserve
-              ?
-            'Switch to Spectator'
-              :
-            'Join Spectator Pool'
-          }
-        </Button>
-      } */}
+        [
+          GameStatus.PLAYING,
+          GameStatus.PAUSED,
+          GameStatus.ABANDONED,
+          GameStatus.FINISHED
+        ].includes(gameStatus) &&
+        <ContactList
+          gameId={gameId}
+          assignmentData={assignmentData}
+          handleContactDetailsOpen={handleContactDetailsOpen}
+        />
+      }
       <br/>
     </div>
   )
 }
+// {/* {
+//   registeredAsReserve
+//     &&
+//   <Button
+//     color="inherit"
+//     variant="contained"
+//     onClick={() => { handleUnregisterUserClick('Reserve'); }}
+//   >
+//     Leave Reserve Pool
+//   </Button>
+// } */}
+// {/* {
+//   (registeredAsPlayer && gameStatus === GameStatus.REGISTRATION)
+//   || registeredAsSpectator
+//   || registeredAsReserve
+//     &&
+//   <Button
+//     color={gameStatus === GameStatus.REGISTRATION ? "warning" : "inherit"}
+//     variant="contained"
+//     onClick={() => {handleRegisterUserClick('Reserve'); }}
+//   >
+//     {
+//       registeredAsPlayer || registeredAsSpectator
+//         ?
+//       'Switch to Reserve'
+//         :
+//       'Join Reserve Pool'
+//     }
+//   </Button>
+// } */}
+//   {/* <br/>
+// {
+//   registeredAsSpectator
+//     &&
+//   <Button
+//     color="inherit"
+//     variant="contained"
+//     onClick={() => { handleUnregisterUserClick('Spectator'); }}
+//   >
+//     Leave Spectator Pool
+//   </Button>
+// } */}
+// {/* {
+//   (registeredAsPlayer && gameStatus === GameStatus.REGISTRATION)
+//   || registeredAsReserve
+//     &&
+//   <Button
+//     color="inherit"
+//     variant="contained"
+//     onClick={() => {handleRegisterUserClick('Spectator'); }}
+//   >
+//     {
+//       registeredAsPlayer || registeredAsReserve
+//         ?
+//       'Switch to Spectator'
+//         :
+//       'Join Spectator Pool'
+//     }
+//   </Button>
+// } */}

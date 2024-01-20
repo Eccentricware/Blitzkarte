@@ -6,7 +6,6 @@ import { AssignmentRequestService } from "../../services/request-services/assign
 import { GameRequestService } from "../../services/request-services/game-request-service";
 import { AssignmentsList } from "./AssignmentsList";
 import { GameStatus } from "../../models/enumeration/game-status-enum";
-import TravelExploreIcon from '@mui/icons-material/TravelExplore';
 
 interface AssignmentsAdmProps {
   assignmentData: any;
@@ -120,8 +119,7 @@ export const AssignmentsAdm: FC<AssignmentsAdmProps> = ({assignmentData, refetch
   };
 
   return (
-    <Grid container spacing={1}>
-      <Grid item xs={6}>
+    <div>
         <AssignmentsList
           gameId={gameId}
           assignmentData={data}
@@ -150,31 +148,7 @@ export const AssignmentsAdm: FC<AssignmentsAdmProps> = ({assignmentData, refetch
         >
           {cancelButtonText}
         </Button>
-      </Grid>
-      <Grid item xs={6}>
-        Players Here
-        <div
-          style={{
-            display: 'flex',
-            color: 'white',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '50px',
-            width: '50%',
-            fontSize: '1.5rem',
-            fontWeight: 'bold',
-            cursor: 'pointer',
-            borderRadius: '5px',
-            backgroundColor: 'green',
-          }}
-          onClick={() => {
-            window.location.href = `/game/${gameId}`;
-          }}
-        >
-          Go To Map <TravelExploreIcon fontSize="large"/>
-        </div>
-      </Grid>
-    </Grid>
+    </div>
   )
 
 }

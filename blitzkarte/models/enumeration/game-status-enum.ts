@@ -1,7 +1,7 @@
 export enum GameStatus {
   ABANDONED = 'Abandoned',
   CANCELLED = 'Cancelled',
-  ENDED = 'Ended',
+  FINISHED = 'Finished',
   PAUSED = 'Paused',
   PLAYING = 'Playing',
   PROCESSING = 'Processing',
