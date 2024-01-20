@@ -1,7 +1,7 @@
 import { TextField, Select, SelectChangeEvent, MenuItem, Button } from "@mui/material";
 import assert from "assert";
 import { useRouter } from "next/router";
-import { FC, useState, useContext, useEffect } from "react";
+import { FC, useState, useContext, useEffect, Fragment } from "react";
 import { UseQueryResult } from "react-query";
 import { GameStatus } from "../../models/enumeration/game-status-enum";
 import { GameDataObject } from "../../models/objects/GameDataObject";
@@ -20,7 +20,8 @@ interface GameDetailsSettingsProps {
 }
 
 export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameDetailsSettings, assignmentRefetch}: GameDetailsSettingsProps) => {
-    const gameData = gameDetailsSettings
+    const gameData = gameDetailsSettings;
+    console.log('GameDetailsSettings gameData:', gameData);
 
     const gameRequestService = new GameRequestService();
     const router = useRouter();
@@ -29,7 +30,8 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameDetailsSe
     const [deadlineType, setDeadlineType] = useState(gameData.deadlineType);
     const [meridiemTime, setMeridiemTime] = useState(gameData.meridiemTime);
     const [observeDst, setObserveDst] = useState(gameData.observeDst);
-    const [gameStart, setGameStart] = useState<Date | null>(new Date());
+    const [readyTime, setReadyTime] = useState<Date | null>(new Date(gameData.readyTime));
+    const [gameStart, setGameStart] = useState<Date | null>(new Date(gameData.startTime));
     const [firstTurnDeadline, setFirstTurnDeadline] = useState<Date | null>(new Date());
 
     const [ordersDay, setOrdersDay] = useState(gameData.ordersDay);
@@ -96,7 +98,9 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameDetailsSe
     const schedulerService = new SchedulerService();
 
     useEffect(() => {
-      schedulerService.setStartScheduling(deadlineOps);
+      if (gameData.gameStatus === GameStatus.REGISTRATION) {
+        schedulerService.setStartScheduling(deadlineOps);
+      }
     }, [
       turn1Timing,
       deadlineType,
@@ -109,6 +113,8 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameDetailsSe
     const deadlineOps: any = {
       gameStart: gameStart,
       setGameStart: setGameStart,
+      readyTime: gameData.readyTime,
+      setReadyTime: setReadyTime,
       deadlineType: deadlineType,
       turn1Timing: turn1Timing,
       firstTurnDeadline: firstTurnDeadline,
@@ -341,9 +347,22 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameDetailsSe
             <MenuItem value="scheduled" disabled>Manually Set Start and First Deadline</MenuItem>
           </Select>
         </div>
-        <div>If the game were declared ready now:</div>
-        <div>Assignments Given: {gameStart !== null && `${gameStart?.toDateString()} | ${gameStart?.toLocaleTimeString()}`}</div>
-        <div>First Turn Deadline: {firstTurnDeadline !== null && `${firstTurnDeadline.toDateString()} | ${firstTurnDeadline.toLocaleTimeString()}`}</div>
+        {
+          gameData.gameStatus === GameStatus.REGISTRATION &&
+          <Fragment>
+            <div>If the game were declared ready now:</div>
+            <div>Assignments Given: {gameStart !== null && `${gameStart?.toDateString()} | ${gameStart?.toLocaleTimeString()}`}</div>
+            <div>First Turn Deadline: {firstTurnDeadline !== null && `${firstTurnDeadline.toDateString()} | ${firstTurnDeadline.toLocaleTimeString()}`}</div>
+          </Fragment>
+        }
+        {
+          [GameStatus.READY, GameStatus.PLAYING, GameStatus.PAUSED, GameStatus.FINISHED].includes(gameData.gameStatus) &&
+          <Fragment>
+            <div>Declared Ready: {readyTime !== null && `${readyTime.toDateString()} | ${readyTime.toLocaleTimeString()}`}</div>
+            <div>Assignments Given: {gameStart !== null && `${gameStart.toDateString()} | ${gameStart.toLocaleTimeString()}`}</div>
+            {/* <div>First Turn Deadline: {firstTurnDeadline !== null && `${firstTurnDeadline.toDateString()} | ${firstTurnDeadline.toLocaleTimeString()}`}</div> */}
+          </Fragment>
+        }
         <div>
           <Select
             id='deadline-type-select'

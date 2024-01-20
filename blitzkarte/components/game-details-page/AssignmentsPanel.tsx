@@ -10,9 +10,10 @@ interface AssignmentsPanelProps {
   queryResult: UseQueryResult<any>;
   gameId: number;
   gameStatus: GameStatus;
+  handleContactDetailsOpen: (event: React.MouseEvent<SVGSVGElement>, contact: any) => void;
 }
 
-export const AssignmentsPanel: FC<AssignmentsPanelProps> = ({queryResult, gameId, gameStatus}: AssignmentsPanelProps) => {
+export const AssignmentsPanel: FC<AssignmentsPanelProps> = ({queryResult, gameId, gameStatus, handleContactDetailsOpen}: AssignmentsPanelProps) => {
   const user = useContext(Blitzkontext).user.user;
   if (queryResult.isFetching) {
     return <StallGlobe mode="querying" message={'Assignments Panel: Fetching'}/>
@@ -31,8 +32,10 @@ export const AssignmentsPanel: FC<AssignmentsPanelProps> = ({queryResult, gameId
           gameStatus={gameStatus}
         />
       : <AssignmentsStd registrationTypes={queryResult.data.userStatus}
+          assignmentData={queryResult.data}
           gameStatus={gameStatus}
           user={user}
+          handleContactDetailsOpen={handleContactDetailsOpen}
         />
     )
   }

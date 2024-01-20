@@ -7,7 +7,7 @@ import { AssignmentStatus } from "../../models/enumeration/assignment-status-enu
 import { AssignmentRequestService } from "../../services/request-services/assignment-request-service";
 import Lock from '@mui/icons-material/Lock';
 import LockOpen from '@mui/icons-material/LockOpen';
-import { AssignmentRow } from "../../models/objects/AssignmentRowObject";
+import { AssignmentDetails } from "../../models/objects/AssignmentRowObject";
 
 interface AssignmentsListProps {
   assignmentData: AssignmentDataObject;
@@ -68,11 +68,11 @@ export const AssignmentsList: FC<AssignmentsListProps> = ({
         </TableHead>
         <TableBody>
           {
-            assignmentData.assignments.map((assignment: AssignmentRow) => {
+            assignmentData.assignments.map((assignment: AssignmentDetails) => {
               return (
                 <TableRow hover role="checkbox" tabIndex={-1} key={assignment.countryId}>
                   <TableCell>
-                    {assignment.countryName}
+                    {assignment.countryName} ({assignment.rank.toUpperCase()})
                   </TableCell>
                   <TableCell>
                     {
