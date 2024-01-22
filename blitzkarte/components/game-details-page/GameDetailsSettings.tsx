@@ -341,8 +341,9 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameDetailsSe
             <MenuItem value="scheduled" disabled>Manually Set Start and First Deadline</MenuItem>
           </Select>
         </div>
-        <div>Game Start: {gameStart !== null && `${gameStart?.toDateString()} | ${gameStart?.toLocaleTimeString()}`}</div>
-        <div>First Turn: {firstTurnDeadline !== null && `${firstTurnDeadline.toDateString()} | ${firstTurnDeadline.toLocaleTimeString()}`}</div>
+        <div>If the game were declared ready now:</div>
+        <div>Assignments Given: {gameStart !== null && `${gameStart?.toDateString()} | ${gameStart?.toLocaleTimeString()}`}</div>
+        <div>First Turn Deadline: {firstTurnDeadline !== null && `${firstTurnDeadline.toDateString()} | ${firstTurnDeadline.toLocaleTimeString()}`}</div>
         <div>
           <Select
             id='deadline-type-select'

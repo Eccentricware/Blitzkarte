@@ -133,4 +133,5 @@ export interface NominationOptions {
 export interface VotingOptions {
   duplicateAlerts: string[];
   nominations: Nomination[];
+  voteCount: number;
 }
