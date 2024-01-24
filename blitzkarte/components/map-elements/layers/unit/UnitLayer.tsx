@@ -10,8 +10,8 @@ export const UnitLayer: FC<Props> = ({unitData}) => {
   return (
     <g className="unit-layer">
       {
-        unitData.map(unit =>
-          <UnitRender key={unit.name} unit={unit}/>
+        unitData.map((unit, index) =>
+          <UnitRender key={index} unit={unit}/>
         )
       }
     </g>

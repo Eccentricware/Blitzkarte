@@ -1,5 +1,5 @@
 import { Box, Tab, Tabs } from "@mui/material";
-import { ChangeEvent, FC, ReactNode, useState } from "react";
+import { ChangeEvent, FC, Fragment, ReactNode, useState } from "react";
 import { OmniBoxData } from "../../models/objects/OmniBoxDataObject";
 import { InputTab } from "./InputTab";
 import { DebugTab } from "./DebugTab";
@@ -9,19 +9,22 @@ import { ChatTab } from "./ChatTab";
 import { HistoryTab } from "./HistoryTab";
 import { OrdersTab } from "./OrdersTab";
 import { useQuery, UseQueryResult } from "react-query";
-import { TurnOrders } from "../../models/objects/TurnOrdersObjects";
+import { GameStats, TurnOrders } from "../../models/objects/TurnOrdersObjects";
 import { GameRequestService } from "../../services/request-services/game-request-service";
 import ReadMoreIcon from '@mui/icons-material/ReadMore';
 import { useRouter } from "next/router";
 import { User } from "firebase/auth";
+import { HistoryRequestService } from "../../services/request-services/history-request-service";
 
 interface OmniProps {
   turnOptionsResult: UseQueryResult<any>;
   turnOrdersResult: UseQueryResult<any>;
+  turnHistoryResult: UseQueryResult<any>;
   orderSet: TurnOrders | undefined;
   nudge: any;
   gameId: number;
   user: User | undefined;
+  historyOps: any;
 }
 
 interface TabPanelProps {
@@ -45,21 +48,24 @@ const TabPanel = ({index, value, children}: TabPanelProps) => {
 export const PlayOmniBox: FC<OmniProps> = ({
   turnOptionsResult,
   turnOrdersResult,
+  turnHistoryResult,
   orderSet,
   gameId,
   nudge,
-  user
+  user,
+  historyOps
 }: OmniProps) => {
-  const gameRequestService = new GameRequestService();
+  const historyRequestService = new HistoryRequestService();
   const router = useRouter();
   const [panel, setPanel] = useState(user ? 0 : 1);
 
   const handleChange = (event: ChangeEvent<{}>, newPanel: number) => {
     setPanel(newPanel);
+    historyOps.setCurrentTab(newPanel);
   }
 
-  const { data: countryStats } = useQuery('getStatsTable', () => {
-    return gameRequestService.getStatsTable(gameId);
+  const { data: gameInfo } = useQuery('getPublicInfo', () => {
+    return historyRequestService.getGameStats(gameId);
   });
 
   return (
@@ -71,9 +77,9 @@ export const PlayOmniBox: FC<OmniProps> = ({
               &&
             <Tab label="Orders" disabled={user === undefined}/>
           }
-          { countryStats && <Tab label="Stats"/> }
-          <Tab label="History" disabled/>
-          <Tab label="Chat" disabled={true}/>
+          { gameInfo && <Tab label="Stats"/> }
+          { gameInfo && <Tab label="History" /> }
+          <Tab label="Chat" disabled/>
           <div
             style={{
               display: 'flex',
@@ -98,15 +104,21 @@ export const PlayOmniBox: FC<OmniProps> = ({
         </TabPanel>
       }
       {
-        countryStats
+        gameInfo
           &&
-        <TabPanel value={panel} index={1}>
-          <StatsTable stats={countryStats} />
-        </TabPanel>
+        <Fragment>
+          <TabPanel value={panel} index={1}>
+            <StatsTable stats={gameInfo} />
+          </TabPanel>
+          <TabPanel value={panel} index={2}>
+            <HistoryTab
+              turns={gameInfo.turns}
+              turnHistoryResult={turnHistoryResult}
+              historyOps={historyOps}
+            />
+          </TabPanel>
+        </Fragment>
       }
-      <TabPanel value={panel} index={2}>
-        <HistoryTab/>
-      </TabPanel>
       <TabPanel value={panel} index={3}>
         <ChatTab />
       </TabPanel>
