@@ -17,6 +17,8 @@ const GameDetailsPage: NextPage = () => {
   const router = useRouter();
   const gameId: number = Number(router.query.gameId);
 
+  console.log('GameDetailsPage: user', user);
+
   if (loading) {
     return (
       <div>
@@ -69,6 +71,7 @@ const GameDetailsPage: NextPage = () => {
         <link rel="icon" href="/favicon.ico"/>
       </Head>
       <NavBarSignedOut title="Game Settings"/>
+      <GameDetailsBody user={undefined} gameId={gameId}/>
     </div>
   )
 }

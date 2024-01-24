@@ -4,21 +4,23 @@ import { AssignmentService } from "../../services/assignment-service";
 import Blitzkontext from "../../utils/Blitzkontext";
 import { GameStatus } from "../../models/enumeration/game-status-enum";
 import { getGameStatusDescription } from "../../utils/general/authors";
+import { User } from "firebase/auth";
 
 interface AssignmentsStdProps {
   registrationTypes: any;
   gameStatus: GameStatus;
+  user: User | undefined;
 }
 
-export const AssignmentsStd: FC<AssignmentsStdProps> = ({registrationTypes, gameStatus}: AssignmentsStdProps) => {
+export const AssignmentsStd: FC<AssignmentsStdProps> = ({registrationTypes, gameStatus, user}: AssignmentsStdProps) => {
   const assignmentService = new AssignmentService();
   const gameId = Number(useContext(Blitzkontext).currentGame.id);
 
   const checkRegistrationType = (targetType: string): boolean => {
-    const filtered = registrationTypes.filter((registrationType: any) => {
+    const filtered = registrationTypes?.filter((registrationType: any) => {
       return targetType === registrationType.assignmentType
     });
-    return filtered.length > 0;
+    return filtered?.length > 0;
   }
 
   const [registeredAsPlayer, setRegisteredAsPlayer] = useState(checkRegistrationType('Player'));
@@ -57,27 +59,29 @@ export const AssignmentsStd: FC<AssignmentsStdProps> = ({registrationTypes, game
       <h5>{statusDescription}</h5>
       {
         registeredAsPlayer
-        ? <Button
+        && <Button
             color={gameStatus === GameStatus.REGISTRATION ? "inherit" : "error"}
             variant="contained"
             onClick={() => { handleUnregisterUserClick('Player'); }}
           >
             {gameStatus === GameStatus.REGISTRATION ? 'Leave Player Pool' : "Abandon Game"}
           </Button>
-        : <Button
-            color="inherit"
-            variant="contained"
-            onClick={() => {handleRegisterUserClick('Player'); }}
-          >
-            {
-              registeredAsReserve || registeredAsSpectator
-                ?
-              'Switch to Player'
-                :
-              'Register As Player'
-            }
-          </Button>
-      } <br/>
+      }
+      { user &&
+        <Button
+          color="inherit"
+          variant="contained"
+          onClick={() => {handleRegisterUserClick('Player'); }}
+        >
+          {
+            registeredAsReserve || registeredAsSpectator
+              ?
+            'Switch to Player'
+              :
+            'Register As Player'
+          }
+        </Button>
+      }
 
       {
         registeredAsReserve
