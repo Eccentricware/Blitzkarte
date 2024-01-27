@@ -4,7 +4,7 @@ import TurnHistoryResults from "../history-tab/TurnHistoryResults";
 
 interface HistoryTabProps {
   turns: any[];
-  turnHistoryResult: UseQueryResult<any>;
+  turnHistoryResult: UseQueryResult<any> | undefined;
   historyOps: any;
 }
 
@@ -35,7 +35,7 @@ export const HistoryTab: FC<HistoryTabProps> = ({turns, turnHistoryResult, histo
         }
       </select>
       {
-        turnHistoryResult.data &&
+        turnHistoryResult?.data &&
         <TurnHistoryResults turnResults={turnHistoryResult.data} />
       }
     </div>
