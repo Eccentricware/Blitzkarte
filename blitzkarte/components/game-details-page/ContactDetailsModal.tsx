@@ -47,7 +47,7 @@ const ContactDetailsModal: FC<ContactDetailsModalProps> = ({
             }
           </b>
         </div>
-        <TextField
+        {/* <TextField
           label="In Game Chat"
           variant="outlined"
           size="small"
@@ -57,7 +57,7 @@ const ContactDetailsModal: FC<ContactDetailsModalProps> = ({
           autoComplete="off"
           disabled
           fullWidth
-        />
+        /> */}
         {
           focusContact?.contactPreferences.email &&
           <TextField

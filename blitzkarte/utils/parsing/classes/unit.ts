@@ -1,5 +1,7 @@
 import { Pin } from "./pin";
 import { convertSpaceToCamelCase } from "../../general/formatters";
+import { UnitType } from "../../../models/enumeration/unit-enumerations";
+import { tr } from "date-fns/locale";
 
 export class Unit {
   name: string;
@@ -13,13 +15,13 @@ export class Unit {
   countryKey!: string;
   valid: boolean;
   errors: string[] = [];
-  validUnitTypes: string[] = [
-    'a', 'A', 'army', 'Army', 'ARMY',
-    'f', 'F', 'fleet', 'Fleet', 'FLEET',
-    'w', 'W', 'wing', 'Wing', 'WING',
-    'n', 'N', 'nuke', 'Nuke', 'NUKE',
-    'g', 'G', 'garrison', 'Garrison', 'GARRSION'
-  ];
+  validUnitTypes = {
+    army: ['a', 'A', 'army', 'Army', 'ARMY'],
+    fleet: ['f', 'F', 'fleet', 'Fleet', 'FLEET'],
+    wing: ['w', 'W', 'wing', 'Wing', 'WING'],
+    nuke: ['n', 'N', 'nuke', 'Nuke', 'NUKE'],
+    garrison: ['g', 'G', 'garrison', 'Garrison', 'GARRSION']
+  };
 
   constructor(node: Pin, country: string) {
     this.name = `${country}_${node.unit}_${node.name}`;
@@ -43,11 +45,28 @@ export class Unit {
   }
 
   validateType(): boolean {
-    if (this.type && !this.validUnitTypes.includes(this.type)) {
+    if (!this.type) {
+      this.errors.push(`Invalid Unit Type: ${this.name}`);
+      return false;
+    } else if (this.validUnitTypes.army.includes(this.type)) {
+      this.type = UnitType.ARMY;
+      return true;
+    } else if (this.validUnitTypes.fleet.includes(this.type)) {
+      this.type = UnitType.FLEET;
+      return true;
+    } else if (this.validUnitTypes.wing.includes(this.type)) {
+      this.type = UnitType.WING;
+      return true;
+    } else if (this.validUnitTypes.nuke.includes(this.type)) {
+      this.type = UnitType.NUKE;
+      return true;
+    } else if (this.validUnitTypes.garrison.includes(this.type)) {
+      this.type = UnitType.GARRISON;
+      return true;
+    } else {
       this.errors.push(`Invalid Unit Type: ${this.name}`);
       return false;
     }
-    return true;
   }
 
   validateCountry(): boolean {
