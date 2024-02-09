@@ -44,5 +44,20 @@ export interface NewGameData {
   voteDeadlineExtension: boolean | undefined;
   blindCreator: boolean;
   partialRosterStart: boolean;
+  coalitionSchedule: CoalitionSchedule;
   dbRows: any;
+}
+
+interface CoalitionSchedule {
+  baseRequired: number;
+  totalVotes: number;
+  penalties: {
+    a: number | undefined;
+    b: number | undefined;
+    c: number | undefined;
+    d: number | undefined;
+    e: number | undefined;
+    f: number | undefined;
+    g: number | undefined;
+  }
 }

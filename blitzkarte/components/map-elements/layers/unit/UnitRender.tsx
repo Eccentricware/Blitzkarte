@@ -12,7 +12,6 @@ export const UnitRender: FC<Props> = ({unit}: Props) => {
   const unitName = unit.name.split(' ').join('_');
   const unitSVG = UnitSVGs[unitType];
   const flagSVG = FlagSVGs[unit.countryKey];
-  const unitLoc = unit.status === 'Retreat' ? unit.eventLoc : unit.loc;
 
   return (
     <Blitzkontext.Consumer>

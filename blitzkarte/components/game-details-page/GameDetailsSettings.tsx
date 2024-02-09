@@ -82,6 +82,15 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameDetailsSe
     const [finalReadinessCheck, setFinalReadinessCheck] = useState(gameData.finalReadinessCheck);
     const [partialRosterStart, setPartialRosterStart] = useState(gameData.partialRosterStart);
 
+    const [baseRequired, setBaseRequired] = useState(gameData.coalitionSchedule.baseFinal);
+    const [penaltyA, setPenaltyA] = useState(gameData.coalitionSchedule.penalties.a);
+    const [penaltyB, setPenaltyB] = useState(gameData.coalitionSchedule.penalties.b);
+    const [penaltyC, setPenaltyC] = useState(gameData.coalitionSchedule.penalties.c);
+    const [penaltyD, setPenaltyD] = useState(gameData.coalitionSchedule.penalties.d);
+    const [penaltyE, setPenaltyE] = useState(gameData.coalitionSchedule.penalties.e);
+    const [penaltyF, setPenaltyF] = useState(gameData.coalitionSchedule.penalties.f);
+    const [penaltyG, setPenaltyG] = useState(gameData.coalitionSchedule.penalties.g);
+
     const gameRules: any[] = [
       {
         key: 'untf',
@@ -109,6 +118,17 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameDetailsSe
       firstOrdersTimeSpan,
       firstOrdersTimeType
     ]);
+
+    useEffect(() => {
+      setBaseRequired(gameData.coalitionSchedule.baseRequired);
+      setPenaltyA(gameData.coalitionSchedule.penalties.a);
+      setPenaltyB(gameData.coalitionSchedule.penalties.b);
+      setPenaltyC(gameData.coalitionSchedule.penalties.c);
+      setPenaltyD(gameData.coalitionSchedule.penalties.d);
+      setPenaltyE(gameData.coalitionSchedule.penalties.e);
+      setPenaltyF(gameData.coalitionSchedule.penalties.f);
+      setPenaltyG(gameData.coalitionSchedule.penalties.g);
+    }, [gameData.coalitionSchedule.baseRequired]);
 
     const deadlineOps: any = {
       gameStart: gameStart,
@@ -207,6 +227,24 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameDetailsSe
       partialRosterStart: partialRosterStart,
       setPartialRosterStart: setPartialRosterStart,
       isAdmin: gameData.isAdmin,
+      baseRequired: baseRequired,
+      setBaseRequired: setBaseRequired,
+      penaltyA: penaltyA,
+      setPenaltyA: setPenaltyA,
+      penaltyB: penaltyB,
+      setPenaltyB: setPenaltyB,
+      penaltyC: penaltyC,
+      setPenaltyC: setPenaltyC,
+      penaltyD: penaltyD,
+      setPenaltyD: setPenaltyD,
+      penaltyE: penaltyE,
+      setPenaltyE: setPenaltyE,
+      penaltyF: penaltyF,
+      setPenaltyF: setPenaltyF,
+      penaltyG: penaltyG,
+      setPenaltyG: setPenaltyG,
+      totalVotes: gameData.coalitionSchedule.totalVotes,
+      highestPenalty: gameData.coalitionSchedule.highestPenalty,
       gameStatus: gameData.gameStatus
     };
 
@@ -296,7 +334,18 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameDetailsSe
           voteDeadlineExtension: voteDeadlineExtension,
           blindCreator: blindCreator,
           partialRosterStart: partialRosterStart,
-          dbRows: bkCtx.newGame.dbRows
+          coalitionSchedule: {
+            baseRequired: baseRequired,
+            penalties: {
+              a: penaltyA,
+              b: penaltyB,
+              c: penaltyC,
+              d: penaltyD,
+              e: penaltyE,
+              f: penaltyF,
+              g: penaltyG
+            }
+          }
         };
 
         gameRequestService.update(updateData)

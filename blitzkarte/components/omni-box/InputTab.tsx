@@ -10,9 +10,10 @@ import { erzahler } from '../../utils/general/erzahler';
 import { SchedulerService } from '../../services/scheduler-service';
 import { GameRequestService } from '../../services/request-services/game-request-service';
 import { NewGameData } from '../../models/objects/games/NewGameDataObject';
+import { InputObject } from '../../models/objects/OmniBoxDataObject';
 
 interface InputProps {
-  input: any;
+  input: InputObject;
   debug: any;
 }
 
@@ -67,6 +68,15 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
   const [finalReadinessCheck, setFinalReadinessCheck] = useState(false);
   const [partialRosterStart, setPartialRosterStart] = useState(false);
 
+  const [baseRequired, setBaseRequired] = useState(input.coalitionSchedule.baseRequired);
+  const [penaltyA, setPenaltyA] = useState(input.coalitionSchedule.penalties.a);
+  const [penaltyB, setPenaltyB] = useState(input.coalitionSchedule.penalties.b);
+  const [penaltyC, setPenaltyC] = useState(input.coalitionSchedule.penalties.c);
+  const [penaltyD, setPenaltyD] = useState(input.coalitionSchedule.penalties.d);
+  const [penaltyE, setPenaltyE] = useState(input.coalitionSchedule.penalties.e);
+  const [penaltyF, setPenaltyF] = useState(input.coalitionSchedule.penalties.f);
+  const [penaltyG, setPenaltyG] = useState(input.coalitionSchedule.penalties.g);
+
   const [submitting, setSubmitting] = useState(false);
 
   const gameRules: any[] = [
@@ -93,6 +103,20 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
     ordersTime,
     firstOrdersTimeSpan,
     firstOrdersTimeType
+  ]);
+
+  useEffect(() => {
+    setBaseRequired(input.coalitionSchedule.baseRequired);
+    setPenaltyA(input.coalitionSchedule.penalties.a);
+    setPenaltyB(input.coalitionSchedule.penalties.b);
+    setPenaltyC(input.coalitionSchedule.penalties.c);
+    setPenaltyD(input.coalitionSchedule.penalties.d);
+    setPenaltyE(input.coalitionSchedule.penalties.e);
+    setPenaltyF(input.coalitionSchedule.penalties.f);
+    setPenaltyG(input.coalitionSchedule.penalties.g);
+  }, [
+    input.coalitionSchedule.baseRequired,
+    input.coalitionSchedule.penalties
   ]);
 
   const deadlineOps: any = {
@@ -186,7 +210,25 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
     finalReadinessCheck: finalReadinessCheck,
     setFinalReadinessCheck: setFinalReadinessCheck,
     partialRosterStart: partialRosterStart,
-    setPartialRosterStart: setPartialRosterStart
+    setPartialRosterStart: setPartialRosterStart,
+    baseRequired: baseRequired,
+    setBaseRequired: setBaseRequired,
+    penaltyA: penaltyA,
+    setPenaltyA: setPenaltyA,
+    penaltyB: penaltyB,
+    setPenaltyB: setPenaltyB,
+    penaltyC: penaltyC,
+    setPenaltyC: setPenaltyC,
+    penaltyD: penaltyD,
+    setPenaltyD: setPenaltyD,
+    penaltyE: penaltyE,
+    setPenaltyE: setPenaltyE,
+    penaltyF: penaltyF,
+    setPenaltyF: setPenaltyF,
+    penaltyG: penaltyG,
+    setPenaltyG: setPenaltyG,
+    totalVotes: input.coalitionSchedule.totalVotes,
+    highestPenalty: input.coalitionSchedule.highestPenalty
   };
 
   const handleDataInput = (fileString: string) => {
@@ -282,6 +324,19 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
           voteDeadlineExtension: voteDeadlineExtension,
           blindCreator: blindCreator,
           partialRosterStart: partialRosterStart,
+          coalitionSchedule: {
+            baseRequired: baseRequired,
+            totalVotes: input.coalitionSchedule.totalVotes,
+            penalties: {
+              a: penaltyA,
+              b: penaltyB,
+              c: penaltyC,
+              d: penaltyD,
+              e: penaltyE,
+              f: penaltyF,
+              g: penaltyG
+            }
+          },
           dbRows: bkCtx.newGame.dbRows
         };
 
