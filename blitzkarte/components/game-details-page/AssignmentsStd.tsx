@@ -1,10 +1,11 @@
 import { Button } from "@mui/material";
-import { FC, useContext, useState } from "react";
+import { FC, useState } from "react";
 import { AssignmentService } from "../../services/assignment-service";
-import Blitzkontext from "../../utils/Blitzkontext";
 import { GameStatus } from "../../models/enumeration/game-status-enum";
 import { getGameStatusDescription } from "../../utils/general/authors";
 import { User } from "firebase/auth";
+import { useRouter } from "next/router";
+import TravelExploreIcon from '@mui/icons-material/TravelExplore';
 
 interface AssignmentsStdProps {
   registrationTypes: any;
@@ -13,8 +14,9 @@ interface AssignmentsStdProps {
 }
 
 export const AssignmentsStd: FC<AssignmentsStdProps> = ({registrationTypes, gameStatus, user}: AssignmentsStdProps) => {
+  const router = useRouter();
   const assignmentService = new AssignmentService();
-  const gameId = Number(useContext(Blitzkontext).currentGame.id);
+  const gameId = Number(router.query.gameId);
 
   const checkRegistrationType = (targetType: string): boolean => {
     const filtered = registrationTypes?.filter((registrationType: any) => {
@@ -58,32 +60,46 @@ export const AssignmentsStd: FC<AssignmentsStdProps> = ({registrationTypes, game
       <h4>Game Status: {gameStatus}</h4>
       <h5>{statusDescription}</h5>
       {
-        registeredAsPlayer
-        && <Button
-            color={gameStatus === GameStatus.REGISTRATION ? "inherit" : "error"}
-            variant="contained"
-            onClick={() => { handleUnregisterUserClick('Player'); }}
-          >
-            {gameStatus === GameStatus.REGISTRATION ? 'Leave Player Pool' : "Abandon Game"}
-          </Button>
+        registeredAsPlayer &&
+        <Button
+          color={gameStatus === GameStatus.REGISTRATION ? "inherit" : "error"}
+          variant="contained"
+          onClick={() => { handleUnregisterUserClick('Player'); }}
+        >
+          {gameStatus === GameStatus.REGISTRATION ? 'Leave Player Pool' : "Abandon Game"}
+        </Button>
       }
-      { user &&
+      {
+        (user && !registeredAsPlayer) &&
         <Button
           color="inherit"
           variant="contained"
           onClick={() => {handleRegisterUserClick('Player'); }}
         >
-          {
-            registeredAsReserve || registeredAsSpectator
-              ?
-            'Switch to Player'
-              :
-            'Register As Player'
-          }
+          Register As Player
         </Button>
       }
-
-      {
+      <div
+          style={{
+            display: 'flex',
+            color: 'white',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '50px',
+            width: '50%',
+            fontSize: '1.5rem',
+            fontWeight: 'bold',
+            cursor: 'pointer',
+            borderRadius: '5px',
+            backgroundColor: 'green',
+          }}
+          onClick={() => {
+            window.location.href = `/game/${gameId}`;
+          }}
+        >
+          Go To Map <TravelExploreIcon fontSize="large"/>
+        </div>
+      {/* {
         registeredAsReserve
           &&
         <Button
@@ -93,8 +109,8 @@ export const AssignmentsStd: FC<AssignmentsStdProps> = ({registrationTypes, game
         >
           Leave Reserve Pool
         </Button>
-      }
-      {
+      } */}
+      {/* {
         (registeredAsPlayer && gameStatus === GameStatus.REGISTRATION)
         || registeredAsSpectator
         || registeredAsReserve
@@ -112,8 +128,8 @@ export const AssignmentsStd: FC<AssignmentsStdProps> = ({registrationTypes, game
             'Join Reserve Pool'
           }
         </Button>
-      }
-        <br/>
+      } */}
+        {/* <br/>
       {
         registeredAsSpectator
           &&
@@ -124,8 +140,8 @@ export const AssignmentsStd: FC<AssignmentsStdProps> = ({registrationTypes, game
         >
           Leave Spectator Pool
         </Button>
-      }
-      {
+      } */}
+      {/* {
         (registeredAsPlayer && gameStatus === GameStatus.REGISTRATION)
         || registeredAsReserve
           &&
@@ -142,7 +158,7 @@ export const AssignmentsStd: FC<AssignmentsStdProps> = ({registrationTypes, game
             'Join Spectator Pool'
           }
         </Button>
-      }
+      } */}
       <br/>
     </div>
   )
