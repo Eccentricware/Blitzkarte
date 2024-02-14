@@ -20,7 +20,7 @@ export const LabelPinRenders: FC<LabelPinRendersProps> = ({labelPinData}: LabelP
                 <text className={`label ${label.type}-label`}
                   transform={`translate(${label.loc[0] - 16000} ${label.loc[1]})`}
                   pointerEvents="none"
-                  fontSize={label.type === 'coast' ? 64 : 100}
+                  fontSize={label.type === 'coast' ? 96 : 125}
                   fill={label.fill}
                 >
                   {label.text}
@@ -28,7 +28,7 @@ export const LabelPinRenders: FC<LabelPinRendersProps> = ({labelPinData}: LabelP
                 <text className={`label ${label.type}-label`}
                   transform={`translate(${label.loc[0]} ${label.loc[1]})`}
                   pointerEvents="none"
-                  fontSize={label.type === 'coast' ? 64 : 100}
+                  fontSize={label.type === 'coast' ? 96 : 125}
                   fill={label.fill}
                 >
                   {label.text}
@@ -36,7 +36,7 @@ export const LabelPinRenders: FC<LabelPinRendersProps> = ({labelPinData}: LabelP
                 <text className={`label ${label.type}-label`}
                   transform={`translate(${label.loc[0] + 16000} ${label.loc[1]})`}
                   pointerEvents="none"
-                  fontSize={label.type === 'coast' ? 64 : 100}
+                  fontSize={label.type === 'coast' ? 96 : 125}
                   fill={label.fill}
                 >
                   {label.text}
