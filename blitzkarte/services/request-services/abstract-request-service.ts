@@ -83,7 +83,7 @@ export class AbstractRequestService {
   ): Promise<any> {
     idToken = idToken ? idToken : '';
 
-    return fetch(`${this.host}:${this.port}/${route}`, {
+    return await fetch(`${this.host}:${this.port}/${route}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

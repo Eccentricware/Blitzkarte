@@ -12,10 +12,27 @@ interface OrdersProps {
 }
 
 export const OrdersTab: FC<OrdersProps> = ({options, orders, nudge}: OrdersProps) => {
-  const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
   const orderRequestService = new OrderRequestService();
+
+  const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
+  const [showAcknowledge, setShowAcknowledge] = useState<boolean>(false);
+  const [showError, setShowError] = useState<boolean>(false);
+
   const handleSubmitOrdersClick = () => {
-    orderRequestService.submitOrders(orders);
+    orderRequestService.submitOrders(orders)
+      .then((response) => {
+        if (response.success) {
+          setShowAcknowledge(true);
+          setTimeout(() => {
+            setShowAcknowledge(false);
+          }, 3000);
+        } else {
+          setShowError(true);
+          setTimeout(() => {
+            setShowError(false);
+          }, 3000);
+        }
+      });
   };
 
   console.log('OrdersTab.orders', orders);
@@ -52,6 +69,8 @@ export const OrdersTab: FC<OrdersProps> = ({options, orders, nudge}: OrdersProps
           Submit Orders
         </Button>
       }
+      { showAcknowledge && <div>Orders submitted successfully!</div> }
+      { showError && <div>Orders failed to submit!</div> }
     </div>
   )
 }

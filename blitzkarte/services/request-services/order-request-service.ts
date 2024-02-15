@@ -16,6 +16,6 @@ export class OrderRequestService extends AbstractRequestService {
   }
 
   async submitOrders(orders: TurnOrders): Promise<any> {
-    this.post(`orders/submit`, {orders: orders});
+    return this.post(`orders/submit`, {orders: orders});
   }
 }
