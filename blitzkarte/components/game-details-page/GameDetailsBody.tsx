@@ -1,12 +1,14 @@
-import { Grid } from "@mui/material";
+import { Button, Grid, Modal, TextField } from "@mui/material";
 import { User } from "firebase/auth";
-import { FC, useEffect, useState } from "react";
+import { CSSProperties, FC, useEffect, useState } from "react";
 import { useQuery, UseQueryResult } from "react-query";
 import { AssignmentRequestService } from "../../services/request-services/assignment-request-service";
 import { GameRequestService } from "../../services/request-services/game-request-service";
 import { AssignmentsPanel } from "./AssignmentsPanel";
 import { GameDetailsSettings } from "./GameDetailsSettings";
-import TravelExploreIcon from '@mui/icons-material/TravelExplore';
+import { MiscDetailsPanel } from "./MiscDetailsPanel";
+import { AssignmentDetails, ContactPreferences } from "../../models/objects/AssignmentRowObject";
+import ContactDetailsModal from "./ContactDetailsModal";
 
 interface GameDetailsBodyProps {
   user: User | undefined;
@@ -22,6 +24,10 @@ const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBo
   const [gameName, setGameName] = useState('');
   const [gameNameAvailable, setGameNameAvailable] = useState(true);
   const [statusTime, setStatusTime] = useState<string>('Loading Time');
+
+  const [contactDetailsOpen, setContactDetailsOpen] = useState(false);
+  const [focusContact, setFocusContact] = useState<AssignmentDetails | undefined>(undefined);
+  const [anchorEl, setAnchorEl] = useState<null | SVGSVGElement>(null);
 
   const gameDetailsQueryResult: UseQueryResult<any> = useQuery('gameDetailsQuery', () => {
     return gameRequestService.getGameDetails(gameId);
@@ -48,35 +54,56 @@ const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBo
   // if (error) {
   //   return <StallGlobe mode="error" message={'GameDetailsBody: Error'}/>
   // }
+  const handleContactDetailsOpen = (event: React.MouseEvent<SVGSVGElement>, contact: AssignmentDetails) => {
+    setFocusContact(contact);
+    setAnchorEl(event.currentTarget);
+    setContactDetailsOpen(true);
+  }
 
+  const handleContactDetailsClose = () => {
+    setContactDetailsOpen(false);
+    setAnchorEl(null);
+  }
 
   return (
-    <Grid container spacing={1}>
-      {/* <Grid item xs={12}>
-        Banner?
-      </Grid> */}
-      <Grid item xs={12} sm={4}>
-        {
-          gameDetailsQueryResult.data
-            &&
-          <GameDetailsSettings gameDetailsSettings={gameDetailsQueryResult.data}
-            assignmentRefetch={assignmentsQueryResult.refetch}
-          />
-        }
+    <div>
+      <Grid container spacing={1}>
+        <Grid item xs={12} sm={4}>
+          {
+            gameDetailsQueryResult.data
+              &&
+            <GameDetailsSettings gameDetailsSettings={gameDetailsQueryResult.data}
+              assignmentRefetch={assignmentsQueryResult.refetch}
+            />
+          }
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          {
+            gameDetailsQueryResult.data
+              &&
+            <AssignmentsPanel queryResult={assignmentsQueryResult}
+              gameId={gameId}
+              gameStatus={gameDetailsQueryResult.data.gameStatus}
+              handleContactDetailsOpen={handleContactDetailsOpen}
+            />
+          }
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          {
+            gameDetailsQueryResult.data
+              &&
+            <MiscDetailsPanel queryResult={gameDetailsQueryResult}
+              gameId={gameId}
+            />
+          }
+        </Grid>
       </Grid>
-      <Grid item xs={12} sm={7}>
-        {
-          gameDetailsQueryResult.data
-          &&
-          <AssignmentsPanel queryResult={assignmentsQueryResult}
-            gameId={gameId}
-            gameStatus={gameDetailsQueryResult.data.gameStatus}
-          />
-        }
-      </Grid>
-      <Grid item xs={12} sm={4}>
-      </Grid>
-    </Grid>
+      <ContactDetailsModal
+        contactDetailsOpen={contactDetailsOpen}
+        handleContactDetailsClose={handleContactDetailsClose}
+        focusContact={focusContact}
+      />
+    </div>
   )
 }
 
