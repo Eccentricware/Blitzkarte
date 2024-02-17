@@ -15,10 +15,13 @@ export interface OmniBoxData {
     errors: string[],
     criticals: string[]
   },
-  input: {
-    functions: {}
-    data: {}
-  }
+  input: InputObject;
+}
+
+export interface InputObject {
+  functions: any,
+  data: any,
+  coalitionSchedule: CoalitionSchedule;
 }
 
 export const initialOmniBoxData: OmniBoxData = {
@@ -37,6 +40,41 @@ export const initialOmniBoxData: OmniBoxData = {
   },
   input: {
     functions: {},
-    data: {}
+    data: {},
+    coalitionSchedule: {
+      totalVotes: 0,
+      baseRequired: 0,
+      countriesInCoalition: 3,
+      highestCoalition: '',
+      rankCounts: {
+        a: 0,
+        b: 0,
+        c: 0,
+        d: 0,
+        e: 0,
+        f: 0,
+        g: 0,
+      },
+      penalties: {
+        a: undefined,
+        b: undefined,
+        c: undefined,
+        d: undefined,
+        e: undefined,
+        f: undefined,
+        g: undefined
+      },
+      highestPenalty: 0
+    }
   }
+}
+
+export interface CoalitionSchedule {
+  totalVotes: number;
+  rankCounts: Record<string, number>;
+  baseRequired: number;
+  countriesInCoalition: number;
+  highestCoalition: string;
+  penalties: Record<string, number | undefined>;
+  highestPenalty: number;
 }

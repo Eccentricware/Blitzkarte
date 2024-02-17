@@ -1,6 +1,6 @@
 import { Button, FormControlLabel, FormGroup, MenuItem, Select, SelectChangeEvent, Switch, TextField } from '@mui/material';
 import { useRouter } from 'next/router';
-import React, { ChangeEvent } from 'react';
+import React, { CSSProperties, ChangeEvent } from 'react';
 import { User } from 'firebase/auth';
 import { FC, Fragment, useContext, useEffect, useState } from 'react';
 import { QueryClient, useQuery, useQueryClient } from 'react-query';
@@ -283,6 +283,10 @@ const UserSettings: FC<UserSettingsProps> = ({user}: UserSettingsProps) => {
     }
   }
 
+  const contactRowStyle: CSSProperties = {
+    padding: '10px'
+  }
+
   if (isFetching) {
     return <StallGlobe mode="querying" message={'UserSettings: Fetching'}/>
   }
@@ -543,52 +547,56 @@ const UserSettings: FC<UserSettingsProps> = ({user}: UserSettingsProps) => {
         <TimeZoneSelector timeZoneOps={timeZoneOps}/>
         <FormGroup>
           <h4>Contact Preferences</h4>
-          <Select
-            value={preferredContactMethod}
-            label="Preferred Contact Method"
-            onChange={(event: SelectChangeEvent<string>) => {
-              handlePreferredContactMethodChange(event.target.value);
-            }}
-          >
-            {
-              contactMethodsReady.length === 0 &&
-              <MenuItem value="none">Choose Preferred Contact Method</MenuItem>
-            }
-            <MenuItem
-              value="email"
-              disabled={!contactEmail}
+          <div style={contactRowStyle}>
+            <h5>Preferred Contact Method</h5>
+            <Select
+              label="Preferred Contact Method"
+              value={preferredContactMethod}
+              fullWidth
+              onChange={(event: SelectChangeEvent<string>) => {
+                handlePreferredContactMethodChange(event.target.value);
+              }}
             >
-              Email
-            </MenuItem>
-            <MenuItem
-              value="discord"
-              disabled={!contactDiscord}
-            >
-              Discord
-            </MenuItem>
-            <MenuItem
-              value="slack"
-              disabled={!contactSlack}
-            >
-              Slack
-            </MenuItem>
-            <MenuItem
-              value="inGame"
-              disabled
-            >
-              In Game Chat
-            </MenuItem>
-            <MenuItem
-              value="other"
-              disabled={!otherContactMethod || !otherContactHandle}
-            >
-              {otherContactMethod ? otherContactMethod : 'Other'}
-            </MenuItem>
-          </Select>
+              {
+                contactMethodsReady.length === 0 &&
+                <MenuItem value="none">Choose Preferred Contact Method</MenuItem>
+              }
+              <MenuItem
+                value="email"
+                disabled={!contactEmail}
+              >
+                Email
+              </MenuItem>
+              <MenuItem
+                value="discord"
+                disabled={!contactDiscord}
+              >
+                Discord
+              </MenuItem>
+              <MenuItem
+                value="slack"
+                disabled={!contactSlack}
+              >
+                Slack
+              </MenuItem>
+              <MenuItem
+                value="inGame"
+                disabled
+              >
+                In Game Chat
+              </MenuItem>
+              <MenuItem
+                value="other"
+                disabled={!otherContactMethod || !otherContactHandle}
+              >
+                {otherContactMethod ? otherContactMethod : 'Other'}
+              </MenuItem>
+            </Select>
+          </div>
           <FormControlLabel
             label="Use In Game Chat"
             labelPlacement="start"
-            style={{alignSelf: 'flex-start'}}
+            style={{alignSelf: 'flex-start', padding: '10px'}}
             value={inGame}
             control={
               <Switch
@@ -602,6 +610,7 @@ const UserSettings: FC<UserSettingsProps> = ({user}: UserSettingsProps) => {
             label="Contact Email"
             variant="outlined"
             value={contactEmail}
+            style={contactRowStyle}
             onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
               handleContactEmailChange(event.target.value);
             }}
@@ -610,6 +619,7 @@ const UserSettings: FC<UserSettingsProps> = ({user}: UserSettingsProps) => {
             label="Discord Username"
             variant="outlined"
             value={contactDiscord}
+            style={contactRowStyle}
             onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
               handleDiscordUsernameChange(event.target.value);
             }}
@@ -618,6 +628,7 @@ const UserSettings: FC<UserSettingsProps> = ({user}: UserSettingsProps) => {
             label="Blitzkarte Slack Username"
             variant="outlined"
             value={contactSlack}
+            style={contactRowStyle}
             onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
               handleSlackUsernameChange(event.target.value);
             }}
@@ -627,6 +638,8 @@ const UserSettings: FC<UserSettingsProps> = ({user}: UserSettingsProps) => {
               label="Other Contact Method"
               variant="outlined"
               value={otherContactMethod}
+              style={contactRowStyle}
+              fullWidth
               onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
                 handleOtherContactMethodChange(event.target.value);
               }}
@@ -635,6 +648,8 @@ const UserSettings: FC<UserSettingsProps> = ({user}: UserSettingsProps) => {
               label="Other Contact Username"
               variant="outlined"
               value={otherContactHandle}
+              style={contactRowStyle}
+              fullWidth
               onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => {
                 handleOtherContactUsernameChange(event.target.value);
               }}

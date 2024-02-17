@@ -11,8 +11,7 @@ import { Terrain } from '../classes/terrain';
 import { initialRenderData, RenderData } from '../../../models/objects/RenderDataObject';
 import { FinalStatusCheck, initialFinalStatusCheck } from '../../../models/objects/FinalStatusCheckObject';
 import { NodeLink } from '../classes/nodeLink';
-import { initialOmniBoxData, OmniBoxData } from '../../../models/objects/OmniBoxDataObject';
-import { convertSnakeToTitleCase } from '../../general/formatters';
+import { CoalitionSchedule, initialOmniBoxData, OmniBoxData } from '../../../models/objects/OmniBoxDataObject';
 
 export class Parser {
   // Logic
@@ -25,6 +24,31 @@ export class Parser {
   labels: LabelPin[] = [];
   labelLines: LabelLine[] = [];
   countries: Country[] = [];
+  coalitionSchedule: CoalitionSchedule = {
+    totalVotes: 0,
+    baseRequired: 0,
+    countriesInCoalition: 3,
+    highestCoalition: '',
+    rankCounts: {
+      a: 0,
+      b: 0,
+      c: 0,
+      d: 0,
+      e: 0,
+      f: 0,
+      g: 0,
+    },
+    penalties: {
+      a: undefined,
+      b: undefined,
+      c: undefined,
+      d: undefined,
+      e: undefined,
+      f: undefined,
+      g: undefined
+    },
+    highestPenalty: 0
+  }
   // For table sorting
   countryNames: string[] = [];
   countryRanks: string[] = [];
@@ -38,7 +62,7 @@ export class Parser {
     labels: {},
     labelLines: {},
     countries: {},
-    units: {}
+    units: {},
   }
   dbRows = {
     provinces: {},
@@ -49,7 +73,8 @@ export class Parser {
     labels: {},
     labelLines: {},
     countries: {},
-    units: {}
+    units: {},
+
   };
   activeProvince: boolean = false;
   warnings: string[] = [];
@@ -85,11 +110,14 @@ export class Parser {
     this.cityReferences();
     this.unitReferences();
     this.provinceReferences();
+    this.countryReferences();
     this.validateProvinces();
     this.validateNodes();
     this.validateCountries();
     this.sortCountries();
+    this.setCoalitionSchedule();
 
+    initialOmniBoxData.input.coalitionSchedule = this.coalitionSchedule;
     initialOmniBoxData.debug.warnings = this.warnings;
     initialOmniBoxData.debug.errors = this.errors;
     initialOmniBoxData.debug.criticals = this.criticals;
@@ -363,10 +391,12 @@ export class Parser {
           province.cityType = 'capital';
           province.owner = province.country;
           province.status = 'active';
+          this.coalitionSchedule.totalVotes++;
           break;
         case 'v':
           province.cityType = 'vote';
           province.status = 'dormant';
+          this.coalitionSchedule.totalVotes++;
           break;
         case 's':
           province.cityType = 'supply';
@@ -419,6 +449,12 @@ export class Parser {
     });
   }
 
+  countryReferences() {
+    this.countries.forEach(country => {
+      this.coalitionSchedule.rankCounts[country.rank]++;
+    });
+  }
+
   sortCountries() {
     while (this.countryNames.length > 0) {
       let spliceIndex: number = 0;
@@ -438,6 +474,72 @@ export class Parser {
 
       this.countryNames.splice(spliceIndex, 1);
       this.countryRanks.splice(spliceIndex, 1);
+    }
+  }
+
+  setCoalitionSchedule() {
+    if (this.coalitionSchedule.rankCounts['g'] > 0) {
+      this.coalitionSchedule.penalties['g'] = 0;
+      this.coalitionSchedule.penalties['f'] = 1;
+      this.coalitionSchedule.penalties['e'] = 2;
+      this.coalitionSchedule.penalties['d'] = 4;
+      this.coalitionSchedule.penalties['c'] = 6;
+      this.coalitionSchedule.penalties['b'] = 7;
+      this.coalitionSchedule.penalties['a'] = 9;
+
+    } else if (this.coalitionSchedule.rankCounts['f'] > 0) {
+      this.coalitionSchedule.penalties['f'] = 0;
+      this.coalitionSchedule.penalties['e'] = 1;
+      this.coalitionSchedule.penalties['d'] = 2;
+      this.coalitionSchedule.penalties['c'] = 5;
+      this.coalitionSchedule.penalties['b'] = 7;
+      this.coalitionSchedule.penalties['a'] = 9;
+
+    } else if (this.coalitionSchedule.rankCounts['e'] > 0) {
+      this.coalitionSchedule.penalties['e'] = 0;
+      this.coalitionSchedule.penalties['d'] = 1;
+      this.coalitionSchedule.penalties['c'] = 3;
+      this.coalitionSchedule.penalties['b'] = 6;
+      this.coalitionSchedule.penalties['a'] = 9;
+
+    } else if (this.coalitionSchedule.rankCounts['d'] > 0) {
+      this.coalitionSchedule.penalties['d'] = 0;
+      this.coalitionSchedule.penalties['c'] = 2;
+      this.coalitionSchedule.penalties['b'] = 5;
+      this.coalitionSchedule.penalties['a'] = 9;
+
+    } else if (this.coalitionSchedule.rankCounts['c'] > 0) {
+      this.coalitionSchedule.penalties['c'] = 0;
+      this.coalitionSchedule.penalties['b'] = 3;
+      this.coalitionSchedule.penalties['a'] = 9;
+
+    } else if (this.coalitionSchedule.rankCounts['b'] > 0) {
+      this.coalitionSchedule.penalties['b'] = 0;
+      this.coalitionSchedule.penalties['a'] = 9;
+
+    } else {
+      this.coalitionSchedule.penalties['a'] = 0;
+    }
+
+    this.coalitionSchedule.baseRequired = Math.ceil(this.coalitionSchedule.totalVotes / 2);
+
+    let ranks = Object.keys(this.coalitionSchedule.rankCounts).sort();
+
+    let rankString = '';
+    ranks.forEach(rank => {
+      if (this.coalitionSchedule.rankCounts[rank] > 0) {
+        let rankSubString = '';
+        while (rankSubString.length < this.coalitionSchedule.rankCounts[rank]) {
+          rankSubString += rank;
+        }
+        rankString += rankSubString;
+      }
+    });
+
+    this.coalitionSchedule.highestCoalition = rankString.slice(0, this.coalitionSchedule.countriesInCoalition);
+    for (let rankIndex = 0; rankIndex < this.coalitionSchedule.highestCoalition.length; rankIndex++) {
+      this.coalitionSchedule.highestPenalty +=
+        this.coalitionSchedule.penalties[this.coalitionSchedule.highestCoalition[rankIndex]]!;
     }
   }
 
