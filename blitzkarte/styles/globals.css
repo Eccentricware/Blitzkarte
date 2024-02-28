@@ -168,7 +168,7 @@ text {
 }
 
 .vote-star-outline {
-  stroke-width: 5px;
+  stroke-width: 10px;
 }
 
 .vote-star-outline.capital.active {
@@ -177,7 +177,7 @@ text {
   /* stroke-width: 5px; */
 }
 
-.vote-star-outline.voting-center.claimed {
+.vote-star-outline.voting-center.active {
   stroke: black;
   fill: red;
   /* stroke-width: 5px; */
@@ -209,6 +209,10 @@ text {
 
 .vote-star-right.capital.active {
   fill: gold;
+}
+
+.vote-star-right.capital.occupied {
+  fill: white;
 }
 
 .vote-star-right.capital.bombarded {
