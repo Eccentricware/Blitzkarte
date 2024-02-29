@@ -2,7 +2,7 @@ import { getAuth } from "firebase/auth";
 import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import GameDetailsBody from "../../components/game-details-page/GameDetailsBody";
 import StallGlobe from "../../components/icons/StallGlobe";
@@ -15,9 +15,11 @@ const GameDetailsPage: NextPage = () => {
   const [user, loading, error] = useAuthState(auth);
   const bkCtx = useContext(Blitzkontext);
   const router = useRouter();
-  const gameId: number = Number(router.query.gameId);
+  const [gameId, setGameId] = useState<number>(Number(router.query.gameId));
 
-  // console.log('GameDetailsPage: user', user);
+  useEffect(() => {
+    setGameId(Number(router.query.gameId));
+  }, [router.query.gameId]);
 
   if (loading) {
     return (
