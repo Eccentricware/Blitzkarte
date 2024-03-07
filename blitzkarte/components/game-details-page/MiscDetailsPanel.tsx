@@ -20,7 +20,7 @@ export const MiscDetailsPanel: FC<MiscDetailsPanelProps> = ({gameId, queryResult
       </div>
       <div style={miscSection}>
         <h3>Coalition Schedules</h3>
-        <div>With 81 votes in play, defaults to 41 base with ABCDE Penatlies:</div>
+        <div>With 81 votes in play, defaults to 41 base with ABCDE Penalties:</div>
         <div>+9, +6, +3, +1, +0</div>
         <div>EEE: 41, ABB: 62, ETC: xyz</div>
       </div>
