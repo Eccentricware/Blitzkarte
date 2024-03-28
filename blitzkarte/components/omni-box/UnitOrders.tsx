@@ -7,10 +7,10 @@ import Blitzkontext from "../../utils/Blitzkontext";
 interface UnitProps {
   unit: UnitOptionsFinalized;
   orders: any;
-  nudge: any;
+  // nudge: any;
 }
 
-export const UnitOrders: FC<UnitProps> = ({unit, orders, nudge}: UnitProps) => {
+export const UnitOrders: FC<UnitProps> = ({unit, orders}: UnitProps) => {
   const [order, setOrder] = useState<Order>(orders.find((order: any) => unit.unitId === order.orderedUnitId));
 
   const handleOrderTypeChange = (orderType: string) => {
@@ -78,7 +78,7 @@ export const UnitOrders: FC<UnitProps> = ({unit, orders, nudge}: UnitProps) => {
       }
 
       setOrder(updatedOrder);
-      nudge.set(!nudge.get);
+      // nudge.set(!nudge.get);
     // }
   }
 
@@ -91,7 +91,7 @@ export const UnitOrders: FC<UnitProps> = ({unit, orders, nudge}: UnitProps) => {
       updatedOrder.eventLoc = destination.loc;
       setOrder(updatedOrder);
     }
-    nudge.set(!nudge.get);
+    // nudge.set(!nudge.get);
   }
 
   const handleMoveTransportedDestinationChange = (destinationId: string) => {
@@ -103,7 +103,7 @@ export const UnitOrders: FC<UnitProps> = ({unit, orders, nudge}: UnitProps) => {
       updatedOrder.eventLoc = destination.loc;
       setOrder(updatedOrder);
     }
-    nudge.set(!nudge.get);
+    // nudge.set(!nudge.get);
   }
 
   const handleNukeTargetChange = (destinationId: string) => {
@@ -115,7 +115,7 @@ export const UnitOrders: FC<UnitProps> = ({unit, orders, nudge}: UnitProps) => {
       updatedOrder.eventLoc = destination.loc;
       setOrder(updatedOrder);
     }
-    nudge.set(!nudge.get);
+    // nudge.set(!nudge.get);
   }
 
   const handleTransportedUnitChange = (unitId: string) => {
@@ -134,7 +134,7 @@ export const UnitOrders: FC<UnitProps> = ({unit, orders, nudge}: UnitProps) => {
         setOrder(updatedOrder);
       }
     }
-    nudge.set(!nudge.get);
+    // nudge.set(!nudge.get);
   }
 
   const handleTransportedDestinationChange = (destinationId: string) => {
@@ -148,7 +148,7 @@ export const UnitOrders: FC<UnitProps> = ({unit, orders, nudge}: UnitProps) => {
         setOrder(updatedOrder);
       }
     }
-    nudge.set(!nudge.get);
+    // nudge.set(!nudge.get);
   }
 
   const handleSupportTransportedUnitChange = (unitId: string) => {
@@ -167,7 +167,7 @@ export const UnitOrders: FC<UnitProps> = ({unit, orders, nudge}: UnitProps) => {
         setOrder(updatedOrder);
       }
     }
-    nudge.set(!nudge.get);
+    // nudge.set(!nudge.get);
   }
 
   const handleSupportTransportedDestinationChange = (destinationId: string) => {
@@ -181,7 +181,7 @@ export const UnitOrders: FC<UnitProps> = ({unit, orders, nudge}: UnitProps) => {
         setOrder(updatedOrder);
       }
     }
-    nudge.set(!nudge.get);
+    // nudge.set(!nudge.get);
   }
 
   const handleSupportUnitChange = (unitId: string) => {
@@ -200,7 +200,7 @@ export const UnitOrders: FC<UnitProps> = ({unit, orders, nudge}: UnitProps) => {
         setOrder(updatedOrder);
       }
     }
-    nudge.set(!nudge.get);
+    // nudge.set(!nudge.get);
   }
 
   const handleSupportDestinationChange = (destinationId: string) => {
@@ -214,7 +214,7 @@ export const UnitOrders: FC<UnitProps> = ({unit, orders, nudge}: UnitProps) => {
         setOrder(updatedOrder);
       }
     }
-    nudge.set(!nudge.get);
+    // nudge.set(!nudge.get);
   }
 
   return(

@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useEffect, useState } from "react";
+import { ChangeEvent, FC, useCallback, useEffect, useState } from "react";
 import { NominatableCountry, NominationOptions } from "../../models/objects/OptionsObjects";
 import { NominationOrder } from "../../models/objects/OrdersObjects";
 
@@ -14,12 +14,7 @@ export const NominationPanel: FC<NominationProps> = ({options, orders, setSubmit
   const [coalitionSignature, setCoalitionSignature] = useState<string>(orders.coalitionSignature);
   const [victoryReq, setVictoryReq] = useState<number | string>(options.victoryBase);
 
-  useEffect(() => {
-    updateCandidateOptionsLists();
-    updateThresholdDetails();
-  }, []);
-
-  const updateCandidateOptionsLists = () => {
+  const updateCandidateOptionsLists = useCallback(() => {
     const newCandidateOptions: NominatableCountry[][] = [];
 
     nominations.forEach((countryId: number) => {
@@ -31,9 +26,12 @@ export const NominationPanel: FC<NominationProps> = ({options, orders, setSubmit
     });
 
     setCandidateOptions(newCandidateOptions);
-  }
+  }, [
+    nominations,
+    options.countries
+  ])
 
-  const updateThresholdDetails = () => {
+  const updateThresholdDetails = useCallback(() => {
     let newVictoryReq = options.victoryBase;
     let nominationInvalid = false;
     let sameChecks: number[] = [];
@@ -56,9 +54,22 @@ export const NominationPanel: FC<NominationProps> = ({options, orders, setSubmit
     setCoalitionSignature(signature.sort().join('').toUpperCase());
     setSubmitDisabled(nominationInvalid);
     setVictoryReq(nominationInvalid ? 'N/A' : newVictoryReq);
-  }
+  }, [
+    nominations,
+    options.countries,
+    options.victoryBase,
+    setSubmitDisabled
+  ]);
 
-  const handleNominatedChange = (id: string, index: number) => {
+  useEffect(() => {
+    updateCandidateOptionsLists();
+    updateThresholdDetails();
+  }, [
+    updateCandidateOptionsLists,
+    updateThresholdDetails
+  ]);
+
+  const handleNominatedChange = useCallback((id: string, index: number) => {
     const countryId = Number(id);
     const newNominations = orders.countryIds;
 
@@ -76,7 +87,13 @@ export const NominationPanel: FC<NominationProps> = ({options, orders, setSubmit
     setNominations(newNominations);
     updateCandidateOptionsLists();
     updateThresholdDetails();
-  }
+  }, [
+    options.countries,
+    orders.countryIds,
+    orders.countryDetails,
+    updateCandidateOptionsLists,
+    updateThresholdDetails
+  ])
 
   return (
     <div>

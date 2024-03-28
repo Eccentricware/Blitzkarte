@@ -45,7 +45,7 @@ export const GameFinderBody: FC<GameFinderBodyProps> = ({user}: GameFinderBodyPr
 
   useEffect(() => {
     refetch();
-  }, [playing, creator, administrator]);
+  }, [playing, creator, administrator, refetch]);
 
   const settings: GameFinderSettings = {
     playing: playing,
