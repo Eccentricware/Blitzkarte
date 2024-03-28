@@ -1,8 +1,9 @@
-import { ChangeEvent, FC, Fragment, useEffect, useState } from "react";
+import { ChangeEvent, FC, Fragment, useCallback, useEffect, useState } from "react";
 import { BuildType } from "../../models/enumeration/unit-enumerations";
 import { AtRiskUnit, BuildLoc, DisbandOptions } from "../../models/objects/OptionsObjects";
 import { Build, DisbandOrders, NukeBuildInDisband } from "../../models/objects/OrdersObjects";
 import { BuildLocRender } from "./BuildsPanel";
+import { set } from "date-fns";
 
 interface DisbandProps {
   options: DisbandOptions;
@@ -23,13 +24,7 @@ export const DisbandsPanel: FC<DisbandProps> = ({options, orders, setSubmitDisab
 
   const [showNoNukeLocError, setShowNoNukeLocError] = useState<boolean>(false);
 
-  useEffect(() => {
-    updateExistingPresence(orders.unitsDisbanding);
-    updateNukeLocArrays();
-    checkSubmitDisabled();
-  }, []);
-
-  const updateExistingPresence = (unitsDisbanding: number[]) => {
+  const updateExistingPresence = useCallback((unitsDisbanding: number[]) => {
     const updatedExistingPresence: string[]
       = options.units
         .filter((unit: AtRiskUnit) => unit.unitId > 0 && !unitsDisbanding.includes(unit.unitId))
@@ -45,9 +40,12 @@ export const DisbandsPanel: FC<DisbandProps> = ({options, orders, setSubmitDisab
     }
 
     setExistingPresence(updatedExistingPresence);
-  }
+  }, [
+    options.units,
+    orders.nukeBuildDetails
+  ])
 
-  const updateNukeLocArrays = () => {
+  const updateNukeLocArrays = useCallback(() => {
     if (orders.nukeLocs?.length > 0) {
       const updatedNukeLocs: BuildLoc[][] = [];
 
@@ -61,7 +59,11 @@ export const DisbandsPanel: FC<DisbandProps> = ({options, orders, setSubmitDisab
 
       setNukeLocs(updatedNukeLocs);
     }
-  }
+  }, [
+    orders.nukeLocs,
+    nukeLocIds,
+    options.nukeLocs
+  ]);
 
   const handleDisbandCheckboxClick = (unitId: number) => {
     const newDisbandIds = orders.unitsDisbanding;
@@ -129,7 +131,7 @@ export const DisbandsPanel: FC<DisbandProps> = ({options, orders, setSubmitDisab
     updateExistingPresence(disbandedIds);
   }
 
-  const checkSubmitDisabled = () => {
+  const checkSubmitDisabled = useCallback(() => {
     const incorrectDisbandCount = disbandedIds.length !== options.disbandCount;
     let nukesNotAssigned = false;
     if (orders.nukeBuildDetails) {
@@ -142,7 +144,23 @@ export const DisbandsPanel: FC<DisbandProps> = ({options, orders, setSubmitDisab
       setShowNoNukeLocError(nukesNotAssigned);
     }
     setSubmitDisabled(incorrectDisbandCount || nukesNotAssigned);
-  }
+  }, [
+    disbandedIds,
+    options.disbandCount,
+    orders.nukeBuildDetails,
+    setSubmitDisabled
+  ])
+
+  useEffect(() => {
+    updateExistingPresence(orders.unitsDisbanding);
+    updateNukeLocArrays();
+    checkSubmitDisabled();
+  }, [
+    checkSubmitDisabled,
+    orders.unitsDisbanding,
+    updateExistingPresence,
+    updateNukeLocArrays
+  ]);
 
   return (
     <div>

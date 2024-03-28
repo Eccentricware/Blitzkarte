@@ -1,7 +1,8 @@
-import { ChangeEvent, FC, Fragment, useEffect, useState } from "react";
+import { ChangeEvent, FC, Fragment, useCallback, useEffect, useState } from "react";
 import { BuildType } from "../../models/enumeration/unit-enumerations";
 import { BuildLoc } from "../../models/objects/OptionsObjects";
 import { Build, BuildOrders } from "../../models/objects/OrdersObjects";
+import { get } from "http";
 
 interface Props {
   options: {
@@ -80,13 +81,9 @@ export const BuildsPanel: FC<Props> = ({options, orders}: Props) => {
   const [bankedBuildsRushingNukes, setBankedBuildsRushingNukes] = useState(getNukesRushedCount());
   const [bankedBuildsEnd, setBankedBuildsEnd] = useState(orders.bankedBuilds);
 
-  useEffect(() => {
-    updateBuildTypeArrays(orders.bankedBuilds);
-    updateLocationArrays();
-    updateBankedBuilds();
-  }, []);
 
-  const getPresence = (): UnitPresence => {
+
+  const getPresence = useCallback((): UnitPresence => {
     const armyPresence: string[]
       = orders.builds
         .filter((build: Build) => build.buildType === BuildType.ARMY)
@@ -121,9 +118,9 @@ export const BuildsPanel: FC<Props> = ({options, orders}: Props) => {
         ? orders.nukesReady.map((build: Build) => build.provinceName)
         : []
     }
-  }
+  }, [orders.builds, orders.nukesReady])
 
-  const updateBuildTypeArrays = (bankedBuilds: number) => {
+  const updateBuildTypeArrays = useCallback((bankedBuilds: number) => {
     const updatedBuildTypeArray: UnitBuildOption[][] = [];
     const presence = getPresence();
     const fullPresence = [...presence.army, ...presence.fleet, ...presence.wing, ...presence.nuke];
@@ -181,7 +178,12 @@ export const BuildsPanel: FC<Props> = ({options, orders}: Props) => {
     });
 
     setBuildTypes(updatedBuildTypeArray);
-  }
+  }, [
+    getPresence,
+    options.locations.sea,
+    orders.builds,
+    orders.nukeRange
+  ])
 
   const getNodeTypeFromBuildType = (buildType: BuildType | string): string => {
     switch(buildType) {
@@ -222,7 +224,7 @@ export const BuildsPanel: FC<Props> = ({options, orders}: Props) => {
     return options.locations[nodeType].find((loc: BuildLoc) => !presences.all.includes(loc.province));
   }
 
-  const updateLocationArrays = () => {
+  const updateLocationArrays = useCallback(() => {
     const presences = getPresence();
 
     const updatedBuildLocs: BuildLocRender[][] = [];
@@ -282,12 +284,17 @@ export const BuildsPanel: FC<Props> = ({options, orders}: Props) => {
 
     setBuildsLocs(updatedBuildLocs);
     setNukeLocs(updatedNukeLocs);
-  }
+  }, [
+    getPresence,
+    options.locations,
+    orders.builds,
+    orders.nukesReady
+  ]);
 
-  const updateBankedBuilds = () => {
+  const updateBankedBuilds = useCallback(() => {
     const bankedBuilds = orders.builds.filter((build: Build) => build.buildType === BuildType.BUILD).length;
     setAdjustmentsIncreasingRange(bankedBuilds);
-  }
+  }, [orders.builds])
 
   const handleBuildTypeChange = (type: string, index: number) => {
     const buildType: UnitBuildOption | undefined = buildTypes[index].find((buildType: UnitBuildOption) => buildType.id === Number(type));
@@ -446,6 +453,17 @@ export const BuildsPanel: FC<Props> = ({options, orders}: Props) => {
       updateLocationArrays();
     }
   }
+
+  useEffect(() => {
+    updateBuildTypeArrays(orders.bankedBuilds);
+    updateLocationArrays();
+    updateBankedBuilds();
+  }, [
+    orders.bankedBuilds,
+    updateBankedBuilds,
+    updateBuildTypeArrays,
+    updateLocationArrays
+  ]);
 
   return (
     <div>

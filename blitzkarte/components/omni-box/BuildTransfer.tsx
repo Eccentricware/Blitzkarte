@@ -1,5 +1,6 @@
-import { ChangeEvent, FC, useEffect, useState } from "react";
+import { ChangeEvent, FC, useCallback, useEffect, useState } from "react";
 import { TransferBuildOrder, TransferBuildsOption, TransferTechCountry } from "../../models/objects/OptionsObjects";
+import { tr } from "date-fns/locale";
 
 interface Props {
   transferOptions: {
@@ -15,24 +16,7 @@ export const BuildTransfer: FC<Props> = ({transferOptions, transferOrders}: Prop
   const [giftedCountryIds, setGiftedCountryIds] = useState<number[]>([]);
   const [rowRecipientsOptions, setRecipientOptions] = useState<TransferTechCountry[][] | undefined>(undefined);
 
-  useEffect(() => {
-    const countryIds = transferOrders.map((country: TransferBuildOrder) => country.recipientId );
 
-    if (remainingBuilds > 0) {
-      countryIds.push(0);
-
-      transferOrders.push({
-        recipientId: 0,
-        recipientName: '--Keep Builds--',
-        quantity: 0
-      });
-      setRecipientsArray(transferOrders);
-    }
-
-    setGiftedCountryIds(countryIds);
-    updateRecipientOptions(countryIds, transferOptions.builds - getTotalSpent());
-    setRemainingBuilds(transferOptions.builds - getTotalSpent());
-  }, []);
 
   const handleTransferCountryChange = (id: string, index: number) => {
     const updatedGiftedIds = giftedCountryIds.slice();
@@ -112,13 +96,13 @@ export const BuildTransfer: FC<Props> = ({transferOptions, transferOrders}: Prop
     setRecipientsArray(transferOrders);
   }
 
-  const getTotalSpent = (): number => {
+  const getTotalSpent = useCallback((): number => {
     let totalSpent = 0;
     recipientsArray.forEach((country: TransferBuildOrder) => totalSpent += country.quantity );
     return totalSpent;
-  }
+  }, [recipientsArray])
 
-  const updateRecipientOptions = (countryIds: number[], buildsRemaining: number) => {
+  const updateRecipientOptions = useCallback((countryIds: number[], buildsRemaining: number) => {
     const initialRowRecipientOptions: any = [];
 
     countryIds.forEach((id: number, index: number) => {
@@ -128,7 +112,7 @@ export const BuildTransfer: FC<Props> = ({transferOptions, transferOrders}: Prop
     });
 
     setRecipientOptions(initialRowRecipientOptions);
-  }
+  }, [transferOptions.options])
 
   const cleanup = (amount: string) => {
     if (Number(amount) === 0) {
@@ -155,6 +139,31 @@ export const BuildTransfer: FC<Props> = ({transferOptions, transferOrders}: Prop
       updateRecipientOptions(countryIds, transferOptions.builds - getTotalSpent());
     }
   }
+
+  useEffect(() => {
+    const countryIds = transferOrders.map((country: TransferBuildOrder) => country.recipientId );
+
+    if (remainingBuilds > 0) {
+      countryIds.push(0);
+
+      transferOrders.push({
+        recipientId: 0,
+        recipientName: '--Keep Builds--',
+        quantity: 0
+      });
+      setRecipientsArray(transferOrders);
+    }
+
+    setGiftedCountryIds(countryIds);
+    updateRecipientOptions(countryIds, transferOptions.builds - getTotalSpent());
+    setRemainingBuilds(transferOptions.builds - getTotalSpent());
+  }, [
+    getTotalSpent,
+    remainingBuilds,
+    transferOptions.builds,
+    transferOrders,
+    updateRecipientOptions
+  ]);
 
   return (
     <div style={{padding: 5}}>

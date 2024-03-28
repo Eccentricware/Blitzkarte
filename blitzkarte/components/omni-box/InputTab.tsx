@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useContext, useEffect, useState } from 'react';
+import React, { FC, Fragment, useContext, useEffect, useMemo, useState } from 'react';
 import {  MenuItem, Select, SelectChangeEvent, TextField, Button } from '@mui/material';
 import { WeeklyDeadlines } from './WeeklyDeadlines';
 import { IntervalDeadlines } from './IntervalDeadlines';
@@ -92,18 +92,7 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
 
   const router = useRouter();
   let bkCtx = useContext(Blitzkontext);
-  const schedulerService = new SchedulerService();
 
-  useEffect(() => {
-    schedulerService.setStartScheduling(deadlineOps);
-  }, [
-    turn1Timing,
-    deadlineType,
-    ordersDay,
-    ordersTime,
-    firstOrdersTimeSpan,
-    firstOrdersTimeType
-  ]);
 
   useEffect(() => {
     setBaseRequired(input.coalitionSchedule.baseRequired);
@@ -119,7 +108,7 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
     input.coalitionSchedule.penalties
   ]);
 
-  const deadlineOps: any = {
+  const deadlineOps = useMemo(() => ({
     gameStart: gameStart,
     setGameStart: setGameStart,
     deadlineType: deadlineType,
@@ -174,7 +163,36 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
     setVotesTimeSpan: setVotesTimeSpan,
     votesTimeType: votesTimeType,
     setVotesTimeType: setVotesTimeType
-  }
+  }), [
+    gameStart,
+    deadlineType,
+    turn1Timing,
+    firstTurnDeadline,
+    ordersDay,
+    ordersTime,
+    retreatsDay,
+    retreatsTime,
+    adjustmentsDay,
+    adjustmentsTime,
+    nominationsDay,
+    nominationsTime,
+    votesDay,
+    votesTime,
+    nominateDuringAdjustments,
+    voteDuringOrders,
+    firstOrdersTimeSpan,
+    firstOrdersTimeType,
+    ordersTimeSpan,
+    ordersTimeType,
+    retreatsTimeSpan,
+    retreatsTimeType,
+    adjustmentsTimeSpan,
+    adjustmentsTimeType,
+    nominationsTimeSpan,
+    nominationsTimeType,
+    votesTimeSpan,
+    votesTimeType
+  ]);
 
   const settings: any = {
     stylizedStartYear: stylizedStartYear,
@@ -230,6 +248,19 @@ export const InputTab: FC<InputProps> = ({input, debug}: InputProps) => {
     totalVotes: input.coalitionSchedule.totalVotes,
     highestPenalty: input.coalitionSchedule.highestPenalty
   };
+
+  useEffect(() => {
+    const schedulerService = new SchedulerService();
+    schedulerService.setStartScheduling(deadlineOps);
+  }, [
+    turn1Timing,
+    deadlineType,
+    ordersDay,
+    ordersTime,
+    firstOrdersTimeSpan,
+    firstOrdersTimeType,
+    deadlineOps
+  ]);
 
   const handleDataInput = (fileString: string) => {
     input.functions.triggerParse(fileString);

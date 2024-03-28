@@ -15,9 +15,11 @@ interface Props {
   refs: any;
   turnOrdersResult: UseQueryResult<TurnOrders> | undefined;
   orderSet: TurnOrders | undefined;
+  mapWidth: number;
+  mapHeight: number;
 }
 
-export const GameMap: FC<Props> = ({renderData, mapRef, refs, turnOrdersResult}: Props) => {
+export const GameMap: FC<Props> = ({renderData, mapRef, refs, turnOrdersResult, mapWidth, mapHeight}: Props) => {
   const maxHeight = window.innerHeight - 45;
   const maxWidth = window.innerWidth - 420;
   console.log(`Max Height: ${maxHeight} | Width: ${maxWidth}`);
@@ -29,7 +31,7 @@ export const GameMap: FC<Props> = ({renderData, mapRef, refs, turnOrdersResult}:
     <Blitzkontext.Consumer>
       {({map}) => {
         return (
-          <svg id="map" ref={mapRef} className="map" width={width} height={height}
+          <svg id="map" ref={mapRef} className="map" width={mapWidth} height={mapHeight}
             viewBox="0 0 16000 10000">
             <g ref={refs}>
               <TerrainLayer terrainRenderData={renderData.terrain} />

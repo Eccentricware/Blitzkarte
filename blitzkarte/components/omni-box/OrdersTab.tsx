@@ -8,10 +8,10 @@ import TurnPanel from "./TurnPanel";
 interface OrdersProps {
   options: OptionsFinal;
   orders: TurnOrders;
-  nudge: any;
+  // nudge: any;
 }
 
-export const OrdersTab: FC<OrdersProps> = ({options, orders, nudge}: OrdersProps) => {
+export const OrdersTab: FC<OrdersProps> = ({options, orders}: OrdersProps) => {
   const orderRequestService = new OrderRequestService();
 
   const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
@@ -45,7 +45,7 @@ export const OrdersTab: FC<OrdersProps> = ({options, orders, nudge}: OrdersProps
           options={options.pending}
           orders={orders.pending}
           setSubmitDisabled={setSubmitDisabled}
-          nudge={nudge}
+          // nudge={nudge}
         />
       }
       {
@@ -55,7 +55,7 @@ export const OrdersTab: FC<OrdersProps> = ({options, orders, nudge}: OrdersProps
           options={options.preliminary}
           orders={orders.preliminary}
           setSubmitDisabled={setSubmitDisabled}
-          nudge={nudge}
+          // nudge={nudge}
         />
       }
       {

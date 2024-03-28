@@ -138,7 +138,7 @@ export const NavBarSignedIn: FC<AppBarProps> = ({title}: AppBarProps) => {
 
           <Container>
             <Typography align="center" variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Blitzkarte
+              {title}
             </Typography>
           </Container>
 

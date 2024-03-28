@@ -59,9 +59,9 @@ p {
 }
 
 .view-controls {
-  position: absolute;
+  position: fixed;
   /* background-color: red; */
-  right: 410px;
+  /* left: 5px; */
   bottom: 5px;
 }
 
