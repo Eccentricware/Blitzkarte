@@ -1,6 +1,7 @@
 import { CSSProperties, FC } from "react";
 import { UseQueryResult } from "react-query";
 import TravelExploreIcon from '@mui/icons-material/TravelExplore';
+import { useRouter } from "next/router";
 
 interface MiscDetailsPanelProps {
   gameId: number;
@@ -8,6 +9,7 @@ interface MiscDetailsPanelProps {
 }
 
 export const MiscDetailsPanel: FC<MiscDetailsPanelProps> = ({gameId, queryResult}: MiscDetailsPanelProps) => {
+  const router = useRouter();
   const miscSection: CSSProperties = {
     borderBottom: '1px solid black',
   }
@@ -48,7 +50,7 @@ export const MiscDetailsPanel: FC<MiscDetailsPanelProps> = ({gameId, queryResult
           bottom: '0'
         }}
         onClick={() => {
-          window.location.href = `/game/${gameId}`;
+          router.push(`/game/${gameId}`);
         }}
       >
         Go To Map <TravelExploreIcon fontSize="large"/>
