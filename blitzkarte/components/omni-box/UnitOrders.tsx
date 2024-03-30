@@ -45,7 +45,7 @@ export const UnitOrders: FC<UnitProps> = ({unit, orders, nudge}: UnitProps) => {
       }
 
       if (orderType === OrderDisplay.SUPPORT_CONVOYED) {
-        const supportUnit = unit.supportStandardUnits[0];
+        const supportUnit = unit.supportTransportedUnits[0];
         if (supportUnit.id) {
           const destination = unit.supportTransportedDestinations[supportUnit.id][0];
           updatedOrder.secondaryUnitId = supportUnit.id;

@@ -15,7 +15,7 @@ export const StatsTable: FC<StatsTableData> = ({stats}: StatsTableData) => {
           <th>Votes</th>
           <th>BBs</th>
           <th>Range</th>
-          <th>Ajd</th>
+          <th>Adj</th>
         </tr>
       </thead>
       <StatsTableBody countries={stats.countries}/>
