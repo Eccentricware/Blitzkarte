@@ -13,10 +13,12 @@ interface Props {
   renderData: RenderData;
   turnOrdersResult: UseQueryResult<any> | undefined;
   orderSet: TurnOrders | undefined;
-  nudge: any;
+  mapWidth: number;
+  mapHeight: number;
+  // nudge: any;
 }
 
-export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet, nudge }: Props) => {
+export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet, mapWidth, mapHeight }: Props) => {
   // const [viewBox, setViewBox] = useState('0 0 16000 10000');
   const [zoomed, setZoomed] = useState(false);
   const [atTop, setAtTop] = useState(true);
@@ -36,72 +38,72 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
     const endOrderCircleStrokeWidth = scaling.orderCircle.strokeWidth * view.current.zoom;
     const endOrderLineStrokeWidth = scaling.orderLine.strokeWidth * view.current.zoom;
 
-    renderData.units.forEach((unit: any) => {
-      const unitType = unit.type.toLowerCase();
-      const unitName = unit.name.split(' ').join('_');
+    // renderData.units.forEach((unit: any) => {
+    //   const unitType = unit.type.toLowerCase();
+    //   const unitName = unit.name.split(' ').join('_');
 
-      gsap.to(s(`.${unitName}_left`), {
-        attr: {
-          'transform': `translate (${unit.loc[0] - 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
-            ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
-            scale(${view.current.zoom})`
-        },
-        ease: ease,
-        duration: 0
-      });
+    //   gsap.to(s(`.${unitName}_left`), {
+    //     attr: {
+    //       'transform': `translate (${unit.loc[0] - 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
+    //         ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
+    //         scale(${view.current.zoom})`
+    //     },
+    //     ease: ease,
+    //     duration: 0
+    //   });
 
-      gsap.to(s(`.${unitName}_center`), {
-        attr: {
-          'transform': `translate (${unit.loc[0] - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
-            ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
-            scale(${view.current.zoom})`
-        },
-        ease: ease,
-        duration: 0
-      });
+    //   gsap.to(s(`.${unitName}_center`), {
+    //     attr: {
+    //       'transform': `translate (${unit.loc[0] - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
+    //         ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
+    //         scale(${view.current.zoom})`
+    //     },
+    //     ease: ease,
+    //     duration: 0
+    //   });
 
-      gsap.to(s(`.${unitName}_right`), {
-        attr: {
-          'transform': `translate (${unit.loc[0] + 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
-            ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
-            scale(${view.current.zoom})`
-        },
-        ease: ease,
-        duration: 0
-      });
-    });
+    //   gsap.to(s(`.${unitName}_right`), {
+    //     attr: {
+    //       'transform': `translate (${unit.loc[0] + 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
+    //         ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
+    //         scale(${view.current.zoom})`
+    //     },
+    //     ease: ease,
+    //     duration: 0
+    //   });
+    // });
 
-    renderData.cities.votingCenters.forEach((city: any) => {
-      gsap.to(s(`.${city.name}_left`), {
-        attr: {
-          'transform': `translate (${city.loc[0] - 16000 - (scaling.votingCenter.width / 2 * view.current.zoom)}
-            ${city.loc[1] - (scaling.votingCenter.height / 2 * view.current.zoom)})
-            scale(${view.current.zoom})`
-        },
-        ease: ease,
-        duration: 0
-      });
+    // renderData.cities.votingCenters.forEach((city: any) => {
+    //   gsap.to(s(`.${city.name}_left`), {
+    //     attr: {
+    //       'transform': `translate (${city.loc[0] - 16000 - (scaling.votingCenter.width / 2 * view.current.zoom)}
+    //         ${city.loc[1] - (scaling.votingCenter.height / 2 * view.current.zoom)})
+    //         scale(${view.current.zoom})`
+    //     },
+    //     ease: ease,
+    //     duration: 0
+    //   });
 
-      gsap.to(s(`.${city.name}_center`), {
-        attr: {
-          'transform': `translate (${city.loc[0] - (scaling.votingCenter.width / 2 * view.current.zoom)}
-            ${city.loc[1] - (scaling.votingCenter.height / 2 * view.current.zoom)})
-            scale(${view.current.zoom})`
-        },
-        ease: ease,
-        duration: 0
-      });
+    //   gsap.to(s(`.${city.name}_center`), {
+    //     attr: {
+    //       'transform': `translate (${city.loc[0] - (scaling.votingCenter.width / 2 * view.current.zoom)}
+    //         ${city.loc[1] - (scaling.votingCenter.height / 2 * view.current.zoom)})
+    //         scale(${view.current.zoom})`
+    //     },
+    //     ease: ease,
+    //     duration: 0
+    //   });
 
-      gsap.to(s(`.${city.name}_right`), {
-        attr: {
-          'transform': `translate (${city.loc[0] + 16000 - (scaling.votingCenter.width / 2 * view.current.zoom)}
-            ${city.loc[1] - (scaling.votingCenter.height / 2 * view.current.zoom)})
-            scale(${view.current.zoom})`
-        },
-        ease: ease,
-        duration: 0
-      });
-    });
+    //   gsap.to(s(`.${city.name}_right`), {
+    //     attr: {
+    //       'transform': `translate (${city.loc[0] + 16000 - (scaling.votingCenter.width / 2 * view.current.zoom)}
+    //         ${city.loc[1] - (scaling.votingCenter.height / 2 * view.current.zoom)})
+    //         scale(${view.current.zoom})`
+    //     },
+    //     ease: ease,
+    //     duration: 0
+    //   });
+    // });
 
     gsap.to(s('.order-circle'), {
       attr: {
@@ -119,7 +121,15 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
       ease: ease,
       duration: 0
     });
-  }, [nudge]);
+  }, [
+    // mapCtx.map.scaling,
+    // mapCtx.map.unitSizing,
+    // mapCtx.map.view,
+    // renderData.cities.votingCenters,
+    renderData.units,
+    // s,
+    // nudge
+  ]);
 
   const zoomIn = () => {
     const view = mapCtx.map.view;
@@ -238,6 +248,7 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
         ease: ease,
         duration: 1
       });
+
       gsap.to(s(`.${unitName}_center`), {
         attr: {
           'transform': `translate (${unit.loc[0] - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
@@ -247,6 +258,7 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
         ease: ease,
         duration: 1
       });
+
       gsap.to(s(`.${unitName}_right`), {
         attr: {
           'transform': `translate (${unit.loc[0] + 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
@@ -257,8 +269,6 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
         duration: 1
       });
     });
-
-
 
     view.current.width = endWidth;
     view.current.height = endHeight;
@@ -398,6 +408,7 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
         ease: ease,
         duration: 1
       });
+
       gsap.to(s(`.${unitName}_center`), {
         attr: {
           'transform': `translate (${unit.loc[0] - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
@@ -407,6 +418,7 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
         ease: ease,
         duration: 1
       });
+
       gsap.to(s(`.${unitName}_right`), {
         attr: {
           'transform': `translate (${unit.loc[0] + 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
@@ -544,7 +556,7 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
 
     view.current.x = startX - (view.current.width * view.panRate);
     view.current.center[0] = view.current.x + (view.current.width / 2);
-    }
+  }
 
   const panRight = () => {
     const view = mapCtx.map.view;
@@ -648,6 +660,7 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
         ease: ease,
         duration: 1
       });
+
       gsap.to(s(`.${unitName}_center`), {
         attr: {
           'transform': `translate (${unit.loc[0] - mapCtx.map.unitSizing[unitType].baseWidth / 2}
@@ -657,6 +670,7 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
         ease: ease,
         duration: 1
       });
+
       gsap.to(s(`.${unitName}_right`), {
         attr: {
           'transform': `translate (${unit.loc[0] + 16000 - mapCtx.map.unitSizing[unitType].baseWidth / 2}
@@ -724,17 +738,17 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
     atBottom: atBottom
   }
 
-
-
   return (
-    <div className="map-container" style={{height: window.innerHeight - 55}}>
+    <div className="map-container" style={{height: window.innerHeight - 45}}>
       <GameMap renderData={renderData}
         turnOrdersResult={turnOrdersResult}
         orderSet={orderSet}
         mapRef={mapRef}
         refs={llRef}
+        mapWidth={mapWidth}
+        mapHeight={mapHeight}
       />
-      <div className='view-controls'>
+      <div className='view-controls' style={{left: mapWidth - 155}}>
         <ViewControls viewOps={viewOps}/>
       </div>
     </div>

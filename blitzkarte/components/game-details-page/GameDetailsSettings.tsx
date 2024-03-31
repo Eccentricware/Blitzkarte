@@ -1,7 +1,7 @@
 import { TextField, Select, SelectChangeEvent, MenuItem, Button } from "@mui/material";
 import assert from "assert";
 import { useRouter } from "next/router";
-import { FC, useState, useContext, useEffect, Fragment } from "react";
+import { FC, useState, useContext, useEffect, Fragment, useMemo } from "react";
 import { UseQueryResult } from "react-query";
 import { GameStatus } from "../../models/enumeration/game-status-enum";
 import { GameDataObject } from "../../models/objects/GameDataObject";
@@ -104,20 +104,6 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameDetailsSe
 
 
     let bkCtx = useContext(Blitzkontext);
-    const schedulerService = new SchedulerService();
-
-    useEffect(() => {
-      if (gameData.gameStatus === GameStatus.REGISTRATION) {
-        schedulerService.setStartScheduling(deadlineOps);
-      }
-    }, [
-      turn1Timing,
-      deadlineType,
-      ordersDay,
-      ordersTime,
-      firstOrdersTimeSpan,
-      firstOrdersTimeType
-    ]);
 
     useEffect(() => {
       setBaseRequired(gameData.coalitionSchedule.baseRequired);
@@ -128,9 +114,18 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameDetailsSe
       setPenaltyE(gameData.coalitionSchedule.penalties.e);
       setPenaltyF(gameData.coalitionSchedule.penalties.f);
       setPenaltyG(gameData.coalitionSchedule.penalties.g);
-    }, [gameData.coalitionSchedule.baseRequired]);
+    }, [
+      gameData.coalitionSchedule.baseRequired,
+      gameData.coalitionSchedule.penalties.a,
+      gameData.coalitionSchedule.penalties.b,
+      gameData.coalitionSchedule.penalties.c,
+      gameData.coalitionSchedule.penalties.d,
+      gameData.coalitionSchedule.penalties.e,
+      gameData.coalitionSchedule.penalties.f,
+      gameData.coalitionSchedule.penalties.g
+    ]);
 
-    const deadlineOps: any = {
+    const deadlineOps = useMemo(() => ({
       gameStart: gameStart,
       setGameStart: setGameStart,
       readyTime: gameData.readyTime,
@@ -189,7 +184,39 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameDetailsSe
       setVotesTimeType: setVotesTimeType,
       isAdmin: gameData.isAdmin,
       gameStatus: gameData.gameStatus
-    }
+    }), [
+      adjustmentsDay,
+      adjustmentsTime,
+      adjustmentsTimeSpan,
+      adjustmentsTimeType,
+      deadlineType,
+      firstOrdersTimeSpan,
+      firstOrdersTimeType,
+      firstTurnDeadline,
+      gameData.gameStatus,
+      gameData.isAdmin,
+      gameData.readyTime,
+      gameStart,
+      nominationsDay,
+      nominationsTime,
+      nominationsTimeSpan,
+      nominationsTimeType,
+      ordersDay,
+      ordersTime,
+      ordersTimeSpan,
+      ordersTimeType,
+      retreatsDay,
+      retreatsTime,
+      retreatsTimeSpan,
+      retreatsTimeType,
+      votesDay,
+      votesTime,
+      votesTimeSpan,
+      votesTimeType,
+      voteDuringOrders,
+      nominateDuringAdjustments,
+      turn1Timing
+    ])
 
     const settings: any = {
       stylizedStartYear: stylizedStartYear,
@@ -247,6 +274,22 @@ export const GameDetailsSettings: FC<GameDetailsSettingsProps> = ({gameDetailsSe
       highestPenalty: gameData.coalitionSchedule.highestPenalty,
       gameStatus: gameData.gameStatus
     };
+
+    useEffect(() => {
+      if (gameData.gameStatus === GameStatus.REGISTRATION) {
+        const schedulerService = new SchedulerService();
+        schedulerService.setStartScheduling(deadlineOps);
+      }
+    }, [
+      turn1Timing,
+      deadlineType,
+      ordersDay,
+      ordersTime,
+      firstOrdersTimeSpan,
+      firstOrdersTimeType,
+      deadlineOps,
+      gameData.gameStatus
+    ]);
 
     const handleGameNameChange = (name: string) => {
       setGameName(name);

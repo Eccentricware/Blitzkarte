@@ -21,7 +21,7 @@ interface OmniProps {
   turnOrdersResult: UseQueryResult<any>;
   turnHistoryResult: UseQueryResult<any> | undefined;
   orderSet: TurnOrders | undefined;
-  nudge: any;
+  // nudge: any;
   gameId: number;
   user: User | undefined;
   historyOps: any;
@@ -51,7 +51,7 @@ export const PlayOmniBox: FC<OmniProps> = ({
   turnHistoryResult,
   orderSet,
   gameId,
-  nudge,
+  // nudge,
   user,
   historyOps
 }: OmniProps) => {
@@ -99,7 +99,7 @@ export const PlayOmniBox: FC<OmniProps> = ({
         <TabPanel value={panel} index={0}>
           <OrdersTab options={turnOptionsResult.data}
             orders={turnOrdersResult.data}
-            nudge={nudge}
+            // nudge={nudge}
           />
         </TabPanel>
       }
