@@ -4,9 +4,10 @@ import { LabelPin } from '../../../../utils/parsing/classes/label';
 
 interface LabelPinRendersProps {
   labelPinData: LabelPin[];
+  labelSize: number;
 }
 
-export const LabelPinRenders: FC<LabelPinRendersProps> = ({labelPinData}: LabelPinRendersProps) => {
+export const LabelPinRenders: FC<LabelPinRendersProps> = ({labelPinData, labelSize}: LabelPinRendersProps) => {
   const mapCtx = useContext(Blitzkontext);
   const labelScaling = mapCtx.map.scaling.label;
   return (
@@ -20,7 +21,7 @@ export const LabelPinRenders: FC<LabelPinRendersProps> = ({labelPinData}: LabelP
                 <text className={`label ${label.type}-label`}
                   transform={`translate(${label.loc[0] - 16000} ${label.loc[1]})`}
                   pointerEvents="none"
-                  fontSize={label.type === 'coast' ? 96 : 125}
+                  fontSize={label.type === 'coast' ? labelSize * 0.65 : labelSize}
                   fill={label.fill}
                 >
                   {label.text}
@@ -28,7 +29,7 @@ export const LabelPinRenders: FC<LabelPinRendersProps> = ({labelPinData}: LabelP
                 <text className={`label ${label.type}-label`}
                   transform={`translate(${label.loc[0]} ${label.loc[1]})`}
                   pointerEvents="none"
-                  fontSize={label.type === 'coast' ? 96 : 125}
+                  fontSize={label.type === 'coast' ? labelSize * 0.65 : labelSize}
                   fill={label.fill}
                 >
                   {label.text}
@@ -36,7 +37,7 @@ export const LabelPinRenders: FC<LabelPinRendersProps> = ({labelPinData}: LabelP
                 <text className={`label ${label.type}-label`}
                   transform={`translate(${label.loc[0] + 16000} ${label.loc[1]})`}
                   pointerEvents="none"
-                  fontSize={label.type === 'coast' ? 96 : 125}
+                  fontSize={label.type === 'coast' ? labelSize * 0.65 : labelSize}
                   fill={label.fill}
                 >
                   {label.text}

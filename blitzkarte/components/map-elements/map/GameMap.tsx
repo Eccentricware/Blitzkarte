@@ -17,9 +17,18 @@ interface Props {
   orderSet: TurnOrders | undefined;
   mapWidth: number;
   mapHeight: number;
+  labelSize: number;
 }
 
-export const GameMap: FC<Props> = ({renderData, mapRef, refs, turnOrdersResult, mapWidth, mapHeight}: Props) => {
+export const GameMap: FC<Props> = ({
+  renderData,
+  mapRef,
+  refs,
+  turnOrdersResult,
+  mapWidth,
+  mapHeight,
+  labelSize
+}: Props) => {
   const maxHeight = window.innerHeight - 45;
   const maxWidth = window.innerWidth - 420;
   console.log(`Max Height: ${maxHeight} | Width: ${maxWidth}`);
@@ -31,12 +40,18 @@ export const GameMap: FC<Props> = ({renderData, mapRef, refs, turnOrdersResult, 
     <Blitzkontext.Consumer>
       {({map}) => {
         return (
-          <svg id="map" ref={mapRef} className="map" width={mapWidth} height={mapHeight}
-            viewBox="0 0 16000 10000">
+          <svg id="map" className="map" ref={mapRef}
+            width={mapWidth} height={mapHeight}
+            viewBox="0 0 16000 10000"
+          >
             <g ref={refs}>
               <TerrainLayer terrainRenderData={renderData.terrain} />
               <CityLayer cityData={renderData.cities}/>
-              <LabelLayer labelPinData={renderData.labels} labelLineData={renderData.labelLines} />
+              <LabelLayer
+                labelPinData={renderData.labels}
+                labelLineData={renderData.labelLines}
+                labelSize={labelSize}
+              />
               { (turnOrdersResult && turnOrdersResult.data) && <OrderLayer orderData={turnOrdersResult.data} /> }
               { (renderData.nodes && renderData.nodes.display) ?
                 <NodeLayer nodeData={renderData.nodes} nodeRefs={refs}/>
