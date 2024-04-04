@@ -37,6 +37,8 @@ const GameBody: FC<GameBodyProps> = ({user}: GameBodyProps) => {
 
   const [mapWidth, setMapWidth] = useState(1600);
   const [mapHeight, setMapHeight] = useState(1000);
+  const [coordinatesPerPixel, setCoordinatesPerPixel] = useState(10);
+  const [labelSize, setLabelSize] = useState(500);
   // const [nudger, setNudge] = useState(false);
 
   // const nudge = {
@@ -89,8 +91,11 @@ const GameBody: FC<GameBodyProps> = ({user}: GameBodyProps) => {
   const calibrateMapSize = () => {
     let mapHeight = window.innerHeight - 45;
     let mapWidth = mapHeight * 1.6;
+    let coordinatesPerPixel = 10000 / mapHeight;
+    let labelSize = 11 * coordinatesPerPixel;
     setMapWidth(mapWidth);
     setMapHeight(mapHeight);
+    setLabelSize(labelSize);
   };
 
   useEffect(() => {
@@ -128,12 +133,13 @@ const GameBody: FC<GameBodyProps> = ({user}: GameBodyProps) => {
       </Head>
       <NavBarSignedIn title="Gameplay"/>
       <div style={{display: 'flex'}}>
-        <div className="column">
+        <div className="column" >
           <MapContainer renderData={renderData}
             turnOrdersResult={turnOrdersResult}
             orderSet={orderSet}
             mapWidth={mapWidth}
             mapHeight={mapHeight}
+            labelSize={labelSize}
           />
         </div>
         <div className="game-divider" style={dividerStyle}></div>

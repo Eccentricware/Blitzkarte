@@ -8,6 +8,7 @@ import { RenderData } from '../../../models/objects/RenderDataObject';
 import { UseQueryResult } from 'react-query';
 import { Unit } from '../../../utils/parsing/classes/unit';
 import { TurnOrders } from '../../../models/objects/OrdersObjects';
+import { set } from 'date-fns';
 
 interface Props {
   renderData: RenderData;
@@ -15,16 +16,30 @@ interface Props {
   orderSet: TurnOrders | undefined;
   mapWidth: number;
   mapHeight: number;
+  labelSize: number;
   // nudge: any;
 }
 
-export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet, mapWidth, mapHeight }: Props) => {
+export const MapContainer: FC<Props> = ({
+  renderData,
+  turnOrdersResult,
+  orderSet,
+  mapWidth,
+  mapHeight,
+  labelSize
+ }: Props) => {
   // const [viewBox, setViewBox] = useState('0 0 16000 10000');
+  const mapCtx = useContext(Blitzkontext);
+
+  const [coordinatesPerPixel, setCoordinatesPerPixel] = useState(10);
+
   const [zoomed, setZoomed] = useState(false);
   const [atTop, setAtTop] = useState(true);
   const [atBottom, setAtBottom] = useState(true);
 
-  const mapCtx = useContext(Blitzkontext);
+  const [mouseDown, setMouseDown] = useState(false);
+  const [mouseDownX, setMouseDownX] = useState(0);
+  const [mouseDownY, setMouseDownY] = useState(0);
 
   const mapRef = React.createRef<SVGSVGElement>();
   const llRef = React.createRef<SVGLineElement>();
@@ -131,33 +146,75 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
     // nudge
   ]);
 
-  const zoomIn = () => {
+  const zoomIn = (pixelLoc?: {x: number, y: number}) => {
     const view = mapCtx.map.view;
+    const constraints = mapCtx.map.view.constraints;
     const scaling = mapCtx.map.scaling;
 
     view.current.zoom *= view.zoomRate;
-
     const endWidth = view.default.width * view.current.zoom;
     const endHeight = view.default.height * view.current.zoom;
-    const endX = view.current.center[0] - (endWidth / 2);
-    const endY = view.current.center[1] - (endHeight / 2);
 
+    const pixelPercentX = pixelLoc ? pixelLoc.x / mapWidth : 0.5;
+    const pixelPercentY = pixelLoc ? (pixelLoc.y - 45) / mapHeight : 0.5;
+
+    const newCenterX = pixelPercentX
+      ? view.current.x + (pixelPercentX * view.current.width)
+      : view.current.center[0];
+
+    const newCenterY = pixelPercentY
+      ? view.current.y + (pixelPercentY * view.current.height)
+      : view.current.center[1];
+
+    let startX = view.current.x;
+    const startY = view.current.center[1] - (view.current.height / 2);
+    let endX = newCenterX - (endWidth / 2);
+    let endY = newCenterY - (endHeight / 2);
+
+    // Too Left
+    if (endX <= constraints.left) {
+      startX += 16000;
+      endX += 16000;
+    }
+
+    // Too Right
+    if (endX + endWidth >= constraints.right) {
+      startX -= 16000;
+      endX -= 16000;
+    }
+
+    // Too High
+    if (endY <= constraints.top) {
+        endY = constraints.top;
+        view.current.center[1] = endHeight / 2;
+        setAtTop(true);
+
+    // Too Low
+    } else if (endY + endHeight >= constraints.bottom) {
+      endY = constraints.bottom - endHeight;
+      view.current.center[1] = constraints.bottom - (endHeight / 2);
+      setAtBottom(true);
+    }
+
+    const startView: string = `${startX} ${startY} ${view.current.width} ${view.current.height}`;
     const endViewBox = `${endX} ${endY} ${endWidth} ${endHeight}`;
 
     const endLineWidth = scaling.linkLine.width * view.current.zoom;
     const endNodeRadius = scaling.node.radius * view.current.zoom;
-    const endLabelSize = scaling.label.size * view.current.zoom;
+    const endLabelSize = labelSize * view.current.zoom;
     const endSupplyCenterR = scaling.supplyCenter.r * view.current.zoom;
     const endSupplyCenterStrokeWidth = scaling.supplyCenter.strokeWidth * view.current.zoom;
     const endOrderCircleR = scaling.orderCircle.r * view.current.zoom;
     const endOrderCircleStrokeWidth = scaling.orderCircle.strokeWidth * view.current.zoom;
     const endOrderLineStrokeWidth = scaling.orderLine.strokeWidth * view.current.zoom;
 
-    gsap.to(mapRef.current, {
-      attr: { viewBox: endViewBox },
-      ease: ease,
-      duration: 1
-    });
+    gsap.fromTo(mapRef.current,
+      { attr: { viewBox: startView } },
+      { attr: { viewBox: endViewBox },
+        ease: ease,
+        duration: 1
+      }
+    );
 
     gsap.to(s('.link-line'), {
       attr: { 'stroke-width': endLineWidth },
@@ -270,17 +327,20 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
       });
     });
 
-    view.current.width = endWidth;
-    view.current.height = endHeight;
     view.current.x = endX;
     view.current.y = endY;
+    view.current.width = endWidth;
+    view.current.height = endHeight;
+    view.current.center[0] = view.current.x + (view.current.width / 2);
+    view.current.center[1] = view.current.y + (view.current.height / 2);
 
     setZoomed(true);
     setAtTop(false);
     setAtBottom(false);
+    calibrateMapElements();
   }
 
-  const zoomOut = () => {
+  const zoomOut = (pixelLoc?: {x: number, y: number}) => {
     const view = mapCtx.map.view;
     const constraints = mapCtx.map.view.constraints;
     const scaling = mapCtx.map.scaling;
@@ -297,19 +357,26 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
       setAtBottom(true);
     }
 
-    const endWidth: number = view.default.width * view.current.zoom;
-    const endHeight: number = view.default.height * view.current.zoom;
+    const endWidth = view.default.width * view.current.zoom;
+    const endHeight = view.default.height * view.current.zoom;
 
     const endLineWidth = scaling.linkLine.width * view.current.zoom;
     const endNodeRadius = scaling.node.radius * view.current.zoom;
-    const endLabelSize = scaling.label.size * view.current.zoom;
+    const endLabelSize = labelSize * view.current.zoom;
     const endSupplyCenterR = scaling.supplyCenter.r * view.current.zoom;
     const endSupplyCenterStrokeWidth = scaling.supplyCenter.strokeWidth * view.current.zoom;
     const endOrderCircleR = scaling.orderCircle.r * view.current.zoom;
     const endOrderCircleStrokeWidth = scaling.orderCircle.strokeWidth * view.current.zoom;
 
-    let startX: number = view.current.x;
-    let endX: number = view.current.center[0] - (endWidth / 2);
+    const pixelPercentX = pixelLoc ? pixelLoc.x / mapWidth : 0.5;
+
+
+    const newCenterX = pixelPercentX
+      ? view.current.x + (pixelPercentX * view.current.width)
+      : view.current.center[0];
+
+    let startX = view.current.x;
+    let endX = newCenterX - (endWidth / 2);
 
     // Too Left
     if (endX <= constraints.left) {
@@ -320,13 +387,18 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
     // Too Right
     if (endX + endWidth >= constraints.right) {
       startX -= 16000;
-      endX += 16000;
+      endX -= 16000;
     }
     view.current.center[0] = endX + (endWidth / 2);
 
-    const startY: number = view.current.center[1] - (view.current.height / 2);
+    const startY = view.current.center[1] - (view.current.height / 2);
+    const pixelPercentY = pixelLoc ? (pixelLoc.y - 45) / mapHeight : 0.5;
 
-    let endY: number = view.current.center[1] - (endHeight / 2);
+    const newCenterY = pixelPercentY
+    ? view.current.y + (pixelPercentY * view.current.height)
+    : view.current.center[1];
+
+    let endY = view.current.center[1] - (endHeight / 2);
 
     // Too High
     if (endY <= constraints.top
@@ -468,6 +540,8 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
     view.current.height = endHeight;
     view.current.center[0] = view.current.x + (view.current.width / 2);
     view.current.center[1] = view.current.y + (view.current.height / 2);
+
+    calibrateMapElements();
   }
 
   const panUp = () => {
@@ -624,7 +698,7 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
     });
 
     gsap.to(s('.label'), {
-      attr: { 'font-size': scaling.label.size },
+      attr: { 'font-size': labelSize },
       ease: ease,
       duration: 0
     });
@@ -725,6 +799,75 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
     setAtBottom(true);
   }
 
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setMouseDown(true);
+    setMouseDownX(e.clientX);
+    setMouseDownY(e.clientY);
+  }
+
+  const handleMouseUp = (e: React.MouseEvent) => {
+    setMouseDown(false);
+  }
+
+  const handleMouseDrag = (e: React.MouseEvent) => {
+    if (mouseDown) {
+      const view = mapCtx.map.view;
+      const constraints = mapCtx.map.view.constraints;
+
+      let startCX = view.current.x;
+      let startCY = view.current.y;
+
+      const pixelDiffX = e.clientX - mouseDownX;
+      const pixelDiffY = e.clientY - mouseDownY;
+      setMouseDownX(e.clientX);
+      setMouseDownY(e.clientY);
+
+      if (startCX - (view.current.width * view.panRate) <= constraints.left) {
+        startCX += 16000;
+      }
+
+      if (startCX + view.current.width + (view.current.width * view.panRate) >= constraints.right) {
+        startCX -= 16000;
+      }
+
+      let endCX = startCX - pixelDiffX * coordinatesPerPixel;
+      let endCY = startCY - pixelDiffY * coordinatesPerPixel;
+
+      if (endCY <= constraints.top) {
+        endCY = constraints.top;
+        setAtTop(true);
+      }
+
+      if (endCY + view.current.height >= constraints.bottom) {
+        endCY = constraints.bottom - view.current.height;
+        setAtBottom(true);
+      }
+
+      let endView: string = `${endCX} ${endCY} ${view.current.width} ${view.current.height}`;
+
+      gsap.to(mapRef.current,
+        {
+          attr: { viewBox: endView },
+          ease: 'none',
+          duration: 0
+        }
+      );
+
+      view.current.x = endCX;
+      view.current.y = endCY;
+      view.current.center[0] = view.current.x - (view.current.width / 2);
+      view.current.center[1] = view.current.y - (view.current.height / 2);
+    }
+  }
+
+  const handleWheel = (e: React.WheelEvent) => {
+    if (e.deltaY < 0) {
+      zoomIn({x: e.clientX, y: e.clientY});
+    } else {
+      zoomOut({x: e.clientX, y: e.clientY});
+    }
+  }
+
   const viewOps = {
     zoomIn: zoomIn,
     zoomOut: zoomOut,
@@ -738,16 +881,41 @@ export const MapContainer: FC<Props> = ({ renderData, turnOrdersResult, orderSet
     atBottom: atBottom
   }
 
+  const calibrateMapElements = () => {
+    const view = mapCtx.map.view;
+    let coordinatesPerPixel = view.current.width / mapWidth;
+
+    setCoordinatesPerPixel(coordinatesPerPixel);
+  };
+
+  useEffect(() => {
+    calibrateMapElements();
+  }, []);
+
   return (
     <div className="map-container" style={{height: window.innerHeight - 45}}>
-      <GameMap renderData={renderData}
-        turnOrdersResult={turnOrdersResult}
-        orderSet={orderSet}
-        mapRef={mapRef}
-        refs={llRef}
-        mapWidth={mapWidth}
-        mapHeight={mapHeight}
-      />
+      <div
+        onMouseDown={(e) => { handleMouseDown(e) }}
+        onMouseMove={(e) => { handleMouseDrag(e) }}
+        onMouseUp={(e) => { handleMouseUp(e) }}
+        onMouseLeave={(e) => { handleMouseUp(e) }}
+        onWheel={(e) => { handleWheel(e) }}
+
+        onPointerDown={(e) => { handleMouseDown(e) }}
+        onPointerMove={(e) => { handleMouseDrag(e) }}
+        onPointerUp={(e) => { handleMouseUp(e) }}
+        onPointerLeave={(e) => { handleMouseUp(e) }}
+      >
+        <GameMap renderData={renderData}
+          turnOrdersResult={turnOrdersResult}
+          orderSet={orderSet}
+          mapRef={mapRef}
+          refs={llRef}
+          mapWidth={mapWidth}
+          mapHeight={mapHeight}
+          labelSize={labelSize}
+        />
+      </div>
       <div className='view-controls' style={{left: mapWidth - 155}}>
         <ViewControls viewOps={viewOps}/>
       </div>
