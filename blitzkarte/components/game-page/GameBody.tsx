@@ -131,7 +131,7 @@ const GameBody: FC<GameBodyProps> = ({user}: GameBodyProps) => {
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link rel="icon" href="/favicon.ico"/>
       </Head>
-      <NavBarSignedIn title="Gameplay"/>
+      {/* <NavBarSignedIn title="Gameplay"/> */}
       <div style={{display: 'flex'}}>
         <div className="column" >
           <MapContainer renderData={renderData}
