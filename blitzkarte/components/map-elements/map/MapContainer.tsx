@@ -901,10 +901,10 @@ export const MapContainer: FC<Props> = ({
         onMouseLeave={(e) => { handleMouseUp(e) }}
         onWheel={(e) => { handleWheel(e) }}
 
-        onPointerDown={(e) => { handleMouseDown(e) }}
-        onPointerMove={(e) => { handleMouseDrag(e) }}
-        onPointerUp={(e) => { handleMouseUp(e) }}
-        onPointerLeave={(e) => { handleMouseUp(e) }}
+        // onPointerDown={(e) => { handleMouseDown(e) }}
+        // onPointerMove={(e) => { handleMouseDrag(e) }}
+        // onPointerUp={(e) => { handleMouseUp(e) }}
+        // onPointerLeave={(e) => { handleMouseUp(e) }}
       >
         <GameMap renderData={renderData}
           turnOrdersResult={turnOrdersResult}

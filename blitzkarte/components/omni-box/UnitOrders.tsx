@@ -217,10 +217,24 @@ export const UnitOrders: FC<UnitProps> = ({unit, orders}: UnitProps) => {
     // nudge.set(!nudge.get);
   }
 
+  if (!order) {
+    return (
+    <div className="order-row">
+      <div className="order-unit">{unit.unitDisplay}</div>
+      <select className="order-type" disabled>
+        <option>Hold</option>
+      </select>
+      <select className="order-destination" disabled>
+        <option>Error</option>
+      </select>
+    </div>
+    )
+  }
+
   return(
     <div className="order-row">
       <div className="order-unit">{unit.unitDisplay}</div>
-      <select className="order-type" value={order.orderType}
+      {order && <select className="order-type" value={order.orderType}
         onChange={(event: ChangeEvent<HTMLSelectElement>) => {
           handleOrderTypeChange(event.target.value);
         }}
@@ -230,7 +244,7 @@ export const UnitOrders: FC<UnitProps> = ({unit, orders}: UnitProps) => {
             return <option key={orderType} value={orderType}>{orderType}</option>
           })
         }
-      </select>
+      </select>}
       {
         order.orderType === OrderDisplay.MOVE
           &&
