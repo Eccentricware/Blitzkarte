@@ -29,6 +29,11 @@ const CreateGamePage: NextPage = () => {
   const [showEventNodes, setShowEventNodes] = useState(true);
   const [fileString, setFileString] = useState('');
 
+  const [mapWidth, setMapWidth] = useState(1600);
+  const [mapHeight, setMapHeight] = useState(1000);
+  const [coordinatesPerPixel, setCoordinatesPerPixel] = useState(10);
+  const [labelSize, setLabelSize] = useState(500);
+
   const bkCtx = useContext(Blitzkontext);
 
   const router = useRouter();
@@ -112,6 +117,16 @@ const CreateGamePage: NextPage = () => {
     setRenderData(updateRenderData);
   }
 
+  const calibrateMapSize = () => {
+    let mapHeight = window.innerHeight - 45;
+    let mapWidth = mapHeight * 1.6;
+    let coordinatesPerPixel = 10000 / mapHeight;
+    let labelSize = 11 * coordinatesPerPixel;
+    setMapWidth(mapWidth);
+    setMapHeight(mapHeight);
+    setLabelSize(labelSize);
+  };
+
   if (loading) {
     return (
       <div>
@@ -141,7 +156,16 @@ const CreateGamePage: NextPage = () => {
 
         <Grid container columns={2}>
           <Grid item>
-            <div className="column"><MapContainer renderData={renderData} turnOrdersResult={undefined} orderSet={undefined} nudge={undefined}/></div>
+            <div className="column">
+              <MapContainer
+                renderData={renderData}
+                turnOrdersResult={undefined}
+                orderSet={undefined}
+                mapWidth={mapWidth}
+                mapHeight={mapHeight}
+                labelSize={labelSize}
+              />
+            </div>
           </Grid>
           <Grid item>
             <div className="column"><CreationOmniBox omniBoxData={omniBoxData}/></div>

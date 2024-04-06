@@ -39,7 +39,14 @@ const GamePage: NextPage = () => {
   if (user) {
     bkCtx.user.user = user;
     return (
-      <div style={{overflow: 'hidden'}}>
+      <div>
+        <Head>
+          <title>Game</title>
+          <meta name="description" content="Game Name"/>
+          <meta name="viewport" content="width=device-width, initial-scale=1"/>
+          <link rel="icon" href="/favicon.ico"/>
+        </Head>
+        <NavBarSignedIn title="Gameplay"/>
         <GameBody gameId={gameId} user={user}/>
       </div>
     )
