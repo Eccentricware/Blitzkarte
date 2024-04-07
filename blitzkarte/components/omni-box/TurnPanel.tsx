@@ -16,10 +16,10 @@ interface TurnTabProps {
   options: SpecificTurnOptions;
   orders: SingleTurnOrders;
   setSubmitDisabled: Function;
-  // nudge: any;
+  nudge: any;
 }
 
-export const TurnPanel: FC<TurnTabProps> = ({options, orders, setSubmitDisabled}: TurnTabProps) => {
+export const TurnPanel: FC<TurnTabProps> = ({options, orders, setSubmitDisabled, nudge}: TurnTabProps) => {
   let frameColor = 'red';
 
   if (orders.turnStatus === TurnStatus.PENDING && !orders.default) {
@@ -56,7 +56,7 @@ export const TurnPanel: FC<TurnTabProps> = ({options, orders, setSubmitDisabled}
         (options.units && orders.units && orders.units.length > 0)
           &&
         <Units units={options.units} unitOrders={orders.units}
-          // nudge={nudge}
+          nudge={nudge}
         />
       }
       {
