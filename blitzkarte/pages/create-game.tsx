@@ -164,6 +164,7 @@ const CreateGamePage: NextPage = () => {
                 mapWidth={mapWidth}
                 mapHeight={mapHeight}
                 labelSize={labelSize}
+                nudge={undefined}
               />
             </div>
           </Grid>
