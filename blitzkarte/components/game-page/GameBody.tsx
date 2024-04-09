@@ -39,12 +39,12 @@ const GameBody: FC<GameBodyProps> = ({user}: GameBodyProps) => {
   const [mapHeight, setMapHeight] = useState(1000);
   const [coordinatesPerPixel, setCoordinatesPerPixel] = useState(10);
   const [labelSize, setLabelSize] = useState(500);
-  // const [nudger, setNudge] = useState(false);
+  const [nudger, setNudge] = useState(false);
 
-  // const nudge = {
-  //   get: nudger,
-  //   set: setNudge
-  // }
+  const nudge = {
+    get: nudger,
+    set: setNudge
+  }
 
   console.log('Game body is in a render loop')
 
@@ -131,7 +131,7 @@ const GameBody: FC<GameBodyProps> = ({user}: GameBodyProps) => {
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link rel="icon" href="/favicon.ico"/>
       </Head>
-      <NavBarSignedIn title="Gameplay"/>
+      {/* <NavBarSignedIn title="Gameplay"/> */}
       <div style={{display: 'flex'}}>
         <div className="column" >
           <MapContainer renderData={renderData}
@@ -140,6 +140,7 @@ const GameBody: FC<GameBodyProps> = ({user}: GameBodyProps) => {
             mapWidth={mapWidth}
             mapHeight={mapHeight}
             labelSize={labelSize}
+            nudge={nudge}
           />
         </div>
         <div className="game-divider" style={dividerStyle}></div>
@@ -149,7 +150,7 @@ const GameBody: FC<GameBodyProps> = ({user}: GameBodyProps) => {
             turnOrdersResult={turnOrdersResult}
             turnHistoryResult={turnHistoryResult}
             orderSet={orderSet}
-            // nudge={nudge}
+            nudge={nudge}
             gameId={gameId}
             user={user}
             historyOps={historyOps}

@@ -8,7 +8,6 @@ import { RenderData } from '../../../models/objects/RenderDataObject';
 import { UseQueryResult } from 'react-query';
 import { Unit } from '../../../utils/parsing/classes/unit';
 import { TurnOrders } from '../../../models/objects/OrdersObjects';
-import { set } from 'date-fns';
 
 interface Props {
   renderData: RenderData;
@@ -17,7 +16,7 @@ interface Props {
   mapWidth: number;
   mapHeight: number;
   labelSize: number;
-  // nudge: any;
+  nudge: any;
 }
 
 export const MapContainer: FC<Props> = ({
@@ -26,7 +25,8 @@ export const MapContainer: FC<Props> = ({
   orderSet,
   mapWidth,
   mapHeight,
-  labelSize
+  labelSize,
+  nudge
  }: Props) => {
   // const [viewBox, setViewBox] = useState('0 0 16000 10000');
   const mapCtx = useContext(Blitzkontext);
@@ -143,7 +143,7 @@ export const MapContainer: FC<Props> = ({
     // renderData.cities.votingCenters,
     renderData.units,
     // s,
-    // nudge
+    nudge
   ]);
 
   const zoomIn = (pixelLoc?: {x: number, y: number}) => {
@@ -901,10 +901,10 @@ export const MapContainer: FC<Props> = ({
         onMouseLeave={(e) => { handleMouseUp(e) }}
         onWheel={(e) => { handleWheel(e) }}
 
-        onPointerDown={(e) => { handleMouseDown(e) }}
-        onPointerMove={(e) => { handleMouseDrag(e) }}
-        onPointerUp={(e) => { handleMouseUp(e) }}
-        onPointerLeave={(e) => { handleMouseUp(e) }}
+        // onPointerDown={(e) => { handleMouseDown(e) }}
+        // onPointerMove={(e) => { handleMouseDrag(e) }}
+        // onPointerUp={(e) => { handleMouseUp(e) }}
+        // onPointerLeave={(e) => { handleMouseUp(e) }}
       >
         <GameMap renderData={renderData}
           turnOrdersResult={turnOrdersResult}
