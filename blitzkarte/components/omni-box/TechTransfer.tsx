@@ -25,18 +25,18 @@ export const TechTransfer: FC<Props> = ({giving, transferOptions, order}: Props)
 
   return (
     <div className="nuke-tech-transfer-row" style={{padding: '5px'}}>
-      <div>{giving ? 'Offer Nuke Tech To: ' : 'Request Nuke Tech From: '}</div>
-        <select className="nuke-tech-transfer-select" value={order.foreignCountryId}
-          onChange={(event: ChangeEvent<HTMLSelectElement>) => {
-            handlePartnerChange(event.target.value);
-          }}
-        >
-          {
-            countries.map((country: TransferTechCountry) =>
-              <option key={country.countryId} value={country.countryId}>{country.countryName}</option>
-            )
-          }
-        </select>
+      <div style={{marginRight: 5}}>{giving ? 'Offer Nuke Tech To: ' : 'Request Nuke Tech From: '}</div>
+      <select className="nuke-tech-transfer-select" value={order.foreignCountryId}
+        onChange={(event: ChangeEvent<HTMLSelectElement>) => {
+          handlePartnerChange(event.target.value);
+        }}
+      >
+        {
+          countries.map((country: TransferTechCountry) =>
+            <option key={country.countryId} value={country.countryId}>{country.countryName}</option>
+          )
+        }
+      </select>
     </div>
   )
 }

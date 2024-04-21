@@ -62,12 +62,12 @@ export const TurnPanel: FC<TurnTabProps> = ({options, orders, setSubmitDisabled,
       {
         options.offerTechOptions && orders.techTransfer
           &&
-        <TechTransfer giving={false} transferOptions={options.offerTechOptions} order={orders.techTransfer}/>
+        <TechTransfer giving={true} transferOptions={options.offerTechOptions} order={orders.techTransfer}/>
       }
       {
         options.receiveTechOptions && orders.techTransfer
           &&
-        <TechTransfer giving={true} transferOptions={options.receiveTechOptions} order={orders.techTransfer}/>
+        <TechTransfer giving={false} transferOptions={options.receiveTechOptions} order={orders.techTransfer}/>
       }
       {
         options.buildTransfers && orders.buildTransfers
