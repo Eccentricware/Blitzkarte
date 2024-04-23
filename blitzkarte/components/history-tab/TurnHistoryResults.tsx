@@ -9,6 +9,7 @@ const TurnHistoryResults: FC<TurnHistoryResultsProps> = ({turnResults}) => {
   return (
     <div>
       {
+        (turnResults && turnResults.orderList) &&
         turnResults.orderList.map((countryOrders: any, index: number) =>
           <div key={index}>
             <b>{countryOrders.countryName}</b>
