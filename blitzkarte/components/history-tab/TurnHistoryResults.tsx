@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { Nomination } from "../../models/objects/OptionsObjects";
+import { HistoricNomination, HistoricNominationVote, HistoricYayVote } from "../../models/objects/HistoryObjects";
 
 interface TurnHistoryResultsProps {
   turnResults: any;
@@ -66,7 +67,7 @@ const TurnHistoryResults: FC<TurnHistoryResultsProps> = ({turnResults}) => {
           </thead>
           <tbody>
           {
-            turnResults.nominations.map((nomination: Nomination) => (
+            turnResults.nominations.map((nomination: HistoricNomination) => (
               <tr key={nomination.nominationId}>
                 <td>
                   {nomination.countries[0].countryName} | {nomination.countries[1].countryName} | {nomination.countries[2].countryName}
@@ -82,6 +83,34 @@ const TurnHistoryResults: FC<TurnHistoryResultsProps> = ({turnResults}) => {
           }
           </tbody>
         </table>
+        </div>
+      }
+      {
+        (turnResults && turnResults.votes) &&
+        <div>
+          {
+            turnResults.votes.map((coalition: HistoricNominationVote) => (
+              <div style={{border: `2px solid ${coalition.winner ? 'green' : 'gray'}`, padding: 5, borderRadius: 5}}>
+                <div><b>Coalition</b></div>
+                <div>
+                  {coalition.countries[0].countryName} | {coalition.countries[1].countryName} | {coalition.countries[2].countryName} ({coalition.signature})
+                </div>
+                <div><b>Votes Required:</b> {coalition.votesRequired}</div>
+                <div><b>Votes Received:</b> {coalition.votesReceived}</div>
+                <div><b>Win Margin:</b> {coalition.votesReceived - coalition.votesRequired}</div>
+                <div><b>Yay Votes:</b></div>
+                <div>
+                  {
+                    coalition.yayVotes.map((vote: HistoricYayVote, index: number) => (
+                      <div key={index}>
+                        {vote.countryName} - {vote.votesControlled}
+                      </div>
+                    ))
+                  }
+                </div>
+              </div>
+            ))
+          }
         </div>
       }
     </div>
