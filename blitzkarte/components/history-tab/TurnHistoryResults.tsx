@@ -91,19 +91,20 @@ const TurnHistoryResults: FC<TurnHistoryResultsProps> = ({turnResults}) => {
           {
             turnResults.votes.map((coalition: HistoricNominationVote) => (
               <div style={{border: `2px solid ${coalition.winner ? 'green' : 'gray'}`, padding: 5, borderRadius: 5}}>
-                <div><b>Coalition</b></div>
-                <div>
-                  {coalition.countries[0].countryName} | {coalition.countries[1].countryName} | {coalition.countries[2].countryName} ({coalition.signature})
-                </div>
-                <div><b>Votes Required:</b> {coalition.votesRequired}</div>
+                <div><b>Coalition: </b>{coalition.countries[0].countryName} ({coalition.countries[0].rank.toUpperCase()}) | {coalition.countries[1].countryName} ({coalition.countries[1].rank.toUpperCase()}) | {coalition.countries[2].countryName} ({coalition.countries[2].rank.toUpperCase()})</div>
+                <div><b>Votes Required:</b> {coalition.votesRequired} ({coalition.signature})</div>
                 <div><b>Votes Received:</b> {coalition.votesReceived}</div>
-                <div><b>Win Margin:</b> {coalition.votesReceived - coalition.votesRequired}</div>
+                {
+                  coalition.votesReceived - coalition.votesRequired >= 0
+                  ? <div style={{color: 'green'}}><b>Win Margin: {coalition.votesReceived - coalition.votesRequired}</b></div>
+                  : <div style={{color: 'red'}}><b>Votes Short: {coalition.votesRequired - coalition.votesReceived}</b></div>
+                }
                 <div><b>Yay Votes:</b></div>
                 <div>
                   {
                     coalition.yayVotes.map((vote: HistoricYayVote, index: number) => (
                       <div key={index}>
-                        {vote.countryName} - {vote.votesControlled}
+                        {vote.countryName}: {vote.votesControlled}
                       </div>
                     ))
                   }
