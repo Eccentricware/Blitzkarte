@@ -90,7 +90,7 @@ const TurnHistoryResults: FC<TurnHistoryResultsProps> = ({turnResults}) => {
         <div>
           {
             turnResults.votes.map((coalition: HistoricNominationVote) => (
-              <div style={{border: `2px solid ${coalition.winner ? 'green' : 'gray'}`, padding: 5, borderRadius: 5}}>
+              <div key={coalition.nominationId} style={{border: `2px solid ${coalition.winner ? 'green' : 'gray'}`, padding: 5, borderRadius: 5}}>
                 <div><b>Coalition: </b>{coalition.countries[0].countryName} ({coalition.countries[0].rank.toUpperCase()}) | {coalition.countries[1].countryName} ({coalition.countries[1].rank.toUpperCase()}) | {coalition.countries[2].countryName} ({coalition.countries[2].rank.toUpperCase()})</div>
                 <div><b>Votes Required:</b> {coalition.votesRequired} ({coalition.signature})</div>
                 <div><b>Votes Received:</b> {coalition.votesReceived}</div>
