@@ -99,10 +99,10 @@ const TurnHistoryResults: FC<TurnHistoryResultsProps> = ({turnResults}) => {
                   ? <div style={{color: 'green'}}><b>Win Margin: {coalition.votesReceived - coalition.votesRequired}</b></div>
                   : <div style={{color: 'red'}}><b>Votes Short: {coalition.votesRequired - coalition.votesReceived}</b></div>
                 }
-                <div><b>Yay Votes:</b></div>
+                <div><b>Yay Votes: </b>{!coalition.yayVotes && 'None'}</div>
                 <div>
                   {
-                    coalition.yayVotes.map((vote: HistoricYayVote, index: number) => (
+                    coalition.yayVotes?.map((vote: HistoricYayVote, index: number) => (
                       <div key={index}>
                         {vote.countryName}: {vote.votesControlled}
                       </div>
