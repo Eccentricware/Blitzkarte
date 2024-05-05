@@ -13,11 +13,14 @@ import { HistoryRequestService } from "../../services/request-services/history-r
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { NavBarSignedIn } from "../nav-bar/NavBarSignedIn";
+import { set } from "date-fns";
 
 interface GameBodyProps {
   user: User | undefined;
   gameId: number;
 }
+
+type RenderOption = 'orders' | 'historic' | 'results';
 
 const GameBody: FC<GameBodyProps> = ({user}: GameBodyProps) => {
   const mapRequestService = new MapRequestService();
@@ -32,8 +35,11 @@ const GameBody: FC<GameBodyProps> = ({user}: GameBodyProps) => {
 
   const [renderData, setRenderData] = useState(initialRenderData);
   const [orderSet, setOrderSet] = useState<undefined>(undefined);
-  const [historyTurnNumber, setHistoryTurnNumber] = useState<number>(0);
+  const [historicTurnNumber, setHistoricTurnNumber] = useState<number>(0);
+  const [historicPhase, setHistoricPhase] = useState<string>('historic');
   const [currentTab, setCurrentTab] = useState<number>(user ? 0 : 1);
+
+  const [renderOption, setRenderOption] = useState<RenderOption>('orders');
 
   const [mapWidth, setMapWidth] = useState(1600);
   const [mapHeight, setMapHeight] = useState(1000);
@@ -45,8 +51,6 @@ const GameBody: FC<GameBodyProps> = ({user}: GameBodyProps) => {
     get: nudger,
     set: setNudge
   }
-
-  console.log('Game body is in a render loop')
 
   const currentMapResult: UseQueryResult<any> = useQuery('getCurrentMap', () => {
     return mapRequestService.getCurrentMap(gameId);
@@ -61,12 +65,15 @@ const GameBody: FC<GameBodyProps> = ({user}: GameBodyProps) => {
   });
 
   const turnHistoryResult: UseQueryResult<any> = useQuery('getTurnHistory', () => {
-    return historyRequestService.getTurnHistory(gameId, historyTurnNumber);
+    return historyRequestService.getTurnHistory(gameId, historicTurnNumber);
   });
 
   const historyOps = {
-    get: historyTurnNumber,
-    set: setHistoryTurnNumber,
+    turnNumber: historicTurnNumber,
+    setTurnNumber: setHistoricTurnNumber,
+    phase: historicPhase,
+    setPhase: setHistoricPhase,
+    currentTab: currentTab,
     setCurrentTab: setCurrentTab
   }
 
@@ -77,16 +84,41 @@ const GameBody: FC<GameBodyProps> = ({user}: GameBodyProps) => {
   }, [currentMapResult.data]);
 
   useEffect(() => {
-    if (turnOrdersResult.data) {
-      setOrderSet(turnOrdersResult.data);
+    console.log(`currentTab: ${historyOps.currentTab} | historicTurnNumber: ${historyOps.turnNumber} | historicPhase: ${historyOps.phase}`);
+    if (historyOps.currentTab === 2) {
+      if (turnHistoryResult.data?.maps) {
+        setRenderData(
+          historyOps.phase === 'historic'
+          ? turnHistoryResult.data.maps.renderData.start
+          : turnHistoryResult.data.maps.renderData.result
+        );
+      }
+    } else {
+      console.log('I see tab 0')
+      if (currentMapResult.data) {
+        console.log('I see current data');
+        setRenderData(currentMapResult.data);
+      }
     }
-  }, [turnOrdersResult.data]);
+  }, [turnOrdersResult.data, turnHistoryResult.data, historyOps.currentTab, historyOps.turnNumber, historyOps.phase]);
 
   useEffect(() => {
     turnHistoryResult.refetch();
   }, [
-    historyTurnNumber
+    historicTurnNumber
   ]);
+
+  const updateRender = () => {
+    if (currentTab === 2 && turnHistoryResult.data.maps) {
+      setRenderData(
+        renderOption === 'historic'
+        ? turnHistoryResult.data.maps.renderData.start
+        : turnHistoryResult.data.maps.renderData.result
+      );
+    } else if (currentMapResult.data) {
+      setRenderData(currentMapResult.data);
+    }
+  }
 
   const calibrateMapSize = () => {
     let mapHeight = window.innerHeight - 45;
