@@ -1,6 +1,7 @@
-import { FC, useEffect, useState } from "react";
+import { FC, Fragment, useEffect, useState } from "react";
 import { Nomination } from "../../models/objects/OptionsObjects";
 import { HistoricNomination, HistoricNominationVote, HistoricYayVote } from "../../models/objects/HistoryObjects";
+import { TurnType } from "../../models/enumeration/TurnTypeEnum";
 
 interface TurnHistoryResultsProps {
   turnResults: any;
@@ -14,7 +15,11 @@ const TurnHistoryResults: FC<TurnHistoryResultsProps> = ({turnResults}) => {
         (turnResults && turnResults.orderList) &&
         turnResults.orderList.map((countryOrders: any, index: number) =>
           <div key={index}>
-            <b>{countryOrders.countryName}</b>
+            <b>{countryOrders.countryName}</b> ({countryOrders.username ? countryOrders.username : 'Civil Disorder'}) {
+              [TurnType.ADJUSTMENTS, TurnType.ADJ_AND_NOM].includes(turnResults.turnType)
+              && <Fragment>(Adj: {countryOrders.history.start.adjustments >= 0 ? '+' : '-'}
+              {countryOrders.history.start.adjustments} | BB: {countryOrders.history.start.bankedBuilds})</Fragment>
+            }
             {
               countryOrders.orders.trades.tech &&
               <div>{countryOrders.orders.trades.tech}</div>
@@ -48,6 +53,22 @@ const TurnHistoryResults: FC<TurnHistoryResultsProps> = ({turnResults}) => {
                 countryOrders.orders.adjustments.map((adjustment: any, index: number) =>
                   <div key={index}>{ adjustment.description }</div>
                 )
+              }
+              {
+                countryOrders.orders.buildsBanked > 0 &&
+                <div>New Banked Builds: {countryOrders.orders.buildsBanked}</div>
+              }
+              {
+                countryOrders.orders.buildsStartingNukes > 0 &&
+                <div>New Nukes Started: {countryOrders.orders.buildsStartingNukes}</div>
+              }
+              {
+                countryOrders.orders.buildsIncreasingRange > 0 &&
+                <div>Builds Increasing Range: {countryOrders.orders.buildsIncreasingRange}</div>
+              }
+              {
+                countryOrders.orders.bankedBuildsIncreasingRange > 0 &&
+                <div>Banked Builds Spent Increasing Range: {countryOrders.orders.bankedBuildsIncreasingRange}</div>
               }
             </div>
           </div>
