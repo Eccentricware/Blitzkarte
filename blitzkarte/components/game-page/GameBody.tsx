@@ -35,6 +35,7 @@ const GameBody: FC<GameBodyProps> = ({user}: GameBodyProps) => {
 
   const [renderData, setRenderData] = useState(initialRenderData);
   const [orderSet, setOrderSet] = useState<undefined>(undefined);
+
   const [historicTurnNumber, setHistoricTurnNumber] = useState<number>(0);
   const [historicPhase, setHistoricPhase] = useState<string>('historic');
   const [currentTab, setCurrentTab] = useState<number>(user ? 0 : 1);
@@ -84,7 +85,6 @@ const GameBody: FC<GameBodyProps> = ({user}: GameBodyProps) => {
   }, [currentMapResult.data]);
 
   useEffect(() => {
-    console.log(`currentTab: ${historyOps.currentTab} | historicTurnNumber: ${historyOps.turnNumber} | historicPhase: ${historyOps.phase}`);
     if (historyOps.currentTab === 2) {
       if (turnHistoryResult.data?.maps) {
         setRenderData(
@@ -92,15 +92,22 @@ const GameBody: FC<GameBodyProps> = ({user}: GameBodyProps) => {
           ? turnHistoryResult.data.maps.renderData.start
           : turnHistoryResult.data.maps.renderData.result
         );
+        setOrderSet(
+          historyOps.phase === 'historic'
+          ? turnHistoryResult.data.maps.orders
+          : []
+        );
       }
+
     } else {
-      console.log('I see tab 0')
       if (currentMapResult.data) {
-        console.log('I see current data');
         setRenderData(currentMapResult.data);
       }
+      if (turnOrdersResult.data) {
+        setOrderSet(turnOrdersResult.data);
+      }
     }
-  }, [turnOrdersResult.data, turnHistoryResult.data, historyOps.currentTab, historyOps.turnNumber, historyOps.phase]);
+  }, [currentMapResult.data, turnOrdersResult.data, turnHistoryResult.data, historyOps.currentTab, historyOps.turnNumber, historyOps.phase]);
 
   useEffect(() => {
     turnHistoryResult.refetch();
@@ -167,7 +174,13 @@ const GameBody: FC<GameBodyProps> = ({user}: GameBodyProps) => {
       <div style={{display: 'flex'}}>
         <div className="column" >
           <MapContainer renderData={renderData}
-            turnOrdersResult={turnOrdersResult}
+            turnOrdersResult={
+              historyOps.currentTab === 2 && historyOps.phase === 'historic'
+              ? turnHistoryResult
+              : historyOps.currentTab === 2 && historyOps.phase === 'results'
+                ? undefined
+                : turnOrdersResult
+            }
             orderSet={orderSet}
             mapWidth={mapWidth}
             mapHeight={mapHeight}
