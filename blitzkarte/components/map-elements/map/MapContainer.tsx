@@ -55,88 +55,96 @@ export const MapContainer: FC<Props> = ({
     const endOrderCircleStrokeWidth = scaling.orderCircle.strokeWidth * view.current.zoom;
     const endOrderLineStrokeWidth = scaling.orderLine.strokeWidth * view.current.zoom;
 
-    // renderData.units.forEach((unit: any) => {
-    //   const unitType = unit.type.toLowerCase();
-    //   const unitName = unit.name.split(' ').join('_');
+    renderData.units.forEach((unit: any) => {
+      const unitType = unit.type.toLowerCase();
+      const unitName = unit.name.split(' ').join('_');
 
-    //   gsap.to(s(`.${unitName}_left`), {
-    //     attr: {
-    //       'transform': `translate (${unit.loc[0] - 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
-    //         ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
-    //         scale(${view.current.zoom})`
-    //     },
-    //     ease: ease,
-    //     duration: 0
-    //   });
+      gsap.to(s(`.${unitName}_left`), {
+        attr: {
+          'transform': `translate (${unit.loc[0] - 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
+            ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
+            scale(${view.current.zoom})`
+        },
+        ease: 'none',
+        duration: 0.1
+      });
 
-    //   gsap.to(s(`.${unitName}_center`), {
-    //     attr: {
-    //       'transform': `translate (${unit.loc[0] - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
-    //         ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
-    //         scale(${view.current.zoom})`
-    //     },
-    //     ease: ease,
-    //     duration: 0
-    //   });
+      gsap.to(s(`.${unitName}_center`), {
+        attr: {
+          'transform': `translate (${unit.loc[0] - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
+            ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
+            scale(${view.current.zoom})`
+        },
+        ease: 'none',
+        duration: 0.1
+      });
 
-    //   gsap.to(s(`.${unitName}_right`), {
-    //     attr: {
-    //       'transform': `translate (${unit.loc[0] + 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
-    //         ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
-    //         scale(${view.current.zoom})`
-    //     },
-    //     ease: ease,
-    //     duration: 0
-    //   });
-    // });
-
-    // renderData.cities.votingCenters.forEach((city: any) => {
-    //   gsap.to(s(`.${city.name}_left`), {
-    //     attr: {
-    //       'transform': `translate (${city.loc[0] - 16000 - (scaling.votingCenter.width / 2 * view.current.zoom)}
-    //         ${city.loc[1] - (scaling.votingCenter.height / 2 * view.current.zoom)})
-    //         scale(${view.current.zoom})`
-    //     },
-    //     ease: ease,
-    //     duration: 0
-    //   });
-
-    //   gsap.to(s(`.${city.name}_center`), {
-    //     attr: {
-    //       'transform': `translate (${city.loc[0] - (scaling.votingCenter.width / 2 * view.current.zoom)}
-    //         ${city.loc[1] - (scaling.votingCenter.height / 2 * view.current.zoom)})
-    //         scale(${view.current.zoom})`
-    //     },
-    //     ease: ease,
-    //     duration: 0
-    //   });
-
-    //   gsap.to(s(`.${city.name}_right`), {
-    //     attr: {
-    //       'transform': `translate (${city.loc[0] + 16000 - (scaling.votingCenter.width / 2 * view.current.zoom)}
-    //         ${city.loc[1] - (scaling.votingCenter.height / 2 * view.current.zoom)})
-    //         scale(${view.current.zoom})`
-    //     },
-    //     ease: ease,
-    //     duration: 0
-    //   });
-    // });
-
-    gsap.to(s('.order-circle'), {
-      attr: {
-        'r': endOrderCircleR,
-        'stroke-width': endOrderCircleStrokeWidth
-      },
-      ease: ease,
-      duration: 0
+      gsap.to(s(`.${unitName}_right`), {
+        attr: {
+          'transform': `translate (${unit.loc[0] + 16000 - (mapCtx.map.unitSizing[unitType].baseWidth / 2 * view.current.zoom)}
+            ${unit.loc[1] - (mapCtx.map.unitSizing[unitType].baseHeight / 2 * view.current.zoom)})
+            scale(${view.current.zoom})`
+        },
+        ease: 'none',
+        duration: 0.1
+      });
     });
+
+    renderData.cities.votingCenters.forEach((city: any) => {
+      gsap.to(s(`.${city.name}_left`), {
+        attr: {
+          'transform': `translate (${city.loc[0] - 16000 - (scaling.votingCenter.width / 2 * view.current.zoom)}
+            ${city.loc[1] - (scaling.votingCenter.height / 2 * view.current.zoom)})
+            scale(${view.current.zoom})`
+        },
+        ease: 'none',
+        duration: 0.1
+      });
+
+      gsap.to(s(`.${city.name}_center`), {
+        attr: {
+          'transform': `translate (${city.loc[0] - (scaling.votingCenter.width / 2 * view.current.zoom)}
+            ${city.loc[1] - (scaling.votingCenter.height / 2 * view.current.zoom)})
+            scale(${view.current.zoom})`
+        },
+        ease: 'none',
+        duration: 0.1
+      });
+
+      gsap.to(s(`.${city.name}_right`), {
+        attr: {
+          'transform': `translate (${city.loc[0] + 16000 - (scaling.votingCenter.width / 2 * view.current.zoom)}
+            ${city.loc[1] - (scaling.votingCenter.height / 2 * view.current.zoom)})
+            scale(${view.current.zoom})`
+        },
+        ease: 'none',
+        duration: 0.1
+      });
+    });
+
+    gsap.fromTo(s('.order-circle'),
+      {
+        attr: {
+          'r': endOrderCircleR,
+          'stroke-width': endOrderCircleStrokeWidth
+        }
+      },
+      {
+        attr: {
+          'r': endOrderCircleR,
+          'stroke-width': endOrderCircleStrokeWidth
+        },
+        ease: 'none',
+        duration: 0.1
+      }
+    );
 
     gsap.to(s('.order-line'), {
       attr: {
         'stroke-width': endOrderLineStrokeWidth
       },
-      ease: ease,
-      duration: 0
+      ease: 'none',
+      duration: 0.1
     });
   }, [
     // mapCtx.map.scaling,

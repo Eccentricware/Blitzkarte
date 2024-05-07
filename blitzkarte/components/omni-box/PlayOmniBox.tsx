@@ -115,6 +115,7 @@ export const PlayOmniBox: FC<OmniProps> = ({
               turns={gameInfo.turns}
               turnHistoryResult={turnHistoryResult}
               historyOps={historyOps}
+              nudge={nudge}
             />
           </TabPanel>
         </Fragment>

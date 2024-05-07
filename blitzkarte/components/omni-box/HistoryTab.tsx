@@ -6,23 +6,27 @@ interface HistoryTabProps {
   turns: any[];
   turnHistoryResult: UseQueryResult<any> | undefined;
   historyOps: any;
+  nudge: any;
 }
 
-export const HistoryTab: FC<HistoryTabProps> = ({turns, turnHistoryResult, historyOps}) => {
+export const HistoryTab: FC<HistoryTabProps> = ({turns, turnHistoryResult, historyOps, nudge}) => {
   console.log('turns', turns);
   const [selectedTurn, setSelectedTurn] = useState(turns.length - 1);
   const [selectedEvent, setSelectedEvent] = useState('historic');
 
   const handleTurnNumberChange = (event: ChangeEvent<HTMLSelectElement>) => {
     historyOps.setTurnNumber(Number(event.target.value));
+    nudge.set(!nudge.get);
   }
 
   const handleEventChange = (eventChange: string) => {
     historyOps.setPhase(eventChange);
+    nudge.set(!nudge.get);
   }
 
   useEffect(() => {
     historyOps.setTurnNumber(selectedTurn);
+    nudge.set(!nudge.get);
   },[]);
 
   return (
