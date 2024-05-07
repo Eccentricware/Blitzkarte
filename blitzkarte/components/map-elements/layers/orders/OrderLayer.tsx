@@ -1,5 +1,4 @@
 import { FC } from "react";
-import { UseQueryResult } from "react-query"
 import { OrderDisplay } from "../../../../models/enumeration/order-enums";
 import { CircleLayer } from "./CircleLayer";
 import { LineLayer } from "./LineLayer";
@@ -15,7 +14,9 @@ export const OrderLayer: FC<OrderLayerProps> = ({orderData}: OrderLayerProps) =>
     ? orderData.pending.units
     : orderData.preliminary?.units && orderData.preliminary?.units?.length > 0
       ? orderData.preliminary.units
-      : [];
+      : orderData.historicOrders?.units && orderData.historicOrders?.units.length > 0
+        ? orderData.historicOrders.units
+        : [];
 
   const moves = units.filter((unit: any) =>
     [OrderDisplay.NUKE, OrderDisplay.MOVE, OrderDisplay.MOVE_CONVOYED].includes(unit.orderType)
@@ -37,7 +38,9 @@ export const OrderLayer: FC<OrderLayerProps> = ({orderData}: OrderLayerProps) =>
     ? orderData.pending.builds
     : orderData.preliminary?.builds
       ? orderData.preliminary.builds
-      : undefined;
+      : orderData.historicOrders?.builds
+        ? orderData.historicOrders.builds
+        : undefined;
 
   const builds = buildData ? buildData.builds : [];
   const nukesReadyBuilding = buildData ? buildData.nukesReady : [];
@@ -46,7 +49,9 @@ export const OrderLayer: FC<OrderLayerProps> = ({orderData}: OrderLayerProps) =>
     ? orderData.pending.disbands
     : orderData.preliminary?.disbands
       ? orderData.preliminary.disbands
-      : undefined;
+      : orderData.historicOrders?.disbands
+        ? orderData.historicOrders.disbands
+        : undefined;
 
   const nukesReadyDisbanding = disbandData?.nukeBuildDetails ? disbandData.nukeBuildDetails : [];
   const disbands = disbandData ? disbandData.unitDisbandingDetailed : [];

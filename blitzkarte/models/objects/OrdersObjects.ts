@@ -8,6 +8,7 @@ export interface TurnOrders {
   countryName?: string;
   pending?: SingleTurnOrders;
   preliminary?: SingleTurnOrders;
+  historicOrders?: SingleTurnOrders;
   message?: string;
 }
 

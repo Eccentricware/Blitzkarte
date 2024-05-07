@@ -14,6 +14,7 @@ interface Props {
   mapRef: any;
   refs: any;
   turnOrdersResult: UseQueryResult<TurnOrders> | undefined;
+  historicOrders: UseQueryResult<any> | undefined;
   orderSet: TurnOrders | undefined;
   mapWidth: number;
   mapHeight: number;
@@ -52,7 +53,8 @@ export const GameMap: FC<Props> = ({
                 labelLineData={renderData.labelLines}
                 labelSize={labelSize}
               />
-              { (turnOrdersResult && turnOrdersResult.data) && <OrderLayer orderData={turnOrdersResult.data} /> }
+              { (turnOrdersResult && turnOrdersResult.data) && <OrderLayer orderData={turnOrdersResult.data}/> }
+              {/* { (historicOrders && historicOrders.data) && <OrderLayer orderData={historicOrders.data.maps.orders.standard}/> } */}
               { (renderData.nodes && renderData.nodes.display) ?
                 <NodeLayer nodeData={renderData.nodes} nodeRefs={refs}/>
                 :
