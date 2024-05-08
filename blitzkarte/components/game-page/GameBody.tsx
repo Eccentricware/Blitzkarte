@@ -181,7 +181,6 @@ const GameBody: FC<GameBodyProps> = ({user}: GameBodyProps) => {
                 ? undefined
                 : turnOrdersResult
             }
-            historicOrders={turnHistoryResult}
             orderSet={orderSet}
             mapWidth={mapWidth}
             mapHeight={mapHeight}
