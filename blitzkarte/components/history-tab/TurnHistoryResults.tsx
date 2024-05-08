@@ -1,4 +1,4 @@
-import { FC, Fragment, useEffect, useState } from "react";
+import { CSSProperties, FC, Fragment, useEffect, useState } from "react";
 import { Nomination } from "../../models/objects/OptionsObjects";
 import { HistoricNomination, HistoricNominationVote, HistoricYayVote } from "../../models/objects/HistoryObjects";
 import { TurnType } from "../../models/enumeration/TurnTypeEnum";
@@ -9,8 +9,14 @@ interface TurnHistoryResultsProps {
 
 const TurnHistoryResults: FC<TurnHistoryResultsProps> = ({turnResults}) => {
   console.log('turnResults', turnResults);
+
+  const style: CSSProperties = {
+    height: window.innerHeight - 114,
+    overflowY: 'scroll',
+  }
+
   return (
-    <div>
+    <div style={style}>
       {
         (turnResults && turnResults.orderList) &&
         turnResults.orderList.map((countryOrders: any, index: number) =>
