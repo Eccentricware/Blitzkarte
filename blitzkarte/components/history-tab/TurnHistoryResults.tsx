@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from "react";
+import { Nomination } from "../../models/objects/OptionsObjects";
 
 interface TurnHistoryResultsProps {
   turnResults: any;
@@ -50,6 +51,38 @@ const TurnHistoryResults: FC<TurnHistoryResultsProps> = ({turnResults}) => {
             </div>
           </div>
         )
+      }
+      {
+        (turnResults && turnResults.nominations) &&
+        <div>
+          <div>Nominations are always anonymous.</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Coalition</th>
+              <th>Signature</th>
+              <th>Votes Req</th>
+            </tr>
+          </thead>
+          <tbody>
+          {
+            turnResults.nominations.map((nomination: Nomination) => (
+              <tr key={nomination.nominationId}>
+                <td>
+                  {nomination.countries[0].countryName} | {nomination.countries[1].countryName} | {nomination.countries[2].countryName}
+                </td>
+                <td>
+                  {nomination.signature}
+                </td>
+                <td>
+                  {nomination.votesRequired}
+                </td>
+              </tr>
+            ))
+          }
+          </tbody>
+        </table>
+        </div>
       }
     </div>
   )
