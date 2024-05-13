@@ -19,3 +19,32 @@ export interface CountryOrders {
     icon: string;
   };
 }
+
+export interface HistoricNomination {
+  nominationId: number;
+  countries: HistoricNominatedCountry[];
+  signature: string;
+  votesRequired: number;
+}
+
+export interface HistoricNominationVote {
+  countries: HistoricNominatedCountry[];
+  nominationId: number;
+  signature: string;
+  votesRequired: number;
+  votesReceived: number;
+  winner: boolean;
+  yayVotes: HistoricYayVote[];
+}
+
+export interface HistoricNominatedCountry {
+  countryId: number;
+  countryName: string;
+  rank: string;
+}
+
+export interface HistoricYayVote {
+  countryId: number;
+  countryName: string;
+  votesControlled: number;
+}
