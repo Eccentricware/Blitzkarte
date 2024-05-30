@@ -1,13 +1,80 @@
+import { OrderDisplay } from "../enumeration/order-enums";
 import { BuildType } from "../enumeration/unit-enumerations";
 import { RenderData } from "./RenderDataObject";
 
 export interface TurnHistory {
-  orderList: CountryOrders[];
+  orderList: HistoricCountryOrders[];
   maps: {
-    nuclear: RenderData,
-    standard: RenderData,
-    result: RenderData
-  }
+    orders: {
+      nuclear: any;
+      standard: any;
+    };
+    renderData: {
+      start: any;
+      result: any;
+    };
+  };
+}
+
+export interface HistoricCountryOrders {
+  countryId: number;
+  countryName: string;
+  rank: string;
+  flagKey: string;
+  history: {
+    start: {
+      cityCount: number;
+      unitCount: number;
+      voteCount: number;
+      bankedBuilds: number;
+      nukeRange: number;
+      adjustments: number;
+    };
+    result: {
+      cityCount: number;
+      unitCount: number;
+      voteCount: number;
+      bankedBuilds: number;
+      nukeRange: number;
+      adjustments: number;
+    };
+  };
+  orders: {
+    trades: {
+      tech: string | undefined;
+      builds: HistoricBuildTransferOrder[];
+    };
+    units: HistoricOrderDisplay[];
+    adjustments: AdjustmentDetails[];
+    buildsBanked: number;
+    buildsStartingNukes: number;
+    buildsIncreasingRange: number;
+    bankedBuildsIncreasingRange: number;
+  };
+}
+
+export interface HistoricOrderDisplay {
+  originProvince: string;
+  description: string;
+  primaryResolution: string;
+  secondaryResolution: string;
+  success: boolean;
+  secondarySuccess: boolean;
+  orderType: OrderDisplay;
+  loc: number[];
+  eventLoc: number[];
+  secondaryLoc: number[];
+}
+
+interface AdjustmentDetails {
+  location: string;
+  loc: number[];
+  description: string;
+}
+
+export interface HistoricBuildTransferOrder {
+  recipientName: string;
+  quantity: number;
 }
 
 export interface CountryOrders {
