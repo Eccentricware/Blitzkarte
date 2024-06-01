@@ -171,7 +171,7 @@ const GameBody: FC<GameBodyProps> = ({user}: GameBodyProps) => {
         <link rel="icon" href="/favicon.ico"/>
       </Head>
       {/* <NavBarSignedIn title="Gameplay"/> */}
-      <div style={{display: 'flex'}}>
+      <div style={{display: 'flex', overflowY: 'clip'}}>
         <div className="column" >
           <MapContainer renderData={renderData}
             turnOrdersResult={
@@ -181,7 +181,6 @@ const GameBody: FC<GameBodyProps> = ({user}: GameBodyProps) => {
                 ? undefined
                 : turnOrdersResult
             }
-            historicOrders={turnHistoryResult}
             orderSet={orderSet}
             mapWidth={mapWidth}
             mapHeight={mapHeight}
@@ -190,7 +189,7 @@ const GameBody: FC<GameBodyProps> = ({user}: GameBodyProps) => {
           />
         </div>
         <div className="game-divider" style={dividerStyle}></div>
-        <div>
+        <div style={{width: '100%'}}>
           <PlayOmniBox
             turnOptionsResult={turnOptionsResult}
             turnOrdersResult={turnOrdersResult}

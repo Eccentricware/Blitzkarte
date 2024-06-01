@@ -143,7 +143,7 @@ export const BuildTransfer: FC<Props> = ({transferOptions, transferOrders}: Prop
   useEffect(() => {
     const countryIds = transferOrders.map((country: TransferBuildOrder) => country.recipientId );
 
-    if (remainingBuilds > 0 && transferOrders[transferOrders.length - 1].recipientId !== 0) {
+    if (remainingBuilds > 0 && transferOrders[transferOrders.length - 1]?.recipientId !== 0) {
       countryIds.push(0);
 
       transferOrders.push({

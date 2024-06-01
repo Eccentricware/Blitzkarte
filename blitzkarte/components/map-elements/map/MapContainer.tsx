@@ -12,7 +12,6 @@ import { TurnOrders } from '../../../models/objects/OrdersObjects';
 interface Props {
   renderData: RenderData;
   turnOrdersResult: UseQueryResult<any> | undefined;
-  historicOrders: UseQueryResult<any> | undefined;
   orderSet: TurnOrders | undefined;
   mapWidth: number;
   mapHeight: number;
@@ -23,7 +22,6 @@ interface Props {
 export const MapContainer: FC<Props> = ({
   renderData,
   turnOrdersResult,
-  historicOrders,
   orderSet,
   mapWidth,
   mapHeight,
@@ -918,7 +916,6 @@ export const MapContainer: FC<Props> = ({
       >
         <GameMap renderData={renderData}
           turnOrdersResult={turnOrdersResult}
-          historicOrders={historicOrders}
           orderSet={orderSet}
           mapRef={mapRef}
           refs={llRef}
