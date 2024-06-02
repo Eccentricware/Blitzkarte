@@ -2,16 +2,17 @@ import React, { FC, useState } from 'react';
 import { FlagSVGs } from '../../../icons/FlagSVGs';
 import { UnitSVGs } from '../../../icons/UnitSVGs';
 import Blitzkontext from '../../../../utils/Blitzkontext';
+import { UnitType } from '../../../../models/enumeration/unit-enumerations';
 
 interface Props {
   unit: any;
 }
 
 export const UnitRender: FC<Props> = ({unit}: Props) => {
-  const unitType = unit.type.toLowerCase();
+  const unitType = unit.status === 'Fallout' ? 'detonation' : unit.type.toLowerCase();
   const unitName = unit.name.split(' ').join('_');
-  const unitSVG = UnitSVGs[unitType];
-  const flagSVG = FlagSVGs[unit.countryKey];
+  const unitSVG = UnitSVGs[unit.status === 'Fallout' ? 'detonation' : unitType];
+  const flagSVG = unit.status !== 'Fallout' && FlagSVGs[unit.countryKey];
 
   return (
     <Blitzkontext.Consumer>
@@ -51,7 +52,10 @@ export const UnitRender: FC<Props> = ({unit}: Props) => {
             <g className={unitName + '_left'} transform={
               `translate(
               ${unit.loc[0] - map.unitSizing[unitType].width / 2 - 16000}
-              ${unit.loc[1] - map.unitSizing[unitType].height / 2}
+              ${unit.status === 'Fallout'
+                ? unit.loc[1]
+                : unit.loc[1] - map.unitSizing[unitType].height / 2
+              }
             )`}
             >
               <g transform={
@@ -71,9 +75,10 @@ export const UnitRender: FC<Props> = ({unit}: Props) => {
             </g>
             <g className={unitName + '_center'} transform={
                 `translate(
-                ${unit.loc[0] - map.unitSizing[unitType].width / 2}
-                ${unit.loc[1] - map.unitSizing[unitType].height / 2}
-              )`}
+                ${unit.loc[0] - map.unitSizing[unitType].width / 2} ${unit.status === 'Fallout'
+                  ? unit.loc[1]
+                  : unit.loc[1] - map.unitSizing[unitType].height / 2
+                })`}
               >
                 <g transform={
                   `translate(
@@ -92,7 +97,10 @@ export const UnitRender: FC<Props> = ({unit}: Props) => {
             <g className={unitName + '_right'} transform={
               `translate(
               ${unit.loc[0] - map.unitSizing[unitType].width / 2 + 16000}
-              ${unit.loc[1] - map.unitSizing[unitType].height / 2}
+              ${unit.status === 'Fallout'
+                ? unit.loc[1]
+                : unit.loc[1] - map.unitSizing[unitType].height / 2
+              }
             )`}
             >
               <g transform={
