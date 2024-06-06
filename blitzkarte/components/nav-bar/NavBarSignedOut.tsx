@@ -155,20 +155,20 @@ export const NavBarSignedOut: FC<AppBarProps> = ({ title }: AppBarProps) => {
     >
       {
         router.pathname !== '/' &&
-        <MenuItem>
-          <Button onClick={handleLandingClick}>Landing Page</Button>
+        <MenuItem onClick={handleLandingClick}>
+          Landing Page
         </MenuItem>
       }
       {
         router.pathname !== '/development' &&
-        <MenuItem>
-          <Button onClick={handleDevelopmentClick}>Development</Button>
+        <MenuItem onClick={handleDevelopmentClick}>
+          Development
         </MenuItem>
       }
       {
         router.pathname !== '/game-finder' &&
-        <MenuItem>
-          <Button onClick={handleFindGameClick}>Games</Button>
+        <MenuItem onClick={handleFindGameClick}>
+          Games
         </MenuItem>
       }
     </Menu>

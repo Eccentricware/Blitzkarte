@@ -78,7 +78,7 @@ const Home: NextPage = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <NavBarSignedOut title="No user"/>
+      <NavBarSignedOut title=""/>
       <IndexBody user={null}/>
     </div>
   )

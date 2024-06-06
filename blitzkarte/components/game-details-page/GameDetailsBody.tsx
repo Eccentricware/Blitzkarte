@@ -9,6 +9,9 @@ import { GameDetailsSettings } from "./GameDetailsSettings";
 import { MiscDetailsPanel } from "./MiscDetailsPanel";
 import { AssignmentDetails, ContactPreferences } from "../../models/objects/AssignmentRowObject";
 import ContactDetailsModal from "./ContactDetailsModal";
+import { NavBarSignedIn } from "../nav-bar/NavBarSignedIn";
+import { NavBarSignedOut } from "../nav-bar/NavBarSignedOut";
+import Head from "next/head";
 
 interface GameDetailsBodyProps {
   user: User | undefined;
@@ -67,42 +70,75 @@ const GameDetailsBody: FC<GameDetailsBodyProps> = ({user, gameId}: GameDetailsBo
 
   return (
     <div>
-      <Grid container spacing={1}>
-        <Grid item xs={12} sm={4}>
+      <Head>
+        <title>
           {
             gameDetailsQueryResult.data
-              &&
-            <GameDetailsSettings gameDetailsSettings={gameDetailsQueryResult.data}
-              assignmentRefetch={assignmentsQueryResult.refetch}
-            />
+            ? `${gameDetailsQueryResult.data.gameName}: Details`
+            : 'Loading Game Details'
           }
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          {
-            gameDetailsQueryResult.data
-              &&
-            <AssignmentsPanel queryResult={assignmentsQueryResult}
-              gameId={gameId}
-              gameStatus={gameDetailsQueryResult.data.gameStatus}
-              handleContactDetailsOpen={handleContactDetailsOpen}
+        </title>
+        <meta name="description" content="Game details"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link rel="icon" href="/favicon.ico"/>
+      </Head>
+      <div>
+        {
+          user
+          ? <NavBarSignedIn
+              title={
+                gameDetailsQueryResult.data
+                ? `${gameDetailsQueryResult.data.gameName} - Details`
+                : 'Loading Game Details'
+              }
             />
-          }
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          {
-            gameDetailsQueryResult.data
-              &&
-            <MiscDetailsPanel queryResult={gameDetailsQueryResult}
-              gameId={gameId}
+          : <NavBarSignedOut
+              title={
+                gameDetailsQueryResult.data
+                ? `${gameDetailsQueryResult.data.gameName} - Details`
+                : 'Loading Game Details'
+              }
             />
-          }
-        </Grid>
-      </Grid>
-      <ContactDetailsModal
-        contactDetailsOpen={contactDetailsOpen}
-        handleContactDetailsClose={handleContactDetailsClose}
-        focusContact={focusContact}
-      />
+        }
+        <div>
+          <Grid container spacing={1}>
+            <Grid item xs={12} sm={4}>
+              {
+                gameDetailsQueryResult.data
+                  &&
+                <GameDetailsSettings gameDetailsSettings={gameDetailsQueryResult.data}
+                  assignmentRefetch={assignmentsQueryResult.refetch}
+                />
+              }
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              {
+                gameDetailsQueryResult.data
+                  &&
+                <AssignmentsPanel queryResult={assignmentsQueryResult}
+                  gameId={gameId}
+                  gameStatus={gameDetailsQueryResult.data.gameStatus}
+                  handleContactDetailsOpen={handleContactDetailsOpen}
+                />
+              }
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              {
+                gameDetailsQueryResult.data
+                  &&
+                <MiscDetailsPanel queryResult={gameDetailsQueryResult}
+                  gameId={gameId}
+                />
+              }
+            </Grid>
+          </Grid>
+          <ContactDetailsModal
+            contactDetailsOpen={contactDetailsOpen}
+            handleContactDetailsClose={handleContactDetailsClose}
+            focusContact={focusContact}
+          />
+        </div>
+      </div>
     </div>
   )
 }

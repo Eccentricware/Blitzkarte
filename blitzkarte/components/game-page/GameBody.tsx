@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 import { NavBarSignedIn } from "../nav-bar/NavBarSignedIn";
 import { set } from "date-fns";
+import { NavBarSignedOut } from "../nav-bar/NavBarSignedOut";
 
 interface GameBodyProps {
   user: User | undefined;
@@ -165,12 +166,34 @@ const GameBody: FC<GameBodyProps> = ({user}: GameBodyProps) => {
   return (
     <div>
       <Head>
-        <title>Adventure Alpha - Gameplay</title>
+      <title>
+          {
+            currentMapResult.data
+            ? `${currentMapResult.data.gameName}`
+            : 'Loading Game'
+          }
+        </title>
         <meta name="description" content="Game Name"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link rel="icon" href="/favicon.ico"/>
       </Head>
-      {/* <NavBarSignedIn title="Gameplay"/> */}
+      {
+          user
+          ? <NavBarSignedIn
+              title={
+                currentMapResult.data
+                ? `${currentMapResult.data.gameName}`
+                : 'Loading Game Details'
+              }
+            />
+          : <NavBarSignedOut
+              title={
+                currentMapResult.data
+                ? `${currentMapResult.data.gameName}`
+                : 'Loading Game Details'
+              }
+            />
+        }
       <div style={{display: 'flex', overflowY: 'clip'}}>
         <div className="column" >
           <MapContainer renderData={renderData}
