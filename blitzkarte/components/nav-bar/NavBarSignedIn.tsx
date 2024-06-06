@@ -75,12 +75,12 @@ export const NavBarSignedIn: FC<AppBarProps> = ({title}: AppBarProps) => {
       }}
     >
       {router.pathname !== '/dashboard' &&
-        <MenuItem>
-          <Button onClick={handleDashboardClick}>Dashboard</Button>
+        <MenuItem onClick={handleDashboardClick}>
+          Dashboard
         </MenuItem>
       }
-      <MenuItem>
-        <Button onClick={handleSignOutClick}>Log Out</Button>
+      <MenuItem onClick={handleSignOutClick}>
+        Log Out
       </MenuItem>
     </Menu>
   );
@@ -99,26 +99,26 @@ export const NavBarSignedIn: FC<AppBarProps> = ({title}: AppBarProps) => {
     >
       {
         router.pathname !== '/' &&
-        <MenuItem>
-          <Button onClick={handleLandingClick}>Landing Page</Button>
+        <MenuItem onClick={handleLandingClick}>
+          Landing Page
         </MenuItem>
       }
       {
         router.pathname !== '/development' &&
-        <MenuItem>
-          <Button onClick={handleDevelopmentClick}>Development</Button>
+        <MenuItem onClick={handleDevelopmentClick}>
+          Development
         </MenuItem>
       }
       {
         router.pathname !== '/create-game' &&
-        <MenuItem>
-          <Button onClick={handleNewGameClick}>New Game</Button>
+        <MenuItem onClick={handleNewGameClick}>
+          New Game
         </MenuItem>
       }
       {
         router.pathname !== '/game-finder' &&
-        <MenuItem>
-          <Button onClick={handleFindGameClick}>Games</Button>
+        <MenuItem onClick={handleFindGameClick}>
+          Games
         </MenuItem>
       }
     </Menu>
