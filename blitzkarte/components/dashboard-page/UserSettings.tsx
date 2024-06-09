@@ -81,8 +81,7 @@ const UserSettings: FC<UserSettingsProps> = ({user}: UserSettingsProps) => {
       setTimeZone(data.timeZone);
       setMeridiemTime(data.meridiemTime);
       setPreferredContactMethod(
-        data.contactPreferences.preferredMethod !== undefined
-        && data.contactPreferences.preferredMethod.length > 0
+        data.contactPreferences.preferredMethod
         ? data.contactPreferences.preferredMethod
         : 'none'
       );

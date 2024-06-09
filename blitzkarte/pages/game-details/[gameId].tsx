@@ -24,13 +24,13 @@ const GameDetailsPage: NextPage = () => {
   if (loading) {
     return (
       <div>
-        <Head>
+        {/* <Head>
           <title>Game Details</title>
           <meta name="description" content="Game details"/>
           <meta name="viewport" content="width=device-width, initial-scale=1"/>
           <link rel="icon" href="/favicon.ico"/>
-        </Head>
-        <NavBarSignedOut title="Game Settings"/>
+        </Head> */}
+        {/* <NavBarSignedOut title="Loading Game Settings"/> */}
         <StallGlobe mode="authenticating" message={"Game Details Page: Loading"}/>
       </div>
     )
@@ -40,13 +40,13 @@ const GameDetailsPage: NextPage = () => {
     bkCtx.user.user = user;
     return (
       <div>
-        <Head>
+        {/* <Head>
           <title>Game Details</title>
           <meta name="description" content="Game Name"/>
           <meta name="viewport" content="width=device-width, initial-scale=1"/>
           <link rel="icon" href="/favicon.ico"/>
-        </Head>
-        <NavBarSignedIn title="Game Settings"/>
+        </Head> */}
+        {/* <NavBarSignedIn title="Game Settings"/> */}
         <GameDetailsBody user={user} gameId={gameId}/>
       </div>
     )
@@ -66,13 +66,13 @@ const GameDetailsPage: NextPage = () => {
 
   return (
     <div>
-      <Head>
+      {/* <Head>
         <title>Game Details</title>
         <meta name="description" content="Game Name"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link rel="icon" href="/favicon.ico"/>
-      </Head>
-      <NavBarSignedOut title="Game Settings"/>
+      </Head> */}
+      {/* <NavBarSignedOut title="Game Settings"/> */}
       <GameDetailsBody user={undefined} gameId={gameId}/>
     </div>
   )

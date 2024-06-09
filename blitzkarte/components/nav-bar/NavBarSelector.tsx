@@ -20,11 +20,11 @@ export const NavBarSelector: FC<NavBarProps> = ({firebaseUser}: NavBarProps) => 
   if (data && !data.warning && !data.error) {
     console.log('NavBarSelector Data:', data);
     return (
-      <NavBarSignedIn title="Yes user"/>
+      <NavBarSignedIn title="Blitzkarte"/>
     )
   }
 
   return (
-    <NavBarSignedOut title="No user"/>
+    <NavBarSignedOut title="Blitzkarte"/>
   )
 };
