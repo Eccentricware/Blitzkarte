@@ -11,6 +11,8 @@ export const StatsTableBody: FC<StatsTableRow> = ({countries}: StatsTableRow) =>
       {
         countries.map(country => {
           return (
+            country.status !== 'Eliminated'
+              ?
             <tr key={country.name}>
               <td>{country.name} ({country.rank.toUpperCase()})</td>
               <td>{country.cityCount}</td>
@@ -18,6 +20,10 @@ export const StatsTableBody: FC<StatsTableRow> = ({countries}: StatsTableRow) =>
               <td>{country.bankedBuilds}</td>
               <td>{country.nuke === 0 ? 'U' : country.nuke}</td>
               <td>{country.adjustments}</td>
+            </tr>
+              :
+            <tr key={country.name}>
+              <td><s>{country.name} ({country.rank.toUpperCase()})</s></td>
             </tr>
           )
         })

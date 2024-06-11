@@ -183,14 +183,14 @@ const GameBody: FC<GameBodyProps> = ({user}: GameBodyProps) => {
               title={
                 currentMapResult.data
                 ? `${currentMapResult.data.gameName}`
-                : 'Loading Game Details'
+                : 'Loading Game'
               }
             />
           : <NavBarSignedOut
               title={
                 currentMapResult.data
                 ? `${currentMapResult.data.gameName}`
-                : 'Loading Game Details'
+                : 'Loading Game'
               }
             />
         }
