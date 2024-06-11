@@ -34,6 +34,7 @@ export class Country {
   approved: boolean = true;
   errors: string[] = [];
   critical: string[] = [];
+  status: string = 'Active';
 
   constructor(pin: Pin) {
     this.name = this.setName(pin);
