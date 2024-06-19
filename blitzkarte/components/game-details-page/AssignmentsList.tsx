@@ -55,7 +55,7 @@ export const AssignmentsList: FC<AssignmentsListProps> = ({
       <Table stickyHeader aria-label="sticky table" size="small">
         <TableHead>
           <TableRow>
-            {columns.map((column) => (
+            { columns.map((column) => (
               <TableCell
                 key={column.id}
                 align={column.align}
@@ -67,52 +67,48 @@ export const AssignmentsList: FC<AssignmentsListProps> = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {
-            assignmentData.assignments.map((assignment: AssignmentDetails) => {
-              return (
-                <TableRow hover role="checkbox" tabIndex={-1} key={assignment.countryId}>
-                  <TableCell>
-                    {assignment.countryName} ({assignment.rank.toUpperCase()})
-                  </TableCell>
-                  <TableCell>
-                    {
-                      assignment.assignmentStatus === AssignmentStatus.LOCKED
-                      ? assignment.username
-                      : <select value={assignment.playerId ? assignment.playerId : 0}
-                          onChange={(event: ChangeEvent<HTMLSelectElement>) => {
-                            handleChoosePlayerChange(
-                              Number(event.target.value),
-                              assignment.countryId
-                            );
-                          }}
-                        >
-                          {
-                            nonLockedPlayers.map((player: any) => <option key={player.userId} value={player.userId}>{player.username}</option>)
-                          }
-                        </select>
-                    }
-                  </TableCell>
-                  <TableCell>
-                    {assignment.assignmentStatus}
-                  </TableCell>
-                  <TableCell>
-                    {
-                      assignment.assignmentStatus === AssignmentStatus.LOCKED
-                      && <IconButton onClick={() => {handleUnlockPlayerClick(assignment.playerId)}}>
-                          <Lock fontSize="small"/>
-                        </IconButton>
-                    }
-                    {
-                      assignment.assignmentStatus === AssignmentStatus.ASSIGNED
-                      && <IconButton onClick={() => { handleLockPlayerClick(assignment.playerId)}}>
-                          <LockOpen fontSize="small"/>
-                        </IconButton>
-                    }
-                  </TableCell>
-                </TableRow>
-              )
-            })
-          }
+          { assignmentData.assignments.map((assignment: AssignmentDetails) =>
+              <TableRow hover role="checkbox" tabIndex={-1} key={assignment.countryId}>
+                <TableCell>
+                  {assignment.countryName} ({assignment.rank.toUpperCase()})
+                </TableCell>
+                <TableCell>
+                  {
+                    assignment.assignmentStatus === AssignmentStatus.LOCKED
+                    ? assignment.username
+                    : <select value={assignment.playerId ? assignment.playerId : 0}
+                        onChange={(event: ChangeEvent<HTMLSelectElement>) => {
+                          handleChoosePlayerChange(
+                            Number(event.target.value),
+                            assignment.countryId
+                          );
+                        }}
+                      >
+                        {
+                          nonLockedPlayers.map((player: any) => <option key={player.userId} value={player.userId}>{player.username}</option>)
+                        }
+                      </select>
+                  }
+                </TableCell>
+                <TableCell>
+                  {assignment.assignmentStatus}
+                </TableCell>
+                <TableCell>
+                  {
+                    assignment.assignmentStatus === AssignmentStatus.LOCKED
+                    && <IconButton onClick={() => {handleUnlockPlayerClick(assignment.playerId)}}>
+                        <Lock fontSize="small"/>
+                      </IconButton>
+                  }
+                  {
+                    assignment.assignmentStatus === AssignmentStatus.ASSIGNED
+                    && <IconButton onClick={() => { handleLockPlayerClick(assignment.playerId)}}>
+                        <LockOpen fontSize="small"/>
+                      </IconButton>
+                  }
+                </TableCell>
+              </TableRow>
+          )}
         </TableBody>
       </Table>
     </TableContainer>
